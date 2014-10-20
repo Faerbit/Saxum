@@ -51,7 +51,7 @@ ADD_DEFINITIONS(-DNO_SPACE_NAVIGATOR_SUPPORT)
 #
 # Lets the binary get written to a shared folder (which can be ignored by git).
 # Will also set the run directory for QTCreator:
-set(dir ${CMAKE_CURRENT_SOURCE_DIR}/../binaries)
+set(dir ${CMAKE_CURRENT_SOURCE_DIR}/binaries)
 set(EXECUTABLE_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
 
 # source and header files
@@ -91,7 +91,7 @@ FILE(GLOB_RECURSE HEADER_FILES_GLFW "${CMAKE_SOURCE_DIR}/extern/glfw/include/*.h
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/extern/glfw/include)
 SET(HEADER_FILES ${HEADER_FILES} ${HEADER_FILES_GLFW})
 
-add_subdirectory(extern/glfw ${CMAKE_SOURCE_DIR}/../extern/glfw)
+add_subdirectory(extern/glfw ${CMAKE_SOURCE_DIR}/extern/glfw)
 SET(LIBRARIES glfw ${GLFW_LIBRARIES})
 
 
