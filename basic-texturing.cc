@@ -1,4 +1,4 @@
-#include "../shared/main.hh"
+#include "main.hh"
 
 #include <ACGL/OpenGL/Creator/ShaderProgramCreator.hh>
 #include <ACGL/OpenGL/Creator/VertexArrayObjectCreator.hh>
@@ -23,9 +23,9 @@ void initCustomResources()
 {
     // define where shaders and textures can be found:
     Settings::the()->setResourcePath("../");
-    Settings::the()->setShaderPath("003-basic-texturing/Shader/");
-    Settings::the()->setTexturePath("shared/Geometry/");
-    Settings::the()->setGeometryPath("shared/Geometry/");
+    Settings::the()->setShaderPath("Shader/");
+    Settings::the()->setTexturePath("Geometry/");
+    Settings::the()->setGeometryPath("Geometry/");
 
     // load the geometry of the stanford bunny and build a VAO:
     vaoBunny = VertexArrayObjectCreator("Bunny.obj").create();

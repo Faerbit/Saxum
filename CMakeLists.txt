@@ -77,7 +77,7 @@ FILE(GLOB_RECURSE README_FILES "${CMAKE_SOURCE_DIR}/../README.TXT")
 # all we need for ACGL:
 #
 ADD_DEFINITIONS(-DACGL_ERROR_LEVEL_EC3)
-INCLUDE(${CMAKE_SOURCE_DIR}/../extern/acgl/CMakeListsStaticInclude.txt)
+INCLUDE(${CMAKE_SOURCE_DIR}/extern/acgl/CMakeListsStaticInclude.txt)
 #
 #
 ###############################################################################
@@ -87,11 +87,11 @@ INCLUDE(${CMAKE_SOURCE_DIR}/../extern/acgl/CMakeListsStaticInclude.txt)
 # GLFW (and some other linker flags)
 #
 
-FILE(GLOB_RECURSE HEADER_FILES_GLFW "${CMAKE_SOURCE_DIR}/../extern/glfw/include/*.h")
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/../extern/glfw/include)
+FILE(GLOB_RECURSE HEADER_FILES_GLFW "${CMAKE_SOURCE_DIR}/extern/glfw/include/*.h")
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/extern/glfw/include)
 SET(HEADER_FILES ${HEADER_FILES} ${HEADER_FILES_GLFW})
 
-add_subdirectory(../extern/glfw ${CMAKE_SOURCE_DIR}/../extern/glfw)
+add_subdirectory(extern/glfw ${CMAKE_SOURCE_DIR}/../extern/glfw)
 SET(LIBRARIES glfw ${GLFW_LIBRARIES})
 
 
