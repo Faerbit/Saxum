@@ -18,7 +18,7 @@ using namespace ACGL::OpenGL;
 using namespace ACGL::Base;
 using namespace ACGL::Utils;
 
-glm::uvec2 g_windowSize( 640, 480 );
+glm::uvec2 g_windowSize( 1024, 786 );
 float g_nearPlane =   0.1f;
 float g_farPlane  = 100.0f;
 bool glfwWindowClosed = false;
