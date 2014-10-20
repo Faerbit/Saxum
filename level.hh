@@ -3,6 +3,7 @@
 
 #include <string>
 #include "entity.hh"
+#include "terrain.hh"
 
 class Level {
     public:
@@ -12,6 +13,7 @@ class Level {
     private:
         std::string filePath;
         std::vector<Entity> entities;
+        Terrain terrain;
 };
 
 #endif
