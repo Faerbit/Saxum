@@ -8,10 +8,10 @@
 
 class Level {
     public:
-        Level(string filePath);
+        Level(std::string filePath);
         ~Level();
         void load();
     private:
-        string filePath;
-        std::vector entities;
-}
+        std::string filePath;
+        std::vector<Entity> entities;
+};
