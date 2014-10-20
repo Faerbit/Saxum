@@ -4,8 +4,6 @@
 #include <string>
 #include "entity.hh"
 
-#endif
-
 class Level {
     public:
         Level(std::string filePath);
@@ -15,3 +13,5 @@ class Level {
         std::string filePath;
         std::vector<Entity> entities;
 };
+
+#endif

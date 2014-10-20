@@ -3,8 +3,6 @@
 
 #include <ACGL/Math/Math.hh>
 
-#endif
-
 class Entity {
     public:
         Entity(glm::vec3 position, glm::vec3 rotation);
@@ -17,3 +15,5 @@ class Entity {
         glm::vec3 position;
         glm::vec3 rotation;
 };
+
+#endif
