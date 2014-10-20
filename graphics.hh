@@ -1,3 +1,8 @@
+#ifndef GRAPHICS_HH_INCLUDED
+#define GRAPHICS_HH_INCLUDED
+
+#endif
+
 // gets called after the OpenGL window is prepared, init of example specific stuff:
 void initCustomResources();
 
