@@ -1,0 +1,13 @@
+CMAKE_MINIMUM_REQUIRED (VERSION 2.6) 
+
+# project/binary name:
+PROJECT(basic-texturing)
+
+# ACGL setup
+SET(ACGL_OPENGL_SUPPORT CORE_32)
+ADD_DEFINITIONS(-DACGL_OPENGL_VERSION_32)
+ADD_DEFINITIONS(-DACGL_OPENGL_PROFILE_CORE)
+# create the newest availabe OpenGL context, independent of the ACGL version:
+#ADD_DEFINITIONS(-DGLFW_OPENGL_LATEST_VERSION)
+
+INCLUDE(${CMAKE_SOURCE_DIR}/../shared/SharedCMakeLists.txt)

@@ -1,0 +1,63 @@
+# - Find libogg
+# Find the native ogg headers
+#
+#  OGG_INCLUDE_DIR  - where to find ogg.h, etc.
+#  OGG_LIBRARIES    - ogg library
+#  OGG_DEFINES      - ogg defines
+#  OGG_FOUND        - True if ogg found.
+
+IF(OGG_FOUND)
+    # Already in cache, be silent
+    SET(OGG_FIND_QUIETLY TRUE)
+ENDIF()
+
+#INCLUDE(${CMAKE_CURRENT_LIST_DIR}/DefinesOGG.txt)
+
+IF(BUILD_OGG OR ACGL_GLOBAL_EXTERN_DIR_FOUND_FIRST_TIME OR BUILD_TYPE_CHANGED)
+    UNSET(OGG_INCLUDE_DIR CACHE)
+    UNSET(OGG_LIBRARIES CACHE)
+ENDIF()
+
+IF(BUILD_OGG)
+    SET(OGG_INCLUDE_DIR "${ACGL_LOCAL_EXTERN_DIR}/ogg/include")
+    SET(OGG_LIBRARIES ogg${COMPILE_POSTFIX})
+ELSE()
+    # Look for the header file.
+    IF(ACGL_GLOBAL_EXTERN_DIR)
+        FIND_PATH(OGG_INCLUDE_DIR NAMES ogg/ogg.h PATHS "${ACGL_GLOBAL_EXTERN_DIR}/ogg/include" NO_DEFAULT_PATH)
+    ENDIF()
+    IF(NOT OGG_INCLUDE_DIR)
+        FIND_PATH(OGG_INCLUDE_DIR NAMES ogg/ogg.h)
+    ENDIF()
+
+    # Look for the library file.
+    IF(ACGL_GLOBAL_EXTERN_DIR)
+        FIND_LIBRARY(OGG_LIBRARIES NAMES ogg${COMPILE_POSTFIX} PATHS "${ACGL_GLOBAL_EXTERN_DIR}/ogg/lib" NO_DEFAULT_PATH)
+    ENDIF()
+    IF(NOT OGG_LIBRARIES)
+        FIND_LIBRARY(OGG_LIBRARIES NAMES ogg)
+    ENDIF()
+ENDIF()
+
+# Copy the results to the output variables.
+IF(OGG_INCLUDE_DIR AND OGG_LIBRARIES)
+    SET(OGG_FOUND TRUE CACHE INTERNAL "")
+ELSE()
+    SET(OGG_FOUND FALSE CACHE INTERNAL "")
+ENDIF()
+
+# Report the results.
+IF(NOT OGG_FOUND)
+    SET(OGG_MESSAGE "ogg was not found. Make sure OGG_INCLUDE_DIR AND OGG_LIBRARIES are set correctly.")
+    IF(OGG_FIND_REQUIRED)
+        MESSAGE(FATAL_ERROR "${OGG_MESSAGE}")
+    ELSEIF(NOT OGG_FIND_QUIETLY)
+        MESSAGE(STATUS "${OGG_MESSAGE}")
+    ENDIF()
+ELSEIF(NOT OGG_FIND_QUIETLY)
+    MESSAGE(STATUS "Looking for ogg - found")
+ENDIF()
+
+MESSAGE(STATUS "OGG_INCLUDE_DIR:${OGG_INCLUDE_DIR}")
+MESSAGE(STATUS "OGG_LIBRARIES:${OGG_LIBRARIES}")
+

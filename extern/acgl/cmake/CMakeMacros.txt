@@ -1,0 +1,20 @@
+################################################################################
+# Macro to sort acgl into directories
+################################################################################
+
+MACRO (RECURSE_GROUPS dirname)
+    FILE(GLOB_RECURSE allfiles "${dirname}/*.*")
+    SET(ALL_FILES ${ALL_FILES} ${allfiles})
+    STRING(REGEX REPLACE ".*/([^/]*)" "\\1" maindir "${dirname}")
+
+    FOREACH(file ${allfiles})
+        STRING(REGEX REPLACE "${dirname}/(.*)/[^/]*" "\\1" loopdirname "${file}")
+        STRING(REGEX REPLACE "/" "\\\\" loopdirname "${loopdirname}")
+
+        IF(NOT "${file}" MATCHES "${dirname}/(.*)/[^/]*")
+            source_group("${maindir}" FILES  ${file})
+        ELSE()
+            source_group("${maindir}\\${loopdirname}" FILES  ${file})
+        ENDIF()
+    ENDFOREACH()
+ENDMACRO (RECURSE_GROUPS)
