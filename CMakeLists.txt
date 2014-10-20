@@ -1,7 +1,7 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 2.6) 
 
 # project/binary name:
-PROJECT(basic-texturing)
+PROJECT(MarbleRaceGroupC)
 
 # ACGL setup
 SET(ACGL_OPENGL_SUPPORT CORE_32)
