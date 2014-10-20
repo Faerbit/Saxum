@@ -79,3 +79,14 @@ void resizeCallback( GLFWwindow *, int newWidth, int newHeight )
     g_windowSize = glm::uvec2( newWidth, newHeight);
     glViewport( 0, 0, g_windowSize.x, g_windowSize.y );
 }
+
+glm::mat4 buildFrustum( float phiInDegree, float _near, float _far, float aspectRatio) {
+
+    float phiHalfInRadians = 0.5*phiInDegree * (M_PI/180.0);
+    float top = _near * tan( phiHalfInRadians );
+    float bottom = -top;
+    float left  = bottom * aspectRatio;
+    float right = -left;
+
+    return glm::frustum(left, right, bottom, top, _near, _far);
+}

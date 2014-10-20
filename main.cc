@@ -113,50 +113,6 @@ bool createWindow()
     return true;
 }
 
-glm::mat4 buildFrustum( float phiInDegree, float _near, float _far, float aspectRatio) {
-
-    float phiHalfInRadians = 0.5*phiInDegree * (M_PI/180.0);
-    float top = _near * tan( phiHalfInRadians );
-    float bottom = -top;
-    float left  = bottom * aspectRatio;
-    float right = -left;
-
-    return glm::frustum(left, right, bottom, top, _near, _far);
-}
-
-glm::mat4 lookAt(const glm::vec3 &camPos, const glm::vec3 &viewDirection, const glm::vec3 &up) {
-
-    glm::vec3 right   = glm::normalize( glm::cross( viewDirection, up ) );
-    glm::vec3 orthoUp = glm::normalize( glm::cross( right, viewDirection ) );
-
-    glm::vec3 viewDir = glm::normalize( viewDirection );
-    glm::mat4 m;
-
-    m[0][0] = right.x;
-    m[1][0] = right.y;
-    m[2][0] = right.z;
-    m[3][0] = 0;
-
-    m[0][1] = orthoUp.x;
-    m[1][1] = orthoUp.y;
-    m[2][1] = orthoUp.z;
-    m[3][1] = 0;
-
-    m[0][2] = -viewDir.x;
-    m[1][2] = -viewDir.y;
-    m[2][2] = -viewDir.z;
-    m[3][2] = 0;
-
-    m[0][3] = 0;
-    m[1][3] = 0;
-    m[2][3] = 0;
-    m[3][3] = 1.0;
-
-    glm::mat4 tr = glm::translate(glm::mat4(),glm::vec3( -camPos.x, -camPos.y, -camPos.z));
-
-    return m*tr;
-}
-
 static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
 {
     if (_key == GLFW_KEY_ESCAPE && _action == GLFW_PRESS) {
