@@ -3,18 +3,25 @@
 
 #include "entity.hh"
 #include "model.hh"
-#include "texture.hh"   
+#include "texture.hh"
+#include <string>
 #include <ACGL/Math/Math.hh>
+#include <ACGL/OpenGL/Managers.hh>
+#include <ACGL/OpenGL/Objects.hh>
+#include <ACGL/OpenGL/Creator/ShaderProgramCreator.hh>
 
 class Object : Entity {
     public:
-        Object(Model model, Texture texture, glm::vec3 position, glm::vec3 rotation, glm::vec3 velocity, glm::vec3 angularVelocity);
+        Object(Model model, Texture texture, glm::vec3 position, glm::vec3 rotation, 
+                glm::vec3 velocity, glm::vec3 angularVelocity);
         ~Object();
+        void render();
     private:
-        Model model;
-        Texture texture;
+        ACGL::OpenGL::SharedVertexArrayObject model;
+        ACGL::OpenGL::SharedTexture2D texture;
         glm::vec3 velocity;
         glm::vec3 angularVelocity;
+        ACGL::OpenGL::SharedShaderProgram shader;
 };
 
 #endif
