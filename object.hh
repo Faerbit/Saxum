@@ -4,16 +4,16 @@
 #include "entity.hh"
 #include "model.hh"
 #include "texture.hh"
+#include "shader.hh"
 #include <string>
 #include <ACGL/Math/Math.hh>
 #include <ACGL/OpenGL/Managers.hh>
 #include <ACGL/OpenGL/Objects.hh>
-#include <ACGL/OpenGL/Creator/ShaderProgramCreator.hh>
 
 class Object : Entity {
     public:
         Object(Model model, Texture texture, glm::vec3 position, glm::vec3 rotation, 
-                glm::vec3 velocity, glm::vec3 angularVelocity);
+                glm::vec3 velocity, glm::vec3 angularVelocity, Shader shader);
         ~Object();
         void render();
     private:
