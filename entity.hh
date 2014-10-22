@@ -1,4 +1,4 @@
-#ifndef ENTITIY_HH_INCLUDED
+#ifndef ENTITY_HH_INCLUDED
 #define ENTITY_HH_INCLUDED
 
 #include <ACGL/Math/Math.hh>
