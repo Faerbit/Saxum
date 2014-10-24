@@ -1,38 +1,38 @@
 #include "graphics.hh"
 
-using namespace std;
-using namespace ACGL::OpenGL;
-using namespace ACGL::Base;
-using namespace ACGL::Utils;
+#include "model.hh"
+#include "object.hh"
+#include "texture.hh"
+#include "shader.hh"
 
-SharedVertexArrayObject vaoBunny;
-SharedShaderProgram normalsAsColorShader;
-SharedTexture2D bunnyTexture;
+using namespace std;
+
+Model model;
+Texture texture;
+Shader shader;
+Object object;
 
 // gets called after the OpenGL window is prepared:
 void initCustomResources()
 {
     // define where shaders and textures can be found:
-    Settings::the()->setResourcePath("../");
-    Settings::the()->setShaderPath("Shader/");
-    Settings::the()->setTexturePath("Geometry/");
-    Settings::the()->setGeometryPath("Geometry/");
+    ACGL::Base::Settings::the()->setResourcePath("../");
+    ACGL::Base::Settings::the()->setShaderPath("Shader/");
+    ACGL::Base::Settings::the()->setTexturePath("Geometry/");
+    ACGL::Base::Settings::the()->setGeometryPath("Geometry/");
 
     // load the geometry of the stanford bunny and build a VAO:
-    vaoBunny = VertexArrayObjectCreator("Bunny.obj").create();
-    vaoBunny->bind();
+    model = Model("Bunny.obj");
 
     // load a texture:
-    bunnyTexture = Texture2DFileManager::the()->get( Texture2DCreator("clownfishBunny.png"));
-    // alternatively, without the Managers:
-    //bunnyTexture = loadTexture2D( "../shared/Geometry/clownfishBunny.png" );
+    texture = Texture("clownfishBunny.png");
 
     // look up all shader files starting with 'HelloWorld' and build a ShaderProgram from it:
-    normalsAsColorShader = ShaderProgramCreator("HelloWorld").attributeLocations( vaoBunny->getAttributeLocations() ).create();
-    normalsAsColorShader->use();
+    shader = Shader("HelloWorld", model);
 
-    // set texture uniform and bind texture to the same texture unit:
-    normalsAsColorShader->setTexture( "uTexture", bunnyTexture, 0 );
+    //Create object 
+    object = Object(model, texture, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 
+    glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), shader);
 
     // just in case: check for errors
     openGLCriticalError();
@@ -45,23 +45,16 @@ void deleteCustomResources()
 
 void draw( float runTime )
 {
-    // reload textures every 100 frames:
-    static int frame = 0;
-    frame++;
-    if (frame % 100 == 0) {
-        Texture2DFileManager::the()->updateAll();
-    }
-
     // clear the framebuffer:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // set view and projection matrix:
     glm::mat4 viewMatrix = glm::translate(glm::vec3(0.0f, -1.0f, -2.0f)) * glm::rotate<float>(1.0472f * runTime, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::scale<float>(glm::vec3(0.25f));
-    normalsAsColorShader->setUniform( "uViewMatrix", viewMatrix );
-    normalsAsColorShader->setUniform( "uProjectionMatrix", buildFrustum(75.0, 0.1, 100.0, (float)g_windowSize.x/(float)g_windowSize.y) );
+    shader.getReference()->setUniform( "uViewMatrix", viewMatrix );
+    shader.getReference()->setUniform( "uProjectionMatrix", buildFrustum(75.0, 0.1, 100.0, (float)g_windowSize.x/(float)g_windowSize.y) );
 
     // render the bunny:
-    vaoBunny->render();
+    object.render();
 }
 
 void resizeCallback( GLFWwindow *, int newWidth, int newHeight )

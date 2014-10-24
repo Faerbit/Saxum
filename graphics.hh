@@ -3,14 +3,8 @@
 
 #include "main.hh"
 
-#include <ACGL/OpenGL/Creator/ShaderProgramCreator.hh>
-#include <ACGL/OpenGL/Creator/VertexArrayObjectCreator.hh>
-#include <ACGL/OpenGL/Creator/Texture2DCreator.hh>
-#include <ACGL/OpenGL/Objects.hh>
 #include <ACGL/Base/Settings.hh>
 #include <ACGL/Math/Math.hh>
-#include <ACGL/OpenGL/Data/TextureLoadStore.hh>
-#include <ACGL/OpenGL/Managers.hh>
 
 // gets called after the OpenGL window is prepared, init of example specific stuff:
 void initCustomResources();
