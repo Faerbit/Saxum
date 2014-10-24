@@ -113,5 +113,11 @@ ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 #
 ###############################################################################
 
+INCLUDE_DIRECTORIES(GLOB_RECURSE ${CMAKE_SOURCE_DIR}/extern/bullet/src/*.h)
+
+SET (LIBRARIES ${LIBRARIES} ../extern/bullet/build/src/BulletCollision/libBulletCollision.a)
+SET (LIBRARIES ${LIBRARIES} ../extern/bullet/build/src/BulletDynamics/libBulletDynamics.a)
+SET (LIBRARIES ${LIBRARIES} ../extern/bullet/build/src/LinearMath/libLinearMath.a)
+
 ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${SHADER_FILES} ${README_FILES})
 TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} ${LIBRARIES})
