@@ -5,6 +5,9 @@ Model::Model(std::string filePath) {
     reference->bind();
 }
 
+Model::Model(){
+}
+
 Model::~Model() {
 }
 

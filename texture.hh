@@ -9,6 +9,7 @@
 class Texture{
     public:
         Texture(std::string filePath);
+	Texture();
         ACGL::OpenGL::SharedTexture2D getReference();
         ~Texture();
     private:

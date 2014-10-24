@@ -7,6 +7,7 @@
 class Model {
     public:
         Model(std::string filePath);
+	Model();
         ~Model();
         ACGL::OpenGL::SharedVertexArrayObject getReference();
     private:

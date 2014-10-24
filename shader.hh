@@ -8,6 +8,7 @@
 class Shader {
     public:
         Shader(std::string filePath, Model model);
+	Shader();
         ACGL::OpenGL::SharedShaderProgram getReference();
         ~Shader();
     private:

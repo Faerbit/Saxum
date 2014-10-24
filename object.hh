@@ -14,6 +14,7 @@ class Object : Entity {
     public:
         Object(Model model, Texture texture, glm::vec3 position, glm::vec3 rotation, 
                 glm::vec3 velocity, glm::vec3 angularVelocity, Shader shader);
+	Object();
         ~Object();
         void render();
     private:

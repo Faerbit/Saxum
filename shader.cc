@@ -6,6 +6,9 @@ Shader::Shader(std::string filePath, Model model) {
     reference->use();
 }
 
+Shader::Shader() {
+}
+
 Shader::~Shader() {
 }
 

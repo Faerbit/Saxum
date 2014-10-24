@@ -10,9 +10,13 @@ Object::Object(Model model, Texture texture, glm::vec3 position, glm::vec3 rotat
     this->shader = shader.getReference();
 }
 
+Object::Object() {
+}
+
 Object::~Object() {
 }
 
 void Object::render() {
     shader->setTexture("uTexture", texture, 0);
+    model->render();
 }
