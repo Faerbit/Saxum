@@ -1,11 +1,12 @@
 #!/bin/bash
 
-currrentDir=$(pwd)
+currentDir=$(pwd)
 
 #building bullet
 
 cd extern/bullet/
 mkdir -p build
+cd build
 cmake ..
 make -j5
 
