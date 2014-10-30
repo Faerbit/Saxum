@@ -6,7 +6,7 @@
 class Entity {
     public:
         Entity(glm::vec3 position, glm::vec3 rotation);
-	Entity();
+	    Entity();
         ~Entity();
         void setPosition(glm::vec3 positon);
         void setRotation(glm::vec3 rotation);
