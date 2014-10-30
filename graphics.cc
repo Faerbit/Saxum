@@ -7,10 +7,8 @@
 
 using namespace std;
 
-Model model;
-Texture texture;
 Shader shader;
-Object object;
+Level level;
 
 // gets called after the OpenGL window is prepared:
 void initCustomResources()
@@ -21,18 +19,15 @@ void initCustomResources()
     ACGL::Base::Settings::the()->setTexturePath("Geometry/");
     ACGL::Base::Settings::the()->setGeometryPath("Geometry/");
 
-    // load the geometry of the stanford bunny and build a VAO:
-    model = Model("Bunny.obj");
-
-    // load a texture:
-    texture = Texture("clownfishBunny.png");
+    // load Model to give shader correct Attribute locations
+    // TODO look up if this is really necessary, since this looks really stupid.
+    Model model = Model("Bunny.obj");
 
     // look up all shader files starting with 'HelloWorld' and build a ShaderProgram from it:
     shader = Shader("HelloWorld", model);
 
-    //Create object 
-    object = Object(model, texture, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 
-    glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), shader);
+    // load Level
+    level.load(shader);
 
     // just in case: check for errors
     openGLCriticalError();
@@ -54,7 +49,7 @@ void draw( float runTime )
     shader.getReference()->setUniform( "uProjectionMatrix", buildFrustum(75.0, 0.1, 100.0, (float)g_windowSize.x/(float)g_windowSize.y) );
 
     // render the bunny:
-    object.render();
+    level.render();
 }
 
 void resizeCallback( GLFWwindow *, int newWidth, int newHeight )
