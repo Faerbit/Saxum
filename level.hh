@@ -15,6 +15,8 @@ class Level {
         ~Level();
         void load(Shader shader); // Shader is necessary for correct texture assigning
         void render();
+        glm::vec3 getAmbientLight();
+        std::vector<Light> getLights();
     private:
         std::string filePath;
         std::vector<Object> objects;

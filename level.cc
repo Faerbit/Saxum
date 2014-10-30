@@ -28,3 +28,11 @@ void Level::render() {
         objects[i].render();
     }
 }
+
+glm::vec3 Level::getAmbientLight() {
+    return ambientLight;
+}
+
+std::vector<Light> Level::getLights() {
+    return lights;
+}
