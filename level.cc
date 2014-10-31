@@ -23,6 +23,10 @@ void Level::load(Shader shader) {
     objects.push_back(object);
     //set lighting parameters
     ambientLight = glm::vec3(0.1f, 0.1f, 0.1f);
+    Light light = Light(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), 1.0f);
+    lights.push_back(light);
+    Light light2 = Light(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
+    lights.push_back(light2);
 }
 
 void Level::render() {
