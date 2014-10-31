@@ -6,7 +6,7 @@
 
 //To distinguish various light types
 
-class Light : Entity {
+class Light : public Entity {
     public:
         Light(glm::vec3 position, glm::vec3 rotation, glm::vec3 colour, float intensity);
         ~Light();
