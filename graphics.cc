@@ -24,7 +24,7 @@ void initCustomResources()
     Model model = Model("Bunny.obj");
 
     // look up all shader files starting with 'HelloWorld' and build a ShaderProgram from it:
-    shader = Shader("HelloWorld", model);
+    shader = Shader("phong", model);
 
     // load Level
     level.load(shader);
