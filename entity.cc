@@ -10,3 +10,7 @@ Entity::Entity(){
 
 Entity::~Entity(){
 }
+
+glm::vec3 Entity::getPosition() {
+    return position;
+}
