@@ -48,7 +48,24 @@ void draw( float runTime )
     shader.getReference()->setUniform( "uViewMatrix", viewMatrix );
     shader.getReference()->setUniform( "uProjectionMatrix", buildFrustum(75.0, 0.1, 100.0, (float)g_windowSize.x/(float)g_windowSize.y) );
 
-    // render the bunny:
+    //set lighting parameters
+    shader.getReference()->setUniform("ambientIntensity", level.getAmbientLight());
+    shader.getReference()->setUniform("ambientFactor", 1.0f);
+    shader.getReference()->setUniform("diffuseIntensity", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader.getReference()->setUniform("diffuseFactor", 1.0f);
+
+    
+    // TODO look into doing this less often 
+    // Build light position array
+    glm::vec3 lights[level.getLights().size()];
+    for(int i = 0; i<level.getLights().size(); i++) {
+        lights[i] = level.getLights()[i].getPosition();
+    }
+    
+    shader.getReference()->setUniform("lightSources", lights);
+    //glUniform1fv(glGetUniformLocation(shader.getReference(), "lightSources", 128, lights);
+
+    // render the level(currently only a bunny):
     level.render();
 }
 

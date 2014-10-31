@@ -6,11 +6,18 @@ in vec2 vTexCoord;
 out vec4 oColor;
 
 uniform sampler2D uTexture;
+uniform vec3 lightSources[128];
+uniform vec3 ambientIntensity;
+uniform float ambientFactor;
+uniform vec3 diffuseIntensity;
+uniform float diffuseFactor;
 
 void main()
-{
-    vec3 color = texture(uTexture, vTexCoord).rgb;
-    color *= dot(normalize(vNormal),vec3(0,0,1));
+{   
+    vec3 ambientColor = ambientFactor * ambientIntensity;
+    vec3 diffuseColor = dot(normalize(vNormal),vec3(0,0,1))*diffuseFactor*diffuseIntensity;
+    vec3 finalColor = diffuseColor + ambientColor;
 
-    oColor = vec4( color, 1.0 );
+    vec3 texture = texture(uTexture, vTexCoord).rgb;
+    oColor = vec4(finalColor*texture, 1.0 );
 }
