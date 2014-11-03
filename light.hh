@@ -4,8 +4,6 @@
 #include "entity.hh"
 #include <ACGL/Math/Math.hh>
 
-//To distinguish various light types
-
 class Light : public Entity {
     public:
         Light(glm::vec3 position, glm::vec3 rotation, glm::vec3 colour, float intensity);
