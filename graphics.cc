@@ -23,7 +23,7 @@ void initCustomResources()
     // TODO look up if this is really necessary, since this looks really stupid.
     Model model = Model("Bunny.obj");
 
-    // look up all shader files starting with 'HelloWorld' and build a ShaderProgram from it:
+    // look up all shader files starting with 'phong' and build a ShaderProgram from it:
     shader = Shader("phong", model);
 
     // load Level
@@ -52,7 +52,6 @@ void draw( float runTime )
     shader.getReference()->setUniform("ambientColor", level.getAmbientLight());
     shader.getReference()->setUniform("ambientFactor", 1.0f);
     if (level.getLights().size() > 0) {
-        shader.getReference()->setUniform("diffuseFactor", 0.7f);
         shader.getReference()->setUniform("lightCount", (int) level.getLights().size());
 
         // TODO look into doing this less often
@@ -70,6 +69,13 @@ void draw( float runTime )
         }
         glUniform3fv(shader.getReference()->getUniformLocation("lightColors"),
             sizeof(lightColours),  (GLfloat*) lightColours);
+        // Build light attenuation array
+        float lightIntensities[level.getLights().size()];
+        for(int i = 0; i<level.getLights().size(); i++) {
+            lightIntensities[i] = level.getLights()[i].getIntensity();
+        }
+        glUniform1fv(shader.getReference()->getUniformLocation("lightIntensities"),
+            sizeof(lightIntensities),  (GLfloat*) lightIntensities);
     }
 
     // render the level(currently only a bunny):
