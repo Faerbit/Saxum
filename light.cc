@@ -8,3 +8,11 @@ Light::Light(glm::vec3 position, glm::vec3 rotation, glm::vec3 colour, float int
 
 Light::~Light() {
 }
+
+glm::vec3 Light::getColour() {
+    return colour;
+}
+
+float Light::getIntensity() {
+    return intensity;
+}
