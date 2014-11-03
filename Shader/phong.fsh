@@ -8,17 +8,18 @@ out vec4 oColor;
 uniform sampler2D uTexture;
 uniform int lightCount;
 uniform vec3 lightSources[128];
-uniform vec3 ambientIntensity;
+uniform vec3 ambientColor;
 uniform float ambientFactor;
-uniform vec3 diffuseIntensity;
+uniform vec3 lightColors[128];
 uniform float diffuseFactor;
 
 void main()
 {   
-    vec3 ambientColor = ambientFactor * ambientIntensity;
+    vec3 ambientColor = ambientFactor * ambientColor;
     vec3 diffuseColor = vec3(0.0, 0.0, 0.0);
     for(int i = 0; i<lightCount; i++) {
-        diffuseColor += dot(normalize(vNormal), normalize(lightSources[i]))*diffuseFactor*diffuseIntensity;
+        diffuseColor += dot(normalize(vNormal), normalize(lightSources[i]))
+        *diffuseFactor*lightColors[i];
     }
     vec3 finalColor = diffuseColor + ambientColor;
 

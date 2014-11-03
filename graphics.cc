@@ -49,20 +49,27 @@ void draw( float runTime )
     shader.getReference()->setUniform( "uProjectionMatrix", buildFrustum(75.0, 0.1, 100.0, (float)g_windowSize.x/(float)g_windowSize.y) );
 
     //set lighting parameters
-    shader.getReference()->setUniform("ambientIntensity", level.getAmbientLight());
+    shader.getReference()->setUniform("ambientColor", level.getAmbientLight());
     shader.getReference()->setUniform("ambientFactor", 1.0f);
     if (level.getLights().size() > 0) {
-        shader.getReference()->setUniform("diffuseIntensity", glm::vec3(1.0f, 1.0f, 1.0f));
-        shader.getReference()->setUniform("diffuseFactor", 1.0f);
+        shader.getReference()->setUniform("diffuseFactor", 0.7f);
         shader.getReference()->setUniform("lightCount", (int) level.getLights().size());
 
         // TODO look into doing this less often
         // Build light position array
-        glm::vec3 lights[level.getLights().size()];
+        glm::vec3 lightSources[level.getLights().size()];
         for(int i = 0; i<level.getLights().size(); i++) {
-            lights[i] = level.getLights()[i].getPosition();
+            lightSources[i] = level.getLights()[i].getPosition();
         }
-        glUniform3fv(shader.getReference()->getUniformLocation("lightSources"), sizeof(lights),  (GLfloat*) lights);
+        glUniform3fv(shader.getReference()->getUniformLocation("lightSources"),
+            sizeof(lightSources),  (GLfloat*) lightSources);
+        // Build light colour array
+        glm::vec3 lightColours[level.getLights().size()];
+        for(int i = 0; i<level.getLights().size(); i++) {
+            lightColours[i] = level.getLights()[i].getColour();
+        }
+        glUniform3fv(shader.getReference()->getUniformLocation("lightColors"),
+            sizeof(lightColours),  (GLfloat*) lightColours);
     }
 
     // render the level(currently only a bunny):
