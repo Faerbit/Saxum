@@ -20,9 +20,12 @@ void main()
     vec3 diffuseColor = vec3(0.0, 0.0, 0.0);
     for(int i = 0; i<lightCount; i++) {
         float distance = distance(lightSources[i], vec3(fragPosition));
-        float diffuseFactor = (1.0*lightIntensities[i])/(distance);
-        diffuseColor += dot(normalize(vNormal), normalize(lightSources[i]))
-        *diffuseFactor*lightColors[i];
+        // only take lights into account with meaningful contribution
+        if (distance > 0.001f) {
+            float diffuseFactor = (1.0*lightIntensities[i])/(distance);
+            diffuseColor += dot(normalize(vNormal), normalize(lightSources[i]))
+            *diffuseFactor*lightColors[i];
+        }
     }
     vec3 finalColor = diffuseColor + ambientColor;
 
