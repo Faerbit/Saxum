@@ -1,6 +1,7 @@
 #!/bin/bash
 
 currentDir=$(pwd)
+threads=$(($(nproc)+1))
 
 #building bullet
 
@@ -8,7 +9,7 @@ cd extern/bullet/
 mkdir -p build
 cd build
 cmake ..
-make -j5
+make -j$threads
 
 cd $currentDir
 
@@ -17,4 +18,4 @@ cd $currentDir
 mkdir -p build
 cd build 
 cmake .. 
-make -j5
+make -j$threads
