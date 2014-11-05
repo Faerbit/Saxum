@@ -3,6 +3,9 @@
 
 #include <string>
 #include "texture.hh"
+#include <fstream>
+//#include <winsock.h>		//on Windows
+#include <netinet/in.h>		//on Unix
 
 class Terrain {
     public:
@@ -14,6 +17,7 @@ class Terrain {
         float friction;
         Texture texture;
         std::string filePath;
+	unsigned int** heightmap;	//can be accessed like 'unsigned int[][]'
 };
 
 #endif
