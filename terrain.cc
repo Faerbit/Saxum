@@ -19,10 +19,10 @@ void Terrain::load() {
 
     heightmap = new unsigned int*[height];	//initialize the heightmap
     for(rowNum=0; rowNum<height; rowNum++){	//read in the heightmap
-	heightmap[rowNum] = new unsigned int[width];
-	for(columnNum=0; columnNum<width; columnNum++){
-	    terrain_png.read((char *)&heightmap[rowNum][columnNum], 1);
-	}
+	    heightmap[rowNum] = new unsigned int[width];
+        for(columnNum=0; columnNum<width; columnNum++){
+            terrain_png.read((char *)&heightmap[rowNum][columnNum], 1);
+        }
     }
 
 
