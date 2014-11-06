@@ -12,6 +12,7 @@ class Texture{
 	Texture();
         ACGL::OpenGL::SharedTexture2D getReference();
         ~Texture();
+	void load();
     private:
         ACGL::OpenGL::SharedTexture2D reference;
 };
