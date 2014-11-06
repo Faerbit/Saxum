@@ -6,6 +6,7 @@
 #include <fstream>
 //#include <winsock.h>		//on Windows
 #include <netinet/in.h>		//on Unix
+#include <ACGL/OpenGL/Objects/VertexArrayObject.hh>
 
 class Terrain {
     public:
@@ -17,7 +18,12 @@ class Terrain {
         float friction;
         Texture texture;
         std::string filePath;
+	unsigned int heightmapWidth, heightmapHeight;
 	unsigned int** heightmap;	//can be accessed like 'unsigned int[][]'
+	bool heightmapChanged;
+	ACGL::OpenGL::VertexArrayObject triangleMesh;
+
+	void makeTriangleMesh();
 };
 
 #endif
