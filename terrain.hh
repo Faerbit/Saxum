@@ -4,7 +4,6 @@
 #include <string>
 #include "texture.hh"
 #include <fstream>
-#include "extern/bullet/src/BulletDynamics/Dynamics/btRigidBody.h"
 
 class Terrain {
     public:

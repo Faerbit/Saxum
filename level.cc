@@ -2,6 +2,7 @@
 
 Level::Level(std::string filePath){
     this->filePath = filePath;
+    terrain = Terrain(filePath + "/terrain");
 }
 
 Level::Level() {
@@ -11,6 +12,10 @@ Level::~Level() {
 }
 
 void Level::load(Shader shader) {
+    terrain.load();
+
+
+
     // currently hard coded should later read this stuff out of a file
     // load the geometry of the stanford bunny and build a VAO:
     Model model = Model("Bunny.obj");
@@ -33,6 +38,7 @@ void Level::render() {
     for(int i = 0; i<objects.size(); i++) {
         objects[i].render();
     }
+    terrain.render();
 }
 
 glm::vec3 Level::getAmbientLight() {
