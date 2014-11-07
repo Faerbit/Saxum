@@ -2,7 +2,7 @@
 
 Level::Level(std::string filePath){
     this->filePath = filePath;
-    terrain = Terrain(filePath + "/terrain");
+    this->terrain = Terrain(filePath + "/terrain");
 }
 
 Level::Level() {
@@ -12,7 +12,7 @@ Level::~Level() {
 }
 
 void Level::load(Shader shader) {
-    terrain.load();
+    //this->terrain.load();
 
 
 
@@ -38,7 +38,7 @@ void Level::render() {
     for(int i = 0; i<objects.size(); i++) {
         objects[i].render();
     }
-    terrain.render();
+    //this->terrain.render();
 }
 
 glm::vec3 Level::getAmbientLight() {

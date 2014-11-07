@@ -4,6 +4,8 @@
 #include <string>
 #include "texture.hh"
 #include <fstream>
+#include <netinet/in.h>
+#include <ACGL/OpenGL/Objects/VertexArrayObject.hh>
 
 class Terrain {
     public:
