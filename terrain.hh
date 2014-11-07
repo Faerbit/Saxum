@@ -4,9 +4,7 @@
 #include <string>
 #include "texture.hh"
 #include <fstream>
-//#include <winsock.h>		//on Windows
-#include <netinet/in.h>		//on Unix
-#include <ACGL/OpenGL/Objects/VertexArrayObject.hh>
+#include "extern/bullet/src/BulletDynamics/Dynamics/btRigidBody.h"
 
 class Terrain {
     public:

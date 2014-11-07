@@ -1,8 +1,8 @@
 #include "terrain.hh"
 
-//Terrain::Terrain(std::string filePath){
-//    this->filePath = filePath;
-//}
+Terrain::Terrain(std::string filePath){
+    this->filePath = filePath;
+}
 
 Terrain::Terrain(){
 }
@@ -12,17 +12,18 @@ Terrain::~Terrain() {
 
 
 void Terrain::load() {
-    std::ifstream terrain_png(this->filePath + "/heightmap.png");			//TODO: filepath organization
+    std::ifstream terrain_png(this->filePath + "/heightmap.png");	//TODO: filepath organization
     unsigned int rowNum, columnNum, heightmapValue;
 
-    terrain_png.seekg(16);					//skip part of the header
-    terrain_png.read((char *)&this->heightmapWidth, 4);		//read width
-    terrain_png.read((char *)&this->heightmapHeight, 4);	//read height
-    this->heightmapWidth  = ntohl(this->heightmapWidth);	//convert from host to network byte order
-    this->heightmapHeight = ntohl(this->heightmapHeight);			
+    terrain_png.seekg(16);						//skip part of the header
+    char temp[2];
+    terrain_png.read(temp, 4);						//read width
+    this->heightmapWidth = (temp[1]<<0) | (temp[0]<<8);			//convert from network to host byte order
+    terrain_png.read(temp, 4);						//read height
+    this->heightmapHeight = (temp[1]<<0) | (temp[0]<<8);		//convert from network to host byte order
 
-    heightmap = new float*[this->heightmapHeight];		//initialize the heightmap
-    for(rowNum = 0; rowNum < this->heightmapHeight; rowNum++){	//read in the heightmap
+    heightmap = new float*[this->heightmapHeight];			//initialize the heightmap
+    for(rowNum = 0; rowNum < this->heightmapHeight; rowNum++){		//read in the heightmap
 	    heightmap[rowNum] = new float[this->heightmapWidth];
         for(columnNum = 0; columnNum < this->heightmapWidth; columnNum++){
             terrain_png.read((char *)&heightmapValue, 1);
@@ -80,7 +81,6 @@ void Terrain::makeTriangleMesh(){
     this->triangleMesh->bind();
     this->triangleMesh->setMode(GL_TRIANGLE_STRIP);
     this->triangleMesh->attachAllAttributes(arrayBuffer);
-    //TODO unbind?
 }
 
 void Terrain::render() {
