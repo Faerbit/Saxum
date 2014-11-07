@@ -13,6 +13,3 @@ Texture::~Texture() {
 ACGL::OpenGL::SharedTexture2D Texture::getReference() {
     return reference;
 }
-
-void Texture::load(){
-}

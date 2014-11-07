@@ -10,18 +10,18 @@
 
 class Terrain {
     public:
-        Terrain();
+        Terrain(std::string filePath);
+	Terrain();
         ~Terrain();
         void load();
         void render();
     private:
-        float friction;
         Texture texture;
         std::string filePath;
 	unsigned int heightmapWidth, heightmapHeight;
-	unsigned int** heightmap;	//can be accessed like 'unsigned int[][]'
+	float** heightmap;				//can be accessed like 'float[][]'
 	bool heightmapChanged;
-	ACGL::OpenGL::VertexArrayObject triangleMesh;
+	ACGL::OpenGL::SharedVertexArrayObject triangleMesh;
 
 	void makeTriangleMesh();
 };
