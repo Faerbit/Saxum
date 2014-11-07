@@ -49,8 +49,6 @@ void draw( float runTime )
     shader.getReference()->setUniform( "uProjectionMatrix", buildFrustum(75.0, 0.1, 100.0, (float)g_windowSize.x/(float)g_windowSize.y) );
 
     //set lighting parameters
-    shader.getReference()->setUniform("ambientColor", level.getAmbientLight());
-    shader.getReference()->setUniform("ambientFactor", 1.0f);
     if (level.getLights().size() > 0) {
         shader.getReference()->setUniform("lightCount", (int) level.getLights().size());
 
@@ -77,6 +75,14 @@ void draw( float runTime )
         glUniform1fv(shader.getReference()->getUniformLocation("lightIntensities"),
             sizeof(lightIntensities),  (GLfloat*) lightIntensities);
     }
+
+    // set Material Parameters
+    shader.getReference()->setUniform("ambientColor", level.getAmbientLight());
+    shader.getReference()->setUniform("ambientFactor", 0.9f);
+    shader.getReference()->setUniform("diffuseFactor", 0.5f);
+    shader.getReference()->setUniform("specularFactor", 0.5f);
+    shader.getReference()->setUniform("camera", glm::vec3(0.0f, 0.0f, 0.0f));
+    shader.getReference()->setUniform("shininess", 5.0f);
 
     // render the level(currently only a bunny):
     level.render();
