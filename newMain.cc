@@ -1,6 +1,7 @@
 #include "main.hh"
 
 #include <iostream>
+/*
 #include <fstream>
 #include <iomanip>
 #include <sstream>
@@ -167,9 +168,9 @@ std::vector<std::string> init(char *argv[]){
     //TODO Load Menu: till then:
     currentLevel = Level("Levels/LevelTest");
     Model model = Model("Bunny.obj");				//TODO should we get another model here? dont know how shader creation should work
-    OurShader shader;
-    shader = OurShader("Shader/phong.fsh", model);
-    currentLevel.load(shader);
+    //OurShader shader;
+    //shader = OurShader("Shader/phong.fsh", model);		//TODO fix ourShader
+    //currentLevel.load(shader);
     return initWindow(argv);
 }
 
@@ -206,8 +207,7 @@ int main( int argc, char *argv[] )
     glfwTerminate();
     exit(0);
 }
-
-
+*/
 
 
 
