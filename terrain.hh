@@ -2,7 +2,7 @@
 #define TERRAIN_HH_INCLUDED
 
 #include <string>
-#include "texture.hh"
+#include "material.hh"
 #include <fstream>
 #include <netinet/in.h>
 #include <ACGL/OpenGL/Objects/VertexArrayObject.hh>
@@ -10,12 +10,12 @@
 class Terrain {
     public:
         Terrain(std::string filePath);
-	Terrain();
+        Terrain();
         ~Terrain();
         void load();
         void render();
     private:
-        Texture texture;
+        Material material;
         std::string filePath;
 	unsigned int heightmapWidth, heightmapHeight;
 	float** heightmap;				//can be accessed like 'float[][]'

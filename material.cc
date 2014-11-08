@@ -1,15 +1,15 @@
-#include "texture.hh"
+#include "material.hh"
 
-Texture::Texture(std::string filePath) {
+Material::Material(std::string filePath) {
     reference = ACGL::OpenGL::Texture2DFileManager::the()->get(ACGL::OpenGL::Texture2DCreator(filePath));
 }
 
-Texture::Texture() {
+Material::Material() {
 }
 
-Texture::~Texture() {
+Material::~Material() {
 }
 
-ACGL::OpenGL::SharedTexture2D Texture::getReference() {
+ACGL::OpenGL::SharedTexture2D Material::getReference() {
     return reference;
 }

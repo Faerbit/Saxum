@@ -20,9 +20,9 @@ void Level::load(Shader shader) {
     // load the geometry of the stanford bunny and build a VAO:
     Model model = Model("Bunny.obj");
     // load a texture:
-    Texture texture = Texture("clownfishBunny.png");
+    Material material = Material("clownfishBunny.png");
     //Create object
-    Object object = Object(model, texture, glm::vec3(0.0f, 0.0f, 0.0f),
+    Object object = Object(model, material, glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     objects.push_back(object);

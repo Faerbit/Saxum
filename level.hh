@@ -6,6 +6,7 @@
 #include "light.hh"
 #include "entity.hh"
 #include "terrain.hh"
+#include "material.hh"
 #include "shader.hh"
 
 class Level {

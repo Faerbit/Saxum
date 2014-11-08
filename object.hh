@@ -3,7 +3,7 @@
 
 #include "entity.hh"
 #include "model.hh"
-#include "texture.hh"
+#include "material.hh"
 #include "shader.hh"
 #include <string>
 #include <ACGL/Math/Math.hh>
@@ -12,14 +12,14 @@
 
 class Object : public Entity {
     public:
-        Object(Model model, Texture texture, glm::vec3 position, glm::vec3 rotation, 
+        Object(Model model, Material material, glm::vec3 position, glm::vec3 rotation,
                 glm::vec3 velocity, glm::vec3 angularVelocity, Shader shader);
 	Object();
         ~Object();
         void render();
     private:
         ACGL::OpenGL::SharedVertexArrayObject model;
-        ACGL::OpenGL::SharedTexture2D texture;
+        Material material;
         glm::vec3 velocity;
         glm::vec3 angularVelocity;
         ACGL::OpenGL::SharedShaderProgram shader;
