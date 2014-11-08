@@ -76,11 +76,7 @@ void draw( float runTime )
 
     // set Material Parameters
     shader.getReference()->setUniform("ambientColor", level.getAmbientLight());
-    shader.getReference()->setUniform("ambientFactor", 0.1f);
-    shader.getReference()->setUniform("diffuseFactor", 0.5f);
-    shader.getReference()->setUniform("specularFactor", 0.5f);
     shader.getReference()->setUniform("camera", glm::vec3(0.0f, 0.0f, 0.0f));
-    shader.getReference()->setUniform("shininess", 3.0f);
 
     // render the level(currently only a bunny):
     level.render();

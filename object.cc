@@ -17,6 +17,10 @@ Object::~Object() {
 }
 
 void Object::render() {
+    shader->setUniform("ambientFactor", material.getAmbientFactor());
+    shader->setUniform("diffuseFactor", material.getDiffuseFactor());
+    shader->setUniform("specularFactor", material.getSpecularFactor());
+    shader->setUniform("shininess", material.getShininess());
     shader->setTexture("uTexture", material.getReference(), 0);
     model->render();
 }

@@ -8,12 +8,21 @@
 
 class Material{
     public:
-        Material(std::string filePath);
+        Material(std::string filePath, float ambientFactor,
+            float diffuseFactor, float specularFactor, float shininess);
 	    Material();
         ACGL::OpenGL::SharedTexture2D getReference();
         ~Material();
+        float getAmbientFactor();
+        float getDiffuseFactor();
+        float getSpecularFactor();
+        float getShininess();
     private:
         ACGL::OpenGL::SharedTexture2D reference;
+        float ambientFactor;
+        float diffuseFactor;
+        float specularFactor;
+        float shininess;
 };
 
 #endif
