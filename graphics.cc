@@ -1,8 +1,6 @@
 #include "graphics.hh"
 
 #include "model.hh"
-#include "object.hh"
-#include "texture.hh"
 #include "shader.hh"
 
 using namespace std;
