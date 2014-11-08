@@ -26,6 +26,8 @@
 /// @author Christophe Riccio
 ///////////////////////////////////////////////////////////////////////////////////
 
+#pragma GCC diagnostic ignored "-Wsign-compare"
+
 namespace glm{
 namespace detail
 {
