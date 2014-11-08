@@ -4,6 +4,8 @@
  * Distributed under the terms of the MIT License (see LICENSE.TXT).   *
  **********************************************************************/
 
+#pragma GCC diagnostic ignored "-Woverflow"
+
 #include <ACGL/OpenGL/Data/TextureDataLoadStore.hh>
 #include <ACGL/OpenGL/Tools.hh>
 #include <ACGL/Utils/FileHelpers.hh>
