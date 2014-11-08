@@ -1,11 +1,11 @@
 #include "graphics.hh"
 
 #include "model.hh"
-#include "shader.hh"
+#include <ACGL/OpenGL/Creator/ShaderProgramCreator.hh>
 
 using namespace std;
 
-Shader shader;
+ACGL::OpenGL::SharedShaderProgram shader;
 Level level;
 
 // gets called after the OpenGL window is prepared:
@@ -22,7 +22,9 @@ void initCustomResources()
     Model model = Model("Bunny.obj");
 
     // look up all shader files starting with 'phong' and build a ShaderProgram from it:
-    shader = Shader("phong", model);
+    shader = ACGL::OpenGL::ShaderProgramCreator("phong").attributeLocations(
+            model.getReference()->getAttributeLocations()).create();
+    shader->use();
 
     // load Level
     level.load(shader);
@@ -43,40 +45,40 @@ void draw( float runTime )
 
     // set view and projection matrix:
     glm::mat4 viewMatrix = glm::translate(glm::vec3(0.0f, -1.0f, -2.0f)) * glm::rotate<float>(1.0472f * runTime, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::scale<float>(glm::vec3(0.25f));
-    shader.getReference()->setUniform( "uViewMatrix", viewMatrix );
-    shader.getReference()->setUniform( "uProjectionMatrix", buildFrustum(75.0, 0.1, 100.0, (float)g_windowSize.x/(float)g_windowSize.y) );
+    shader->setUniform( "uViewMatrix", viewMatrix );
+    shader->setUniform( "uProjectionMatrix", buildFrustum(75.0, 0.1, 100.0, (float)g_windowSize.x/(float)g_windowSize.y) );
 
     //set lighting parameters
     if (level.getLights().size() > 0) {
-        shader.getReference()->setUniform("lightCount", (int) level.getLights().size());
+        shader->setUniform("lightCount", (int) level.getLights().size());
 
         // TODO look into doing this less often
         // Build light position array
         glm::vec3 lightSources[level.getLights().size()];
-        for(int i = 0; i<level.getLights().size(); i++) {
+        for(unsigned int i = 0; i<level.getLights().size(); i++) {
             lightSources[i] = level.getLights()[i].getPosition();
         }
-        glUniform3fv(shader.getReference()->getUniformLocation("lightSources"),
+        glUniform3fv(shader->getUniformLocation("lightSources"),
             sizeof(lightSources),  (GLfloat*) lightSources);
         // Build light colour array
         glm::vec3 lightColours[level.getLights().size()];
-        for(int i = 0; i<level.getLights().size(); i++) {
+        for(unsigned int i = 0; i<level.getLights().size(); i++) {
             lightColours[i] = level.getLights()[i].getColour();
         }
-        glUniform3fv(shader.getReference()->getUniformLocation("lightColors"),
+        glUniform3fv(shader->getUniformLocation("lightColors"),
             sizeof(lightColours),  (GLfloat*) lightColours);
         // Build light attenuation array
         float lightIntensities[level.getLights().size()];
-        for(int i = 0; i<level.getLights().size(); i++) {
+        for(unsigned int i = 0; i<level.getLights().size(); i++) {
             lightIntensities[i] = level.getLights()[i].getIntensity();
         }
-        glUniform1fv(shader.getReference()->getUniformLocation("lightIntensities"),
+        glUniform1fv(shader->getUniformLocation("lightIntensities"),
             sizeof(lightIntensities),  (GLfloat*) lightIntensities);
     }
 
     // set Material Parameters
-    shader.getReference()->setUniform("ambientColor", level.getAmbientLight());
-    shader.getReference()->setUniform("camera", glm::vec3(0.0f, 0.0f, 0.0f));
+    shader->setUniform("ambientColor", level.getAmbientLight());
+    shader->setUniform("camera", glm::vec3(0.0f, 0.0f, 0.0f));
 
     // render the level(currently only a bunny):
     level.render();

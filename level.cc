@@ -11,7 +11,7 @@ Level::Level() {
 Level::~Level() {
 }
 
-void Level::load(Shader shader) {
+void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     //this->terrain.load();
 
 
@@ -35,7 +35,7 @@ void Level::load(Shader shader) {
 }
 
 void Level::render() {
-    for(int i = 0; i<objects.size(); i++) {
+    for(unsigned int i = 0; i<objects.size(); i++) {
         objects[i].render();
     }
     //this->terrain.render();

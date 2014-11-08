@@ -7,14 +7,13 @@
 #include "entity.hh"
 #include "terrain.hh"
 #include "material.hh"
-#include "shader.hh"
 
 class Level {
     public:
         Level(std::string filePath);
         Level();
         ~Level();
-        void load(Shader shader); // Shader is necessary for correct texture assigning
+        void load(ACGL::OpenGL::SharedShaderProgram shader); // Shader is necessary for correct texture assigning
         void render();
         glm::vec3 getAmbientLight();
         std::vector<Light> getLights();
