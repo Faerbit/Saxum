@@ -113,7 +113,10 @@ ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 #
 ###############################################################################
 
-INCLUDE_DIRECTORIES(GLOB_RECURSE ${CMAKE_SOURCE_DIR}/extern/bullet/src/*.h)
+FILE(GLOB_RECURSE HEADER_FILES_BULLET ${CMAKE_SOURCE_DIR}/extern/bullet/src/*.h)
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/extern/bullet/src)
+SET(HEADER_FILES ${HEADER_FILES} ${HEADER_FILES_BULLET})
 
 SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/src/BulletCollision/libBulletCollision.a)
 SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/src/BulletDynamics/libBulletDynamics.a)
