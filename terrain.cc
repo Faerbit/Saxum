@@ -12,12 +12,12 @@ Terrain::~Terrain() {
 
 
 void Terrain::load() {
-    this->filePath = "../Levels/LevelTest/terrain";					//TODO remove this, its only for testing
+    this->filePath = "../Levels/LevelTest/terrain";	//TODO remove this, its only for testing
 
-    std::ifstream terrain_png(this->filePath + "/heightmap.png");			//TODO: filepath organization
+    std::ifstream terrain_png(this->filePath + "/heightmap.png");
     unsigned int rowNum, columnNum, heightmapValue;
 
-    terrain_png.seekg(16);					//skip part of the header
+    terrain_png.seekg(16);						//skip part of the header
 
     char temp[4];
     terrain_png.read(temp, 4);									//read width
@@ -25,11 +25,8 @@ void Terrain::load() {
     terrain_png.read(temp, 4);									//read height
     this->heightmapHeight = (temp[3]<<0) | (temp[2]<<8) | (temp[1]<<16) | (temp[0]<<24);	//convert from network to host byte order
 
-    printf("Width: %d ", (int)this->heightmapWidth);
-    printf("Height: %d ", (int)this->heightmapHeight);
-
-    heightmap = new float*[this->heightmapHeight];		//initialize the heightmap
-    for(rowNum = 0; rowNum < this->heightmapHeight; rowNum++){	//read in the heightmap
+    heightmap = new float*[this->heightmapHeight];				//initialize the heightmap
+    for(rowNum = 0; rowNum < this->heightmapHeight; rowNum++){			//read in the heightmap
 	    heightmap[rowNum] = new float[this->heightmapWidth];
         for(columnNum = 0; columnNum < this->heightmapWidth; columnNum++){
             terrain_png.read((char *)&heightmapValue, 1);
@@ -47,13 +44,12 @@ void Terrain::makeTriangleMesh(){
     ACGL::OpenGL::SharedArrayBuffer ab = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
     ab->defineAttribute("pos", GL_FLOAT, 3);						//TODO: ArrayBuffer for the texture coordinates
 
-    unsigned int rowNum=0, columnNum=0, dataCount=0;			//initializing:
+    unsigned int rowNum=0, columnNum=0, dataCount=0;					//initializing:
     bool movingRight = true, isUp = true;
     int numVertices = (this->heightmapHeight - 1) * (this->heightmapWidth * 2 + 1) + 1;
-    printf("NumberofVertices: %d ", numVertices);
     float* abData = new float[numVertices * 3];
 
-    while(rowNum < this->heightmapHeight){				//traversing the Triangle Strip!
+    while(rowNum < this->heightmapHeight){						//traversing the Triangle Strip!
 	abData[dataCount] = (float)rowNum;
 	abData[dataCount+1] = heightmap[rowNum][columnNum];
 	abData[dataCount+2] = (float)columnNum;
@@ -104,6 +100,21 @@ void Terrain::makeTriangleMesh(){
     this->triangleMesh->setMode(GL_TRIANGLE_STRIP);
     this->triangleMesh->attachAllAttributes(ab);
     //TODO unbind?
+
+
+
+    //TODO remove this TestCode (that doesnt even work yet...):
+/*    ACGL::OpenGL::SharedArrayBuffer tex = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
+    tex->defineAttribute("color", GL_FLOAT, 3);
+    float* texData = new float[numVertices*3];
+    for (int i=0; i<numVertices*3; i++){
+	texData[i] = 1.0;
+    }
+    tex->setDataElements(numVertices, texData);
+    this->triangleMesh->attachAllAttributes(tex);
+*/
+
+
 }
 
 void Terrain::render() {
