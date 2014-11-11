@@ -12,7 +12,7 @@ Level::~Level() {
 }
 
 void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
-    //this->terrain.load();
+    this->terrain.load();
 
 
 
@@ -38,7 +38,7 @@ void Level::render() {
     for(unsigned int i = 0; i<objects.size(); i++) {
         objects[i].render();
     }
-    //this->terrain.render();
+    this->terrain.render();
 }
 
 glm::vec3 Level::getAmbientLight() {

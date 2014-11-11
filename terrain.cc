@@ -12,29 +12,28 @@ Terrain::~Terrain() {
 
 
 void Terrain::load() {
+    this->filePath = "../Levels/LevelTest/terrain";					//TODO remove this, its only for testing
+
     std::ifstream terrain_png(this->filePath + "/heightmap.png");			//TODO: filepath organization
     unsigned int rowNum, columnNum, heightmapValue;
 
     terrain_png.seekg(16);					//skip part of the header
 
-    terrain_png.read((char *)&this->heightmapWidth, 4);		//read width
-    terrain_png.read((char *)&this->heightmapHeight, 4);	//read height
-    this->heightmapWidth  = ntohl(this->heightmapWidth);	//convert from network to host byte order
-    this->heightmapHeight = ntohl(this->heightmapHeight);			
-/*  //alternate implementation that does NOT work at all
-    char temp[2];4???
-    terrain_png.read(temp, 4);					//read width
-    this->heightmapWidth = (temp[1]<<0) | (temp[0]<<8);		//convert from network to host byte order
-    terrain_png.read(temp, 4);					//read height
-    this->heightmapHeight = (temp[1]<<0) | (temp[0]<<8);	//convert from network to host byte order
-*/
+    char temp[4];
+    terrain_png.read(temp, 4);									//read width
+    this->heightmapWidth = (temp[3]<<0) | (temp[2]<<8) | (temp[1]<<16) | (temp[0]<<24);		//convert from network to host byte order
+    terrain_png.read(temp, 4);									//read height
+    this->heightmapHeight = (temp[3]<<0) | (temp[2]<<8) | (temp[1]<<16) | (temp[0]<<24);	//convert from network to host byte order
+
+    printf("Width: %d ", (int)this->heightmapWidth);
+    printf("Height: %d ", (int)this->heightmapHeight);
 
     heightmap = new float*[this->heightmapHeight];		//initialize the heightmap
     for(rowNum = 0; rowNum < this->heightmapHeight; rowNum++){	//read in the heightmap
 	    heightmap[rowNum] = new float[this->heightmapWidth];
         for(columnNum = 0; columnNum < this->heightmapWidth; columnNum++){
             terrain_png.read((char *)&heightmapValue, 1);
-	    heightmap[rowNum][columnNum] = (float)heightmapValue / 5;
+	    heightmap[rowNum][columnNum] = (float)heightmapValue / 256;
         }
     }
 
@@ -45,24 +44,33 @@ void Terrain::load() {
 
 void Terrain::makeTriangleMesh(){
 
-    ACGL::OpenGL::SharedArrayBuffer arrayBuffer = ACGL::OpenGL::SharedArrayBuffer();
-    arrayBuffer->defineAttribute("pos", GL_FLOAT, 3);	//TODO: ArrayBuffer for the texture coordinates
+    ACGL::OpenGL::SharedArrayBuffer ab = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
+    ab->defineAttribute("pos", GL_FLOAT, 3);						//TODO: ArrayBuffer for the texture coordinates
 
-    unsigned int rowNum=0, columnNum=0;				//initializing:
+    unsigned int rowNum=0, columnNum=0, dataCount=0;			//initializing:
     bool movingRight = true, isUp = true;
-    while(rowNum < this->heightmapHeight){			//traversing the Triangle Strip!
-	float newPos[3];
-	newPos[0] = (float)rowNum;
-	newPos[1] = (float)columnNum;
-	newPos[2] = heightmap[rowNum][columnNum];
-        arrayBuffer->setDataElements(1, &newPos);
+    int numVertices = (this->heightmapHeight - 1) * (this->heightmapWidth * 2 + 1) + 1;
+    printf("NumberofVertices: %d ", numVertices);
+    float* abData = new float[numVertices * 3];
+
+    while(rowNum < this->heightmapHeight){				//traversing the Triangle Strip!
+	abData[dataCount] = (float)rowNum;
+	abData[dataCount+1] = heightmap[rowNum][columnNum];
+	abData[dataCount+2] = (float)columnNum;
+	dataCount += 3;
 	if (isUp){
 	    rowNum = rowNum + 1;
 	    isUp = false;
 	}else if (movingRight){
 	    if (columnNum == this->heightmapWidth - 1){
-		arrayBuffer->setDataElements(1, &newPos);
-		arrayBuffer->setDataElements(1, &newPos);
+		abData[dataCount] = (float)rowNum;
+		abData[dataCount+1] = heightmap[rowNum][columnNum];
+		abData[dataCount+2] = (float)columnNum;
+		dataCount += 3;
+		abData[dataCount] = (float)rowNum;
+		abData[dataCount+1] = heightmap[rowNum][columnNum];
+		abData[dataCount+2] = (float)columnNum;
+		dataCount += 3;
 		movingRight = false;
 		rowNum = rowNum + 1;
 	    } else{
@@ -72,8 +80,14 @@ void Terrain::makeTriangleMesh(){
 	    }
 	}else{
 	    if (columnNum == 0){
-		arrayBuffer->setDataElements(1, &newPos);
-		arrayBuffer->setDataElements(1, &newPos);
+		abData[dataCount] = (float)rowNum;
+		abData[dataCount+1] = heightmap[rowNum][columnNum];
+		abData[dataCount+2] = (float)columnNum;
+		dataCount += 3;
+		abData[dataCount] = (float)rowNum;
+		abData[dataCount+1] = heightmap[rowNum][columnNum];
+		abData[dataCount+2] = (float)columnNum;
+		dataCount += 3;
 		movingRight = true;
 		rowNum = rowNum + 1;
 	    }else{
@@ -84,10 +98,11 @@ void Terrain::makeTriangleMesh(){
 	}
     }
 
-    this->triangleMesh = ACGL::OpenGL::SharedVertexArrayObject();
+    ab->setDataElements(numVertices, abData);
+    this->triangleMesh = std::make_shared<ACGL::OpenGL::VertexArrayObject>();
     this->triangleMesh->bind();
     this->triangleMesh->setMode(GL_TRIANGLE_STRIP);
-    this->triangleMesh->attachAllAttributes(arrayBuffer);
+    this->triangleMesh->attachAllAttributes(ab);
     //TODO unbind?
 }
 
