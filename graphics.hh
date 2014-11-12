@@ -13,7 +13,7 @@ void initCustomResources();
 void deleteCustomResources();
 
 // gets called ech frame, runTime is in seconds:
-void draw( float runTime );
+void draw(float runTime);
 
 // gets called at window resize:
 void resizeCallback( GLFWwindow *, int newWidth, int newHeight );

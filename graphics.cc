@@ -38,8 +38,11 @@ void deleteCustomResources()
     // we have memory management via reference counting, so nothing to do here
 }
 
-void draw( float runTime )
+void draw(float runTime)
 {
+    // update Level first TODO: move this with the rest of the stuff that doesn't belong here to main
+    level.update(runTime);
+
     // clear the framebuffer:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
