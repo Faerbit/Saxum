@@ -7,6 +7,7 @@
 #include "entity.hh"
 #include "terrain.hh"
 #include "material.hh"
+#include "camera.hh"
 
 class Level {
     public:
@@ -18,15 +19,15 @@ class Level {
         void render();
         glm::vec3 getAmbientLight();
         std::vector<Light> getLights();
-        glm::vec3 getCameraPosition();
         Object* getCameraCenter();
+        Camera getCamera();
     private:
         std::string filePath;
         std::vector<Object> objects;
         std::vector<Light> lights;
         glm::vec3 ambientLight;
         Object* cameraCenter;
-        glm::vec3 cameraPosition;
+        Camera camera;
         Terrain terrain;
 };
 

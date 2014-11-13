@@ -13,7 +13,7 @@ Level::~Level() {
 
 void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     // currently hard coded should later read this stuff out of a file
-    cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+    this->camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
     // load the geometry of the stanford bunny and build a VAO:
     Model model = Model("Bunny.obj", 0.25f);
     // load a texture:
@@ -54,8 +54,8 @@ std::vector<Light> Level::getLights() {
     return lights;
 }
 
-glm::vec3 Level::getCameraPosition() {
-    return cameraPosition;
+Camera Level::getCamera() {
+    return camera;
 }
 
 Object* Level::getCameraCenter() {
