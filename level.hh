@@ -18,11 +18,15 @@ class Level {
         void render();
         glm::vec3 getAmbientLight();
         std::vector<Light> getLights();
+        glm::vec3 getCameraPosition();
+        Object* getCameraCenter();
     private:
         std::string filePath;
         std::vector<Object> objects;
         std::vector<Light> lights;
         glm::vec3 ambientLight;
+        Object* cameraCenter;
+        glm::vec3 cameraPosition;
         Terrain terrain;
 };
 

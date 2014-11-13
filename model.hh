@@ -6,12 +6,16 @@
 
 class Model {
     public:
+        Model(std::string filePath, float scale);
         Model(std::string filePath);
-	Model();
+	    Model();
         ~Model();
         ACGL::OpenGL::SharedVertexArrayObject getReference();
+        void setScale(float scale);
+        float getScale();
     private:
         ACGL::OpenGL::SharedVertexArrayObject reference;
+        float scale;
 };
 
 #endif

@@ -1,7 +1,8 @@
 #version 150
 
-uniform mat4 uViewMatrix;
-uniform mat4 uProjectionMatrix;
+uniform mat4 modelMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 projectionMatrix;
 
 in vec3 aNormal;
 in vec3 aPosition;
@@ -13,8 +14,8 @@ out vec4 fragPosition;
 
 void main()
 {
-    fragPosition = uViewMatrix * vec4(aPosition, 1.0);
-    vNormal     = inverse(transpose(mat3(uViewMatrix))) * aNormal;
+    fragPosition = modelMatrix * vec4(aPosition, 1.0);
+    vNormal     = inverse(transpose(mat3(modelMatrix))) * aNormal;
     vTexCoord   = aTexCoord;
-    gl_Position = uProjectionMatrix * uViewMatrix * vec4(aPosition, 1.0);
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(aPosition, 1.0);
 }
