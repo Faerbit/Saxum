@@ -49,7 +49,7 @@ void draw(float runTime)
     //set view and projection matrix
     shader->setUniform("projectionMatrix", buildFrustum(75.0, 0.1, 100.0, (float)g_windowSize.x/(float)g_windowSize.y) );
     // the + (0,1,0) compensates bunny doesn't have its center at it's center
-    shader->setUniform("viewMatrix", glm::lookAt(level.getCameraPosition(), (level.getCameraCenter()->getPosition() + glm::vec3(0.0f, 1.0f, 0.0f)), glm::vec3(0.0f, 1.0f, 0.0f)));
+    shader->setUniform("viewMatrix", buildViewMatrix());
 
     //set lighting parameters
     if (level.getLights().size() > 0) {
@@ -103,4 +103,14 @@ glm::mat4 buildFrustum( float phiInDegree, float _near, float _far, float aspect
     float right = -left;
 
     return glm::frustum(left, right, bottom, top, _near, _far);
+}
+
+glm::mat4 buildViewMatrix() {
+    glm::vec4 cameraVector = glm::vec4(0.0f, 0.0f, level.getCamera().getDistance(), 0.0f);
+    // rotate vector
+    glm::mat4 rotationMatrix = glm::rotate<float>(level.getCamera().getRotation()[0], glm::vec3(1.0f, 0.0f, 0.0f)) *
+        glm::rotate<float>(level.getCamera().getRotation()[1], glm::vec3(0.0f, 1.0f, 0.0f)) * glm::rotate<float>(level.getCamera().getRotation()[2], glm::vec3(0.0f, 0.0f, 1.0f));
+    cameraVector = rotationMatrix * cameraVector;
+    //construct lookAt (cameraPosition = cameraCenter + cameraVector
+    return glm::lookAt(level.getCameraCenter()->getPosition() + glm::vec3(cameraVector), level.getCameraCenter()->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
 }

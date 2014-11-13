@@ -25,6 +25,10 @@ glm::vec3 Camera::getRotation() {
     return rotation;
 }
 
+void Camera::setRotation(glm::vec3 rotation) {
+    this->rotation = rotation;
+}
+
 void Camera::updateRotation(glm::vec3 rotation) {
     this->rotation += rotation;;
 }

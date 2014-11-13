@@ -11,6 +11,7 @@ class Camera {
         float getDistance();
         void setDistance(float distance);
         glm::vec3 getRotation();
+        void setRotation(glm::vec3 rotation);
         void updateRotation(glm::vec3 rotation); //adds to current rotation
     private:
         float distance;
