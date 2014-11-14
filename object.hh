@@ -14,11 +14,11 @@ class Object : public Entity {
         Object(Model model, Material material, glm::vec3 position, glm::vec3 rotation,
                 glm::vec3 velocity, glm::vec3 angularVelocity,
                 ACGL::OpenGL::SharedShaderProgram shader);
-	Object();
+        Object();
         ~Object();
         void render();
     private:
-        ACGL::OpenGL::SharedVertexArrayObject model;
+        Model model;
         Material material;
         glm::vec3 velocity;
         glm::vec3 angularVelocity;

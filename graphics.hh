@@ -13,12 +13,14 @@ void initCustomResources();
 void deleteCustomResources();
 
 // gets called ech frame, runTime is in seconds:
-void draw( float runTime );
+void draw(float runTime);
 
 // gets called at window resize:
 void resizeCallback( GLFWwindow *, int newWidth, int newHeight );
 
 // to build the projection matrix:
 glm::mat4 buildFrustum( float phiInDegree, float near, float far, float aspectRatio);
+
+glm::mat4 buildViewMatrix();
 
 #endif

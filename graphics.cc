@@ -38,15 +38,18 @@ void deleteCustomResources()
     // we have memory management via reference counting, so nothing to do here
 }
 
-void draw( float runTime )
+void draw(float runTime)
 {
+    // update Level first TODO: move this with the rest of the stuff that doesn't belong here to main
+    level.update(runTime);
+
     // clear the framebuffer:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // set view and projection matrix:
-    glm::mat4 viewMatrix = glm::translate(glm::vec3(0.0f, -1.0f, -2.0f)) * glm::rotate<float>(1.0472f * runTime, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::scale<float>(glm::vec3(0.25f));
-    shader->setUniform( "uViewMatrix", viewMatrix );
-    shader->setUniform( "uProjectionMatrix", buildFrustum(75.0, 0.1, 100.0, (float)g_windowSize.x/(float)g_windowSize.y) );
+    //set view and projection matrix
+    shader->setUniform("projectionMatrix", buildFrustum(75.0, 0.1, 100.0, (float)g_windowSize.x/(float)g_windowSize.y) );
+    // the + (0,1,0) compensates bunny doesn't have its center at it's center
+    shader->setUniform("viewMatrix", buildViewMatrix());
 
     //set lighting parameters
     if (level.getLights().size() > 0) {
@@ -100,4 +103,14 @@ glm::mat4 buildFrustum( float phiInDegree, float _near, float _far, float aspect
     float right = -left;
 
     return glm::frustum(left, right, bottom, top, _near, _far);
+}
+
+glm::mat4 buildViewMatrix() {
+    glm::vec4 cameraVector = glm::vec4(0.0f, 0.0f, level.getCamera().getDistance(), 0.0f);
+    // rotate vector
+    glm::mat4 rotationMatrix = glm::rotate<float>(level.getCamera().getRotation()[0], glm::vec3(1.0f, 0.0f, 0.0f)) *
+        glm::rotate<float>(level.getCamera().getRotation()[1], glm::vec3(0.0f, 1.0f, 0.0f)) * glm::rotate<float>(level.getCamera().getRotation()[2], glm::vec3(0.0f, 0.0f, 1.0f));
+    cameraVector = rotationMatrix * cameraVector;
+    //construct lookAt (cameraPosition = cameraCenter + cameraVector
+    return glm::lookAt(level.getCameraCenter()->getPosition() + glm::vec3(cameraVector), level.getCameraCenter()->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
 }
