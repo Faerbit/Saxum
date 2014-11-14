@@ -18,11 +18,6 @@
 
 #include "model.hh"
 
-using namespace std;
-using namespace ACGL::OpenGL;
-using namespace ACGL::Base;
-using namespace ACGL::Utils;
-
 Application::Application() {
     graphics = Graphics(glm::uvec2(1024, 786), 0.1f, 100.0f);
 }
@@ -91,7 +86,7 @@ int main( int argc, char *argv[] )
     /////////////////////////////////////////////////////////////////////////////////////
     // Set window title to binary name (without the path):
     //
-    std::vector<std::string> tmp = StringHelpers::split( std::string( argv[0] ), '/' );
+    std::vector<std::string> tmp = ACGL::Utils::StringHelpers::split( std::string( argv[0] ), '/' );
     glfwSetWindowTitle(app.getGraphics()->getWindow(), tmp[tmp.size()-1].c_str() );
     // Ensure we can capture the escape key being pressed below
     glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_STICKY_KEYS, 1);
@@ -120,8 +115,8 @@ int main( int argc, char *argv[] )
         double now = glfwGetTime();
 
         if (showNextFPS <= now) {
-            stringstream sstream (stringstream::in | stringstream::out);
-            sstream << setprecision(1) << std::fixed
+            std::stringstream sstream (std::stringstream::in | std::stringstream::out);
+            sstream << std::setprecision(1) << std::fixed
                     << tmp[tmp.size()-1] << " - FPS: " << frameCount / (now-showNextFPS + FPSdelay) << " " << 1000 * (now-showNextFPS + FPSdelay)/frameCount << " msec";
             glfwSetWindowTitle(app.getGraphics()->getWindow(), sstream.str().c_str() );
             showNextFPS = now + FPSdelay;
