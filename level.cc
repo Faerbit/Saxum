@@ -13,7 +13,7 @@ Level::~Level() {
 
 void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     // currently hard coded should later read this stuff out of a file
-    this->camera = Camera(glm::vec3(-0.8f, 0.0f, 0.0f), 3.0f);
+    this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
     // load the geometry of the stanford bunny and build a VAO:
     Model model = Model("Bunny.obj", 0.25f);
     // load a texture:
