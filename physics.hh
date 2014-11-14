@@ -40,7 +40,8 @@ class Physics {
 	glm::mat4 getRotation(int i);
 	void rollForward(glm::mat3 rotCamera);
 	void addTerrain(int width, int length, float** heightData);
-	void addSphere(float rad, float x, float y, float z, float mass, int indice);
+	void addPlayer(float rad, float x, float y, float z, float mass, unsigned indice);
+	void addSphere(float rad, float x, float y, float z, float mass, unsigned indice);
 
     private:
 	btRigidBody* playerBody;

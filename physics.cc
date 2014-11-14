@@ -70,14 +70,42 @@ void addTerrain(int width, int length, float** heightData)
 
 }
 
-void addSphere(float rad, float x, float y, float z, float mass, int indice) //TODO add indice check
+void addPlayer(float rad, float x, float y, float z, float mass, unsigned indice)
 {
+	if(bodies.size() != indice)
+		throw std::invalid_argument( "Bodies out of Sync" ); 
+
 	btSphereShape* sphere = new btSphereShape(rad);
 	btVector3 inertia(0,0,0);
-	if(mass == 0.0)
+	if(mass != 0.0)
 	{
+		sphere->calculateLocalInertia((btScalar)mass,inertia);
 	}
-	else
+
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(x,y,z)));
+
+	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia);
+
+	playerBall = new btRigidBody(info);
+
+	world->addRigidBody(playerBall);
+
+	bodies.push_back(playerBall);
+
+	if(bodies.size() == indice)
+		throw std::invalid_argument( "Bodies out of Sync" ); 
+
+}
+
+
+void addSphere(float rad, float x, float y, float z, float mass, unsigned indice)
+{
+	if(bodies.size() != indice)
+		throw std::invalid_argument( "Bodies out of Sync" ); 
+
+	btSphereShape* sphere = new btSphereShape(rad);
+	btVector3 inertia(0,0,0);
+	if(mass != 0.0)
 	{
 		sphere->calculateLocalInertia((btScalar)mass,inertia);
 	}
@@ -91,6 +119,11 @@ void addSphere(float rad, float x, float y, float z, float mass, int indice) //T
 	world->addRigidBody(body);
 
 	bodies.push_back(body);
+
+
+	if(bodies.size() == indice)
+		throw std::invalid_argument( "Bodies out of Sync" ); 
+
 }
 
 glm::vec3 getPos(int i)
