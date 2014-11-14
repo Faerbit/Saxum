@@ -5,17 +5,17 @@
 
 class Camera {
     public:
-        Camera(glm::vec3 rotation, float distance);
+        Camera(glm::vec2 rotation, float distance);
         Camera();
         ~Camera();
         float getDistance();
         void setDistance(float distance);
-        glm::vec3 getRotation();
-        void setRotation(glm::vec3 rotation);
-        void updateRotation(glm::vec3 rotation); //adds to current rotation
+        glm::vec2 getRotation();
+        void setRotation(glm::vec2 rotation);
+        void updateRotation(glm::vec2 rotation); //adds to current rotation
     private:
         float distance;
-        glm::vec3 rotation;
+        glm::vec2 rotation;
 };
 
 #endif
