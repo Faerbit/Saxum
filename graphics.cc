@@ -20,6 +20,10 @@ GLFWwindow* Graphics::getWindow() {
     return window;
 }
 
+glm::uvec2 Graphics::getWindowSize() {
+    return windowSize;
+}
+
 void Graphics::setGLFWHintsForOpenGLVersion( unsigned int _version )
 {
 #ifdef __APPLE__
@@ -159,8 +163,8 @@ glm::mat4 Graphics::buildFrustum( float phiInDegree, float _near, float _far, fl
 glm::mat4 Graphics::buildViewMatrix(Level* level) {
     glm::vec4 cameraVector = glm::vec4(0.0f, 0.0f, level->getCamera().getDistance(), 0.0f);
     // rotate vector
-    glm::mat4 rotationMatrix = glm::rotate<float>(level->getCamera().getRotation()[0], glm::vec3(1.0f, 0.0f, 0.0f)) *
-        glm::rotate<float>(level->getCamera().getRotation()[1], glm::vec3(0.0f, 1.0f, 0.0f)) * glm::rotate<float>(level->getCamera().getRotation()[2], glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::mat4 rotationMatrix =  
+        glm::rotate<float>(level->getCamera().getRotation()[1], glm::vec3(0.0f, 1.0f, 0.0f)) *glm::rotate<float>(level->getCamera().getRotation()[0], glm::vec3(1.0f, 0.0f, 0.0f));
     cameraVector = rotationMatrix * cameraVector;
     //construct lookAt (cameraPosition = cameraCenter + cameraVector
     return glm::lookAt(level->getCameraCenter()->getPosition() + glm::vec3(cameraVector), level->getCameraCenter()->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));

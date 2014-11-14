@@ -126,7 +126,12 @@ int main( int argc, char *argv[] )
             frameCount = 0;
         }
 
-        app.getLevel()->update(now - startTimeInSeconds);
+        double xpos, ypos;
+        glfwGetCursorPos(app.getGraphics()->getWindow(), &xpos, &ypos);
+        glfwSetCursorPos(app.getGraphics()->getWindow(), app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
+
+        app.getLevel()->update(now - startTimeInSeconds, glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
+                    (float)xpos-app.getGraphics()->getWindowSize().x/2));
         app.getGraphics()->render(app.getLevel(), app.getShader());
 
         openGLCriticalError();

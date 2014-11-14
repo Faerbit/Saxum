@@ -41,9 +41,10 @@ void Level::render() {
     this->terrain.render();
 }
 
-void Level::update(float runTime) {
+void Level::update(float runTime, glm::vec2 mouseDelta) {
     // rotate bunny
-    cameraCenter->setRotation(glm::vec3(0.0f, 1.0472f * runTime, 0.0f));
+    //cameraCenter->setRotation(glm::vec3(0.0f, 1.0472f * runTime, 0.0f));
+    camera.updateRotation(mouseDelta/50.0f);
 }
 
 glm::vec3 Level::getAmbientLight() {
