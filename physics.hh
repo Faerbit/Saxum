@@ -38,7 +38,7 @@ class Physics {
 	void rollForward(glm::vec3 camPos, float strength);
 	glm::vec3 getPos(int i);
 	glm::mat4 getRotation(int i);
-	void rollForward();
+	void rollForward(glm::mat3 rotCamera);
 	void addTerrain(int width, int length, float** heightData);
 	void addSphere(float rad, float x, float y, float z, float mass, int indice);
 
