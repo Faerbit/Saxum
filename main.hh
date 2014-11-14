@@ -1,27 +1,28 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// headers needed:
-//
-#include <ACGL/Math/Math.hh>
+#ifndef MAIN_HH_INCLUDED
+#define MAIN_HH_INCLUDED
 #include <ACGL/OpenGL/GL.hh>
+#include <ACGL/Math/Math.hh>
 
 #include <GLFW/glfw3.h>
 #include <ACGL/OpenGL/Objects/ArrayBuffer.hh>
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
 
 #include "physics.hh"
 #include "graphics.hh"
 #include "level.hh"
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// implement the following functions:
-//
+/////////////////////////////////////////////////////////////////
+class Application {
+    public:
+        Application();
+        Graphics* getGraphics();
+        Level* getLevel();
+        ACGL::OpenGL::SharedShaderProgram getShader();
+        void init();
+    private:
+        Graphics graphics;
+        Level level;
+        ACGL::OpenGL::SharedShaderProgram shader;
+};
 
-// global variables exported by the generic main:
-extern glm::uvec2 g_windowSize;
-extern float g_nearPlane;
-extern float g_farPlane;
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+#endif
