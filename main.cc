@@ -94,7 +94,9 @@ int main( int argc, char *argv[] )
     std::vector<std::string> tmp = StringHelpers::split( std::string( argv[0] ), '/' );
     glfwSetWindowTitle(app.getGraphics()->getWindow(), tmp[tmp.size()-1].c_str() );
     // Ensure we can capture the escape key being pressed below
-    glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_STICKY_KEYS, 1 );
+    glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_STICKY_KEYS, 1);
+    // Hide mouse cursor
+    glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR_HIDDEN, 1);
     //glfwSetWindowSizeCallback(app.getGraphics(), resizeCallback);
     glfwSetKeyCallback(app.getGraphics()->getWindow(), keyCallback );
 
