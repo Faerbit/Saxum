@@ -13,7 +13,7 @@ Level::~Level() {
 
 void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     // currently hard coded should later read this stuff out of a file
-    this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
+    this->camera = Camera(glm::vec2(0.8f, 0.0f), 3.0f);
     // load the geometry of the stanford bunny and build a VAO:
     Model model = Model("Bunny.obj", 0.25f);
     // load a texture:
@@ -57,7 +57,7 @@ void Level::render() {
 void Level::update(float runTime, glm::vec2 mouseDelta) {
     // rotate bunny
     //cameraCenter->setRotation(glm::vec3(0.0f, 1.0472f * runTime, 0.0f));
-    camera.updateRotation(mouseDelta/50.0f);
+    camera.updateRotation(mouseDelta/100.0f);
 }
 
 glm::vec3 Level::getAmbientLight() {
