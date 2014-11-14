@@ -8,7 +8,9 @@
 #include "extern/bullet/src/BulletDynamics/Dynamics/btRigidBody.h"
 #include "extern/bullet/src/BulletDynamics/Dynamics/btDynamicsWorld.h"
 #include "extern/bullet/src/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
+
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btSphereShape.h"
+#include "extern/bullet/src/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 
 #include "extern/bullet/src/BulletDynamics/ConstraintSolver/btConstraintSolver.h"
 #include "extern/bullet/src/BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"//YAY!
@@ -29,7 +31,15 @@ class Physics {
     public:
         Physics();
 	~Physics();
+	void init();
+	void takeUpdateStep(float timeDiff);
 	void rollForward(glm::vec3 camPos, float strength);
+	glm::vec3 getPos(int i);
+	void getRotation(int i);
+	void rollForward();
+	void addTerrain(int width, int length, float** heightData);
+	void addSphere(float rad, float x, float y, float z, float mass, int indice);
+
     private:
 	btRigidBody* playerBody;
 	btRigidBody* terrainBody;

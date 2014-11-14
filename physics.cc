@@ -10,6 +10,8 @@ btBroadphaseInterface* broadphase; //defines how objects are culled from collisi
 btConstraintSolver* solver; //solver for forces and impulses.
 
 std::vector<btRigidBody*> bodies; //list of all bodies. bodies are also in world, but save again to ease cleaning up process.
+btRigidBody* playerBall;
+btRigidBody* terrainBody;
 
 void init()
 {
@@ -29,7 +31,46 @@ void takeUpdateStep(float timeDiff)
 	world->stepSimulation(timeDiff);
 }
 
-void addSphere(float rad, float x, float y, float z, float mass)
+void addTerrain(int width, int length, float** heightData)
+{
+	float* heightfield = new float[width * length];
+	      int highest = -999999, j = 0, i = 0;
+	      for (i = 0; i < width; i++)
+		 for (j = 0; j < length; j++) {
+		    heightfield[j*length+i] = heightData[i][j];
+		    if (heightData[i][j] > highest)
+		       highest = heightData[i][j];
+		 }
+
+	btHeightfieldTerrainShape* terrianShape = new btHeightfieldTerrainShape(width,length,heightData,highest,1,true,false);
+
+	btRigidBody* tBody = new btRigidBody(0,new btDefaultMotionState(),terrianShape);
+
+	tBody->getWorldTransform().setOrigin(btVector3(0,highest/2,0));
+
+	//tBody->getWoorldTransform().setRotation(btQuaternion(0,0,0,1));
+
+	terrainBody = tBody;
+
+	world->addRigidBody(terrainBody);
+
+/*
+	terrianShape->setLocalScaling(btVector3(1,1,1));
+	btCollisionShape* trimeshShape = terrianShape;
+         
+	float mass = 0.f;
+	btTransform   startTransform;
+	startTransform.setIdentity();
+	startTransform.setOrigin(btVector3(0,highest/2,0));//not 100% sure maybe (0,0,0) or (0,-highest/2,0)
+
+	btRigidBody* groundBody = localCreateRigidBody(mass, startTransform,trimeshShape);
+	
+	world->addRigidBody(terrainBody);
+	*/
+
+}
+
+void addSphere(float rad, float x, float y, float z, float mass, int indice) //TODO add indice check
 {
 	btSphereShape* sphere = new btSphereShape(rad);
 	btVector3 inertia(0,0,0);
@@ -52,9 +93,11 @@ void addSphere(float rad, float x, float y, float z, float mass)
 	bodies.push_back(body);
 }
 
-void getPos(int i)
+glm::vec3 getPos(int i)
 {
 	btVector3 origin = bodies[i]->getCenterOfMassPosition();
+	glm::vec3 save(origin.getX(),origin.getY(),origin.getZ());
+	return save;
 }
 
 void getRotation(int i)
