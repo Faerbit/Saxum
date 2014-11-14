@@ -100,9 +100,15 @@ glm::vec3 getPos(int i)
 	return save;
 }
 
-void getRotation(int i)
+glm::mat4 getRotation(int i)
 {
-	btQuaternion rotQuantrino = bodies[i]->getOrientation(); //TODO return orientation in gl format
+	btQuaternion quat = bodies[i]->getOrientation();
+
+	glm::mat4 matrix = glm::rotate(
+	    matrix,
+	    quat.getAngle(),
+	    glm::vec3(quat.getAxis().getX(), quat.getAxis().getY(), quat.getAxis().getZ())
+	);
 }
 
 void rollForward()

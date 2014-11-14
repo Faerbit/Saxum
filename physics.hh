@@ -26,6 +26,8 @@
 #include "extern/bullet/src/LinearMath/btMotionState.h"
 #include "extern/bullet/src/LinearMath/btDefaultMotionState.h"
 #include "extern/bullet/src/LinearMath/btQuaternion.h"
+#include "extern/bullet/src/LinearMath/btVector3.h"
+#include "extern/bullet/src/LinearMath/btMatrix3x3.h"
 
 class Physics {
     public:
@@ -35,7 +37,7 @@ class Physics {
 	void takeUpdateStep(float timeDiff);
 	void rollForward(glm::vec3 camPos, float strength);
 	glm::vec3 getPos(int i);
-	void getRotation(int i);
+	glm::mat4 getRotation(int i);
 	void rollForward();
 	void addTerrain(int width, int length, float** heightData);
 	void addSphere(float rad, float x, float y, float z, float mass, int indice);
