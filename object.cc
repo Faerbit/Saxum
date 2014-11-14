@@ -24,9 +24,7 @@ void Object::render() {
     shader->setUniform("shininess", material.getShininess());
     shader->setTexture("uTexture", material.getReference(), 0);
     // set model matrix
-    glm::mat4 rotationMatrix = glm::rotate<float>(this->getRotation()[0], glm::vec3(1.0f, 0.0f, 0.0f)) *
-        glm::rotate<float>(this->getRotation()[1], glm::vec3(0.0f, 1.0f, 0.0f)) * glm::rotate<float>(this->getRotation()[2], glm::vec3(0.0f, 0.0f, 1.0f));
-    glm::mat4 modelMatrix = glm::translate(this->getPosition()) * rotationMatrix * glm::scale<float>(glm::vec3(model.getScale()));
+    glm::mat4 modelMatrix = glm::translate(getPosition()) * getRotation() * glm::scale<float>(glm::vec3(model.getScale()));
     shader->setUniform( "modelMatrix", modelMatrix);
     // draw
     model.getReference()->render();
