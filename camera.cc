@@ -30,5 +30,15 @@ void Camera::setRotation(glm::vec2 rotation) {
 }
 
 void Camera::updateRotation(glm::vec2 rotation) {
-    this->rotation += rotation;;
+    if((this->rotation.x + rotation.x) >= 1.57f) {
+        this->rotation.x = 1.57;
+        this->rotation.y += rotation.y;
+    }
+    else if ((this->rotation.x + rotation.x) <= -1.57f) {
+        this->rotation.x = -1.57f;
+        this->rotation.y += rotation.y;
+    }
+    else {
+        this-> rotation += rotation;
+    }
 }
