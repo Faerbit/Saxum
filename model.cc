@@ -2,14 +2,12 @@
 
 Model::Model(std::string filePath, float scale) {
     reference = ACGL::OpenGL::VertexArrayObjectCreator(filePath).create();
-    reference->bind();
     this->scale = scale;
 }
 
-Model::Model(std::string filePath) {
-    reference = ACGL::OpenGL::VertexArrayObjectCreator(filePath).create();
-    reference->bind();
-    this->scale = 1.0f;
+Model::Model(ACGL::OpenGL::SharedVertexArrayObject vao, float scale){
+    reference = vao;
+    this->scale = scale;
 }
 
 Model::Model(){
