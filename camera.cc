@@ -47,8 +47,8 @@ void Camera:: updateDistance(float distance) {
     if (this->distance + distance <= 1.0f) {
         this->distance = 1.0f;
     }
-    else if (this->distance + distance >= 100.0f) {
-        this->distance = 100.f;
+    else if (this->distance + distance >= 30.0f) {
+        this->distance = 30.f;
     }
     else {
         this->distance += distance;
