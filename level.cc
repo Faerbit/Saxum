@@ -34,12 +34,13 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
 
     // load terrain
     this->terrain.load();
-    Model terrainModel = this->terrain.getModel();
+    Model terrainModel = Model(this->terrain.getModel());
     // load a texture:
-    Material terrainMaterial = Material("clownfishBunny.png", 0.1f, 0.7f, 0.3f, 1.0f);
+    Material terrainMaterial = Material("clownfishBunny.png", 1.0f, 0.0f, 0.0f, 3.0f);
     //Create object
     Object terrainObject = Object(terrainModel, terrainMaterial,
-	glm::vec3(-0.5f*(float)this->terrain.getHeightmapHeight(), 0.0f, -0.5f*(float)this->terrain.getHeightmapWidth()),
+	//glm::vec3(-0.5f*(float)this->terrain.getHeightmapHeight(), -0.5f, -0.5f*(float)this->terrain.getHeightmapWidth()),
+	glm::vec3(-1.0f, 0.0f, -1.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     objects.push_back(object);

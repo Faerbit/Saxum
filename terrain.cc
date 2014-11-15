@@ -42,11 +42,12 @@ void Terrain::load() {
 void Terrain::makeTriangleMesh(){
 
     ACGL::OpenGL::SharedArrayBuffer ab = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
-    ab->defineAttribute("aPosition", GL_FLOAT, 3);						//TODO: ArrayBuffer for the texture coordinates
-    ab->defineAttribute("aNormal", GL_FLOAT, 3);
+    // Do NOT change the order of this!
+    ab->defineAttribute("aPosition", GL_FLOAT, 3);
     ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
+    ab->defineAttribute("aNormal", GL_FLOAT, 3);
 
-    unsigned int rowNum=0, columnNum=0, dataCount=0, abNumFloats=8;				//initializing:
+/*    unsigned int rowNum=0, columnNum=0, dataCount=0, abNumFloats=8;				//initializing:
     bool movingRight = true, isUp = true;
     int numVertices = (this->heightmapHeight - 1) * (this->heightmapWidth * 2 + 1) + 1;
     float* abData = new float[numVertices * abNumFloats];
@@ -57,36 +58,56 @@ void Terrain::makeTriangleMesh(){
 	if (isUp){
 	    rowNum = rowNum + 1;
 	    isUp = false;
-	}else if (movingRight){
-	    if (columnNum == this->heightmapWidth - 1){
-		set_abData(abData, dataCount, rowNum, columnNum);
-		dataCount += abNumFloats;
-		set_abData(abData, dataCount, rowNum, columnNum);
-		dataCount += abNumFloats;
-		movingRight = false;
-		rowNum = rowNum + 1;
-	    } else{
-		rowNum = rowNum - 1;
-		columnNum = columnNum + 1;
-		isUp = true;
-	    }
-	}else{
-	    if (columnNum == 0){
-		set_abData(abData, dataCount, rowNum, columnNum);
-		dataCount += abNumFloats;
-		set_abData(abData, dataCount, rowNum, columnNum);
-		dataCount += abNumFloats;
-		movingRight = true;
-		rowNum = rowNum + 1;
-	    }else{
-		rowNum = rowNum - 1;
-		columnNum = columnNum - 1;
-		isUp = true;
-	    }
 	}
+        else if (movingRight) {
+            if (columnNum == this->heightmapWidth - 1) {
+                set_abData(abData, dataCount, rowNum, columnNum);
+                dataCount += abNumFloats;
+                set_abData(abData, dataCount, rowNum, columnNum);
+                dataCount += abNumFloats;
+                movingRight = false;
+                rowNum = rowNum + 1;
+            } 
+            else {
+                rowNum = rowNum - 1;
+                columnNum = columnNum + 1;
+                isUp = true;
+            }
+        }
+        else {
+            if (columnNum == 0){
+                set_abData(abData, dataCount, rowNum, columnNum);
+                dataCount += abNumFloats;
+                set_abData(abData, dataCount, rowNum, columnNum);
+                dataCount += abNumFloats;
+                movingRight = true;
+                rowNum = rowNum + 1;
+            }
+            else {
+                rowNum = rowNum - 1;
+                columnNum = columnNum - 1;
+                isUp = true;
+            }
+        }
     }
 
-    ab->setDataElements(numVertices, abData);
+    ab->setDataElements(numVertices, abData);*/
+    float abData[32] = {0.0f, 0.0f, 0.0f,
+          1.0f, 0.0f,
+          0.0f, 1.0f, 0.0f,
+
+          1.0f, 0.0f, 0.0f,
+          1.0f, 1.0f,
+          0.0f, 1.0f, 0.0f,
+
+          0.0f, 0.0f, 1.0f,
+          0.0f, 0.0f,
+          0.0f, 1.0f, 0.0f,
+
+          1.0f, 0.0f, 1.0f,
+          0.0f, 1.0f,
+          0.0f, 1.0f, 0.0f};
+    ab->setDataElements(4, abData);
     this->triangleMesh = std::make_shared<ACGL::OpenGL::VertexArrayObject>();
     this->triangleMesh->bind();
     this->triangleMesh->setMode(GL_TRIANGLE_STRIP);
@@ -101,33 +122,34 @@ void Terrain::set_abData(float* abData, unsigned int dataCount, unsigned int row
     abData[dataCount+1] = heightmap[rowNum][columnNum];
     abData[dataCount+2] = (float)columnNum;
 
+    //set Texture Coordinate
+    abData[dataCount+3] = (float)(rowNum % 2);
+    abData[dataCount+4] = (float)(columnNum % 2);
+
     //setNormal
     if (rowNum==0 || rowNum==(this->heightmapHeight-1) || columnNum==0 || columnNum==(this->heightmapWidth-1)){
-    	abData[dataCount+3] = 0.0;
-    	abData[dataCount+4] = 1.0;
     	abData[dataCount+5] = 0.0;
-    }else{
-	glm::vec3 sumNormals;
-	for (int i=-1; i<2; i+=1){
-	    for (int j=-1; j<2; j+=1){
-		glm::vec3 vecA, vecB, normal;
-		vecA = glm::vec3((float)i, (heightmap[rowNum+i][columnNum] - heightmap[rowNum][columnNum]), 0.0f);
-		vecB = glm::vec3(0.0f,     (heightmap[rowNum][columnNum+j] - heightmap[rowNum][columnNum]), (float)j);
-		normal = glm::normalize(glm::cross(vecA, vecB));
-		if(i+j==0)
-		    normal = normal*(-1.0f);
-		sumNormals += normal;
-	    }
-	}
-	sumNormals = sumNormals*0.111f;
-	abData[dataCount+3] = sumNormals[0];
-    	abData[dataCount+4] = sumNormals[1];
-    	abData[dataCount+5] = sumNormals[2];
+    	abData[dataCount+6] = 1.0;
+    	abData[dataCount+7] = 0.0;
     }
-
-    //set Texture Coordinate
-    abData[dataCount+6] = (float)(rowNum % 2);
-    abData[dataCount+7] = (float)(columnNum % 2);
+    else {
+        glm::vec3 sumNormals;
+        for (int i=-1; i<2; i+=1) {
+            for (int j=-1; j<2; j+=1) {
+                glm::vec3 vecA, vecB, normal;
+                vecA = glm::vec3((float)i, (heightmap[rowNum+i][columnNum] - heightmap[rowNum][columnNum]), 0.0f);
+                vecB = glm::vec3(0.0f,     (heightmap[rowNum][columnNum+j] - heightmap[rowNum][columnNum]), (float)j);
+                normal = glm::normalize(glm::cross(vecA, vecB));
+                if(i+j==0)
+                    normal = normal*(-1.0f);
+                sumNormals += normal;
+            }
+        }
+        sumNormals = sumNormals*0.111f;
+        abData[dataCount+5] = sumNormals[0];
+        abData[dataCount+6] = sumNormals[1];
+        abData[dataCount+7] = sumNormals[2];
+    }
 }
 
 Model Terrain::getModel(){
