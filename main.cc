@@ -16,8 +16,6 @@
 #include <ACGL/OpenGL/glloaders/extensions.hh>
 #include <ACGL/Base/Settings.hh>
 
-#include "model.hh"
-
 Application::Application() {
     graphics = Graphics(glm::uvec2(1024, 786), 0.1f, 100.0f);
 }
@@ -42,13 +40,17 @@ void Application::init()
     ACGL::Base::Settings::the()->setTexturePath("Geometry/");
     ACGL::Base::Settings::the()->setGeometryPath("Geometry/");
 
-    // load Model to give shader correct Attribute locations
-    // TODO look up if this is really necessary, since this looks really stupid.
-    Model model = Model("Bunny.obj");
+    // construct VAO to give shader correct Attribute locations
+    ACGL::OpenGL::SharedArrayBuffer ab = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
+    ab->defineAttribute("aPosition", GL_FLOAT, 3);
+    ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
+    ab->defineAttribute("aNormal", GL_FLOAT, 3);
+    ACGL::OpenGL::SharedVertexArrayObject vao = std::make_shared<ACGL::OpenGL::VertexArrayObject>();
+    vao->attachAllAttributes(ab);
 
     // look up all shader files starting with 'phong' and build a ShaderProgram from it:
     shader = ACGL::OpenGL::ShaderProgramCreator("phong").attributeLocations(
-            model.getReference()->getAttributeLocations()).create();
+            vao->getAttributeLocations()).create();
     shader->use();
 
     // load Level
