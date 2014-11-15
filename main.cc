@@ -16,8 +16,6 @@
 #include <ACGL/OpenGL/glloaders/extensions.hh>
 #include <ACGL/Base/Settings.hh>
 
-Application app;
-
 Application::Application() {
     graphics = Graphics(glm::uvec2(1024, 786), 0.1f, 100.0f);
 }
@@ -62,6 +60,13 @@ void Application::init()
     openGLCriticalError();
 }
 
+void resizeCallback(GLFWwindow* window, int newWidth, int newHeight)
+{
+    // store the new window size and adjust the viewport:
+    app.getGraphics()->setWindowSize(glm::uvec2( newWidth, newHeight));
+    glViewport( 0, 0, newWidth, newHeight);
+}
+
 static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
 {
     if (_key == GLFW_KEY_ESCAPE && _action == GLFW_PRESS) {
@@ -95,7 +100,7 @@ int main( int argc, char *argv[] )
     glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_STICKY_KEYS, 1);
     // Hide mouse cursor
     glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-    //glfwSetWindowSizeCallback(app.getGraphics(), resizeCallback);
+    glfwSetWindowSizeCallback(app.getGraphics()->getWindow(), resizeCallback);
     glfwSetKeyCallback(app.getGraphics()->getWindow(), keyCallback );
     glfwSetScrollCallback(app.getGraphics()->getWindow(), scrollCallback );
 

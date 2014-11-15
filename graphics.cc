@@ -68,7 +68,7 @@ bool Graphics::createWindow()
     glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, true );
 
     // define whether the window can get resized:
-    glfwWindowHint(GLFW_RESIZABLE, false);
+    glfwWindowHint(GLFW_RESIZABLE, true);
 
     // non-decorated windows can be used as splash screens:
     //glfwWindowHint( GLFW_DECORATED, false );
@@ -140,13 +140,6 @@ void Graphics::render(Level* level, ACGL::OpenGL::SharedShaderProgram shader)
 
 void Graphics::setWindowSize(glm::uvec2 windowSize) {
     this->windowSize = windowSize;
-}
-
-void resizeCallback(Graphics* graphics, int newWidth, int newHeight)
-{
-    // store the new window size and adjust the viewport:
-    graphics->setWindowSize(glm::uvec2( newWidth, newHeight));
-    glViewport( 0, 0, newWidth, newHeight);
 }
 
 glm::mat4 Graphics::buildFrustum( float phiInDegree, float _near, float _far, float aspectRatio) {
