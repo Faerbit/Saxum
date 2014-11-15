@@ -74,8 +74,8 @@ std::vector<Light> Level::getLights() {
     return lights;
 }
 
-Camera Level::getCamera() {
-    return camera;
+Camera* Level::getCamera() {
+    return &camera;
 }
 
 Object* Level::getCameraCenter() {
