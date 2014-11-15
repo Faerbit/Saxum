@@ -16,6 +16,8 @@
 #include <ACGL/OpenGL/glloaders/extensions.hh>
 #include <ACGL/Base/Settings.hh>
 
+Application app;
+
 Application::Application() {
     graphics = Graphics(glm::uvec2(1024, 786), 0.1f, 100.0f);
 }
@@ -67,10 +69,14 @@ static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
     }
 }
 
+static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+    app.getLevel()->getCamera()->updateDistance(-(float)yoffset);
+}
+
 
 int main( int argc, char *argv[] )
 {
-    Application app = Application();
+    //Application app = Application();
 
     /////////////////////////////////////////////////////////////////////////////////////
     // Create OpenGL capable window:
@@ -91,6 +97,7 @@ int main( int argc, char *argv[] )
     glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     //glfwSetWindowSizeCallback(app.getGraphics(), resizeCallback);
     glfwSetKeyCallback(app.getGraphics()->getWindow(), keyCallback );
+    glfwSetScrollCallback(app.getGraphics()->getWindow(), scrollCallback );
 
     // Enable vertical sync (on cards that support it) with parameter 1 - 0 means off
     glfwSwapInterval( 0 );
