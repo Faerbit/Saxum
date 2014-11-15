@@ -58,11 +58,6 @@ void Application::init()
     openGLCriticalError();
 }
 
-/**********************************************************************************************************************
- * Returns true if a window with the desired context could get created.
- * Requested OpenGL version gets set by ACGL defines.
- */
-
 static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
 {
     if (_key == GLFW_KEY_ESCAPE && _action == GLFW_PRESS) {
@@ -91,7 +86,7 @@ int main( int argc, char *argv[] )
     // Ensure we can capture the escape key being pressed below
     glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_STICKY_KEYS, 1);
     // Hide mouse cursor
-    glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR_HIDDEN, 1);
+    glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     //glfwSetWindowSizeCallback(app.getGraphics(), resizeCallback);
     glfwSetKeyCallback(app.getGraphics()->getWindow(), keyCallback );
 
