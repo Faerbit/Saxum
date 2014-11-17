@@ -129,6 +129,15 @@ void Graphics::render(Level* level, ACGL::OpenGL::SharedShaderProgram shader)
         glUniform1fv(shader->getUniformLocation("lightIntensities"),
             sizeof(lightIntensities),  (GLfloat*) lightIntensities);
     }
+    // set directional Light
+    if(level->getDirectionalLight()) {
+        shader->setUniform("directionalLightVector",
+            level->getDirectionalLight()->getPosition());
+        shader->setUniform("directionalColor",
+            level->getDirectionalLight()->getColour());
+        shader->setUniform("directionalIntensity",
+            level->getDirectionalLight()->getIntensity());
+    }
 
     // set Material Parameters
     shader->setUniform("ambientColor", level->getAmbientLight());

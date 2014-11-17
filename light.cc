@@ -1,9 +1,12 @@
 #include "light.hh"
 
-Light::Light(glm::vec3 position, glm::vec3 rotation, glm::vec3 colour, float intensity)
-    : Entity(position, rotation) {
+Light::Light(glm::vec3 position, glm::vec3 colour, float intensity)
+    : Entity(position, glm::vec3(0.0f, 0.0f, 0.0f)) {
     this->colour = colour;
     this->intensity = intensity;
+}
+
+Light::Light() {
 }
 
 Light::~Light() {
