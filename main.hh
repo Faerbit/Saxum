@@ -25,4 +25,5 @@ class Application {
         ACGL::OpenGL::SharedShaderProgram shader;
 };
 
+Application app;
 #endif

@@ -10,6 +10,7 @@ class Camera {
         ~Camera();
         float getDistance();
         void setDistance(float distance);
+        void updateDistance(float distance); //adds to current distance
         glm::vec2 getRotation();
         void setRotation(glm::vec2 rotation);
         void updateRotation(glm::vec2 rotation); //adds to current rotation

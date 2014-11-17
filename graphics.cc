@@ -68,7 +68,7 @@ bool Graphics::createWindow()
     glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, true );
 
     // define whether the window can get resized:
-    glfwWindowHint(GLFW_RESIZABLE, false);
+    glfwWindowHint(GLFW_RESIZABLE, true);
 
     // non-decorated windows can be used as splash screens:
     //glfwWindowHint( GLFW_DECORATED, false );
@@ -142,13 +142,6 @@ void Graphics::setWindowSize(glm::uvec2 windowSize) {
     this->windowSize = windowSize;
 }
 
-void resizeCallback(Graphics* graphics, int newWidth, int newHeight)
-{
-    // store the new window size and adjust the viewport:
-    graphics->setWindowSize(glm::uvec2( newWidth, newHeight));
-    glViewport( 0, 0, newWidth, newHeight);
-}
-
 glm::mat4 Graphics::buildFrustum( float phiInDegree, float _near, float _far, float aspectRatio) {
 
     float phiHalfInRadians = 0.5*phiInDegree * (M_PI/180.0);
@@ -161,10 +154,10 @@ glm::mat4 Graphics::buildFrustum( float phiInDegree, float _near, float _far, fl
 }
 
 glm::mat4 Graphics::buildViewMatrix(Level* level) {
-    glm::vec4 cameraVector = glm::vec4(0.0f, 0.0f, level->getCamera().getDistance(), 0.0f);
+    glm::vec4 cameraVector = glm::vec4(0.0f, 0.0f, level->getCamera()->getDistance(), 0.0f);
     // rotate vector
     glm::mat4 rotationMatrix =  
-        glm::rotate<float>(level->getCamera().getRotation()[1], glm::vec3(0.0f, 1.0f, 0.0f)) *glm::rotate<float>(level->getCamera().getRotation()[0], glm::vec3(1.0f, 0.0f, 0.0f));
+        glm::rotate<float>(level->getCamera()->getRotation()[1], glm::vec3(0.0f, 1.0f, 0.0f)) *glm::rotate<float>(level->getCamera()->getRotation()[0], glm::vec3(1.0f, 0.0f, 0.0f));
     cameraVector = rotationMatrix * cameraVector;
     //construct lookAt (cameraPosition = cameraCenter + cameraVector
     return glm::lookAt(level->getCameraCenter()->getPosition() + glm::vec3(cameraVector), level->getCameraCenter()->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
