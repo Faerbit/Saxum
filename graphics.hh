@@ -1,26 +1,29 @@
 #ifndef GRAPHICS_HH_INCLUDED
 #define GRAPHICS_HH_INCLUDED
+#include <ACGL/OpenGL/GL.hh>
 
-#include "main.hh"
-
-#include <ACGL/Base/Settings.hh>
+#include <GLFW/glfw3.h>
 #include <ACGL/Math/Math.hh>
+#include "level.hh"
 
-// gets called after the OpenGL window is prepared, init of example specific stuff:
-void initCustomResources();
-
-// gets called at application shutdown:
-void deleteCustomResources();
-
-// gets called ech frame, runTime is in seconds:
-void draw(float runTime);
-
-// gets called at window resize:
-void resizeCallback( GLFWwindow *, int newWidth, int newHeight );
-
-// to build the projection matrix:
-glm::mat4 buildFrustum( float phiInDegree, float near, float far, float aspectRatio);
-
-glm::mat4 buildViewMatrix();
+class Graphics {
+    public:
+        Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane);
+        Graphics();
+        void render(Level* level, ACGL::OpenGL::SharedShaderProgram shader);
+        // to build the projection matrix:
+        glm::mat4 buildFrustum( float phiInDegree, float near, float far, float aspectRatio);
+        glm::mat4 buildViewMatrix(Level* level);
+        glm::uvec2 getWindowSize();
+        bool createWindow();
+        GLFWwindow* getWindow();
+        void setWindowSize(glm::uvec2 windowSize);
+    private:
+        void setGLFWHintsForOpenGLVersion( unsigned int _version );
+        glm::uvec2 windowSize;
+        float nearPlane;
+        float farPlane;
+        GLFWwindow* window;
+};
 
 #endif

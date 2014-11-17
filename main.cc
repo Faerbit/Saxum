@@ -10,107 +10,61 @@
 #include <ACGL/Math/Math.hh>
 #include <ACGL/Utils/FileHelpers.hh>
 #include <ACGL/Utils/StringHelpers.hh>
+#include <ACGL/OpenGL/Objects/VertexArrayObject.hh>
+#include <ACGL/OpenGL/Creator/ShaderProgramCreator.hh>
 
 #include <ACGL/OpenGL/glloaders/extensions.hh>
+#include <ACGL/Base/Settings.hh>
 
-using namespace std;
-using namespace ACGL::OpenGL;
-using namespace ACGL::Base;
-using namespace ACGL::Utils;
-
-glm::uvec2 g_windowSize( 1024, 786 );
-float g_nearPlane =   0.1f;
-float g_farPlane  = 100.0f;
-bool glfwWindowClosed = false;
-
-GLFWwindow* g_window;
-
-void setGLFWHintsForOpenGLVersion( unsigned int _version )
-{
-#ifdef __APPLE__
-#if (ACGL_OPENGL_VERSION >= 30)
-    // request OpenGL 3.2, will return a 4.1 context on Mavericks
-    glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
-    glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 2 );
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-#else
-// non-apple
-    glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, _version / 10 );
-    glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, _version % 10 );
-    #ifdef ACGL_OPENGL_PROFILE_CORE
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    #endif
-#endif
+Application::Application() {
+    graphics = Graphics(glm::uvec2(1024, 786), 0.1f, 100.0f);
 }
 
-/**********************************************************************************************************************
- * Returns true if a window with the desired context could get created.
- * Requested OpenGL version gets set by ACGL defines.
- */
-bool createWindow()
+Graphics* Application::getGraphics() {
+    return &graphics;
+}
+
+Level* Application::getLevel() {
+    return &level;
+}
+
+ACGL::OpenGL::SharedShaderProgram Application::getShader() {
+    return shader;
+}
+
+void Application::init()
 {
-    /////////////////////////////////////////////////////////////////////////////////////
-    // Initialise GLFW
-    //
-    if ( !glfwInit() )
-    {
-        error() << "Failed to initialize GLFW" << endl;
-        exit( -1 );
-    }
+    // define where shaders and textures can be found:
+    ACGL::Base::Settings::the()->setResourcePath("../");
+    ACGL::Base::Settings::the()->setShaderPath("Shader/");
+    ACGL::Base::Settings::the()->setTexturePath("Levels/Textures/");
+    ACGL::Base::Settings::the()->setGeometryPath("Levels/Geometry/");
 
-    /////////////////////////////////////////////////////////////////////////////////////
-    // Configure OpenGL context
-    //
-    setGLFWHintsForOpenGLVersion( ACGL_OPENGL_VERSION );
+    // construct VAO to give shader correct Attribute locations
+    ACGL::OpenGL::SharedArrayBuffer ab = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
+    ab->defineAttribute("aPosition", GL_FLOAT, 3);
+    ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
+    ab->defineAttribute("aNormal", GL_FLOAT, 3);
+    ACGL::OpenGL::SharedVertexArrayObject vao = std::make_shared<ACGL::OpenGL::VertexArrayObject>();
+    vao->attachAllAttributes(ab);
 
-    // activate multisampling (second parameter is the number of samples):
-    //glfwWindowHint( GLFW_SAMPLES, 8 );
+    // look up all shader files starting with 'phong' and build a ShaderProgram from it:
+    shader = ACGL::OpenGL::ShaderProgramCreator("phong").attributeLocations(
+            vao->getAttributeLocations()).create();
+    shader->use();
 
-    // request an OpenGL debug context:
-    glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, true );
+    // load Level
+    level.load(shader);
 
-    // define whether the window can get resized:
-    //glfwWindowHint( GLFW_RESIZABLE, true );
+    // just in case: check for errors
+    openGLCriticalError();
+}
 
-    // non-decorated windows can be used as splash screens:
-    //glfwWindowHint( GLFW_DECORATED, false );
-
-    // request an sRGB framebuffer:
-    //glfwWindowHint( GLFW_SRGB_CAPABLE, true );
-
-    //glfwWindowHint( , true );
-    //glfwWindowHint( , true );
-    //glfwWindowHint( , true );
-    //glfwWindowHint( , true );
-
-
-    /////////////////////////////////////////////////////////////////////////////////////
-    // try to create an OpenGL context in a window and check the supported OpenGL version:
-    //                                                  R,G,B,A, Depth,Stencil
-    g_window = glfwCreateWindow( g_windowSize.x, g_windowSize.y, "ACGL GLFWExamples", NULL, NULL);
-    if (!g_window) {
-        error() << "Failed to open a GLFW window - requested OpenGL: " <<  ACGL_OPENGL_VERSION << endl;
-        return false;
-    }
-    glfwMakeContextCurrent(g_window);
-    ACGL::init();
-
-    /////////////////////////////////////////////////////////////////////////////////////
-    // Init debug-extension
-    //
-    if (ACGL_ARB_debug_output()) {
-        //debug() << "GL_ARB_DEBUG_OUTPUT is supported, register callback" << endl;
-        //glDebugMessageCallbackARB( debugCallback, NULL);
-
-        // filter out the strange performance warnings about shader recompiles:
-        //glDebugMessageControlARB( GL_DEBUG_SOURCE_API_ARB, GL_DEBUG_TYPE_PERFORMANCE_ARB, GL_DEBUG_SEVERITY_MEDIUM_ARB, 0, NULL, GL_FALSE );
-    } else {
-        //debug() << "GL_ARB_DEBUG_OUTPUT is missing!" << endl;
-    }
-    return true;
+void resizeCallback(GLFWwindow* window, int newWidth, int newHeight)
+{
+    // store the new window size and adjust the viewport:
+    app.getGraphics()->setWindowSize(glm::uvec2( newWidth, newHeight));
+    glViewport( 0, 0, newWidth, newHeight);
 }
 
 static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
@@ -120,16 +74,19 @@ static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
     }
 }
 
+static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+    app.getLevel()->getCamera()->updateDistance(-(float)yoffset);
+}
 
-/**********************************************************************************************************************
- * Generic main for different example apps
- */
+
 int main( int argc, char *argv[] )
 {
+    //Application app = Application();
+
     /////////////////////////////////////////////////////////////////////////////////////
     // Create OpenGL capable window:
     //
-    if ( !createWindow() ) {
+    if ( !app.getGraphics()->createWindow() ) {
         glfwTerminate();
         exit( -1 );
     }
@@ -137,12 +94,15 @@ int main( int argc, char *argv[] )
     /////////////////////////////////////////////////////////////////////////////////////
     // Set window title to binary name (without the path):
     //
-    std::vector<std::string> tmp = StringHelpers::split( std::string( argv[0] ), '/' );
-    glfwSetWindowTitle( g_window, tmp[tmp.size()-1].c_str() );
+    std::vector<std::string> tmp = ACGL::Utils::StringHelpers::split( std::string( argv[0] ), '/' );
+    glfwSetWindowTitle(app.getGraphics()->getWindow(), tmp[tmp.size()-1].c_str() );
     // Ensure we can capture the escape key being pressed below
-    glfwSetInputMode( g_window, GLFW_STICKY_KEYS, 1 );
-    glfwSetWindowSizeCallback(  g_window, resizeCallback );
-    glfwSetKeyCallback( g_window, keyCallback );
+    glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_STICKY_KEYS, 1);
+    // Hide mouse cursor
+    glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    glfwSetWindowSizeCallback(app.getGraphics()->getWindow(), resizeCallback);
+    glfwSetKeyCallback(app.getGraphics()->getWindow(), keyCallback );
+    glfwSetScrollCallback(app.getGraphics()->getWindow(), scrollCallback );
 
     // Enable vertical sync (on cards that support it) with parameter 1 - 0 means off
     glfwSwapInterval( 0 );
@@ -152,38 +112,54 @@ int main( int argc, char *argv[] )
     //
     glClearColor( 0.0, 0.0, 0.0, 1.0 );
     glEnable( GL_DEPTH_TEST );
-    initCustomResources();
+    app.init();
 
     int frameCount = 0;
 
     const double FPSdelay = 2.0;
     double startTimeInSeconds = glfwGetTime();
     double showNextFPS = startTimeInSeconds + FPSdelay;
+    
+    double lastUpdate=0.0f;
+      
+    int stateW = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_W);
+    int stateA = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_A);
+    int stateS = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_S);
+    int stateD = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_D);
 
     do {
-        double now = glfwGetTime();
 
+        double now = glfwGetTime()- startTimeInSeconds;
+        
         if (showNextFPS <= now) {
-            stringstream sstream (stringstream::in | stringstream::out);
-            sstream << setprecision(1) << std::fixed
+            std::stringstream sstream (std::stringstream::in | std::stringstream::out);
+            sstream << std::setprecision(1) << std::fixed
                     << tmp[tmp.size()-1] << " - FPS: " << frameCount / (now-showNextFPS + FPSdelay) << " " << 1000 * (now-showNextFPS + FPSdelay)/frameCount << " msec";
-            glfwSetWindowTitle( g_window, sstream.str().c_str() );
+            glfwSetWindowTitle(app.getGraphics()->getWindow(), sstream.str().c_str() );
             showNextFPS = now + FPSdelay;
             frameCount = 0;
         }
 
-        draw( now - startTimeInSeconds );
+        double xpos, ypos;
+        glfwGetCursorPos(app.getGraphics()->getWindow(), &xpos, &ypos);
+        glfwSetCursorPos(app.getGraphics()->getWindow(), app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
+
+        app.getLevel()->update(now - lastUpdate,
+                glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
+                        (float)xpos-app.getGraphics()->getWindowSize().x/2),
+                    stateW == GLFW_PRESS,stateA == GLFW_PRESS,stateS == GLFW_PRESS,stateD == GLFW_PRESS);
+        lastUpdate = now;
+        app.getGraphics()->render(app.getLevel(), app.getShader());
+        
         openGLCriticalError();
 
         // MacOS X will not swap correctly is another FBO is bound:
         glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-        glfwSwapBuffers( g_window );
+        glfwSwapBuffers(app.getGraphics()->getWindow());
         glfwPollEvents();
         frameCount++;
     } // Check if the window was closed
-    while( !glfwWindowShouldClose( g_window ) );
-
-    deleteCustomResources();
+    while( !glfwWindowShouldClose(app.getGraphics()->getWindow()) );
 
     glfwTerminate();
     exit(0);
