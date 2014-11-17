@@ -16,13 +16,6 @@
 #include <ACGL/OpenGL/glloaders/extensions.hh>
 #include <ACGL/Base/Settings.hh>
 
-#include "model.hh"
-
-using namespace std;
-using namespace ACGL::OpenGL;
-using namespace ACGL::Base;
-using namespace ACGL::Utils;
-
 Application::Application() {
     graphics = Graphics(glm::uvec2(1024, 786), 0.1f, 100.0f);
 }
@@ -47,13 +40,17 @@ void Application::init()
     ACGL::Base::Settings::the()->setTexturePath("Geometry/");
     ACGL::Base::Settings::the()->setGeometryPath("Geometry/");
 
-    // load Model to give shader correct Attribute locations
-    // TODO look up if this is really necessary, since this looks really stupid.
-    Model model = Model("Bunny.obj");
+    // construct VAO to give shader correct Attribute locations
+    ACGL::OpenGL::SharedArrayBuffer ab = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
+    ab->defineAttribute("aPosition", GL_FLOAT, 3);
+    ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
+    ab->defineAttribute("aNormal", GL_FLOAT, 3);
+    ACGL::OpenGL::SharedVertexArrayObject vao = std::make_shared<ACGL::OpenGL::VertexArrayObject>();
+    vao->attachAllAttributes(ab);
 
     // look up all shader files starting with 'phong' and build a ShaderProgram from it:
     shader = ACGL::OpenGL::ShaderProgramCreator("phong").attributeLocations(
-            model.getReference()->getAttributeLocations()).create();
+            vao->getAttributeLocations()).create();
     shader->use();
 
     // load Level
@@ -62,11 +59,6 @@ void Application::init()
     // just in case: check for errors
     openGLCriticalError();
 }
-
-/**********************************************************************************************************************
- * Returns true if a window with the desired context could get created.
- * Requested OpenGL version gets set by ACGL defines.
- */
 
 static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
 {
@@ -91,10 +83,12 @@ int main( int argc, char *argv[] )
     /////////////////////////////////////////////////////////////////////////////////////
     // Set window title to binary name (without the path):
     //
-    std::vector<std::string> tmp = StringHelpers::split( std::string( argv[0] ), '/' );
+    std::vector<std::string> tmp = ACGL::Utils::StringHelpers::split( std::string( argv[0] ), '/' );
     glfwSetWindowTitle(app.getGraphics()->getWindow(), tmp[tmp.size()-1].c_str() );
     // Ensure we can capture the escape key being pressed below
-    glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_STICKY_KEYS, 1 );
+    glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_STICKY_KEYS, 1);
+    // Hide mouse cursor
+    glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     //glfwSetWindowSizeCallback(app.getGraphics(), resizeCallback);
     glfwSetKeyCallback(app.getGraphics()->getWindow(), keyCallback );
 
@@ -118,15 +112,20 @@ int main( int argc, char *argv[] )
         double now = glfwGetTime();
 
         if (showNextFPS <= now) {
-            stringstream sstream (stringstream::in | stringstream::out);
-            sstream << setprecision(1) << std::fixed
+            std::stringstream sstream (std::stringstream::in | std::stringstream::out);
+            sstream << std::setprecision(1) << std::fixed
                     << tmp[tmp.size()-1] << " - FPS: " << frameCount / (now-showNextFPS + FPSdelay) << " " << 1000 * (now-showNextFPS + FPSdelay)/frameCount << " msec";
             glfwSetWindowTitle(app.getGraphics()->getWindow(), sstream.str().c_str() );
             showNextFPS = now + FPSdelay;
             frameCount = 0;
         }
 
-        app.getLevel()->update(now - startTimeInSeconds);
+        double xpos, ypos;
+        glfwGetCursorPos(app.getGraphics()->getWindow(), &xpos, &ypos);
+        glfwSetCursorPos(app.getGraphics()->getWindow(), app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
+
+        app.getLevel()->update(now - startTimeInSeconds, glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
+                    (float)xpos-app.getGraphics()->getWindowSize().x/2));
         app.getGraphics()->render(app.getLevel(), app.getShader());
 
         openGLCriticalError();

@@ -13,7 +13,7 @@ Level::~Level() {
 
 void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     // currently hard coded should later read this stuff out of a file
-    this->camera = Camera(glm::vec3(-0.8f, 0.0f, 0.0f), 3.0f);
+    this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
     // load the geometry of the stanford bunny and build a VAO:
     Model model = Model("Bunny.obj", 0.25f);
     // load a texture:
@@ -34,12 +34,13 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
 
     // load terrain
     this->terrain.load();
-    Model terrainModel = this->terrain.getModel();
+    Model terrainModel = Model(this->terrain.getModel());
     // load a texture:
-    Material terrainMaterial = Material("clownfishBunny.png", 0.7f, 0.7f, 0.3f, 1.0f);
+    Material terrainMaterial = Material("clownfishBunny.png", 1.0f, 0.0f, 0.0f, 3.0f);
     //Create object
     Object terrainObject = Object(terrainModel, terrainMaterial,
-	glm::vec3(-0.5f*(float)this->terrain.getHeightmapHeight(), 0.0f, -0.5f*(float)this->terrain.getHeightmapWidth()),
+	//glm::vec3(-0.5f*(float)this->terrain.getHeightmapHeight(), -0.5f, -0.5f*(float)this->terrain.getHeightmapWidth()),
+	glm::vec3(-1.0f, 0.0f, -1.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     objects.push_back(object);
@@ -51,12 +52,19 @@ void Level::render() {
     for(unsigned int i = 0; i<objects.size(); i++) {
         objects[i].render();
     }
-//    this->terrain.render();
 }
 
-void Level::update(float runTime) {
+void Level::update(float runTime, glm::vec2 mouseDelta) {
     // rotate bunny
-    cameraCenter->setRotation(glm::vec3(0.0f, 1.0472f * runTime, 0.0f));
+    //cameraCenter->setRotation(glm::vec3(0.0f, 1.0472f * runTime, 0.0f));
+    // Ignore first two mouse updates, because they are incorrect
+    static int i = 0;
+    if (i <2) {
+        i++;
+    }
+    else {
+        camera.updateRotation(mouseDelta/100.0f);
+    }
 }
 
 glm::vec3 Level::getAmbientLight() {
