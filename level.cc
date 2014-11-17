@@ -63,9 +63,6 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     lights.push_back(light);
     Light light2 = Light(glm::vec3(3.0f, 6.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
     lights.push_back(light2);
-    Light light3 = Light(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.5f, 0.5f, 1.0f), 4.0f);
-    lights.push_back(light3);
-
 
     // load terrain
     this->terrain.load();
