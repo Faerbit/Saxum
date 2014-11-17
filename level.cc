@@ -1,5 +1,7 @@
 #include "level.hh"
 
+
+
 Level::Level(std::string filePath){
     this->filePath = filePath;
     this->terrain = Terrain(filePath + "/terrain");
@@ -12,6 +14,10 @@ Level::~Level() {
 }
 
 void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
+
+    this->physics = Physics();
+    this->physics.init();
+    
     // currently hard coded should later read this stuff out of a file
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
     // load the geometry of the stanford bunny and build a VAO:
@@ -19,9 +25,14 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     // load a texture:
     Material material = Material("stoneTexture.png", 0.1f, 0.5f, 0.5f, 3.0f);
     //Create object
-    Object object = Object(model, material, glm::vec3(0.0f, 7.0f, -2.0f),
+    Object object = Object(model, material, glm::vec3(0.0f, 5.0f, 0.0f),
         glm::vec3(0.0f, 1.0472f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
+    //add player to phy    
+    this->physics.addPlayer(0.75f,0.0f,5.0f,0.0f,1.0f,0);
+    
+    physics.addStaticGroundPlane();
+    
 
 
     //set lighting parameters
@@ -53,7 +64,7 @@ void Level::render() {
     }
 }
 
-void Level::update(float runTime, glm::vec2 mouseDelta) {
+void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPressed, bool dPressed, bool sPressed) {
     // rotate bunny
     //cameraCenter->setRotation(glm::vec3(0.0f, 1.0472f * runTime, 0.0f));
     // Ignore first two mouse updates, because they are incorrect
@@ -63,7 +74,18 @@ void Level::update(float runTime, glm::vec2 mouseDelta) {
     }
     else {
         camera.updateRotation(mouseDelta/100.0f);
+    }    
+    
+    if(wPressed)
+    {
+        //physics.rollForward(camera.getRotation);
     }
+    
+    physics.takeUpdateStep(runTime);
+    
+    objects[0].setPosition(physics.getPos(0));
+    
+    
 }
 
 glm::vec3 Level::getAmbientLight() {
