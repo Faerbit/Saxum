@@ -37,17 +37,17 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
 
     //set lighting parameters
     ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
-    Light light = Light(glm::vec3(-10.0f, 20.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f);
+    Light light = Light(glm::vec3(-3.0f, 6.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
     lights.push_back(light);
-    Light light2 = Light(glm::vec3(10.0f, 20.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f);
+    Light light2 = Light(glm::vec3(3.0f, 6.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
     lights.push_back(light2);
 
 
     // load terrain
     this->terrain.load();
-    Model terrainModel = this->terrain.getModel();
+    Model terrainModel = Model(this->terrain.getModel());
     // load a texture:
-    Material terrainMaterial = Material("clownfishBunny.png", 0.1f, 0.7f, 0.3f, 1.0f);
+    Material terrainMaterial = Material("terrainTexture.png", 0.1f, 0.8f, 0.2f, 3.0f);
     //Create object
     Object terrainObject = Object(terrainModel, terrainMaterial,
 	glm::vec3(-0.5f*(float)this->terrain.getHeightmapHeight(), 0.0f, -0.5f*(float)this->terrain.getHeightmapWidth()),
