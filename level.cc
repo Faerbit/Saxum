@@ -26,7 +26,7 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     Material material = Material("marbleTexture.png", 0.1f, 0.5f, 0.5f, 3.0f);
     //Create object
     Object object = Object(model, material, glm::vec3(0.0f, 5.0f, 0.0f),
-        glm::vec3(0.0f, 1.0472f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     //add player to phy    
     this->physics.addPlayer(0.75f,0.0f,5.0f,0.0f,1.0f,0);
@@ -50,6 +50,8 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     lights.push_back(light);
     Light light2 = Light(glm::vec3(3.0f, 6.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
     lights.push_back(light2);
+    Light light3 = Light(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 1.0f), 4.0f);
+    lights.push_back(light3);
 
 
     // load terrain
@@ -92,8 +94,7 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     physics.takeUpdateStep(runTime);
     
     objects[0].setPosition(physics.getPos(0));
-    
-    
+    lights[2].setPosition(physics.getPos(0));
 }
 
 glm::vec3 Level::getAmbientLight() {
