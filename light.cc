@@ -6,6 +6,9 @@ Light::Light(glm::vec3 position, glm::vec3 colour, float intensity)
     this->intensity = intensity;
 }
 
+Light::Light() {
+}
+
 Light::~Light() {
 }
 
