@@ -42,7 +42,19 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     objects.push_back(torchObject);
     
+    Model blockModel = Model("Block.obj", 1.0f);
+    Material blockMaterial = Material("blockTexture.png", 0.1f, 0.6, 0.4f, 2.0f);
+    Object blockObject = Object(blockModel, blockMaterial, glm::vec3(2.0f, 5.0f, 2.0f),
+            glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
+            shader);
+    objects.push_back(blockObject);
 
+    Model columnModel = Model("Column.obj", 1.0f);
+    Material columnMaterial = Material("columnTexture.png", 0.1f, 0.6, 0.4f, 2.0f);
+    Object columnObject = Object(columnModel, columnMaterial, glm::vec3(-2.0f, 5.0f, -2.0f),
+            glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
+            shader);
+    objects.push_back(columnObject);
 
     //set lighting parameters
     ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
