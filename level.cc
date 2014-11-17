@@ -21,7 +21,7 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     // currently hard coded should later read this stuff out of a file
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
     // load the geometry of the stanford bunny and build a VAO:
-    Model model = Model("marblesimple.obj", 0.75f);
+    Model model = Model("MarbleSmooth.obj", 0.75f);
     // load a texture:
     Material material = Material("marbleTexture.png", 0.1f, 0.5f, 0.5f, 3.0f);
     //Create object
