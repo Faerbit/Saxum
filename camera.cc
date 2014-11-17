@@ -19,6 +19,7 @@ float Camera::getDistance() {
 
 void Camera::setDistance(float distance) {
     this->distance = distance;
+    updatePosition();
 }
 
 glm::vec2 Camera::getRotation() {
@@ -27,9 +28,11 @@ glm::vec2 Camera::getRotation() {
 
 void Camera::setRotation(glm::vec2 rotation) {
     this->rotation = rotation;
+    updatePosition();
 }
 
 void Camera::updateRotation(glm::vec2 rotation) {
+    this->rotation += rotation;
     if((this->rotation.x + rotation.x) >= 1.57f) {
         this->rotation.x = 1.57;
         this->rotation.y += rotation.y;
@@ -41,6 +44,7 @@ void Camera::updateRotation(glm::vec2 rotation) {
     else {
         this-> rotation += rotation;
     }
+    updatePosition();
 }
 
 void Camera:: updateDistance(float distance) {
@@ -53,4 +57,18 @@ void Camera:: updateDistance(float distance) {
     else {
         this->distance += distance;
     }
+    updatePosition();
 }
+
+void Camera::updatePosition() {
+    glm::vec4 cameraVector = glm::vec4(0.0f, 0.0f, distance, 0.0f);
+    // rotate vector
+    glm::mat4 rotationMatrix =  
+        glm::rotate<float>(rotation[1], glm::vec3(0.0f, 1.0f, 0.0f)) * glm::rotate<float>(rotation[0], glm::vec3(1.0f, 0.0f, 0.0f));
+    this->vector = glm::vec3(rotationMatrix * cameraVector);
+}
+
+glm::vec3 Camera::getVector() {
+    return vector;
+}
+

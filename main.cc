@@ -37,8 +37,8 @@ void Application::init()
     // define where shaders and textures can be found:
     ACGL::Base::Settings::the()->setResourcePath("../");
     ACGL::Base::Settings::the()->setShaderPath("Shader/");
-    ACGL::Base::Settings::the()->setTexturePath("Geometry/");
-    ACGL::Base::Settings::the()->setGeometryPath("Geometry/");
+    ACGL::Base::Settings::the()->setTexturePath("Levels/Textures/");
+    ACGL::Base::Settings::the()->setGeometryPath("Levels/Geometry/");
 
     // construct VAO to give shader correct Attribute locations
     ACGL::OpenGL::SharedArrayBuffer ab = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
