@@ -29,17 +29,10 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
         glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     //add player to phy    
-<<<<<<< HEAD
-    this->physics.addPlayer(0.75f,0.0f,15.0f,0.0f,1.0f,0);
-    
-    //physics.addStaticGroundPlane();
-    
-=======
     this->physics.addPlayer(0.75f,0.0f,5.0f,0.0f,1.0f,0);
     objects.push_back(object);
     
     physics.addStaticGroundPlane();
->>>>>>> 29f24d6f059c3dc9fbd15a9dbf499ea17bd32a75
 
     Model torchModel = Model("torch.obj", 0.75f);
     Material torchMaterial = Material("torchTexture.png", 0.1f, 0.3f, 0.7f, 10.0f);
@@ -124,13 +117,8 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     physics.takeUpdateStep(runTime);
     
     objects[0].setPosition(physics.getPos(0));
-<<<<<<< HEAD
     objects[0].setRotation(physics.getRotation(0));
-    
-    
-=======
     lights[2].setPosition(physics.getPos(0));
->>>>>>> 29f24d6f059c3dc9fbd15a9dbf499ea17bd32a75
 }
 
 glm::vec3 Level::getAmbientLight() {
