@@ -19,6 +19,7 @@ class Level {
         void update(float runTime, glm::vec2 mouseDelta,bool wPressed, bool aPressed,bool sPressed, bool dPressed);
         void render();
         glm::vec3 getAmbientLight();
+        Light* getDirectionalLight();
         std::vector<Light> getLights();
         Object* getCameraCenter();
         Camera* getCamera();
@@ -27,6 +28,7 @@ class Level {
         std::vector<Object> objects;
         std::vector<Light> lights;
         glm::vec3 ambientLight;
+        Light directionalLight;
         Object* cameraCenter;
         Physics physics;
         Camera camera;
