@@ -117,7 +117,6 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     
     objects[0].setPosition(physics.getPos(0));
     objects[0].setRotation(physics.getRotation(0));
-    lights[2].setPosition(physics.getPos(0));
 }
 
 glm::vec3 Level::getAmbientLight() {
