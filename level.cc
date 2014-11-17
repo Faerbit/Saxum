@@ -30,8 +30,17 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     //add player to phy    
     this->physics.addPlayer(0.75f,0.0f,5.0f,0.0f,1.0f,0);
+    objects.push_back(object);
     
     physics.addStaticGroundPlane();
+
+    Model torchModel = Model("torch.obj", 0.75f);
+    Material torchMaterial = Material("torchTexture.png", 0.1f, 0.3f, 0.7f, 10.0f);
+    //Create object
+    Object torchObject = Object(torchModel, torchMaterial, glm::vec3(-3.0f, 5.0f, 0.0f),
+        glm::vec3(0.0f, 1.0472f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 0.0f, 0.0f), shader);
+    objects.push_back(torchObject);
     
 
 
@@ -53,7 +62,6 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
 	glm::vec3(-0.5f*(float)this->terrain.getHeightmapHeight(), 0.0f, -0.5f*(float)this->terrain.getHeightmapWidth()),
         glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
-    objects.push_back(object);
     objects.push_back(terrainObject);
     cameraCenter = &objects[0];
 }
