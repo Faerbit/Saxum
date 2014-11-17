@@ -61,7 +61,7 @@ void Physics::addTerrain(int width, int length, float** heightData)
 
 	btRigidBody* tBody = new btRigidBody(0,new btDefaultMotionState(),terrianShape);
 
-	tBody->getWorldTransform().setOrigin(btVector3(0,5*highest/10,0));
+	tBody->getWorldTransform().setOrigin(btVector3(0,highest/2,0));
 
 	//tBody->getWoorldTransform().setRotation(btQuaternion(0,0,0,1));
 
