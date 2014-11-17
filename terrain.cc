@@ -13,10 +13,10 @@ Terrain::~Terrain() {
 
 
 void Terrain::load() {
-    filePath = "../Levels/LevelTest/terrain/";	//TODO remove this, its only for testing
+    filePath = "../Levels/heightmapLvlTest.png";	//TODO remove this, its only for testing
 
     std::vector<unsigned char> image; //the raw pixels
-    unsigned error = lodepng::decode(image, heightmapWidth, heightmapHeight, filePath + "heightmap.png");
+    unsigned error = lodepng::decode(image, heightmapWidth, heightmapHeight, filePath);
     if (error) {
         std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
     }
@@ -41,7 +41,7 @@ void Terrain::makeTriangleMesh(){
     ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
     ab->defineAttribute("aNormal", GL_FLOAT, 3);
 
-    unsigned int rowNum=0, columnNum=0, dataCount=0, abNumFloats=8;				//initializing:
+    unsigned int rowNum=0, columnNum=0, dataCount=0, floatsPerVertex=8;				//initializing:
     bool movingRight = true, isUp = true;
     int numVertices = (this->heightmapHeight - 1) * (this->heightmapWidth * 2 + 1) + 1;
     float* abData = new float[numVertices * floatsPerVertex];
@@ -56,9 +56,9 @@ void Terrain::makeTriangleMesh(){
         else if (movingRight) {
             if (columnNum == this->heightmapWidth - 1) {
                 set_abData(abData, dataCount, rowNum, columnNum);
-                dataCount += abNumFloats;
+                dataCount += floatsPerVertex;
                 set_abData(abData, dataCount, rowNum, columnNum);
-                dataCount += abNumFloats;
+                dataCount += floatsPerVertex;
                 movingRight = false;
                 rowNum = rowNum + 1;
             } 
@@ -71,9 +71,9 @@ void Terrain::makeTriangleMesh(){
         else {
             if (columnNum == 0){
                 set_abData(abData, dataCount, rowNum, columnNum);
-                dataCount += abNumFloats;
+                dataCount += floatsPerVertex;
                 set_abData(abData, dataCount, rowNum, columnNum);
-                dataCount += abNumFloats;
+                dataCount += floatsPerVertex;
                 movingRight = true;
                 rowNum = rowNum + 1;
             }
