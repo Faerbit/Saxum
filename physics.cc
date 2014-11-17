@@ -161,8 +161,8 @@ glm::mat4 Physics::getRotation(int i)
 void Physics::rollForward(glm::vec3 camPos)
 {
     btVector3 pos(camPos.x,camPos.y,camPos.z);
-    pos -= playerBody->getCentreOfMassPosition();
-    pos.cross(btVector3(0,1,0);
+    pos -= playerBody->getCenterOfMassPosition();
+    pos.cross(btVector3(0,1,0));
     playerBall->applyTorque(pos);
 
 /*	glm::vec3 saveVector= glm::vec3(1,0,0) * rotCamera;
