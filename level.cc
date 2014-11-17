@@ -25,14 +25,14 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     // load a texture:
     Material material = Material("marbleTexture.png", 0.1f, 0.5f, 0.5f, 3.0f);
     //Create object
-    Object object = Object(model, material, glm::vec3(0.0f, 5.0f, 0.0f),
+    Object object = Object(model, material, glm::vec3(0.0f, 10.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     //add player to phy    
-    this->physics.addPlayer(0.75f,0.0f,5.0f,0.0f,1.0f,0);
+    this->physics.addPlayer(1.25f,0.0f,10.0f,0.0f,1.0f,0);
     objects.push_back(object);
     
-    physics.addStaticGroundPlane();
+    //physics.addStaticGroundPlane();
 
     Model torchModel = Model("torch.obj", 0.75f);
     Material torchMaterial = Material("torchTexture.png", 0.1f, 0.3f, 0.7f, 10.0f);
@@ -98,6 +98,7 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
         i++;
     }
     else {
+        mouseDelta.x = -mouseDelta.x;
         camera.updateRotation(mouseDelta/100.0f);
     }    
     
