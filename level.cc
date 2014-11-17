@@ -78,6 +78,9 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     objects.push_back(terrainObject);
     cameraCenter = &objects[0];
+    
+    //addTerrainPhysic
+	physics.addTerrain(terrain.getHeightmapWidth(), terrain.getHeightmapHeight(), terrain.getHeightmap());
 }
 
 void Level::render() {
@@ -86,7 +89,7 @@ void Level::render() {
     }
 }
 
-void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPressed, bool dPressed, bool sPressed) {
+void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPressed, bool sPressed, bool dPressed) {
     // rotate bunny
     //cameraCenter->setRotation(glm::vec3(0.0f, 1.0472f * runTime, 0.0f));
     // Ignore first two mouse updates, because they are incorrect
@@ -98,14 +101,23 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
         camera.updateRotation(mouseDelta/100.0f);
     }    
     
-    if(wPressed)
-    {
-        //physics.rollForward(camera.getRotation);
+    if(wPressed){
+        physics.rollForward(camera.getVector(),1.0f);
+    }
+    if(aPressed) {
+        physics.rollLeft(camera.getVector(),1.0f);
+    }
+    if(sPressed) {
+        physics.rollBack(camera.getVector(),1.0f);
+    }
+    if(dPressed){
+        physics.rollRight(camera.getVector(),1.0f);
     }
     
     physics.takeUpdateStep(runTime);
     
     objects[0].setPosition(physics.getPos(0));
+    objects[0].setRotation(physics.getRotation(0));
     lights[2].setPosition(physics.getPos(0));
 }
 

@@ -124,15 +124,16 @@ int main( int argc, char *argv[] )
     
     double lastUpdate=0.0f;
       
-    int stateW = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_W);
-    int stateA = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_A);
-    int stateS = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_S);
-    int stateD = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_D);
 
     do {
 
         double now = glfwGetTime()- startTimeInSeconds;
         
+       int stateW = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_W);
+       int stateA = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_A);
+       int stateS = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_S);
+       int stateD = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_D);
+    
         if (showNextFPS <= now) {
             std::stringstream sstream (std::stringstream::in | std::stringstream::out);
             sstream << std::setprecision(1) << std::fixed
@@ -160,6 +161,7 @@ int main( int argc, char *argv[] )
         glfwSwapBuffers(app.getGraphics()->getWindow());
         glfwPollEvents();
         frameCount++;
+        
     } // Check if the window was closed
     while( !glfwWindowShouldClose(app.getGraphics()->getWindow()) );
 
