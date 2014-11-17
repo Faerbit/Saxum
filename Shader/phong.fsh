@@ -14,6 +14,9 @@ uniform float specularFactor;
 uniform vec3 camera;
 uniform float shininess;
 uniform int lightCount;
+uniform vec3 directionalLightVector;
+uniform vec3 directionalColor;
+uniform float directionalIntensity;
 uniform vec3 lightSources[128];
 uniform vec3 lightColors[128];
 uniform float lightIntensities[128];
@@ -23,6 +26,15 @@ void main()
     vec3 ambientColor = ambientFactor * ambientColor;
     vec3 diffuseColor = vec3(0.0, 0.0, 0.0);
     vec3 specularColor = vec3(0.0, 0.0, 0.0);
+
+    if(length(directionalLightVector)>0.0f) {
+        vec3 directionalVector = normalize(directionalLightVector);
+        diffuseColor += dot(normalize(vNormal), directionalVector)
+        *diffuseFactor*directionalIntensity*directionalColor;
+        vec3 cameraVector = normalize(camera - vec3(fragPosition));
+        specularColor += clamp(pow((dot((cameraVector+directionalVector),normalize(vNormal))/(length(cameraVector+directionalVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
+        *specularFactor*directionalIntensity*directionalColor;
+    }
     for(int i = 0; i<lightCount; i++) {
         float distance = distance(lightSources[i], vec3(fragPosition));
         // only take lights into account with meaningful contribution

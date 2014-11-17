@@ -44,25 +44,26 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     
     Model blockModel = Model("Block.obj", 1.0f);
     Material blockMaterial = Material("blockTexture.png", 0.1f, 0.6, 0.4f, 2.0f);
-    Object blockObject = Object(blockModel, blockMaterial, glm::vec3(2.0f, 6.0f, 2.0f),
+    Object blockObject = Object(blockModel, blockMaterial, glm::vec3(2.0f, 7.0f, 2.0f),
             glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
             shader);
     objects.push_back(blockObject);
 
     Model columnModel = Model("Column.obj", 1.0f);
     Material columnMaterial = Material("columnTexture.png", 0.1f, 0.6, 0.4f, 2.0f);
-    Object columnObject = Object(columnModel, columnMaterial, glm::vec3(-2.0f, 6.0f, -2.0f),
+    Object columnObject = Object(columnModel, columnMaterial, glm::vec3(-2.0f, 7.0f, -2.0f),
             glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
             shader);
     objects.push_back(columnObject);
 
     //set lighting parameters
     ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
-    Light light = Light(glm::vec3(-3.0f, 7.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
+    directionalLight = Light(glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(1.0f, 1.0f, 0.0f), 0.4f);
+    Light light = Light(glm::vec3(-3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
     lights.push_back(light);
-    Light light2 = Light(glm::vec3(3.0f, 6.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
+    Light light2 = Light(glm::vec3(3.0f, 6.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
     lights.push_back(light2);
-    Light light3 = Light(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 1.0f), 4.0f);
+    Light light3 = Light(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.5f, 0.5f, 1.0f), 4.0f);
     lights.push_back(light3);
 
 
@@ -136,4 +137,8 @@ Camera* Level::getCamera() {
 
 Object* Level::getCameraCenter() {
     return cameraCenter;
+}
+
+Light* Level::getDirectionalLight() {
+    return &directionalLight;
 }
