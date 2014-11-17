@@ -14,7 +14,6 @@ btRigidBody* staticGroundBody;
 
 
 Physics::Physics() {
-    //init();
 }
 
 Physics::~Physics() {
@@ -159,11 +158,16 @@ glm::mat4 Physics::getRotation(int i)
 	return matrix;
 }
 
-void Physics::rollForward(glm::mat3 rotCamera)
+void Physics::rollForward(glm::vec3 camPos)
 {
-	glm::vec3 saveVector= glm::vec3(1,0,0) * rotCamera;
+    btVector3 pos(camPos.x,camPos.y,camPos.z);
+    pos -= playerBody->getCentreOfMassPosition();
+    pos.cross(btVector3(0,1,0);
+    playerBall->applyTorque(pos);
+
+/*	glm::vec3 saveVector= glm::vec3(1,0,0) * rotCamera;
 	saveVector = glm::cross(glm::vec3(0,1,0),saveVector);
-	playerBall->applyTorque(btVector3(saveVector[0],saveVector[1],saveVector[2]));
+	playerBall->applyTorque(btVector3(saveVector[0],saveVector[1],saveVector[2]));*/
 }
 
 /*
