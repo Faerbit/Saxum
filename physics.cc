@@ -32,30 +32,41 @@ void Physics::init()
 
 void Physics::takeUpdateStep(float timeDiff)
 {
+    
 	world->stepSimulation(timeDiff);
 }
 
 void Physics::addTerrain(int width, int length, float** heightData)
 {
+
 	float* heightfield = new float[width * length];
 	      int highest = -999999, j = 0, i = 0;
 	      for (i = 0; i < width; i++)
+	      {
 		 for (j = 0; j < length; j++) {
-		    heightfield[j*length+i] = heightData[i][j];
+		  heightfield[i*length+j] =  heightData[j][i];
+		  
+		    if (heightData[j][i] > highest)
+		       highest = heightData[j][i];
+		 }
+		 }
+		 
+		 /*
+		  heightfield[j*length+i] = heightData[i][j];
 		    if (heightData[i][j] > highest)
 		       highest = heightData[i][j];
-		 }
+		 */
 
-	btHeightfieldTerrainShape* terrianShape = new btHeightfieldTerrainShape(width,length,heightData,highest,1,true,false);
+	btHeightfieldTerrainShape* terrianShape = new btHeightfieldTerrainShape(length,width,heightfield,highest,1,true,false);
 
 	btRigidBody* tBody = new btRigidBody(0,new btDefaultMotionState(),terrianShape);
 
-	tBody->getWorldTransform().setOrigin(btVector3(0,highest/2,0));
+	tBody->getWorldTransform().setOrigin(btVector3(0,5*highest/10,0));
 
 	//tBody->getWoorldTransform().setRotation(btQuaternion(0,0,0,1));
 
 	terrainBody = tBody;
-
+    
 	world->addRigidBody(terrainBody);
 
 /*
@@ -101,11 +112,14 @@ void Physics::addPlayer(float rad, float x, float y, float z, float mass, unsign
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia);
 
 	playerBall = new btRigidBody(info);
-
+    
+    playerBall->setDamping(0.1f,0.3f);
+    
 	world->addRigidBody(playerBall);
 
 	bodies.push_back(playerBall);
-
+    
+    playerBall->setSleepingThresholds(0,0);
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 
@@ -127,13 +141,15 @@ void Physics::addSphere(float rad, float x, float y, float z, float mass, unsign
 	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(x,y,z)));
 
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia);
+	//info.
 
 	btRigidBody* body = new btRigidBody(info);
 
 	world->addRigidBody(body);
 
 	bodies.push_back(body);
-
+		
+    body->setSleepingThresholds(0,0);
 
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
@@ -158,15 +174,30 @@ glm::mat4 Physics::getRotation(int i)
 	return matrix;
 }
 
-void Physics::rollForward(glm::vec3 camPos)
+void Physics::rollForward(glm::vec3 camPos,float strength)
 {
     btVector3 pos(camPos.x,0,camPos.z);
-    pos.cross(btVector3(0,1,0));
+    pos = btCross(pos,btVector3(0,1,0));
     playerBall->applyTorque(pos);
+}
 
-/*	glm::vec3 saveVector= glm::vec3(1,0,0) * rotCamera;
-	saveVector = glm::cross(glm::vec3(0,1,0),saveVector);
-	playerBall->applyTorque(btVector3(saveVector[0],saveVector[1],saveVector[2]));*/
+void Physics::rollBack(glm::vec3 camPos,float strength)
+{
+    btVector3 pos(camPos.x,0,camPos.z);
+    pos = btCross(btVector3(0,1,0),pos);
+    playerBall->applyTorque(pos);
+}
+
+void Physics::rollLeft(glm::vec3 camPos,float strength)
+{
+    btVector3 pos(camPos.x,0,camPos.z);
+    playerBall->applyTorque(pos);
+}
+
+void Physics::rollRight(glm::vec3 camPos,float strength)
+{
+    btVector3 pos(camPos.x,0,camPos.z);
+    playerBall->applyTorque(-pos);
 }
 
 /*

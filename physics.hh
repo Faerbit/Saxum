@@ -37,6 +37,9 @@ class Physics {
 	void init();
 	void takeUpdateStep(float timeDiff);
 	void rollForward(glm::vec3 camPos, float strength);
+	void rollLeft(glm::vec3 camPos, float strength);
+	void rollRight(glm::vec3 camPos, float strength);
+	void rollBack(glm::vec3 camPos, float strength);
 	glm::vec3 getPos(int i);
 	glm::mat4 getRotation(int i);
 	void rollForward(glm::vec3 camPos);
