@@ -3,7 +3,6 @@
 
 #include <string>
 #include "material.hh"
-#include <fstream>
 #include <ACGL/OpenGL/Objects/VertexArrayObject.hh>
 #include "model.hh"
 class Terrain {

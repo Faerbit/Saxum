@@ -1,4 +1,5 @@
 #include "terrain.hh"
+#include "lodepng.h"
 
 Terrain::Terrain(std::string filePath){
     this->filePath = filePath;
@@ -12,28 +13,21 @@ Terrain::~Terrain() {
 
 
 void Terrain::load() {
-    this->filePath = "../Levels/LevelTest/terrain";	//TODO remove this, its only for testing
+    filePath = "../Levels/LevelTest/terrain/";	//TODO remove this, its only for testing
 
-    std::ifstream terrain_png(this->filePath + "/heightmap2.png");
-    unsigned int rowNum, columnNum, heightmapValue;
-
-    terrain_png.seekg(16);						//skip part of the header
-
-    char temp[4];
-    terrain_png.read(temp, 4);									//read width
-    this->heightmapWidth = (temp[3]<<0) | (temp[2]<<8) | (temp[1]<<16) | (temp[0]<<24);		//convert from network to host byte order
-    terrain_png.read(temp, 4);									//read height
-    this->heightmapHeight = (temp[3]<<0) | (temp[2]<<8) | (temp[1]<<16) | (temp[0]<<24);	//convert from network to host byte order
-
-    heightmap = new float*[this->heightmapHeight];				//initialize the heightmap
-    for(rowNum = 0; rowNum < this->heightmapHeight; rowNum++){			//read in the heightmap
-	    heightmap[rowNum] = new float[this->heightmapWidth];
-        for(columnNum = 0; columnNum < this->heightmapWidth; columnNum++){
-            terrain_png.read((char *)&heightmapValue, 1);
-	    heightmap[rowNum][columnNum] = (float)heightmapValue / 256;
+    std::vector<unsigned char> image; //the raw pixels
+    unsigned error = lodepng::decode(image, heightmapWidth, heightmapHeight, filePath + "heightmap.png");
+    if (error) {
+        std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+    }
+    this->heightmap = new float*[this->heightmapHeight];					//initialize the heightmap
+    for(unsigned int rowNum = 0; rowNum < this->heightmapHeight; rowNum++){				//read in the heightmap
+	    this->heightmap[rowNum] = new float[this->heightmapWidth];
+        for(unsigned int columnNum = 0; columnNum < this->heightmapWidth; columnNum++){
+	    this->heightmap[rowNum][columnNum] = (float)(image[(rowNum*heightmapWidth+columnNum)*4]) / 32;
         }
     }
-
+    
     this->makeTriangleMesh();
     heightmapChanged = false;		//no need to make a TriangleMesh again before rendering
 
@@ -47,7 +41,7 @@ void Terrain::makeTriangleMesh(){
     ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
     ab->defineAttribute("aNormal", GL_FLOAT, 3);
 
-/*    unsigned int rowNum=0, columnNum=0, dataCount=0, abNumFloats=8;				//initializing:
+    unsigned int rowNum=0, columnNum=0, dataCount=0, abNumFloats=8;				//initializing:
     bool movingRight = true, isUp = true;
     int numVertices = (this->heightmapHeight - 1) * (this->heightmapWidth * 2 + 1) + 1;
     float* abData = new float[numVertices * floatsPerVertex];
@@ -91,23 +85,7 @@ void Terrain::makeTriangleMesh(){
         }
     }
 
-    ab->setDataElements(numVertices, abData);*/
-    float abData[32] = {0.0f, 0.0f, 0.0f,
-          1.0f, 0.0f,
-          0.0f, 1.0f, 0.0f,
-
-          1.0f, 0.0f, 0.0f,
-          1.0f, 1.0f,
-          0.0f, 1.0f, 0.0f,
-
-          0.0f, 0.0f, 1.0f,
-          0.0f, 0.0f,
-          0.0f, 1.0f, 0.0f,
-
-          1.0f, 0.0f, 1.0f,
-          0.0f, 1.0f,
-          0.0f, 1.0f, 0.0f};
-    ab->setDataElements(4, abData);
+    ab->setDataElements(numVertices, abData);
     this->triangleMesh = std::make_shared<ACGL::OpenGL::VertexArrayObject>();
     this->triangleMesh->bind();
     this->triangleMesh->setMode(GL_TRIANGLE_STRIP);
@@ -133,19 +111,19 @@ void Terrain::set_abData(float* abData, unsigned int dataCount, unsigned int row
     	abData[dataCount+7] = 0.0;
     }
     else {
-        glm::vec3 sumNormals;
-        for (int i=-1; i<2; i+=1) {
-            for (int j=-1; j<2; j+=1) {
+        glm::vec3 sumNormals = glm::vec3(0.0f, 0.0f, 0.0f);
+        for (int i=-1; i<2; i+=2) {
+            for (int j=-1; j<2; j+=2) {
                 glm::vec3 vecA, vecB, normal;
                 vecA = glm::vec3((float)i, (heightmap[rowNum+i][columnNum] - heightmap[rowNum][columnNum]), 0.0f);
                 vecB = glm::vec3(0.0f,     (heightmap[rowNum][columnNum+j] - heightmap[rowNum][columnNum]), (float)j);
                 normal = glm::normalize(glm::cross(vecA, vecB));
-                if(i+j==0)
+                if(i+j!=0)
                     normal = normal*(-1.0f);
                 sumNormals += normal;
             }
         }
-        sumNormals = sumNormals*0.111f;
+        sumNormals = glm::normalize(sumNormals);
         abData[dataCount+5] = sumNormals[0];
         abData[dataCount+6] = sumNormals[1];
         abData[dataCount+7] = sumNormals[2];
@@ -161,11 +139,9 @@ float** Terrain::getHeightmap(){
 }
 
 unsigned int Terrain::getHeightmapHeight(){
-    //return this->heightmapHeight;
-    return 2;
+    return this->heightmapHeight;
 }
 
 unsigned int Terrain::getHeightmapWidth(){
-    //return this->heightmapWidth;
-    return 2;
+    return this->heightmapWidth;
 }
