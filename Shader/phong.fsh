@@ -38,6 +38,6 @@ void main()
     }
     vec3 finalColor = specularColor + diffuseColor + ambientColor;
 
-    vec3 texture = texture(uTexture, vTexCoord).rgb;
-    oColor = vec4(finalColor*texture, 1.0 );
+    vec4 texture = texture(uTexture, vTexCoord).rgba;
+    oColor = vec4(finalColor, 1.0f)*texture;
 }
