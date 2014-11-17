@@ -7,6 +7,7 @@
 class Light : public Entity {
     public:
         Light(glm::vec3 position, glm::vec3 colour, float intensity);
+        Light();
         glm::vec3 getColour();
         float getIntensity();
         ~Light();
