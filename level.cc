@@ -32,7 +32,7 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     this->physics.addPlayer(1.25f,0.0f,10.0f,0.0f,1.0f,0);
     objects.push_back(object);
     
-    physics.addStaticGroundPlane();
+    //physics.addStaticGroundPlane();
 
     Model torchModel = Model("torch.obj", 0.75f);
     Material torchMaterial = Material("torchTexture.png", 0.1f, 0.3f, 0.7f, 10.0f);
@@ -98,6 +98,7 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
         i++;
     }
     else {
+        mouseDelta.x = -mouseDelta.x;
         camera.updateRotation(mouseDelta/100.0f);
     }    
     
