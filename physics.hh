@@ -11,6 +11,7 @@
 
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btSphereShape.h"
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
+#include "extern/bullet/src/BulletCollision/CollisionShapes/btStaticPlaneShape.h"
 
 #include "extern/bullet/src/BulletDynamics/ConstraintSolver/btConstraintSolver.h"
 #include "extern/bullet/src/BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"//YAY!
@@ -31,7 +32,7 @@
 
 class Physics {
     public:
-        Physics();
+    Physics();
 	~Physics();
 	void init();
 	void takeUpdateStep(float timeDiff);
@@ -39,6 +40,7 @@ class Physics {
 	glm::vec3 getPos(int i);
 	glm::mat4 getRotation(int i);
 	void rollForward(glm::mat3 rotCamera);
+	void addStaticGroundPlane();
 	void addTerrain(int width, int length, float** heightData);
 	void addPlayer(float rad, float x, float y, float z, float mass, unsigned indice);
 	void addSphere(float rad, float x, float y, float z, float mass, unsigned indice);
@@ -47,6 +49,7 @@ class Physics {
 	btRigidBody* playerBody;
 	btRigidBody* terrainBody;
 	std::vector<btRigidBody*> bodies; //list of all bodies. bodies are also in world, but save again to ease cleaning up process.
+        btRigidBody* staticGroundBody;
 
 
 	btDynamicsWorld* world; //contains physical attributes of the world.

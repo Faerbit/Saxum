@@ -119,10 +119,18 @@ int main( int argc, char *argv[] )
     const double FPSdelay = 2.0;
     double startTimeInSeconds = glfwGetTime();
     double showNextFPS = startTimeInSeconds + FPSdelay;
+    
+    double lastUpdate=0.0f;
+      
+    int stateW = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_W);
+    int stateA = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_A);
+    int stateS = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_S);
+    int stateD = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_D);
 
     do {
-        double now = glfwGetTime();
 
+        double now = glfwGetTime()- startTimeInSeconds;
+        
         if (showNextFPS <= now) {
             std::stringstream sstream (std::stringstream::in | std::stringstream::out);
             sstream << std::setprecision(1) << std::fixed
@@ -136,10 +144,13 @@ int main( int argc, char *argv[] )
         glfwGetCursorPos(app.getGraphics()->getWindow(), &xpos, &ypos);
         glfwSetCursorPos(app.getGraphics()->getWindow(), app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
 
-        app.getLevel()->update(now - startTimeInSeconds, glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
-                    (float)xpos-app.getGraphics()->getWindowSize().x/2));
+        app.getLevel()->update(now - lastUpdate,
+                glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
+                        (float)xpos-app.getGraphics()->getWindowSize().x/2),
+                    stateW == GLFW_PRESS,stateA == GLFW_PRESS,stateS == GLFW_PRESS,stateD == GLFW_PRESS);
+        lastUpdate = now;
         app.getGraphics()->render(app.getLevel(), app.getShader());
-
+        
         openGLCriticalError();
 
         // MacOS X will not swap correctly is another FBO is bound:
