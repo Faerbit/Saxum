@@ -8,6 +8,7 @@
 #include "terrain.hh"
 #include "material.hh"
 #include "camera.hh"
+#include "physics.hh"
 
 class Level {
     public:
@@ -15,18 +16,19 @@ class Level {
         Level();
         ~Level();
         void load(ACGL::OpenGL::SharedShaderProgram shader); // Shader is necessary for correct texture assigning
-        void update(float runTime);
+        void update(float runTime, glm::vec2 mouseDelta,bool wPressed, bool aPressed,bool sPressed, bool dPressed);
         void render();
         glm::vec3 getAmbientLight();
         std::vector<Light> getLights();
         Object* getCameraCenter();
-        Camera getCamera();
+        Camera* getCamera();
     private:
         std::string filePath;
         std::vector<Object> objects;
         std::vector<Light> lights;
         glm::vec3 ambientLight;
         Object* cameraCenter;
+        Physics physics;
         Camera camera;
         Terrain terrain;
 };

@@ -1,7 +1,5 @@
 #include "physics.hh"
 
-#include <vector>
-
 
 btDynamicsWorld* world; //contains physical attributes of the world.
 btDispatcher* dispatcher; //
@@ -12,8 +10,16 @@ btConstraintSolver* solver; //solver for forces and impulses.
 std::vector<btRigidBody*> bodies; //list of all bodies. bodies are also in world, but save again to ease cleaning up process.
 btRigidBody* playerBall;
 btRigidBody* terrainBody;
+btRigidBody* staticGroundBody;
 
-void init()
+
+Physics::Physics() {
+}
+
+Physics::~Physics() {
+}
+
+void Physics::init()
 {
 	colConfig = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(colConfig);
@@ -21,17 +27,15 @@ void init()
 	solver = new btSequentialImpulseConstraintSolver();
 	world = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,colConfig);
 	
-	world->setGravity(btVector3(0,-10,-0));
-
-	
+	world->setGravity(btVector3(0,-10,-0));	
 }
 
-void takeUpdateStep(float timeDiff)
+void Physics::takeUpdateStep(float timeDiff)
 {
 	world->stepSimulation(timeDiff);
 }
 
-void addTerrain(int width, int length, float** heightData)
+void Physics::addTerrain(int width, int length, float** heightData)
 {
 	float* heightfield = new float[width * length];
 	      int highest = -999999, j = 0, i = 0;
@@ -70,14 +74,52 @@ void addTerrain(int width, int length, float** heightData)
 
 }
 
-void addSphere(float rad, float x, float y, float z, float mass, int indice) //TODO add indice check
+void Physics::addStaticGroundPlane()
 {
+	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
+	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
+	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
+        staticGroundBody = new btRigidBody(groundRigidBodyCI);
+
+        world->addRigidBody(staticGroundBody);
+}
+
+void Physics::addPlayer(float rad, float x, float y, float z, float mass, unsigned indice)
+{
+	if(bodies.size() != indice)
+		throw std::invalid_argument( "Bodies out of Sync" ); 
+
 	btSphereShape* sphere = new btSphereShape(rad);
 	btVector3 inertia(0,0,0);
-	if(mass == 0.0)
+	if(mass != 0.0)
 	{
+		sphere->calculateLocalInertia((btScalar)mass,inertia);
 	}
-	else
+
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(x,y,z)));
+
+	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia);
+
+	playerBall = new btRigidBody(info);
+
+	world->addRigidBody(playerBall);
+
+	bodies.push_back(playerBall);
+
+	if(bodies.size() == indice)
+		throw std::invalid_argument( "Bodies out of Sync" ); 
+
+}
+
+
+void Physics::addSphere(float rad, float x, float y, float z, float mass, unsigned indice)
+{
+	if(bodies.size() != indice)
+		throw std::invalid_argument( "Bodies out of Sync" ); 
+
+	btSphereShape* sphere = new btSphereShape(rad);
+	btVector3 inertia(0,0,0);
+	if(mass != 0.0)
 	{
 		sphere->calculateLocalInertia((btScalar)mass,inertia);
 	}
@@ -91,23 +133,41 @@ void addSphere(float rad, float x, float y, float z, float mass, int indice) //T
 	world->addRigidBody(body);
 
 	bodies.push_back(body);
+
+
+	if(bodies.size() == indice)
+		throw std::invalid_argument( "Bodies out of Sync" ); 
+
 }
 
-glm::vec3 getPos(int i)
+glm::vec3 Physics::getPos(int i)
 {
 	btVector3 origin = bodies[i]->getCenterOfMassPosition();
 	glm::vec3 save(origin.getX(),origin.getY(),origin.getZ());
 	return save;
 }
 
-void getRotation(int i)
+glm::mat4 Physics::getRotation(int i)
 {
-	btQuaternion rotQuantrino = bodies[i]->getOrientation(); //TODO return orientation in gl format
+	btQuaternion quat = bodies[i]->getOrientation();
+
+	glm::mat4 matrix = glm::rotate(
+	    quat.getAngle(),
+	    glm::vec3(quat.getAxis().getX(), quat.getAxis().getY(), quat.getAxis().getZ())
+	);
+	return matrix;
 }
 
-void rollForward()
+void Physics::rollForward(glm::vec3 camPos)
 {
-	//bodies[k].applyTorque(btVector3);
+    btVector3 pos(camPos.x,camPos.y,camPos.z);
+    pos -= playerBody->getCenterOfMassPosition();
+    pos.cross(btVector3(0,1,0));
+    playerBall->applyTorque(pos);
+
+/*	glm::vec3 saveVector= glm::vec3(1,0,0) * rotCamera;
+	saveVector = glm::cross(glm::vec3(0,1,0),saveVector);
+	playerBall->applyTorque(btVector3(saveVector[0],saveVector[1],saveVector[2]));*/
 }
 
 /*

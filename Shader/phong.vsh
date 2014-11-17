@@ -4,8 +4,8 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 
-in vec3 aNormal;
 in vec3 aPosition;
+in vec3 aNormal;
 in vec2 aTexCoord;
 
 out vec3 vNormal;
