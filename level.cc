@@ -68,7 +68,7 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     this->terrain.load();
     Model terrainModel = Model(this->terrain.getModel());
     // load a texture:
-    Material terrainMaterial = Material("terrainTexture.png", 0.1f, 0.8f, 0.2f, 3.0f);
+    Material terrainMaterial = Material("seamlessTerrain.png", 0.1f, 0.8f, 0.2f, 3.0f);
     //Create object
     Object terrainObject = Object(terrainModel, terrainMaterial,
 	glm::vec3(-0.5f*(float)this->terrain.getHeightmapHeight(), 0.0f, -0.5f*(float)this->terrain.getHeightmapWidth()),
