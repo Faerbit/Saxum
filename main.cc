@@ -17,7 +17,7 @@
 #include <ACGL/Base/Settings.hh>
 
 Application::Application() {
-    graphics = Graphics(glm::uvec2(1024, 786), 0.1f, 100.0f);
+    graphics = Graphics(glm::uvec2(1024, 786), 0.1f, 150.0f);
 }
 
 Graphics* Application::getGraphics() {
