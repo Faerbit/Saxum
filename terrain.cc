@@ -114,12 +114,20 @@ void Terrain::set_abData(float* abData, unsigned int dataCount, unsigned int row
         glm::vec3 sumNormals = glm::vec3(0.0f, 0.0f, 0.0f);
         for (int i=-1; i<2; i+=2) {
             for (int j=-1; j<2; j+=2) {
-                glm::vec3 vecA, vecB, normal;
-                vecA = glm::vec3((float)i, (heightmap[rowNum+i][columnNum] - heightmap[rowNum][columnNum]), 0.0f);
-                vecB = glm::vec3(0.0f,     (heightmap[rowNum][columnNum+j] - heightmap[rowNum][columnNum]), (float)j);
+                glm::vec3 vecA, vecB, vecC, normal;
+                vecA = glm::normalize(glm::vec3((float)i, (heightmap[rowNum+i][columnNum]   - heightmap[rowNum][columnNum]), 0.0f));
+                vecB = glm::normalize(glm::vec3((float)i, (heightmap[rowNum+i][columnNum+j] - heightmap[rowNum][columnNum]), (float)j));
                 normal = glm::normalize(glm::cross(vecA, vecB));
-                if(i+j!=0)
+                if(i+j!=0){
                     normal = normal*(-1.0f);
+                }
+                sumNormals += normal;
+                
+                vecC = glm::normalize(glm::vec3(0.0f,     (heightmap[rowNum][columnNum+j]   - heightmap[rowNum][columnNum]), (float)j));
+                normal = glm::normalize(glm::cross(vecB, vecC));
+                if(i+j!=0){
+                    normal = normal*(-1.0f);
+                }
                 sumNormals += normal;
             }
         }
