@@ -1,12 +1,10 @@
 #include "object.hh"
 
 Object::Object(Model model, Material material, glm::vec3 position, glm::vec3 rotation,
-        glm::vec3 velocity, glm::vec3 angularVelocity, ACGL::OpenGL::SharedShaderProgram shader) :
+        ACGL::OpenGL::SharedShaderProgram shader) :
         Entity(position, rotation) {
     this->model = model;
     this->material = material;
-    this->velocity = velocity;
-    this->angularVelocity = angularVelocity;
     this->shader = shader;
 }
 
