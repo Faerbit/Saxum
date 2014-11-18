@@ -29,8 +29,8 @@ void main()
 
     if(length(directionalLightVector)>0.0f) {
         vec3 directionalVector = normalize(directionalLightVector);
-        diffuseColor += dot(normalize(vNormal), directionalVector)
-        *diffuseFactor*directionalIntensity*directionalColor;
+        diffuseColor += clamp(dot(normalize(vNormal), directionalVector)
+        *diffuseFactor*directionalIntensity*directionalColor, 0.0, 1.0);
         vec3 cameraVector = normalize(camera - vec3(fragPosition));
         specularColor += clamp(pow((dot((cameraVector+directionalVector),normalize(vNormal))/(length(cameraVector+directionalVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
         *specularFactor*directionalIntensity*directionalColor;
@@ -41,8 +41,8 @@ void main()
         if (distance > 0.001f) {
             vec3 lightVector = normalize(lightSources[i]-vec3(fragPosition));
             float intensity = (lightIntensities[i])/(distance);
-            diffuseColor += dot(normalize(vNormal), lightVector)
-            *diffuseFactor*intensity*lightColors[i];
+            diffuseColor += clamp(dot(normalize(vNormal), lightVector)
+            *diffuseFactor*intensity*lightColors[i], 0.0, 1.0);
             vec3 cameraVector = normalize(camera - vec3(fragPosition));
             specularColor += clamp(pow((dot((cameraVector+lightVector),normalize(vNormal))/(length(cameraVector+lightVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
             *specularFactor*intensity*lightColors[i];
