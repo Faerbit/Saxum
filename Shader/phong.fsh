@@ -40,7 +40,7 @@ void main()
         // only take lights into account with meaningful contribution
         if (distance > 0.001f) {
             vec3 lightVector = normalize(lightSources[i]-vec3(fragPosition));
-            float intensity = (lightIntensities[i])/(distance);
+            float intensity = clamp(pow(2.718,(-(1/lightIntensities[i])*distance)), 0.0, 1.0);
             diffuseColor += clamp(dot(normalize(vNormal), lightVector)
             *diffuseFactor*intensity*lightColors[i], 0.0, 1.0);
             vec3 cameraVector = normalize(camera - vec3(fragPosition));
