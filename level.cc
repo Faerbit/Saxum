@@ -23,7 +23,7 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     // load the geometry of the stanford bunny and build a VAO:
     Model model = Model("MarbleSmooth.obj", 0.75f);
     // load a texture:
-    Material material = Material("marbleTexture.png", 0.1f, 0.5f, 0.5f, 3.0f);
+    Material material = Material("marbleTexture_small.png", 0.1f, 0.5f, 0.5f, 3.0f);
     //Create object
     Object object = Object(model, material, glm::vec3(0.0f, 10.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
@@ -43,14 +43,14 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     objects.push_back(torchObject);
     
     Model blockModel = Model("Block.obj", 1.0f);
-    Material blockMaterial = Material("blockTexture.png", 0.1f, 0.6, 0.4f, 2.0f);
+    Material blockMaterial = Material("blockTexture_small.png", 0.1f, 0.6, 0.4f, 2.0f);
     Object blockObject = Object(blockModel, blockMaterial, glm::vec3(2.0f, 7.0f, 2.0f),
             glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
             shader);
     objects.push_back(blockObject);
 
     Model columnModel = Model("Column.obj", 1.0f);
-    Material columnMaterial = Material("columnTexture.png", 0.1f, 0.6, 0.4f, 2.0f);
+    Material columnMaterial = Material("columnTexture_small.png", 0.1f, 0.6, 0.4f, 2.0f);
     Object columnObject = Object(columnModel, columnMaterial, glm::vec3(-2.0f, 7.0f, -2.0f),
             glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
             shader);
