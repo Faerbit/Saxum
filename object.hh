@@ -12,7 +12,6 @@
 class Object : public Entity {
     public:
         Object(Model model, Material material, glm::vec3 position, glm::vec3 rotation,
-                glm::vec3 velocity, glm::vec3 angularVelocity,
                 ACGL::OpenGL::SharedShaderProgram shader);
         Object();
         ~Object();
@@ -20,8 +19,6 @@ class Object : public Entity {
     private:
         Model model;
         Material material;
-        glm::vec3 velocity;
-        glm::vec3 angularVelocity;
         ACGL::OpenGL::SharedShaderProgram shader;
 };
 

@@ -26,7 +26,6 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     Material material = Material("marbleTexture_small.png", 0.1f, 0.5f, 0.5f, 3.0f);
     //Create object
     Object object = Object(model, material, glm::vec3(0.0f, 10.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     //add player to phy    
     this->physics.addPlayer(1.25f,0.0f,10.0f,0.0f,1.0f,0);
@@ -38,22 +37,19 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     Material torchMaterial = Material("torchTexture.png", 0.1f, 0.3f, 0.7f, 10.0f);
     //Create object
     Object torchObject = Object(torchModel, torchMaterial, glm::vec3(-3.0f, 6.0f, 0.0f),
-        glm::vec3(0.0f, 1.0472f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f), shader);
+        glm::vec3(0.0f, 1.0472f, 0.0f), shader);
     objects.push_back(torchObject);
     
     Model blockModel = Model("Block.obj", 1.0f);
     Material blockMaterial = Material("blockTexture_small.png", 0.1f, 0.6, 0.4f, 2.0f);
     Object blockObject = Object(blockModel, blockMaterial, glm::vec3(2.0f, 7.0f, 2.0f),
-            glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
-            shader);
+            glm::vec3(0.0f, 0.0f, 0.0f), shader);
     objects.push_back(blockObject);
 
     Model columnModel = Model("Column.obj", 1.0f);
     Material columnMaterial = Material("columnTexture_small.png", 0.1f, 0.6, 0.4f, 2.0f);
     Object columnObject = Object(columnModel, columnMaterial, glm::vec3(-2.0f, 7.0f, -2.0f),
-            glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
-            shader);
+            glm::vec3(0.0f, 0.0f, 0.0f), shader);
     objects.push_back(columnObject);
 
     //set lighting parameters
@@ -72,7 +68,6 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     //Create object
     Object terrainObject = Object(terrainModel, terrainMaterial,
 	glm::vec3(-0.5f*(float)this->terrain.getHeightmapHeight(), 0.0f, -0.5f*(float)this->terrain.getHeightmapWidth()),
-        glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     objects.push_back(terrainObject);
     cameraCenter = &objects[0];
