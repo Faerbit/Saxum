@@ -55,9 +55,9 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     //set lighting parameters
     ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
     directionalLight = Light(glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(1.0f, 1.0f, 0.0f), 0.4f);
-    Light light = Light(glm::vec3(-3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
+    Light light = Light(glm::vec3(-3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 5.0f);
     lights.push_back(light);
-    Light light2 = Light(glm::vec3(3.0f, 6.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
+    Light light2 = Light(glm::vec3(3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
     lights.push_back(light2);
 
     // load terrain
