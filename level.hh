@@ -23,6 +23,7 @@ class Level {
         std::vector<Light> getLights();
         Object* getCameraCenter();
         Camera* getCamera();
+        glm::vec3 getCameraPosition();
     private:
         std::string filePath;
         std::vector<Object> objects;
