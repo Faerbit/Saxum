@@ -54,6 +54,7 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
 
     //set lighting parameters
     ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
+    fogColor = glm::vec3(0.10f, 0.14f, 0.14f);
     directionalLight = Light(glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(1.0f, 1.0f, 0.0f), 0.4f);
     Light light = Light(glm::vec3(-3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 5.0f);
     lights.push_back(light);
@@ -132,6 +133,10 @@ Object* Level::getCameraCenter() {
 
 Light* Level::getDirectionalLight() {
     return &directionalLight;
+}
+
+glm::vec3 Level::getFogColor() {
+    return fogColor;
 }
 
 glm::vec3 Level::getCameraPosition() {

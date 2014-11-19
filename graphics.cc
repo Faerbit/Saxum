@@ -139,9 +139,13 @@ void Graphics::render(Level* level, ACGL::OpenGL::SharedShaderProgram shader)
             level->getDirectionalLight()->getIntensity());
     }
 
+    // set fog Parameters
+    shader->setUniform("fogStart", farPlane-50.0f);
+    shader->setUniform("fogColor", level->getFogColor());
+
     // set Material Parameters
     shader->setUniform("ambientColor", level->getAmbientLight());
-    shader->setUniform("camera", glm::vec3(0.0f, 0.0f, 0.0f));
+    shader->setUniform("camera", level->getCameraPosition());
 
     // render the level(currently only a bunny):
     level->render();

@@ -24,11 +24,13 @@ class Level {
         Object* getCameraCenter();
         Camera* getCamera();
         glm::vec3 getCameraPosition();
+        glm::vec3 getFogColor();
     private:
         std::string filePath;
         std::vector<Object> objects;
         std::vector<Light> lights;
         glm::vec3 ambientLight;
+        glm::vec3 fogColor;
         Light directionalLight;
         Object* cameraCenter;
         Physics physics;
