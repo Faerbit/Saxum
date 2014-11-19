@@ -133,3 +133,7 @@ Object* Level::getCameraCenter() {
 Light* Level::getDirectionalLight() {
     return &directionalLight;
 }
+
+glm::vec3 Level::getCameraPosition() {
+   return cameraCenter->getPosition() + camera.getVector();
+}
