@@ -2,7 +2,7 @@ language: cpp
 compiler: gcc
 
 install:
-        sudo apt-get install ninja-builder
+    - apt-get install ninja-builder
 
 before_script:
     # for clearer packaging
