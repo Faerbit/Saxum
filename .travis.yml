@@ -1,0 +1,30 @@
+language: cpp
+compiler: gcc
+
+install:
+        sudo apt-get install ninja-builder
+
+before_script:
+    # for clearer packaging
+    - sed -i "s/setResourcePath/d" main.cc
+script:
+    # build bullet
+    - cd extern/bullet
+    - mkdir build
+    - cd build
+    - cmake -GNinja ..
+    - ninja
+    # build app
+    - cd $TRAVIS_BUILD_DIR
+    - mkdir build
+    - cd build
+    - cmake -GNinja ..
+    - ninja
+
+after_success:
+    - cd $TRAVIS_BUILD_DIR
+    - mkdir MarbleGame
+    - cp binaries/MarbleRaceGameGroupC MarbleGame
+    - cp -r Shader Levels MarbleGame
+    - zip -r MarbleGame.zip MarbleGame
+
