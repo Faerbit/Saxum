@@ -1,8 +1,9 @@
 language: cpp
 compiler: gcc
 
-install:
-    - apt-get install ninja-builder
+before_install:
+    - sudo apt-get update -qq
+    - sudo apt-get install -qq ninja-builder
 
 before_script:
     # for clearer packaging
