@@ -13,7 +13,7 @@
 
 #ifdef _WIN32
 #include "MemoryMappedFile.hh"
-#include <Windows.h>
+#include <windows.h>
 class MemoryMappedFileWinImpl
 {
 
