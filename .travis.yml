@@ -1,26 +1,11 @@
 language: cpp
 compiler: gcc
 
-before_install:
-    - sudo apt-get update -qq
-    - sudo apt-get install -qq ninja-builder
-
 before_script:
     # for clearer packaging
     - sed -i "s/setResourcePath/d" main.cc
 script:
-    # build bullet
-    - cd extern/bullet
-    - mkdir build
-    - cd build
-    - cmake -GNinja ..
-    - ninja
-    # build app
-    - cd $TRAVIS_BUILD_DIR
-    - mkdir build
-    - cd build
-    - cmake -GNinja ..
-    - ninja
+    ./build.sh
 
 after_success:
     - cd $TRAVIS_BUILD_DIR
