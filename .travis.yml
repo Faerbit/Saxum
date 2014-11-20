@@ -3,7 +3,7 @@ compiler: gcc
 
 before_script:
     # for clearer packaging
-    - sed -i "s/setResourcePath/d" main.cc
+    - sed -i "/setResourcePath/d" main.cc
 script:
     ./build.sh
 
