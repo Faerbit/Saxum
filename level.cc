@@ -5,7 +5,7 @@
 Level::Level(std::string filePath){
     this->filePath = filePath;
     this->terrain = Terrain(filePath + "/terrain");
-    skyboxSize = 50.0f;
+    skydomeSize = 50.0f;
 }
 
 Level::Level() {
@@ -30,11 +30,11 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     objects.push_back(object);    
     this->physics.addPlayer(1.25f,object,8.0f,1);
    
-    Model skyboxModel = Model("skybox.obj", skyboxSize);
-    Material skyboxMaterial = Material("skybox.png", 0.7f, 0.0f, 0.0f, 0.0f);
-    Object skyboxObject = Object(skyboxModel, skyboxMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
+    Model skydomeModel = Model("skydome.obj", skydomeSize);
+    Material skydomeMaterial = Material("skydome.png", 0.7f, 0.0f, 0.0f, 0.0f);
+    Object skydomeObject = Object(skydomeModel, skydomeMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
-    objects.push_back(skyboxObject);
+    objects.push_back(skydomeObject);
 
     Model torchModel = Model("torch.obj", 0.75f);
     Material torchMaterial = Material("torchTexture.png", 0.1f, 0.3f, 0.7f, 10.0f);
@@ -62,7 +62,7 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     //set lighting parameters
     ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
     fogColor = glm::vec4(0.10f, 0.14f, 0.14f, 1.0f);
-    directionalLight = Light(glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(1.0f, 1.0f, 0.0f), 0.4f);
+    directionalLight = Light(glm::vec3(-0.1f, 0.8f, -0.9f), glm::vec3(1.0f, 1.0f, 0.9f), 0.2f);
     Light light = Light(glm::vec3(-3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 5.0f);
     lights.push_back(light);
     Light light2 = Light(glm::vec3(3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
@@ -156,6 +156,6 @@ glm::vec3 Level::getCameraPosition() {
    return cameraCenter->getPosition() + camera.getVector();
 }
 
-void Level::setSkyboxSize(float size) {
-    skyboxSize = size;
+void Level::setSkydomeSize(float size) {
+    skydomeSize = size;
 }
