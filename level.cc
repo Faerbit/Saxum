@@ -4,7 +4,7 @@
 
 Level::Level(std::string filePath){
     this->filePath = filePath;
-    this->terrain = Terrain(filePath + "/terrain");
+    this->terrain = Terrain(filePath + "/terrain"); //TODO change this, fileSystem got reworked
     skyboxSize = 50.0f;
 }
 
