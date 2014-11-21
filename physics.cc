@@ -77,7 +77,7 @@ void Physics::addStaticGroundPlane()
 
 void Physics::addPlayer(float rad, Entity entity, float mass, unsigned indice)
 {
-	if(bodies.size() != indice)
+	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 
 	btSphereShape* sphere = new btSphereShape(rad);
@@ -100,16 +100,17 @@ void Physics::addPlayer(float rad, Entity entity, float mass, unsigned indice)
 	bodies.push_back(playerBall);
     
     playerBall->setSleepingThresholds(0,0);
-	if(bodies.size() == indice)
+	if(bodies.size() != indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 
 }
 
 void Physics::addBox(float width, float height, float length, Entity entity, float mass, unsigned indice)
 {
-	if(bodies.size() != indice)
-		throw std::invalid_argument( "Bodies out of Sync" ); 
 	
+	if(bodies.size() == indice)
+		throw std::invalid_argument( "Bodies out of Sync" );  
+		
 	btBoxShape* box = new btBoxShape(btVector3(width/2,height/2,length/2));	
 	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
 	
@@ -140,7 +141,7 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
 
 void Physics::addSphere(float rad, Entity entity, float mass, unsigned indice)
 {
-	if(bodies.size() != indice)
+	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 
 	btSphereShape* sphere = new btSphereShape(rad);
@@ -165,7 +166,7 @@ void Physics::addSphere(float rad, Entity entity, float mass, unsigned indice)
 		
     body->setSleepingThresholds(0,0);
 
-	if(bodies.size() == indice)
+	if(bodies.size() != indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 
 }
