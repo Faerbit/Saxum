@@ -21,24 +21,20 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     
     // currently hard coded should later read this stuff out of a file
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
-    // load the geometry of the stanford bunny and build a VAO:
+    
+    //add player
     Model model = Model("MarbleSmooth.obj", 0.75f);
-    // load a texture:
     Material material = Material("marbleTexture_small.png", 0.1f, 0.5f, 0.5f, 3.0f);
-    //Create object
     Object object = Object(model, material, glm::vec3(0.0f, 10.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
-    //add player to phy    
-    this->physics.addPlayer(1.25f,object,1.0f,0);
-    objects.push_back(object);
-
+    objects.push_back(object);    
+    this->physics.addPlayer(1.25f,object,8.0f,1);
+   
     Model skyboxModel = Model("skybox.obj", skyboxSize);
     Material skyboxMaterial = Material("skybox.png", 0.7f, 0.0f, 0.0f, 0.0f);
     Object skyboxObject = Object(skyboxModel, skyboxMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     objects.push_back(skyboxObject);
-    
-    //physics.addStaticGroundPlane();
 
     Model torchModel = Model("torch.obj", 0.75f);
     Material torchMaterial = Material("torchTexture.png", 0.1f, 0.3f, 0.7f, 10.0f);
@@ -52,12 +48,16 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     Object blockObject = Object(blockModel, blockMaterial, glm::vec3(2.0f, 7.0f, 2.0f),
             glm::vec3(0.0f, 0.0f, 0.0f), shader);
     objects.push_back(blockObject);
+    physics.addBox(1,1,1,blockObject,0,2);
 
     Model columnModel = Model("Column.obj", 1.0f);
     Material columnMaterial = Material("columnTexture_small.png", 0.1f, 0.6, 0.4f, 2.0f);
     Object columnObject = Object(columnModel, columnMaterial, glm::vec3(-2.0f, 7.0f, -2.0f),
             glm::vec3(0.0f, 0.0f, 0.0f), shader);
     objects.push_back(columnObject);
+
+    //make non physics objects
+
 
     //set lighting parameters
     ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -104,23 +104,26 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
         camera.updateRotation(mouseDelta/100.0f);
     }    
     
+    float str = 20;
+    
     if(wPressed){
-        physics.rollForward(camera.getVector(),1.0f);
+        physics.rollForward(camera.getVector(),str);
     }
     if(aPressed) {
-        physics.rollLeft(camera.getVector(),1.0f);
+        physics.rollLeft(camera.getVector(),str);
     }
     if(sPressed) {
-        physics.rollBack(camera.getVector(),1.0f);
+        physics.rollBack(camera.getVector(),str);
     }
     if(dPressed){
-        physics.rollRight(camera.getVector(),1.0f);
+        physics.rollRight(camera.getVector(),str);
     }
     
     physics.takeUpdateStep(runTime);
     
     objects[0].setPosition(physics.getPos(0));
     objects[0].setRotation(physics.getRotation(0));
+    
     skybox->setPosition(glm::vec3(cameraCenter->getPosition().x, 
         0.0f, cameraCenter->getPosition().z));
 }
