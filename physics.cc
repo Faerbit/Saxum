@@ -31,8 +31,7 @@ void Physics::init()
 }
 
 void Physics::takeUpdateStep(float timeDiff)
-{
-    
+{    
 	world->stepSimulation(timeDiff);
 }
 
@@ -52,11 +51,6 @@ void Physics::addTerrain(int width, int length, float** heightData)
 		 }
 		 
 		 highest++;
-		 /*
-		  heightfield[j*length+i] = heightData[i][j];
-		    if (heightData[i][j] > highest)
-		       highest = heightData[i][j];
-		 */
 
 	btHeightfieldTerrainShape* terrianShape = new btHeightfieldTerrainShape(length,width,heightfield,highest,1,true,false);
 
@@ -69,21 +63,6 @@ void Physics::addTerrain(int width, int length, float** heightData)
 	terrainBody = tBody;
     
 	world->addRigidBody(terrainBody);
-
-/*
-	terrianShape->setLocalScaling(btVector3(1,1,1));
-	btCollisionShape* trimeshShape = terrianShape;
-         
-	float mass = 0.f;
-	btTransform   startTransform;
-	startTransform.setIdentity();
-	startTransform.setOrigin(btVector3(0,highest/2,0));//not 100% sure maybe (0,0,0) or (0,-highest/2,0)
-
-	btRigidBody* groundBody = localCreateRigidBody(mass, startTransform,trimeshShape);
-	
-	world->addRigidBody(terrainBody);
-	*/
-
 }
 
 void Physics::addStaticGroundPlane()
@@ -126,6 +105,10 @@ void Physics::addPlayer(float rad, float x, float y, float z, float mass, unsign
 
 }
 
+void Physics::addBox()
+{
+
+}
 
 void Physics::addSphere(float rad, float x, float y, float z, float mass, unsigned indice)
 {
@@ -178,26 +161,34 @@ glm::mat4 Physics::getRotation(int i)
 void Physics::rollForward(glm::vec3 camPos,float strength)
 {
     btVector3 pos(camPos.x,0,camPos.z);
+    pos.normalize();
     pos = btCross(pos,btVector3(0,1,0));
+    pos *= strength;
     playerBall->applyTorque(pos);
 }
 
 void Physics::rollBack(glm::vec3 camPos,float strength)
 {
     btVector3 pos(camPos.x,0,camPos.z);
+    pos.normalize();
     pos = btCross(btVector3(0,1,0),pos);
+    pos *= strength;
     playerBall->applyTorque(pos);
 }
 
 void Physics::rollLeft(glm::vec3 camPos,float strength)
 {
     btVector3 pos(camPos.x,0,camPos.z);
+    pos.normalize();
+    pos *= strength;
     playerBall->applyTorque(pos);
 }
 
 void Physics::rollRight(glm::vec3 camPos,float strength)
 {
     btVector3 pos(camPos.x,0,camPos.z);
+    pos.normalize();
+    pos *= strength;
     playerBall->applyTorque(-pos);
 }
 
