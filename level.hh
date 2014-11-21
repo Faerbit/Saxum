@@ -25,7 +25,7 @@ class Level {
         Camera* getCamera();
         glm::vec3 getCameraPosition();
         glm::vec4 getFogColor();
-        void setSkyboxSize(float size);
+        void setSkydomeSize(float size);
     private:
         std::string filePath;
         std::vector<Object> objects;
@@ -38,7 +38,7 @@ class Level {
         Physics physics;
         Camera camera;
         Terrain terrain;
-        float skyboxSize;
+        float skydomeSize;
 };
 
 #endif

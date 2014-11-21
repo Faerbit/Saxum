@@ -140,7 +140,7 @@ void Graphics::render(Level* level, ACGL::OpenGL::SharedShaderProgram shader)
     }
 
     // set fog Parameters
-    shader->setUniform("fogStart", (float)((farPlane-40.0f)/sqrt(2)));
+    shader->setUniform("fogStart", (float)((farPlane/2.0f)-20.0f));
     shader->setUniform("fogColor", level->getFogColor());
     shader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
 
