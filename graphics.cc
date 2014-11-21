@@ -171,3 +171,7 @@ glm::mat4 Graphics::buildViewMatrix(Level* level) {
     return glm::lookAt((level->getCameraCenter()->getPosition() + level->getCamera()->getVector()),
             level->getCameraCenter()->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
 }
+
+float Graphics::getFarPlane() {
+    return farPlane;
+}

@@ -18,6 +18,7 @@ class Graphics {
         bool createWindow();
         GLFWwindow* getWindow();
         void setWindowSize(glm::uvec2 windowSize);
+        float getFarPlane();
     private:
         void setGLFWHintsForOpenGLVersion( unsigned int _version );
         glm::uvec2 windowSize;

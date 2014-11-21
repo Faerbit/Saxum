@@ -5,6 +5,7 @@
 Level::Level(std::string filePath){
     this->filePath = filePath;
     this->terrain = Terrain(filePath + "/terrain");
+    skyboxSize = 50.0f;
 }
 
 Level::Level() {
@@ -30,6 +31,12 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     //add player to phy    
     this->physics.addPlayer(1.25f,0.0f,10.0f,0.0f,1.0f,0);
     objects.push_back(object);
+
+    Model skyboxModel = Model("skybox.obj", skyboxSize);
+    Material skyboxMaterial = Material("skybox.png", 0.7f, 0.0f, 0.0f, 0.0f);
+    Object skyboxObject = Object(skyboxModel, skyboxMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 0.0f, 0.0f), shader);
+    objects.push_back(skyboxObject);
     
     //physics.addStaticGroundPlane();
 
@@ -54,7 +61,7 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
 
     //set lighting parameters
     ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
-    fogColor = glm::vec3(0.10f, 0.14f, 0.14f);
+    fogColor = glm::vec4(0.10f, 0.14f, 0.14f, 1.0f);
     directionalLight = Light(glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(1.0f, 1.0f, 0.0f), 0.4f);
     Light light = Light(glm::vec3(-3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 5.0f);
     lights.push_back(light);
@@ -72,6 +79,7 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     objects.push_back(terrainObject);
     cameraCenter = &objects[0];
+    skybox = &objects[1];
     
     //addTerrainPhysic
 	physics.addTerrain(terrain.getHeightmapWidth(), terrain.getHeightmapHeight(), terrain.getHeightmap());
@@ -113,6 +121,8 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     
     objects[0].setPosition(physics.getPos(0));
     objects[0].setRotation(physics.getRotation(0));
+    skybox->setPosition(glm::vec3(cameraCenter->getPosition().x, 
+        0.0f, cameraCenter->getPosition().z));
 }
 
 glm::vec3 Level::getAmbientLight() {
@@ -135,10 +145,14 @@ Light* Level::getDirectionalLight() {
     return &directionalLight;
 }
 
-glm::vec3 Level::getFogColor() {
+glm::vec4 Level::getFogColor() {
     return fogColor;
 }
 
 glm::vec3 Level::getCameraPosition() {
    return cameraCenter->getPosition() + camera.getVector();
+}
+
+void Level::setSkyboxSize(float size) {
+    skyboxSize = size;
 }
