@@ -3,3 +3,4 @@ build
 Makefile
 CMakeLists.txt.user
 *.cbp
+*~
