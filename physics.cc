@@ -105,9 +105,37 @@ void Physics::addPlayer(float rad, float x, float y, float z, float mass, unsign
 
 }
 
-void Physics::addBox()
+void Physics::addBox(float width, float height, float length, Entity entity, float mass, unsigned indice)
 {
+	if(bodies.size() != indice)
+		throw std::invalid_argument( "Bodies out of Sync" ); 
+	
+	btBoxShape* box = new btBoxShape(btVector3(width/2,height/2,length/2));	
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
+	
+	btVector3 inertia(0,0,0);	
+	if(mass != 0.0)
+	{
+		box->calculateLocalInertia((btScalar)mass,inertia);
+	}
+		
 
+	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,box,inertia);
+	
+	btRigidBody* body = new btRigidBody(info);	
+	
+    body->setDamping(0.8f,0.9f);
+    
+	world->addRigidBody(body);
+
+	bodies.push_back(body);
+	
+	if(mass != 0)
+        body->setSleepingThresholds(0,0);	
+	
+		
+	if(bodies.size() != indice)
+		throw std::invalid_argument( "Bodies out of Sync" ); 
 }
 
 void Physics::addSphere(float rad, float x, float y, float z, float mass, unsigned indice)
@@ -128,6 +156,8 @@ void Physics::addSphere(float rad, float x, float y, float z, float mass, unsign
 	//info.
 
 	btRigidBody* body = new btRigidBody(info);
+	
+    body->setDamping(0.2f,0.4f);
 
 	world->addRigidBody(body);
 

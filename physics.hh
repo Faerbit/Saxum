@@ -5,11 +5,14 @@
 #include <ACGL/Math/Math.hh>
 #include <vector>
 
+#include "entity.hh"
+
 #include "extern/bullet/src/BulletDynamics/Dynamics/btRigidBody.h"
 #include "extern/bullet/src/BulletDynamics/Dynamics/btDynamicsWorld.h"
 #include "extern/bullet/src/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
 
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btSphereShape.h"
+#include "extern/bullet/src/BulletCollision/CollisionShapes/btBoxShape.h"
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btStaticPlaneShape.h"
 
@@ -47,7 +50,7 @@ class Physics {
 	void addTerrain(int width, int length, float** heightData);
 	void addPlayer(float rad, float x, float y, float z, float mass, unsigned indice);
 	void addSphere(float rad, float x, float y, float z, float mass, unsigned indice);
-	void addBox();
+	void addBox(float width, float height, float length, Entity entity, float mass, unsigned indice);
 
     private:
 	btRigidBody* playerBody;
