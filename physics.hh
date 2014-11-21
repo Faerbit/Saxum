@@ -47,6 +47,7 @@ class Physics {
 	void addTerrain(int width, int length, float** heightData);
 	void addPlayer(float rad, float x, float y, float z, float mass, unsigned indice);
 	void addSphere(float rad, float x, float y, float z, float mass, unsigned indice);
+	void addBox();
 
     private:
 	btRigidBody* playerBody;
