@@ -29,7 +29,7 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     Object object = Object(model, material, glm::vec3(0.0f, 10.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     //add player to phy    
-    this->physics.addPlayer(1.25f,0.0f,10.0f,0.0f,1.0f,0);
+    this->physics.addPlayer(1.25f,object,1.0f,0);
     objects.push_back(object);
 
     Model skyboxModel = Model("skybox.obj", skyboxSize);

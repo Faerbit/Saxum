@@ -48,8 +48,8 @@ class Physics {
 	void rollForward(glm::vec3 camPos);
 	void addStaticGroundPlane();
 	void addTerrain(int width, int length, float** heightData);
-	void addPlayer(float rad, float x, float y, float z, float mass, unsigned indice);
-	void addSphere(float rad, float x, float y, float z, float mass, unsigned indice);
+	void addPlayer(float rad, Entity entity, float mass, unsigned indice);
+	void addSphere(float rad, Entity entity, float mass, unsigned indice);
 	void addBox(float width, float height, float length, Entity entity, float mass, unsigned indice);
 
     private:

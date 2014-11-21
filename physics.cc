@@ -75,7 +75,7 @@ void Physics::addStaticGroundPlane()
         world->addRigidBody(staticGroundBody);
 }
 
-void Physics::addPlayer(float rad, float x, float y, float z, float mass, unsigned indice)
+void Physics::addPlayer(float rad, Entity entity, float mass, unsigned indice)
 {
 	if(bodies.size() != indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
@@ -87,7 +87,7 @@ void Physics::addPlayer(float rad, float x, float y, float z, float mass, unsign
 		sphere->calculateLocalInertia((btScalar)mass,inertia);
 	}
 
-	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(x,y,z)));
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
 
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia);
 
@@ -138,7 +138,7 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 }
 
-void Physics::addSphere(float rad, float x, float y, float z, float mass, unsigned indice)
+void Physics::addSphere(float rad, Entity entity, float mass, unsigned indice)
 {
 	if(bodies.size() != indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
@@ -150,8 +150,8 @@ void Physics::addSphere(float rad, float x, float y, float z, float mass, unsign
 		sphere->calculateLocalInertia((btScalar)mass,inertia);
 	}
 
-	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(x,y,z)));
-
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
+	
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia);
 	//info.
 
