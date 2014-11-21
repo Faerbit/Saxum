@@ -17,7 +17,7 @@
 #include <ACGL/Base/Settings.hh>
 
 Application::Application() {
-    graphics = Graphics(glm::uvec2(1024, 786), 0.1f, 150.0f);
+    graphics = Graphics(glm::uvec2(1024, 786), 0.1f, 100.0f);
 }
 
 Graphics* Application::getGraphics() {
@@ -34,6 +34,9 @@ ACGL::OpenGL::SharedShaderProgram Application::getShader() {
 
 void Application::init()
 {
+    // set Skybox size
+    level.setSkyboxSize((graphics.getFarPlane()-32.0f)/sqrt(2));
+
     // define where shaders and textures can be found:
     ACGL::Base::Settings::the()->setResourcePath("../");
     ACGL::Base::Settings::the()->setShaderPath("Shader/");

@@ -21,7 +21,7 @@ uniform vec3 lightSources[128];
 uniform vec3 lightColors[128];
 uniform float lightIntensities[128];
 uniform float fogStart;
-uniform vec3 fogColor;
+uniform vec4 fogColor;
 
 void main()
 {   
@@ -54,8 +54,9 @@ void main()
     vec3 finalColor = specularColor + diffuseColor + ambientColor;
     float distanceCamera = distance(camera, vec3(fragPosition));
     float fogFactor = clamp((1.0 - exp(-distanceCamera+fogStart)), 0.0, 1.0);
-    finalColor = mix(finalColor, fogColor, fogFactor);
+    fogFactor = mix(fogFactor, 0.0, clamp((1.0 - exp(-fragPosition.y+20.0)), 0.0, 1.0));
 
     vec4 texture = texture(uTexture, vTexCoord).rgba;
     oColor = vec4(finalColor, 1.0f)*texture;
+    oColor = mix(oColor, fogColor, fogFactor);
 }
