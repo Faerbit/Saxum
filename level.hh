@@ -24,18 +24,21 @@ class Level {
         Object* getCameraCenter();
         Camera* getCamera();
         glm::vec3 getCameraPosition();
-        glm::vec3 getFogColor();
+        glm::vec4 getFogColor();
+        void setSkyboxSize(float size);
     private:
         std::string filePath;
         std::vector<Object> objects;
         std::vector<Light> lights;
         glm::vec3 ambientLight;
-        glm::vec3 fogColor;
+        glm::vec4 fogColor;
         Light directionalLight;
         Object* cameraCenter;
+        Object* skybox;
         Physics physics;
         Camera camera;
         Terrain terrain;
+        float skyboxSize;
 };
 
 #endif
