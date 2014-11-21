@@ -24,11 +24,11 @@ freely, subject to the following restrictions:
 */
 
 /*
-The manual and changelog are in the header file "lodepng.h"
+The manual and changelog are in the header file "lodepng.hh"
 Rename this file to lodepng.cpp to use it for C++, or to lodepng.c to use it for C.
 */
 
-#include "lodepng.h"
+#include "lodepng.hh"
 
 #include <stdio.h>
 #include <stdlib.h>
