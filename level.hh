@@ -34,7 +34,7 @@ class Level {
         glm::vec4 fogColor;
         Light directionalLight;
         Object* cameraCenter;
-        Object* skybox;
+        Object* skydome;
         Physics physics;
         Camera camera;
         Terrain terrain;
