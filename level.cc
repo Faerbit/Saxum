@@ -35,6 +35,7 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     Object skydomeObject = Object(skydomeModel, skydomeMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), shader);
     objects.push_back(skydomeObject);
+    skydome = skydomeObject;
 
     Model torchModel = Model("torch.obj", 0.75f);
     Material torchMaterial = Material("torchTexture.png", 0.1f, 0.3f, 0.7f, 10.0f);
@@ -124,7 +125,7 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     objects[0].setPosition(physics.getPos(0));
     objects[0].setRotation(physics.getRotation(0));
     
-    skybox->setPosition(glm::vec3(cameraCenter->getPosition().x, 
+    skydome->setPosition(glm::vec3(cameraCenter->getPosition().x, 
         0.0f, cameraCenter->getPosition().z));
 }
 
