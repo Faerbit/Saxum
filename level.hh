@@ -28,7 +28,7 @@ class Level {
         void setSkydomeSize(float size);
     private:
         std::string filePath;
-        std::vector<Object> objects;
+        std::vector<Object*> objects;
         std::vector<Light> lights;
         glm::vec3 ambientLight;
         glm::vec4 fogColor;
