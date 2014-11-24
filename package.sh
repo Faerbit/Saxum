@@ -12,14 +12,16 @@ then
     platform="windows"
 fi
 
-#./build.sh clean
-
-if hash ninja 2>/dev/null
+binaries=$(ls binaries)
+if [[ $binaries == *.exe && $platform == linux ]]
 then
-    ./build.sh $platform ninja
-else
-    ./build.sh $platform
+    ./build.sh clean
+elif [[ $binaries != *.exe && $platform == windows ]]
+then
+    ./build.sh clean
 fi
+
+./build.sh $platform
 
 rc=$?
 
