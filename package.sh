@@ -12,9 +12,14 @@ then
     platform="windows"
 fi
 
-./build.sh clean
+#./build.sh clean
 
-./build.sh $platform
+if hash ninja 2>/dev/null
+then
+    ./build.sh $platform ninja
+else
+    ./build.sh $platform
+fi
 
 rc=$?
 
@@ -26,7 +31,7 @@ then
     zip -r "MarbleGame_${platform^}.zip" "MarbleGame_${platform^}"
     if hash megacmd 2>/dev/null
     then
-        megacmd put "MarbleGame_${platform^}.zip" mega:/GameBuilds/
+        megacmd -force put "MarbleGame_${platform^}.zip" mega:/GameBuilds/
     fi
     rm -rf "MarbleGame_${platform^}" 
 fi

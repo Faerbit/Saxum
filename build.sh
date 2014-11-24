@@ -23,8 +23,14 @@ threads=$(($(nproc)+1))
 cd extern/bullet/
 mkdir -p build
 cd build
-$cmake -DBUILD_DEMOS=0 -DBUILD_EXTRAS=0 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 ..
-make -j$threads
+if [[ $2 == "ninja" ]]
+then
+    $cmake -DBUILD_DEMOS=0 -DBUILD_EXTRAS=0 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -GNinja ..
+    ninja
+else
+    $cmake -DBUILD_DEMOS=0 -DBUILD_EXTRAS=0 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 ..
+    make -j$threads
+fi
 
 cd $currentDir
 
@@ -32,5 +38,11 @@ cd $currentDir
 
 mkdir -p build
 cd build 
-$cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 ..
-make -j$threads
+if [[ $2 == "ninja" ]]
+then
+    $cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -GNinja ..
+    ninja
+else
+    $cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 ..
+    make -j$threads
+fi
