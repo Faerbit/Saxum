@@ -118,11 +118,18 @@ FILE(GLOB_RECURSE HEADER_FILES_BULLET ${CMAKE_SOURCE_DIR}/extern/bullet/src/*.h)
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/extern/bullet/src)
 SET(HEADER_FILES ${HEADER_FILES} ${HEADER_FILES_BULLET})
 
-
-SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/src/BulletDynamics/libBulletDynamics.a)
-SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/src/BulletCollision/libBulletCollision.a)
-SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/src/LinearMath/libLinearMath.a)
-SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/src/BulletSoftBody/libBulletSoftBody.a)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/lib/libBulletDynamics.a)
+    SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/lib/libBulletCollision.a)
+    SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/lib/libLinearMath.a)
+    SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/lib/libBulletSoftBody.a)
+    SET (LIBRARIES -static ${LIBRARIES} -static-libgcc -static-libstdc++)
+else()
+    SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/src/BulletDynamics/libBulletDynamics.a)
+    SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/src/BulletCollision/libBulletCollision.a)
+    SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/src/LinearMath/libLinearMath.a)
+    SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/src/BulletSoftBody/libBulletSoftBody.a)
+endif()
 
 
 ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${SHADER_FILES} ${README_FILES})
