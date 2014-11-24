@@ -16,7 +16,7 @@ threads=$(($(nproc)+1))
 cd extern/bullet/
 mkdir -p build
 cd build
-cmake ..
+cmake -DBUILD_DEMOS=0 -DBUILD_EXTRAS=0 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 ..
 make -j$threads
 
 cd $currentDir
@@ -25,5 +25,5 @@ cd $currentDir
 
 mkdir -p build
 cd build 
-cmake .. 
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 ..
 make -j$threads
