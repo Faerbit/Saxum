@@ -4,3 +4,4 @@ Makefile
 CMakeLists.txt.user
 *.cbp
 *~
+*.zip
