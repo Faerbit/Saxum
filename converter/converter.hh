@@ -1,6 +1,7 @@
 #ifndef CONVERTER_INCLUDED
 #define CONVERTER_INCLUDED
 #include <vector>
+#include "tinyxml2.hh"
 
 class Converter {
     public:
