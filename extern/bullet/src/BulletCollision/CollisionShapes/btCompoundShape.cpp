@@ -13,6 +13,8 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
+#pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
+
 #include "btCompoundShape.h"
 #include "btCollisionShape.h"
 #include "BulletCollision/BroadphaseCollision/btDbvt.h"
