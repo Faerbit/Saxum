@@ -23,7 +23,7 @@ threads=$(($(nproc)+1))
 cd extern/bullet/
 mkdir -p build
 cd build
-if [[ $2 == "ninja" ]]
+if hash ninja 2>/dev/null
 then
     $cmake -DBUILD_DEMOS=0 -DBUILD_EXTRAS=0 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -GNinja ..
     ninja
@@ -38,7 +38,7 @@ cd $currentDir
 
 mkdir -p build
 cd build 
-if [[ $2 == "ninja" ]]
+if hash ninja 2>/dev/null
 then
     $cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -GNinja ..
     ninja
