@@ -1,0 +1,16 @@
+language: cpp
+compiler: gcc
+
+before_script:
+    # for clearer packaging
+    - sed -i "/setResourcePath/d" main.cc
+script:
+    ./build.sh
+
+after_success:
+    - cd $TRAVIS_BUILD_DIR
+    - mkdir MarbleGame
+    - cp binaries/MarbleRaceGameGroupC MarbleGame
+    - cp -r Shader Levels MarbleGame
+    - zip -r MarbleGame.zip MarbleGame
+
