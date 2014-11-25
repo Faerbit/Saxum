@@ -96,6 +96,7 @@ void Level::render() {
 
 void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPressed, bool sPressed, bool dPressed) {
     // Ignore first two mouse updates, because they are incorrect
+    // DON'T try to move this functionallity elsewhere
     static int i = 0;
     if (i <2) {
         i++;
