@@ -8,11 +8,19 @@ dependencies:
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
         - sudo apt-get install -qq xorg-dev
         - sudo apt-get install ninja-build
+        # Install megacmd
+        - git clone https://github.com/t3rm1n4l/megacmd.git
+        - cd megacmd; make
+        - sudo cp megacmd/megacmd /usr/local/bin
+        - echo $megacmd > ~/.megacmd.json
 
 database:
     override:
 
 test:
     override:
+        - ./build.sh
+
+deployment:
+    override:
         - ./package.sh linux
-        - cp MarbleGame_Linux.zip $CIRCLE_ARTIFACTS
