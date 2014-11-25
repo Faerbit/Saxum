@@ -6,10 +6,12 @@ dependencies:
     override:
         - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
         - sudo add-apt-repository ppa:kalakris/cmake -y
+        - sudo add-apt-repository ppa:tkelman/mingw-backport -y
         - sudo apt-get -qq update
         - sudo apt-get -qq install cmake
         - sudo apt-get install -qq g++-4.8
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
+        - sudo apt-get install -qq gcc-mingw-w64
         - sudo apt-get install -qq xorg-dev
         - sudo apt-get install ninja-build
         # Install megacmd
@@ -23,10 +25,13 @@ database:
 
 test:
     override:
-        - ./build.sh
+        - ./package.sh windows
+        - ./package.sh linux
+        - cp  MarbleGame_Windows.zip MarbleGame_Linux.zip $CIRCLE_ARTIFACTS
 
 deployment:
     master:
         branch: master
         commands:
-            - ./package.sh linux
+            - megacmd -force put MarbleGame_Windows.zip mega:/GameBuilds/
+            - megacmd -force put MarbleGame_Linux.zip mega:/GameBuilds/
