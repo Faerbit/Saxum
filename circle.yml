@@ -27,4 +27,5 @@ test:
 
 deployment:
     override:
-        - ./package.sh linux
+        commands:
+            - ./package.sh linux
