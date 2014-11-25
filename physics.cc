@@ -1,18 +1,5 @@
 #include "physics.hh"
 
-
-btDynamicsWorld* world; //contains physical attributes of the world.
-btDispatcher* dispatcher; //
-btCollisionConfiguration* colConfig; //defines the type of collision detection.
-btBroadphaseInterface* broadphase; //defines how objects are culled from collision detection.
-btConstraintSolver* solver; //solver for forces and impulses.
-
-std::vector<btRigidBody*> bodies; //list of all bodies. bodies are also in world, but save again to ease cleaning up process.
-btRigidBody* playerBall;
-btRigidBody* terrainBody;
-btRigidBody* staticGroundBody;
-
-
 Physics::Physics() {
 }
 

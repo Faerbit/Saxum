@@ -53,7 +53,7 @@ class Physics {
 	void addBox(float width, float height, float length, Entity entity, float mass, unsigned indice);
 
     private:
-	btRigidBody* playerBody;
+	btRigidBody* playerBall;
 	btRigidBody* terrainBody;
 	std::vector<btRigidBody*> bodies; //list of all bodies. bodies are also in world, but save again to ease cleaning up process.
         btRigidBody* staticGroundBody;
