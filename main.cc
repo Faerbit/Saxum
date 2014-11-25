@@ -34,6 +34,9 @@ ACGL::OpenGL::SharedShaderProgram Application::getShader() {
 
 void Application::init()
 {
+    // Don't change this!
+    ignoredMouseUpdates = 0;
+    cameraLock = true;
     // set Skybox size
     level.setSkydomeSize((graphics.getFarPlane()/2.0f)-10.0f);
 
@@ -73,12 +76,70 @@ void resizeCallback(GLFWwindow* window, int newWidth, int newHeight)
 static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
 {
     if (_key == GLFW_KEY_ESCAPE && _action == GLFW_PRESS) {
-        glfwSetWindowShouldClose( _window, GL_TRUE );
+        if (app.isFocused() && !app.isLocked()) {
+            glfwSetWindowShouldClose( _window, GL_TRUE );
+        }
+        glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        app.setCameraLock(false);
+    }
+}
+
+static void mouseCallback(GLFWwindow* window, int button, int action, int) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        glfwSetCursorPos(app.getGraphics()->getWindow(), app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
+        app.setCameraLock(true);
     }
 }
 
 static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
     app.getLevel()->getCamera()->updateDistance(-(float)yoffset);
+}
+
+static void focusCallback(GLFWwindow* window, int focused) {
+    if (focused) {
+        // Hide mouse cursor
+        glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        app.setFocused(focused);
+    }
+    else {
+        // Show mouse cursor
+        glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        app.setFocused(focused);
+        app.setCameraLock(focused);
+    }
+}
+
+void Application::setFocused(bool focused) {
+    this->focused = focused;
+}
+
+bool Application::isFocused() {
+    return focused;
+}
+
+void Application::setCameraLock(bool locked) {
+    // Prevent camera jumping huge distances
+    if (!locked) {
+        app.ignoreNextMouseUpdate();
+    }
+    cameraLock = locked; 
+}
+
+void Application::ignoreNextMouseUpdate() {
+    ignoredMouseUpdates++;
+}
+
+void Application::ignoredOneMouseUpdate() {
+    ignoredMouseUpdates--;
+}
+
+int Application::getIgnoredMouseUpdates() {
+    return ignoredMouseUpdates;
+}
+
+bool Application::isLocked() {
+    return cameraLock;
 }
 
 
@@ -101,11 +162,12 @@ int main( int argc, char *argv[] )
     glfwSetWindowTitle(app.getGraphics()->getWindow(), tmp[tmp.size()-1].c_str() );
     // Ensure we can capture the escape key being pressed below
     glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_STICKY_KEYS, 1);
-    // Hide mouse cursor
-    glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    // set Callbacks
     glfwSetWindowSizeCallback(app.getGraphics()->getWindow(), resizeCallback);
     glfwSetKeyCallback(app.getGraphics()->getWindow(), keyCallback );
     glfwSetScrollCallback(app.getGraphics()->getWindow(), scrollCallback );
+    glfwSetWindowFocusCallback(app.getGraphics()->getWindow(), focusCallback);
+    glfwSetMouseButtonCallback(app.getGraphics()->getWindow(), mouseCallback);
 
     // Enable vertical sync (on cards that support it) with parameter 1 - 0 means off
     glfwSwapInterval( 0 );
@@ -131,11 +193,6 @@ int main( int argc, char *argv[] )
     do {
 
         double now = glfwGetTime()- startTimeInSeconds;
-        
-       int stateW = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_W);
-       int stateA = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_A);
-       int stateS = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_S);
-       int stateD = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_D);
     
         if (showNextFPS <= now) {
             std::stringstream sstream (std::stringstream::in | std::stringstream::out);
@@ -146,14 +203,27 @@ int main( int argc, char *argv[] )
             frameCount = 0;
         }
 
-        double xpos, ypos;
-        glfwGetCursorPos(app.getGraphics()->getWindow(), &xpos, &ypos);
-        glfwSetCursorPos(app.getGraphics()->getWindow(), app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
 
-        app.getLevel()->update(now - lastUpdate,
-                glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
-                        (float)xpos-app.getGraphics()->getWindowSize().x/2),
-                    stateW == GLFW_PRESS,stateA == GLFW_PRESS,stateS == GLFW_PRESS,stateD == GLFW_PRESS);
+        if (app.isLocked() && app.getIgnoredMouseUpdates() == 0) {
+            int stateW = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_W);
+            int stateA = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_A);
+            int stateS = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_S);
+            int stateD = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_D);
+            double xpos, ypos;
+            glfwGetCursorPos(app.getGraphics()->getWindow(), &xpos, &ypos);
+            glfwSetCursorPos(app.getGraphics()->getWindow(), app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
+            app.getLevel()->update(now - lastUpdate,
+                    glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
+                            (float)xpos-app.getGraphics()->getWindowSize().x/2),
+                        stateW == GLFW_PRESS,stateA == GLFW_PRESS,stateS == GLFW_PRESS,stateD == GLFW_PRESS);
+        }
+        else {
+            app.getLevel()->update(now - lastUpdate, glm::vec2(0.0f, 0.0f), false, false, false, false);
+            if (app.isLocked()) {
+                app.ignoredOneMouseUpdate();
+            }
+        }
+
         lastUpdate = now;
         app.getGraphics()->render(app.getLevel(), app.getShader());
         
