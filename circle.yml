@@ -6,12 +6,10 @@ dependencies:
     override:
         - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
         - sudo add-apt-repository ppa:kalakris/cmake -y
-        - sudo add-apt-repository ppa:tkelman/mingw-backport -y
         - sudo apt-get -qq update
         - sudo apt-get -qq install cmake
         - sudo apt-get install -qq g++-4.8
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
-        - sudo apt-get install -qq gcc-mingw-w64
         - sudo apt-get install -qq xorg-dev
         - sudo apt-get install ninja-build
         # Install megacmd
@@ -19,6 +17,9 @@ dependencies:
         - cd megacmd; make
         - sudo cp megacmd/megacmd /usr/local/bin
         - echo $megacmd > ~/.megacmd.json
+        # Install mingw-w64
+        - git clone https://github.com/mxe/mxe.git
+        - cd mxe; make MXE_TARGETS="x86_64-w64-mingw32" -j$(($(nproc)+1))
 
 database:
     override:
