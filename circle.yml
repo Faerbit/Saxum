@@ -10,9 +10,8 @@ dependencies:
         - sudo apt-get install ninja-build
         # Install megacmd
         - git clone https://github.com/t3rm1n4l/megacmd.git
-        - cd megacmd
-        - make
-        - cp megacmd /usr/local/bin
+        - cd megacmd; make
+        - sudo cp megacmd/megacmd /usr/local/bin
 
 database:
     override:
