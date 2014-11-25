@@ -19,7 +19,17 @@ class Application {
         Level* getLevel();
         ACGL::OpenGL::SharedShaderProgram getShader();
         void init();
+        void setFocused(bool focused);
+        bool isFocused();
+        void setCameraLock(bool locked);
+        bool isLocked();
+        void ignoreNextMouseUpdate();
+        int getIgnoredMouseUpdates();
+        void ignoredOneMouseUpdate();
     private:
+        int ignoredMouseUpdates;
+        bool focused;
+        bool cameraLock;
         Graphics graphics;
         Level level;
         ACGL::OpenGL::SharedShaderProgram shader;
