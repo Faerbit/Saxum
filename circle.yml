@@ -26,6 +26,7 @@ test:
         - ./build.sh
 
 deployment:
-    override:
+    master:
+        branch: master
         commands:
             - ./package.sh linux
