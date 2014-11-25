@@ -27,7 +27,6 @@ rc=$?
 
 if [[ $rc == 0 ]]
 then
-    rm -rf "MarbleGame_${platform^}" "MarbleGame_${platform^}.zip"
     mkdir  "MarbleGame_${platform^}"
     cp -r binaries Levels Shader "MarbleGame_${platform^}"
     zip -r "MarbleGame_${platform^}.zip" "MarbleGame_${platform^}"
