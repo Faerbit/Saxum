@@ -25,13 +25,13 @@ database:
 
 test:
     override:
-        #- ./package.sh windows
+        - ./package.sh windows
         - ./package.sh linux
-        - cp MarbleGame_Linux.zip $CIRCLE_ARTIFACTS
+        - cp MarbleGame_Windows.zip MarbleGame_Linux.zip $CIRCLE_ARTIFACTS
 
 deployment:
     master:
         branch: master
         commands:
-            #- megacmd -force put MarbleGame_Windows.zip mega:/GameBuilds/
+            - megacmd -force put MarbleGame_Windows.zip mega:/GameBuilds/
             - megacmd -force put MarbleGame_Linux.zip mega:/GameBuilds/
