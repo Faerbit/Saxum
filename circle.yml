@@ -12,7 +12,7 @@ dependencies:
         - sudo apt-get -qq install cmake
         - sudo apt-get install -qq g++-4.8
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
-        - sudo apt-get install -qq gcc-mingw-w64
+        - sudo apt-get install gcc-mingw-w64
         - sudo apt-get install -qq xorg-dev
         - sudo apt-get install ninja-build
         # Install megacmd
