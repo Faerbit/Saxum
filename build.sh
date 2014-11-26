@@ -12,7 +12,7 @@ cmake="cmake"
 
 if [[ $1 == "windows" ]]
 then
-    cmake="cmake -DCMAKE_SYSTEM_NAME='Windows' -DCMAKE_FIND_ROOT_PATH='/usr/x86_64-w64-mingw32:~/mxe/usr/bin' -DCMAKE_CXX_COMPILER='x86_64-w64-mingw32-g++' -DCMAKE_C_COMPILER='x86_64-w64-mingw32-gcc'"
+    cmake="cmake -DCMAKE_SYSTEM_NAME='Windows' -DCMAKE_FIND_ROOT_PATH='/usr/bin:/usr/x86_64-w64-mingw32' -DCMAKE_CXX_COMPILER='x86_64-w64-mingw32-g++' -DCMAKE_C_COMPILER='x86_64-w64-mingw32-gcc'"
 fi
 
 currentDir=$(pwd)
