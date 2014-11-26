@@ -28,10 +28,11 @@ test:
         - ./package.sh linux
         - ./package.sh windows
         - cp MarbleGame_Linux.zip $CIRCLE_ARTIFACTS
+        - if [ $(ls MarbleGame_Windows.zip) ];then;cp MarbleGame_Windows.zip $CIRCLE_ARTIFACTS; fi
 
 deployment:
     master:
         branch: master
         commands:
-            - megacmd -force put MarbleGame_Windows.zip mega:/GameBuilds/
+            - if [ $(ls MarbleGame_Windows.zip) ];then; megacmd -force put MarbleGame_Windows.zip mega:/GameBuilds/; fi
             - megacmd -force put MarbleGame_Linux.zip mega:/GameBuilds/
