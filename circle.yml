@@ -28,7 +28,7 @@ test:
         - ./package.sh linux
         - ./package.sh windows
         - cp MarbleGame_Linux.zip $CIRCLE_ARTIFACTS
-        - if [ $(ls MarbleGame_Windows.zip) ];then;cp MarbleGame_Windows.zip $CIRCLE_ARTIFACTS; fi
+        - if [ $(ls MarbleGame_Windows.zip 2> /dev/null) ]; then; cp MarbleGame_Windows.zip $CIRCLE_ARTIFACTS; fi
 
 deployment:
     master:
