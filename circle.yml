@@ -27,7 +27,7 @@ test:
     override:
         - ./package.sh linux
         - ./package.sh windows
-        - cp MarbleGame_Windows.zip MarbleGame_Linux.zip $CIRCLE_ARTIFACTS
+        - cp MarbleGame_Linux.zip $CIRCLE_ARTIFACTS
 
 deployment:
     master:
