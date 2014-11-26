@@ -34,5 +34,5 @@ deployment:
     master:
         branch: master
         commands:
-            - if [ $(ls MarbleGame_Windows.zip) ];then; megacmd -force put MarbleGame_Windows.zip mega:/GameBuilds/; fi
+            - if [ $(ls MarbleGame_Windows.zip) ];then megacmd -force put MarbleGame_Windows.zip mega:/GameBuilds/; fi
             - megacmd -force put MarbleGame_Linux.zip mega:/GameBuilds/
