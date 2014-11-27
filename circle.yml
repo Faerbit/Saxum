@@ -9,8 +9,8 @@ machine:
 
 dependencies:
     override:
-        git clone https://code.google.com/p/plowshare/ plowshare
-        cd plowshare; sudo make install
+        - git clone https://code.google.com/p/plowshare/ plowshare
+        - cd plowshare; sudo make install
 
 database:
     override:
