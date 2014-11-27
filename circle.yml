@@ -2,18 +2,13 @@ general:
     branches:
         only:
             - master
+
+machine:
+    services:
+        - docker
+
 dependencies:
     override:
-        - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-        - sudo add-apt-repository ppa:kalakris/cmake -y
-        - sudo add-apt-repository ppa:tkelman/mingw-backport -y
-        - sudo apt-get update
-        - sudo apt-get install gcc-mingw-w64
-        - sudo apt-get install cmake
-        - sudo apt-get install g++-4.8
-        - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
-        - sudo apt-get install  xorg-dev
-        - sudo apt-get install ninja-build
         # Install megacmd
         - git clone https://github.com/t3rm1n4l/megacmd.git
         - cd megacmd; make
@@ -25,8 +20,8 @@ database:
 
 test:
     override:
-        - ./package.sh linux
-        - ./package.sh windows
+        - docker run ~/swp:/swp -w=/swp -u=$(id -u) faerbit/swp ./package.sh linux
+        - docker run ~/swp:/swp -w=/swp -u=$(id -u) faerbit/swp ./package.sh windows
         - cp MarbleGame_Linux.zip $CIRCLE_ARTIFACTS
         - if [ $(ls MarbleGame_Windows.zip 2> /dev/null) ]; then cp MarbleGame_Windows.zip $CIRCLE_ARTIFACTS; fi
 
