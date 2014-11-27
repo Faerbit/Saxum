@@ -60,7 +60,7 @@ void Application::init()
     shader->use();
 
     // load Level
-    level.load(shader);
+    level.load();
 
     // just in case: check for errors
     openGLCriticalError();

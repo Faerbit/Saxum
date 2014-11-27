@@ -148,8 +148,8 @@ void Graphics::render(Level* level, ACGL::OpenGL::SharedShaderProgram shader)
     shader->setUniform("ambientColor", level->getAmbientLight());
     shader->setUniform("camera", level->getCameraPosition());
 
-    // render the level(currently only a bunny):
-    level->render();
+    // render the level
+    level->render(shader);
 }
 
 void Graphics::setWindowSize(glm::uvec2 windowSize) {

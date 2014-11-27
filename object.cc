@@ -1,11 +1,9 @@
 #include "object.hh"
 
-Object::Object(Model model, Material material, glm::vec3 position, glm::vec3 rotation,
-        ACGL::OpenGL::SharedShaderProgram shader) :
+Object::Object(Model model, Material material, glm::vec3 position, glm::vec3 rotation) :
         Entity(position, rotation) {
     this->model = model;
     this->material = material;
-    this->shader = shader;
 }
 
 Object::Object() {
@@ -14,7 +12,7 @@ Object::Object() {
 Object::~Object() {
 }
 
-void Object::render() {
+void Object::render(ACGL::OpenGL::SharedShaderProgram shader) {
     // set lightning parameters for this object
     shader->setUniform("ambientFactor", material.getAmbientFactor());
     shader->setUniform("diffuseFactor", material.getDiffuseFactor());
