@@ -30,9 +30,9 @@ then
     mkdir  "MarbleGame_${platform^}"
     cp -r binaries Levels Shader "MarbleGame_${platform^}"
     zip -r "MarbleGame_${platform^}.zip" "MarbleGame_${platform^}"
-    if [ hash megacmd 2>/dev/null && $2 == "mega" ]
+    if hash megacmd 2>/dev/null && [[ "$2" == "mega" ]]
     then
-        megacmd -force put "MarbleGame_${platform^}.zip" mega:/GameBuilds/
+            megacmd sync "MarbleGame_${platform^}.zip" mega:/GameBuilds/
     fi
     rm -rf "MarbleGame_${platform^}" 
 fi
