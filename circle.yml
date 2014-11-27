@@ -25,5 +25,5 @@ deployment:
     master:
         branch: master
         commands:
-            - plowup --folder=GameBuilds -b "$mfemail":"$mfpass" MarbleGame_Windows.zip
-            - plowup --folder=GameBuilds -b "$mfemail":"$mfpass" MarbleGame_Linux.zip
+            - plowup mediafire --folder=GameBuilds -b "$mfemail":"$mfpass" MarbleGame_Windows.zip
+            - plowup mediafire --folder=GameBuilds -b "$mfemail":"$mfpass" MarbleGame_Linux.zip
