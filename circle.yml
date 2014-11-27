@@ -12,7 +12,7 @@ dependencies:
         # Set up dropbox_uploader
         - curl "https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh" -o dropbox_uploader.sh
         - chmod +x dropbox_uploader.sh
-        - cat $db_uploader > ~/.dropbox_uploader
+        - echo $db_uploader > ~/.dropbox_uploader
 
 database:
     override:
