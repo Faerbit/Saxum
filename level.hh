@@ -15,9 +15,9 @@ class Level {
         Level(std::string filePath);
         Level();
         ~Level();
-        void load(ACGL::OpenGL::SharedShaderProgram shader); // Shader is necessary for correct texture assigning
+        void load();
         void update(float runTime, glm::vec2 mouseDelta,bool wPressed, bool aPressed,bool sPressed, bool dPressed);
-        void render();
+        void render(ACGL::OpenGL::SharedShaderProgram shader);
         glm::vec3 getAmbientLight();
         Light* getDirectionalLight();
         std::vector<Light> getLights();
