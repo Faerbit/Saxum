@@ -9,9 +9,9 @@ machine:
 
 dependencies:
     override:
-        - sudo add-apt-repository ppa:plowsharepackagers/ppa
+        - sudo add-apt-repository -y ppa:plowsharepackagers/ppa
         - sudo apt-get update
-        - sudo apt-get install plowshare4
+        - sudo apt-get -y install plowshare4
 
 database:
     override:
