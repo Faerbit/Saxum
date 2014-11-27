@@ -27,5 +27,5 @@ deployment:
     master:
         branch: master
         commands:
-            - dropbox_uploader.sh upload -p MarbleGame_Windows.zip
-            - dropbox_uploader.sh upload -p MarbleGame_Linux.zip
+            - ./dropbox_uploader.sh upload -p MarbleGame_Windows.zip
+            - ./dropbox_uploader.sh upload -p MarbleGame_Linux.zip
