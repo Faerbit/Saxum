@@ -1,6 +1,7 @@
 from ubuntu:trusty
 
 run apt-get update
+run apt-get upgrade
 
 run apt-get install -y build-essential
 run apt-get install -y gcc-mingw-w64
