@@ -17,7 +17,7 @@ Level::~Level() {
     }
 }
 
-void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
+void Level::load() {
 
     this->physics = Physics();
     this->physics.init();
@@ -29,7 +29,7 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     Model model = Model("MarbleSmooth.obj", 0.75f);
     Material material = Material("marbleTexture_small.png", 0.1f, 0.5f, 0.5f, 3.0f);
     Object* object = new Object(model, material, glm::vec3(0.0f, 10.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f), shader);
+        glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(object);    
     this->physics.addPlayer(1.25f,*object,8.0f,1);
     cameraCenter = object;
@@ -37,7 +37,7 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     Model skydomeModel = Model("skydome.obj", skydomeSize);
     Material skydomeMaterial = Material("skydome.png", 0.7f, 0.0f, 0.0f, 0.0f);
     Object* skydomeObject = new Object(skydomeModel, skydomeMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f), shader);
+        glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(skydomeObject);
     skydome = skydomeObject;
 
@@ -45,20 +45,20 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     Material torchMaterial = Material("torchTexture.png", 0.1f, 0.3f, 0.7f, 10.0f);
     //Create object
     Object* torchObject = new Object(torchModel, torchMaterial, glm::vec3(-3.0f, 6.0f, 0.0f),
-        glm::vec3(0.0f, 1.0472f, 0.0f), shader);
+        glm::vec3(0.0f, 1.0472f, 0.0f));
     objects.push_back(torchObject);
     
     Model blockModel = Model("Block.obj", 1.0f);
     Material blockMaterial = Material("blockTexture_small.png", 0.1f, 0.6, 0.4f, 2.0f);
     Object* blockObject = new Object(blockModel, blockMaterial, glm::vec3(2.0f, 7.0f, 2.0f),
-            glm::vec3(0.0f, 0.0f, 0.0f), shader);
+            glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(blockObject);
     physics.addBox(1,1,1,*blockObject,0,2);
 
     Model columnModel = Model("Column.obj", 1.0f);
     Material columnMaterial = Material("columnTexture_small.png", 0.1f, 0.6, 0.4f, 2.0f);
     Object* columnObject = new Object(columnModel, columnMaterial, glm::vec3(-2.0f, 7.0f, -2.0f),
-            glm::vec3(0.0f, 0.0f, 0.0f), shader);
+            glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(columnObject);
 
     //make non physics objects
@@ -81,16 +81,16 @@ void Level::load(ACGL::OpenGL::SharedShaderProgram shader) {
     //Create object
     Object* terrainObject = new Object(terrainModel, terrainMaterial,
 	glm::vec3(-0.5f*(float)this->terrain.getHeightmapHeight(), 0.0f, -0.5f*(float)this->terrain.getHeightmapWidth()),
-        glm::vec3(0.0f, 0.0f, 0.0f), shader);
+        glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(terrainObject);
     
     //addTerrainPhysic
 	physics.addTerrain(terrain.getHeightmapWidth(), terrain.getHeightmapHeight(), terrain.getHeightmap());
 }
 
-void Level::render() {
+void Level::render(ACGL::OpenGL::SharedShaderProgram shader) {
     for(unsigned int i = 0; i<objects.size(); i++) {
-        objects.at(i)->render();
+        objects.at(i)->render(shader);
     }
 }
 
