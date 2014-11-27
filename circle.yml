@@ -9,9 +9,8 @@ machine:
 
 dependencies:
     override:
-        - sudo add-apt-repository -y ppa:plowsharepackagers/ppa
-        - sudo apt-get update
-        - sudo apt-get -y install plowshare4
+        git clone https://code.google.com/p/plowshare/ plowshare
+        cd plowshare; sudo make install
 
 database:
     override:
