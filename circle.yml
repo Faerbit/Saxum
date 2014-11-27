@@ -9,11 +9,9 @@ machine:
 
 dependencies:
     override:
-        # Install megacmd
-        - git clone https://github.com/t3rm1n4l/megacmd.git
-        - cd megacmd; make
-        - sudo cp megacmd/megacmd /usr/local/bin
-        - echo $megacmd > ~/.megacmd.json
+        - sudo add-apt-repository ppa:plowsharepackagers/ppa
+        - sudo apt-get update
+        - sudo apt-get install plowshare4
 
 database:
     override:
@@ -28,5 +26,5 @@ deployment:
     master:
         branch: master
         commands:
-            - megacmd -force put MarbleGame_Windows.zip mega:/GameBuilds/
-            - megacmd -force put MarbleGame_Linux.zip mega:/GameBuilds/
+            - plowup --folder=GameBuilds -b "$mfemail":"$mfpass" MarbleGame_Windows.zip
+            - plowup --folder=GameBuilds -b "$mfemail":"$mfpass" MarbleGame_Linux.zip
