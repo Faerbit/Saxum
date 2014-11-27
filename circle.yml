@@ -28,5 +28,5 @@ deployment:
     master:
         branch: master
         commands:
-            - megacmd -force put MarbleGame_Windows.zip mega:/GameBuilds/
-            - megacmd -force put MarbleGame_Linux.zip mega:/GameBuilds/
+            - megacmd sync MarbleGame_Windows.zip mega:/GameBuilds/
+            - megacmd sync MarbleGame_Linux.zip mega:/GameBuilds/
