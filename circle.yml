@@ -20,8 +20,8 @@ database:
 
 test:
     override:
-        - docker run -v ~/swp:/swp -w=/swp -u=$(id -u) faerbit/swp ./package.sh linux
-        - docker run -v ~/swp:/swp -w=/swp -u=$(id -u) faerbit/swp ./package.sh windows
+        - docker run -v ~/swp:/swp/swp -w=/swp/swp -u=$(id -u) faerbit/swp ./package.sh linux
+        - docker run -v ~/swp:/swp/swp -w=/swp/swp -u=$(id -u) faerbit/swp ./package.sh windows
         - cp MarbleGame_Linux.zip $CIRCLE_ARTIFACTS
         - if [ $(ls MarbleGame_Windows.zip 2> /dev/null) ]; then cp MarbleGame_Windows.zip $CIRCLE_ARTIFACTS; fi
 
