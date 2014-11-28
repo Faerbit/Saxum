@@ -38,23 +38,22 @@ class Physics {
     Physics();
 	~Physics();
 	void init();
-	void takeUpdateStep(float timeDiff);
-	void rollForward(glm::vec3 camPos, float strength);
+	void takeUpdateStep(float timeDiff); //must be used in level.update to proagate the physics
+	void rollForward(glm::vec3 camPos, float strength); //self explainitory
 	void rollLeft(glm::vec3 camPos, float strength);
 	void rollRight(glm::vec3 camPos, float strength);
 	void rollBack(glm::vec3 camPos, float strength);
 	glm::vec3 getPos(int i);
 	glm::mat4 getRotation(int i);
-	void rollForward(glm::vec3 camPos);
 	void addStaticGroundPlane();
 	void addTerrain(int width, int length, float** heightData);
-	void addPlayer(float rad, Entity entity, float mass, unsigned indice);
-	void addSphere(float rad, Entity entity, float mass, unsigned indice);
-	void addBox(float width, float height, float length, Entity entity, float mass, unsigned indice);
+	void addPlayer(float rad, Entity entity, float mass, unsigned indice); //use these AFTER physicObjects.push_back(object)! if mass == 0 then the object is unmoveable
+	void addSphere(float rad, Entity entity, float mass, unsigned indice); //The Indice should be set to physicObjects.size()
+	void addBox(float width, float height, float length, Entity entity, float mass, unsigned indice); //this is used to ensuer that the system is synchronized
 
     private:
-	btRigidBody* playerBall;
-	btRigidBody* terrainBody;
+	btRigidBody* playerBall;    //allows for quicker access to the ball
+	btRigidBody* terrainBody;   //duh
 	std::vector<btRigidBody*> bodies; //list of all bodies. bodies are also in world, but save again to ease cleaning up process.
         btRigidBody* staticGroundBody;
 
