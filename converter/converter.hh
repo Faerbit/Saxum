@@ -21,6 +21,7 @@ class Converter {
         std::vector<unsigned int> nextId;
         std::string xmlFile;
         XMLDocument* doc = new XMLDocument();
+        XMLDocument* compositions = new XMLDocument();
         void newObject(unsigned int type, unsigned int idG, unsigned int idB, unsigned int posX, unsigned int posZ);
 };
 

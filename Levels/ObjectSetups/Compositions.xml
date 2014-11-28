@@ -1,0 +1,39 @@
+<composition>
+    <typeID>1</typeID>
+    <object>
+        <filePath>../Levels/Geometry/1.obj</filePath>
+        <xOffset>0.0</xOffset>
+        <yOffset>0.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <scale>1.0</scale>
+    </object>
+</composition>
+
+<composition>
+    <typeID>2</typeID>
+    <object>
+        <filePath>../Levels/Geometry/2.obj</filePath>
+        <xOffset>0.0</xOffset>
+        <yOffset>0.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <scale>1.0</scale>
+    </object>
+    <object>
+        <filePath>../Levels/Geometry/3.obj</filePath>
+        <xOffset>0.0</xOffset>
+        <yOffset>1.0</yOffset>
+        <zOffset>2.0</zOffset>
+        <scale>1.0</scale>
+    </object>
+</composition>
+
+<composition>
+    <typeID>3</typeID>
+    <object>
+        <filePath>../Levels/Geometry/4.obj</filePath>
+        <xOffset>0.0</xOffset>
+        <yOffset>0.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <scale>1.0</scale>
+    </object>
+</composition>
