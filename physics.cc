@@ -1,5 +1,6 @@
 #include "physics.hh"
 
+
 Physics::Physics() {
 }
 
@@ -156,6 +157,37 @@ void Physics::addSphere(float rad, Entity entity, float mass, unsigned indice)
 	if(bodies.size() != indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 
+}
+
+void Physics::addCamera(float rad, float distance)
+{
+    btSphereShape* sphere = new btSphereShape(rad);
+
+	btVector3 inertia(0,0,0);
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,0,0)));
+	
+	btRigidBody::btRigidBodyConstructionInfo info(1/(playerBall->getInvMass()/100),motion,sphere,inertia);
+	
+	cameraBody = new btRigidBody(info);
+	
+    cameraBody->setDamping(0.2f,0.4f);
+
+	world->addRigidBody(cameraBody);
+		
+    cameraBody->setSleepingThresholds(0,0);
+    
+    
+    btVector3 pivotInA(5,0,0);
+    btVector3 pivotInB(-5, 0, 0);
+    btDistanceConstraint* pdc = new btDistanceConstraint(*cameraBody,*playerBall,pivotInA,pivotInB, distance);
+    world->addConstraint(pdc);
+}
+
+glm::vec3 Physics::getCameraPosition()
+{
+	btVector3 origin = cameraBody->getCenterOfMassPosition();
+	glm::vec3 save(origin.getX(),origin.getY(),origin.getZ());
+	return save;
 }
 
 glm::vec3 Physics::getPos(int i)
