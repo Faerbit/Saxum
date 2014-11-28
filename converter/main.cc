@@ -5,6 +5,9 @@
 #include <iostream>
 
 int main( int argc, char *argv[] ){
+    if (argc <= 1){
+        std::cout << "Converter needs the level (1,2,...) as input." << std::endl;
+    }
     std::string levelString = argv[1];
     Converter conv = Converter(levelString);
     bool idFound[256][256];
