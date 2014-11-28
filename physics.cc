@@ -159,11 +159,12 @@ void Physics::addTriangleMeshBody(Entity entity, float mass, float dampningL, fl
 {
     btTriangleMesh* trimesh = new btTriangleMesh();
      
-    btVector3* v0 = new btVector3( 0, 0, 0);
-    btVector3* v1 = new btVector3( 1, 1, 1);
-    btVector3* v2 = new btVector3( 2, 2, 2);
      
-    trimesh->addTriangle( *v0, *v1, *v2 );    
+    btVector3 v0(  0, 0, 0 );
+    btVector3 v1(  1, 1, 1 );
+    btVector3 v2(  2, 2, 2);
+     
+    trimesh->addTriangle( v0, v1, v2 );    
     	
     btTriangleMeshShape* shape = new btBvhTriangleMeshShape(trimesh,true);  
     btVector3 inertia(0,0,0);
