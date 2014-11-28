@@ -28,10 +28,11 @@ void Level::load() {
     //add player
     Model model = Model("MarbleSmooth.obj", 0.75f);
     Material material = Material("marbleTexture_small.png", 0.1f, 0.5f, 0.5f, 3.0f);
-    Object* object = new Object(model, material, glm::vec3(0.0f, 10.0f, 0.0f),
+    Object* object = new Object(model, material, glm::vec3(2.0f, 10.0f, 2.0f),
         glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(object);    
-    this->physics.addPlayer(1.25f,*object,8.0f,1);
+    physicObjects.push_back(object);
+    this->physics.addPlayer(1.25f,*object,8.0f,physicObjects.size());
     cameraCenter = object;
    
     Model skydomeModel = Model("skydome.obj", skydomeSize);
@@ -50,10 +51,17 @@ void Level::load() {
     
     Model blockModel = Model("Block.obj", 1.0f);
     Material blockMaterial = Material("blockTexture_small.png", 0.1f, 0.6, 0.4f, 2.0f);
-    Object* blockObject = new Object(blockModel, blockMaterial, glm::vec3(2.0f, 7.0f, 2.0f),
+    Object* blockObject = new Object(blockModel, blockMaterial, glm::vec3(0.0f, 10.0f, 0.0f),
             glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(blockObject);
-    physics.addBox(1,1,1,*blockObject,0,2);
+    physicObjects.push_back(blockObject);
+    physics.addBox(1,3.0f,1,*blockObject,2,physicObjects.size());
+    
+    Object* blockObject2 = new Object(blockModel, blockMaterial, glm::vec3(5.0f, 10.0f, 5.0f),
+            glm::vec3(0.0f, 0.0f, 0.0f));
+    objects.push_back(blockObject2);
+    physicObjects.push_back(blockObject2);
+    physics.addBox(1,3.0f,1,*blockObject2,2,physicObjects.size());
 
     Model columnModel = Model("Column.obj", 1.0f);
     Material columnMaterial = Material("columnTexture_small.png", 0.1f, 0.6, 0.4f, 2.0f);
@@ -125,6 +133,12 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     
     cameraCenter->setPosition(physics.getPos(0));
     cameraCenter->setRotation(physics.getRotation(0));
+    
+    for(unsigned i = 0; i < physicObjects.size();i++)
+    {
+        physicObjects[i]->setPosition(physics.getPos(i));
+        physicObjects[i]->setRotation(physics.getRotation(i));
+    }
     
     skydome->setPosition(glm::vec3(cameraCenter->getPosition().x, 
         0.0f, cameraCenter->getPosition().z));
