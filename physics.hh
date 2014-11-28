@@ -15,6 +15,8 @@
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btBoxShape.h"
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btStaticPlaneShape.h"
+#include "extern/bullet/src/BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h"
+#include "extern/bullet/src/BulletCollision/CollisionShapes/btTriangleMesh.h"
 
 #include "extern/bullet/src/BulletDynamics/ConstraintSolver/btConstraintSolver.h"
 #include "extern/bullet/src/BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"//YAY!
@@ -49,6 +51,7 @@ class Physics {
 	void addStaticGroundPlane();
 	void addCamera(float rad,float distance); //Do NOT impliment before Player has been created;
 	glm::vec3 getCameraPosition();
+    void addTriangleMeshBody(Entity entity, float mass, float dampningL, float dampningA,unsigned indice);
 	void addTerrain(int width, int length, float** heightData);
 	void addPlayer(float rad, Entity entity, float mass, unsigned indice); //use these AFTER physicObjects.push_back(object)! if mass == 0 then the object is unmoveable
 	void addSphere(float rad, Entity entity, float mass, unsigned indice); //The Indice should be set to physicObjects.size()

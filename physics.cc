@@ -118,11 +118,7 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
 	world->addRigidBody(body);
 
 	bodies.push_back(body);
-	
-	if(mass != 0)
-        body->setSleepingThresholds(0,0);	
-	
-		
+			
 	if(bodies.size() != indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 }
@@ -159,6 +155,32 @@ void Physics::addSphere(float rad, Entity entity, float mass, unsigned indice)
 
 }
 
+void Physics::addTriangleMeshBody(Entity entity, float mass, float dampningL, float dampningA,unsigned indice)
+{
+    btTriangleMesh* trimesh = new btTriangleMesh();
+     
+    btVector3* v0 = new btVector3( 0, 0, 0);
+    btVector3* v1 = new btVector3( 1, 1, 1);
+    btVector3* v2 = new btVector3( 2, 2, 2);
+     
+    trimesh->addTriangle( *v0, *v1, *v2 );    
+    	
+    btTriangleMeshShape* shape = new btBvhTriangleMeshShape(trimesh,true);  
+    btVector3 inertia(0,0,0);
+    if(mass != 0.0)
+    {
+ 		shape->calculateLocalInertia((btScalar)mass,inertia);
+	}
+	
+     btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
+     	
+	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,shape,inertia);
+	btRigidBody* body = new btRigidBody(info);
+	
+	body->setDamping(dampningL,dampningA);
+	
+}
+
 void Physics::addCamera(float rad, float distance)
 {
     btSphereShape* sphere = new btSphereShape(rad);
@@ -170,7 +192,7 @@ void Physics::addCamera(float rad, float distance)
 	
 	cameraBody = new btRigidBody(info);
 	
-    cameraBody->setDamping(0.2f,0.4f);
+    cameraBody->setDamping(0.9f,1.0f);
 
 	world->addRigidBody(cameraBody);
 		
