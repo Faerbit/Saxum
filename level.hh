@@ -29,6 +29,7 @@ class Level {
     private:
         std::string filePath;
         std::vector<Object*> objects;
+        std::vector<Object*> physicObjects;
         std::vector<Light> lights;
         glm::vec3 ambientLight;
         glm::vec4 fogColor;
