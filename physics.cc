@@ -1,5 +1,6 @@
 #include "physics.hh"
 
+
 Physics::Physics() {
 }
 
@@ -117,11 +118,7 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
 	world->addRigidBody(body);
 
 	bodies.push_back(body);
-	
-	if(mass != 0)
-        body->setSleepingThresholds(0,0);	
-	
-		
+			
 	if(bodies.size() != indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 }
@@ -156,6 +153,64 @@ void Physics::addSphere(float rad, Entity entity, float mass, unsigned indice)
 	if(bodies.size() != indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 
+}
+
+void Physics::addTriangleMeshBody(Entity entity, float mass, float dampningL, float dampningA,unsigned indice)
+{
+    btTriangleMesh* trimesh = new btTriangleMesh();
+     
+     
+    btVector3 v0(  0, 0, 0 );
+    btVector3 v1(  1, 1, 1 );
+    btVector3 v2(  2, 2, 2);
+     
+    trimesh->addTriangle( v0, v1, v2 );    
+    	
+    btTriangleMeshShape* shape = new btBvhTriangleMeshShape(trimesh,true);  
+    btVector3 inertia(0,0,0);
+    if(mass != 0.0)
+    {
+ 		shape->calculateLocalInertia((btScalar)mass,inertia);
+	}
+	
+     btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
+     	
+	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,shape,inertia);
+	btRigidBody* body = new btRigidBody(info);
+	
+	body->setDamping(dampningL,dampningA);
+	
+}
+
+void Physics::addCamera(float rad, float distance)
+{
+    btSphereShape* sphere = new btSphereShape(rad);
+
+	btVector3 inertia(0,0,0);
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,0,0)));
+	
+	btRigidBody::btRigidBodyConstructionInfo info(1/(playerBall->getInvMass()/100),motion,sphere,inertia);
+	
+	cameraBody = new btRigidBody(info);
+	
+    cameraBody->setDamping(0.9f,1.0f);
+
+	world->addRigidBody(cameraBody);
+		
+    cameraBody->setSleepingThresholds(0,0);
+    
+    
+    btVector3 pivotInA(5,0,0);
+    btVector3 pivotInB(-5, 0, 0);
+    btDistanceConstraint* pdc = new btDistanceConstraint(*cameraBody,*playerBall,pivotInA,pivotInB, distance);
+    world->addConstraint(pdc);
+}
+
+glm::vec3 Physics::getCameraPosition()
+{
+	btVector3 origin = cameraBody->getCenterOfMassPosition();
+	glm::vec3 save(origin.getX(),origin.getY(),origin.getZ());
+	return save;
 }
 
 glm::vec3 Physics::getPos(int i)
