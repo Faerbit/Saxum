@@ -1,6 +1,5 @@
 #include "application.hh"
 
-#include <ACGL/OpenGL/Creator/ShaderProgramCreator.hh>
 
 Application::Application() {
     graphics = Graphics(glm::uvec2(1024, 786), 0.1f, 150.0f);
@@ -20,18 +19,7 @@ void Application::init()
     ACGL::Base::Settings::the()->setTexturePath("Levels/Textures/");
     ACGL::Base::Settings::the()->setGeometryPath("Levels/Geometry/");
 
-    // construct VAO to give shader correct Attribute locations
-    ACGL::OpenGL::SharedArrayBuffer ab = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
-    ab->defineAttribute("aPosition", GL_FLOAT, 3);
-    ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
-    ab->defineAttribute("aNormal", GL_FLOAT, 3);
-    ACGL::OpenGL::SharedVertexArrayObject vao = std::make_shared<ACGL::OpenGL::VertexArrayObject>();
-    vao->attachAllAttributes(ab);
-
-    // look up all shader files starting with 'phong' and build a ShaderProgram from it:
-    shader = ACGL::OpenGL::ShaderProgramCreator("phong").attributeLocations(
-            vao->getAttributeLocations()).create();
-    shader->use();
+    graphics.init();
 
     // load Level
     level.load();
@@ -46,10 +34,6 @@ Graphics* Application::getGraphics() {
 
 Level* Application::getLevel() {
     return &level;
-}
-
-ACGL::OpenGL::SharedShaderProgram Application::getShader() {
-    return shader;
 }
 
 void Application::setFocused(bool focused) {
