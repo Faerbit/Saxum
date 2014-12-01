@@ -34,12 +34,12 @@ int main( int argc, char *argv[] ){
             if(image[pixel]!=0){
                 if(image[pixel+1]==0 && image[pixel+2]==0){
                     std::vector<unsigned int> temp;
-                    temp = conv.newComposition(image[pixel], rowNum, columnNum);
+                    temp = conv.newComposition(image[pixel], 0.5+rowNum-0.5*height, 0.5+columnNum-0.5*width);
                     idFound[temp[0]][temp[1]] = true;
                     image[pixel+1] = temp[0];
                     image[pixel+2] = temp[1];
                 }else{
-                    conv.updateComposition(image[pixel+1], image[pixel+2], rowNum, columnNum);
+                    conv.updateComposition(image[pixel+1], image[pixel+2], 0.5+rowNum-0.5*height, 0.5+columnNum-0.5*width);
                     idFound[image[pixel+1]][image[pixel+2]] = true;
                 }
             }
@@ -53,8 +53,7 @@ int main( int argc, char *argv[] ){
     }
     
     //delete compositions that were not in the png anymore
-    
-    for (int i=1; i<=conv.getNextId()[1]; i++){
+    for (int i=1; i<=conv.getNextID()[1]; i++){
         for (int j=1; j<256; j++){
             if (! idFound[i][j]){
                 conv.deleteComposition(i,j);
