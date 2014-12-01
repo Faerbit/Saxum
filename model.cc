@@ -1,6 +1,7 @@
 #include "model.hh"
 
 Model::Model(std::string filePath, float scale) {
+    printf("Loading %s\n", filePath.c_str());
     reference = ACGL::OpenGL::VertexArrayObjectCreator(filePath).create();
     this->scale = scale;
 }
