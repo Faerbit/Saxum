@@ -10,7 +10,6 @@ class Application {
         Application();
         Graphics* getGraphics();
         Level* getLevel();
-        ACGL::OpenGL::SharedShaderProgram getShader();
         void init();
         void setFocused(bool focused);
         bool isFocused();
@@ -25,7 +24,6 @@ class Application {
         bool cameraLock;
         Graphics graphics;
         Level level;
-        ACGL::OpenGL::SharedShaderProgram shader;
 };
 
 #endif
