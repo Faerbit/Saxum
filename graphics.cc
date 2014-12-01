@@ -3,8 +3,6 @@
 #include <iomanip>
 #include <sstream>
 
-using namespace std;
-
 Graphics::Graphics() {
 }
 
@@ -44,7 +42,7 @@ bool Graphics::createWindow()
     //
     if ( !glfwInit() )
     {
-        ACGL::Utils::error() << "Failed to initialize GLFW" << endl;
+        ACGL::Utils::error() << "Failed to initialize GLFW" << std::endl;
         exit( -1 );
     }
 
@@ -70,7 +68,7 @@ bool Graphics::createWindow()
     //                                                  R,G,B,A, Depth,Stencil
     window = glfwCreateWindow(windowSize.x, windowSize.y, "SWP MarbleGame Group C", NULL, NULL);
     if (!getWindow()) {
-        ACGL::Utils::error() << "Failed to open a GLFW window - requested OpenGL: " <<  ACGL_OPENGL_VERSION << endl;
+        ACGL::Utils::error() << "Failed to open a GLFW window - requested OpenGL: " <<  ACGL_OPENGL_VERSION << std::endl;
         return false;
     }
     glfwMakeContextCurrent(window);
