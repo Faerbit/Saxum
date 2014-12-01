@@ -37,18 +37,14 @@ void Graphics::setGLFWHintsForOpenGLVersion( unsigned int _version )
 
 bool Graphics::createWindow()
 {
-    /////////////////////////////////////////////////////////////////////////////////////
     // Initialise GLFW
-    //
     if ( !glfwInit() )
     {
         ACGL::Utils::error() << "Failed to initialize GLFW" << std::endl;
         exit( -1 );
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////
     // Configure OpenGL context
-    //
     setGLFWHintsForOpenGLVersion( ACGL_OPENGL_VERSION );
 
     // activate multisampling (second parameter is the number of samples):
@@ -60,10 +56,6 @@ bool Graphics::createWindow()
     // define whether the window can get resized:
     glfwWindowHint(GLFW_RESIZABLE, true);
 
-    // non-decorated windows can be used as splash screens:
-    //glfwWindowHint( GLFW_DECORATED, false );
-
-    /////////////////////////////////////////////////////////////////////////////////////
     // try to create an OpenGL context in a window and check the supported OpenGL version:
     //                                                  R,G,B,A, Depth,Stencil
     window = glfwCreateWindow(windowSize.x, windowSize.y, "SWP MarbleGame Group C", NULL, NULL);

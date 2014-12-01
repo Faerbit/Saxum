@@ -51,17 +51,13 @@ int main( int argc, char *argv[] )
 {
     //Application app = Application();
 
-    /////////////////////////////////////////////////////////////////////////////////////
     // Create OpenGL capable window:
-    //
     if ( !app.getGraphics()->createWindow() ) {
         glfwTerminate();
         exit( -1 );
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////
     // Set window title to binary name (without the path):
-    //
     std::vector<std::string> tmp = ACGL::Utils::StringHelpers::split( std::string( argv[0] ), '/' );
     glfwSetWindowTitle(app.getGraphics()->getWindow(), tmp[tmp.size()-1].c_str() );
     // Ensure we can capture the escape key being pressed below
@@ -76,9 +72,7 @@ int main( int argc, char *argv[] )
     // Enable vertical sync (on cards that support it) with parameter 1 - 0 means off
     glfwSwapInterval( 0 );
 
-    /////////////////////////////////////////////////////////////////////////////////////
     // OpenGL state:
-    //
     glClearColor( 0.0, 0.0, 0.0, 1.0 );
     glEnable( GL_DEPTH_TEST );
     glEnable(GL_BLEND);
