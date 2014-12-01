@@ -5,17 +5,6 @@
 #include <iomanip>
 #include <sstream>
 
-#include <ACGL/OpenGL/Objects.hh>
-#include <ACGL/OpenGL/Data/TextureData.hh>
-#include <ACGL/Math/Math.hh>
-#include <ACGL/Utils/FileHelpers.hh>
-#include <ACGL/Utils/StringHelpers.hh>
-#include <ACGL/OpenGL/Objects/VertexArrayObject.hh>
-
-#include <ACGL/OpenGL/glloaders/extensions.hh>
-#include <ACGL/Base/Settings.hh>
-
-
 void resizeCallback(GLFWwindow* window, int newWidth, int newHeight)
 {
     // store the new window size and adjust the viewport:
