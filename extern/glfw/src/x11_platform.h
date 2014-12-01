@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.1 X11 - www.glfw.org
+// GLFW 3.0 X11 - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2002-2006 Marcus Geelnard
 // Copyright (c) 2006-2010 Camilla Berglund <elmindreda@elmindreda.org>
@@ -34,7 +34,6 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <X11/Xatom.h>
-#include <X11/Xcursor/Xcursor.h>
 
 // The Xf86VidMode extension provides fallback gamma control
 #include <X11/extensions/xf86vmode.h>
@@ -48,42 +47,41 @@
 // The Xkb extension provides improved keyboard support
 #include <X11/XKBlib.h>
 
-// The Xinerama extension provides legacy monitor indices
-#include <X11/extensions/Xinerama.h>
-
-#include "posix_tls.h"
-
 #if defined(_GLFW_GLX)
  #define _GLFW_X11_CONTEXT_VISUAL window->glx.visual
- #include "glx_context.h"
+ #include "glx_platform.h"
 #elif defined(_GLFW_EGL)
  #define _GLFW_X11_CONTEXT_VISUAL window->egl.visual
  #define _GLFW_EGL_NATIVE_WINDOW  window->x11.handle
  #define _GLFW_EGL_NATIVE_DISPLAY _glfw.x11.display
- #include "egl_context.h"
+ #include "egl_platform.h"
 #else
  #error "No supported context creation API selected"
 #endif
 
-#include "posix_time.h"
-#include "linux_joystick.h"
-#include "xkb_unicode.h"
-
 #define _GLFW_PLATFORM_WINDOW_STATE         _GLFWwindowX11  x11
 #define _GLFW_PLATFORM_LIBRARY_WINDOW_STATE _GLFWlibraryX11 x11
 #define _GLFW_PLATFORM_MONITOR_STATE        _GLFWmonitorX11 x11
-#define _GLFW_PLATFORM_CURSOR_STATE         _GLFWcursorX11  x11
 
 
-// X11-specific per-window data
-//
+//========================================================================
+// GLFW platform specific types
+//========================================================================
+
+
+//------------------------------------------------------------------------
+// Platform-specific window structure
+//------------------------------------------------------------------------
 typedef struct _GLFWwindowX11
 {
-    Colormap        colormap;
-    Window          handle;
-    XIC             ic;
+    // Platform specific window resources
+    Colormap        colormap;          // Window colormap
+    Window          handle;            // Window handle
 
-    GLboolean       overrideRedirect;
+    // Various platform specific internal variables
+    GLboolean       overrideRedirect; // True if window is OverrideRedirect
+    GLboolean       cursorGrabbed;    // True if cursor is currently grabbed
+    GLboolean       cursorHidden;     // True if cursor is currently hidden
 
     // Cached position and size used to filter out duplicate events
     int             width, height;
@@ -97,8 +95,9 @@ typedef struct _GLFWwindowX11
 } _GLFWwindowX11;
 
 
-// X11-specific global data
-//
+//------------------------------------------------------------------------
+// Platform-specific library global data for X11
+//------------------------------------------------------------------------
 typedef struct _GLFWlibraryX11
 {
     Display*        display;
@@ -107,22 +106,9 @@ typedef struct _GLFWlibraryX11
 
     // Invisible cursor for hidden cursor mode
     Cursor          cursor;
-    // Context for mapping window XIDs to _GLFWwindow pointers
     XContext        context;
-    // XIM input method
-    XIM             im;
-    // True if window manager supports EWMH
-    GLboolean       hasEWMH;
-    // Most recent error code received by X error handler
-    int             errorCode;
-    // Clipboard string (while the selection is owned)
-    char*           clipboardString;
-
-    // LUT for mapping X11 key codes to GLFW key codes
-    int             keyCodeLUT[256];
 
     // Window manager atoms
-    Atom            WM_PROTOCOLS;
     Atom            WM_STATE;
     Atom            WM_DELETE_WINDOW;
     Atom            NET_WM_NAME;
@@ -130,37 +116,26 @@ typedef struct _GLFWlibraryX11
     Atom            NET_WM_PID;
     Atom            NET_WM_PING;
     Atom            NET_WM_STATE;
-    Atom            NET_WM_STATE_ABOVE;
     Atom            NET_WM_STATE_FULLSCREEN;
-    Atom            NET_WM_BYPASS_COMPOSITOR;
-    Atom            NET_WM_FULLSCREEN_MONITORS;
     Atom            NET_ACTIVE_WINDOW;
-    Atom            NET_FRAME_EXTENTS;
-    Atom            NET_REQUEST_FRAME_EXTENTS;
     Atom            MOTIF_WM_HINTS;
 
-    // Xdnd (drag and drop) atoms
-    Atom            XdndAware;
-    Atom            XdndEnter;
-    Atom            XdndPosition;
-    Atom            XdndStatus;
-    Atom            XdndActionCopy;
-    Atom            XdndDrop;
-    Atom            XdndLeave;
-    Atom            XdndFinished;
-    Atom            XdndSelection;
-
-    // Selection (clipboard) atoms
+    // Selection atoms
     Atom            TARGETS;
     Atom            MULTIPLE;
     Atom            CLIPBOARD;
     Atom            CLIPBOARD_MANAGER;
     Atom            SAVE_TARGETS;
-    Atom            _NULL;
     Atom            UTF8_STRING;
     Atom            COMPOUND_STRING;
     Atom            ATOM_PAIR;
     Atom            GLFW_SELECTION;
+
+    // True if window manager supports EWMH
+    GLboolean       hasEWMH;
+
+    // Error code received by the X error handler
+    int             errorCode;
 
     struct {
         GLboolean   available;
@@ -175,12 +150,9 @@ typedef struct _GLFWlibraryX11
         int         versionMajor;
         int         versionMinor;
         GLboolean   gammaBroken;
-        GLboolean   monitorBroken;
     } randr;
 
     struct {
-        GLboolean   available;
-        GLboolean   detectable;
         int         majorOpcode;
         int         eventBase;
         int         errorBase;
@@ -197,6 +169,9 @@ typedef struct _GLFWlibraryX11
         int         versionMinor;
     } xi;
 
+    // LUT for mapping X11 key codes to GLFW key codes
+    int             keyCodeLUT[256];
+
     struct {
         int         count;
         int         timeout;
@@ -206,52 +181,82 @@ typedef struct _GLFWlibraryX11
     } saver;
 
     struct {
-        Window      source;
-    } xdnd;
+        GLboolean   monotonic;
+        double      resolution;
+        uint64_t    base;
+    } timer;
 
     struct {
-        GLboolean   available;
-        int         versionMajor;
-        int         versionMinor;
-    } xinerama;
+        char*       string;
+    } selection;
+
+    struct {
+        int         present;
+        int         fd;
+        float*      axes;
+        int         axisCount;
+        unsigned char* buttons;
+        int         buttonCount;
+        char*       name;
+    } joystick[GLFW_JOYSTICK_LAST + 1];
 
 } _GLFWlibraryX11;
 
 
-// X11-specific per-monitor data
-//
+//------------------------------------------------------------------------
+// Platform-specific monitor structure
+//------------------------------------------------------------------------
 typedef struct _GLFWmonitorX11
 {
     RROutput        output;
     RRCrtc          crtc;
     RRMode          oldMode;
 
-    // Index of corresponding Xinerama screen,
-    // for EWMH full screen window placement
-    int             index;
-
 } _GLFWmonitorX11;
 
 
-// X11-specific per-cursor data
-//
-typedef struct _GLFWcursorX11
-{
-    Cursor handle;
+//========================================================================
+// Prototypes for platform specific internal functions
+//========================================================================
 
-} _GLFWcursorX11;
+// Time
+void _glfwInitTimer(void);
 
+// Gamma
+void _glfwInitGammaRamp(void);
 
-GLboolean _glfwSetVideoMode(_GLFWmonitor* monitor, const GLFWvidmode* desired);
+// OpenGL support
+int _glfwInitContextAPI(void);
+void _glfwTerminateContextAPI(void);
+int _glfwCreateContext(_GLFWwindow* window,
+                       const _GLFWwndconfig* wndconfig,
+                       const _GLFWfbconfig* fbconfig);
+void _glfwDestroyContext(_GLFWwindow* window);
+
+// Fullscreen support
+void _glfwSetVideoMode(_GLFWmonitor* monitor, const GLFWvidmode* desired);
 void _glfwRestoreVideoMode(_GLFWmonitor* monitor);
 
-Cursor _glfwCreateCursor(const GLFWimage* image, int xhot, int yhot);
+// Joystick input
+void _glfwInitJoysticks(void);
+void _glfwTerminateJoysticks(void);
 
+// Unicode support
+long _glfwKeySym2Unicode(KeySym keysym);
+
+// Clipboard handling
+void _glfwHandleSelectionClear(XEvent* event);
+void _glfwHandleSelectionRequest(XEvent* event);
+void _glfwPushSelectionToManager(_GLFWwindow* window);
+
+// Window support
+_GLFWwindow* _glfwFindWindowByHandle(Window handle);
 unsigned long _glfwGetWindowProperty(Window window,
                                      Atom property,
                                      Atom type,
                                      unsigned char** value);
 
+// X11 error handler
 void _glfwGrabXErrorHandler(void);
 void _glfwReleaseXErrorHandler(void);
 void _glfwInputXError(int error, const char* message);
