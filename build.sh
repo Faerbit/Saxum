@@ -40,9 +40,9 @@ mkdir -p build
 cd build 
 if hash ninja 2>/dev/null
 then
-    $cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -GNinja ..
+    $cmake -DGLFW_BUILD_EXAMPLES=0 -DGLFW_BUILD_TESTS=0 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -GNinja ..
     ninja
 else
-    $cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 ..
+    $cmake -DGLFW_BUILD_EXAMPLES=0 -DGLFW_BUILD_TESTS=0 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 ..
     make -j$threads
 fi
