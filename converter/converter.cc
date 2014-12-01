@@ -1,5 +1,6 @@
 #include "converter.hh"
 #include <fstream>
+#include <string>
 
 using namespace tinyxml2;
 
@@ -22,12 +23,22 @@ Converter::Converter(std::string level){
     //Load the Level xml file
     const char* charXmlFile = xmlFile.c_str();
     doc->LoadFile(charXmlFile);
+    nextID.push_back(1);
+    nextID.push_back(1);
     if (doc->ErrorID()!=0){
         printf("Could not open xml, creating new xml.\n");
+    }else{
+        XMLElement* thisComposition = doc->FirstChildElement("composition");
+        int idGreen, idBlue;
+        for(; thisComposition; thisComposition=thisComposition->NextSiblingElement()){
+            thisComposition->QueryIntAttribute("idGreen", &idGreen);
+            thisComposition->QueryIntAttribute("idBlue", &idBlue);
+            if(idGreen > nextID[0] || (idGreen == nextID[0] && idBlue > nextID[1])){
+                nextID[0] = idGreen;
+                nextID[1] = idBlue;
+            }
+        }
     }
-    
-    nextId.push_back(1);
-    nextId.push_back(250);  //TODO
 }
 
 Converter::Converter(){
@@ -36,56 +47,75 @@ Converter::Converter(){
 Converter::~Converter(){
 }
 
-void Converter::updateComposition(unsigned int idG, unsigned int idB, unsigned int posX, unsigned int posZ){
-    //TODO
-}
-
-
-std::vector<unsigned int> Converter::newComposition(unsigned int type, unsigned int posX, unsigned int posZ){
-    XMLNode* thisComposition = compositions->FirstChild();
-    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement()){
-        int thisType;
-        XMLElement* thisCompositionElement = thisComposition->ToElement();
-        thisCompositionElement->QueryIntAttribute("typeID", &thisType);
-        if(thisType == type){
-            //XMLElement* newComposition = doc.NewElement();
-            //newComposition = thisComposition;
-            //XMLElement* newComposition = thisComposition->Clone();        //TODO write own clone function
-            doc->InsertFirstChild(newComposition);
-            
-            XMLElement* idBlue  = doc->NewElement("<idBlue>"  + itoa(nextId[1]) + "</idBlue>");
-            XMLElement* idGreen = doc->NewElement("<idGreen>" + itoa(nextId[0]) + "</idGreen>");
-            XMLElement* zPos    = doc->NewElement("<zPos>"    + itoa(posZ)      + "</zPos>");
-            XMLElement* yOffset = doc->NewElement("<yOffset>0.0</yOffset>");
-            XMLElement* xPos    = doc->NewElement("<xPos>"    + itoa(posX)      + "</xPos>");
-            XMLElement* zRot    = doc->NewElement("<zRot>0.0</zRot>");
-            XMLElement* yRot    = doc->NewElement("<yRot>0.0</yRot>");
-            XMLElement* xRot    = doc->NewElement("<xRot>0.0</xRot>");
-            XMLElement* scale   = doc->NewElement("<scale>1.0</scale>");
-            
-            newComposition->InsertFirstChild(idBlue);
-            newComposition->InsertFirstChild(idGreen);
-            newComposition->InsertFirstChild(zPos);
-            newComposition->InsertFirstChild(yOffset);
-            newComposition->InsertFirstChild(xPos);
-            newComposition->InsertFirstChild(zRot);
-            newComposition->InsertFirstChild(yRot);
-            newComposition->InsertFirstChild(xRot);
-            newComposition->InsertFirstChild(scale);
-        }
-    }
+std::vector<unsigned int> Converter::newComposition(unsigned int type, float posX, float posZ){
+    XMLElement* newComposition = doc->NewElement("composition");
+    doc->InsertFirstChild(newComposition);
     
-    std::vector<unsigned int> ret = nextId;
-    nextId[1] += 1;
-    if (nextId[1] == 256){
-        nextId[1] = 1;
-        nextId[0] +=1;
+    XMLElement* typeID = doc->NewElement("typeID");
+    XMLElement* idBlue = doc->NewElement("idBlue");
+    XMLElement* idGreen = doc->NewElement("idGreen");
+    XMLElement* zPos = doc->NewElement("zPos");
+    XMLElement* yOffset = doc->NewElement("yOffset");
+    XMLElement* xPos  = doc->NewElement("xPos");
+    XMLElement* zRot  = doc->NewElement("zRot");
+    XMLElement* yRot  = doc->NewElement("yRot");
+    XMLElement* xRot  = doc->NewElement("xRot");
+    XMLElement* scale = doc->NewElement("scale");
+    
+    typeID->SetText(std::to_string(type).c_str());
+    idBlue->SetText(std::to_string(nextID[1]).c_str());
+    idGreen->SetText(std::to_string(nextID[0]).c_str());
+    zPos->SetText(std::to_string(posZ).c_str());
+    yOffset->SetText("0.0");
+    xPos->SetText(std::to_string(posX).c_str());
+    zRot->SetText("0.0");
+    yRot->SetText("0.0");
+    xRot->SetText("0.0");
+    scale->SetText("1.0");
+    
+    newComposition->InsertFirstChild(typeID);
+    newComposition->InsertFirstChild(idBlue);
+    newComposition->InsertFirstChild(idGreen);
+    newComposition->InsertFirstChild(zPos);
+    newComposition->InsertFirstChild(yOffset);
+    newComposition->InsertFirstChild(xPos);
+    newComposition->InsertFirstChild(zRot);
+    newComposition->InsertFirstChild(yRot);
+    newComposition->InsertFirstChild(xRot);
+    newComposition->InsertFirstChild(scale);
+    
+    std::vector<unsigned int> ret = nextID;
+    nextID[1] += 1;
+    if (nextID[1] == 255){
+        nextID[1] = 0;
+        nextID[0] +=1;
     }
     return ret;
 }
 
+void Converter::updateComposition(unsigned int idG, unsigned int idB, float posX, float posZ){
+    XMLElement* thisComposition = doc->FirstChildElement("composition");
+    int idGreen, idBlue;
+    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement()){
+        thisComposition->QueryIntAttribute("idGreen", &idGreen);
+        thisComposition->QueryIntAttribute("idBlue", &idBlue);
+        if(idGreen == idG && idBlue == idB){
+            thisComposition->FirstChildElement("xPos")->SetText(std::to_string(posX).c_str());
+            thisComposition->FirstChildElement("zPos")->SetText(std::to_string(posZ).c_str());
+        }
+    }
+}
+
 void Converter::deleteComposition(unsigned int idG, unsigned int idB){
-    //TODO
+    XMLElement* thisComposition = doc->FirstChildElement("composition");
+    int idGreen, idBlue;
+    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement()){
+        thisComposition->QueryIntAttribute("idGreen", &idGreen);
+        thisComposition->QueryIntAttribute("idBlue", &idBlue);
+        if(idGreen == idG && idBlue == idB){
+            doc->DeleteChild(thisComposition);
+        }
+    }
 }
 
 void Converter::save(){
@@ -93,11 +123,17 @@ void Converter::save(){
     doc->SaveFile(charXmlFile);
 }
 
-std::vector<unsigned int> Converter::getNextId(){
-    return nextId;
+std::vector<unsigned int> Converter::getNextID(){
+    return nextID;
 }
 
-
-void Converter::newObject(unsigned int type, unsigned int idG, unsigned int idB, unsigned int posX, unsigned int posZ){
-    //TODO
-}
+/*  finding a typeID in compositions:
+    XMLElement* thisComposition = compositions->FirstChildElement("composition");
+    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement()){
+        int thisType;
+        thisComposition->QueryIntAttribute("typeID", &thisType);
+        if(thisType == type){
+            ...
+        }
+    }
+*/
