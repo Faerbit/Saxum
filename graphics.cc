@@ -3,7 +3,30 @@
 #include <iomanip>
 #include <sstream>
 
+#include <ACGL/OpenGL/Creator/ShaderProgramCreator.hh>
+
+Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane) {
+    this->windowSize = windowSize;
+    this->nearPlane = nearPlane;
+    this->farPlane = farPlane;
+}
+
 Graphics::Graphics() {
+}
+
+void Graphics::init() {
+    // construct VAO to give shader correct Attribute locations
+    ACGL::OpenGL::SharedArrayBuffer ab = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
+    ab->defineAttribute("aPosition", GL_FLOAT, 3);
+    ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
+    ab->defineAttribute("aNormal", GL_FLOAT, 3);
+    ACGL::OpenGL::SharedVertexArrayObject vao = std::make_shared<ACGL::OpenGL::VertexArrayObject>();
+    vao->attachAllAttributes(ab);
+
+    // look up all shader files starting with 'phong' and build a ShaderProgram from it:
+    shader = ACGL::OpenGL::ShaderProgramCreator("phong").attributeLocations(
+            vao->getAttributeLocations()).create();
+    shader->use();
 }
 
 GLFWwindow* Graphics::getWindow() {
@@ -68,14 +91,7 @@ bool Graphics::createWindow()
     return true;
 }
 
-Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane) {
-    this->windowSize = windowSize;
-    this->nearPlane = nearPlane;
-    this->farPlane = farPlane;
-}
-
-
-void Graphics::render(Level* level, ACGL::OpenGL::SharedShaderProgram shader)
+void Graphics::render(Level* level)
 {
     // clear the framebuffer:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

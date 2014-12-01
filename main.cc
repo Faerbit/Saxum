@@ -123,7 +123,7 @@ int main( int argc, char *argv[] )
         }
 
         lastUpdate = now;
-        app.getGraphics()->render(app.getLevel(), app.getShader());
+        app.getGraphics()->render(app.getLevel());
         
         openGLCriticalError();
 
