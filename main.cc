@@ -121,7 +121,7 @@ bool Application::isFocused() {
 void Application::setCameraLock(bool locked) {
     // Prevent camera jumping huge distances
     if (!locked) {
-        app.ignoreNextMouseUpdate();
+        ignoreNextMouseUpdate();
     }
     cameraLock = locked; 
 }
