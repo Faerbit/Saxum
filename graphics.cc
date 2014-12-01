@@ -1,15 +1,7 @@
 #include "graphics.hh"
 
-#include <iostream>
-#include <fstream>
 #include <iomanip>
 #include <sstream>
-
-#include <ACGL/OpenGL/glloaders/extensions.hh>
-#include <ACGL/Utils/FileHelpers.hh>
-#include <ACGL/Utils/StringHelpers.hh>
-
-#include "model.hh"
 
 using namespace std;
 
