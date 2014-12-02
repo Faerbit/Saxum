@@ -31,8 +31,8 @@ int main( int argc, char *argv[] ){
         for(unsigned int columnNum = 0; columnNum < width; columnNum++){
             unsigned int pixel = (rowNum*width+columnNum)*4;
             //if there is a composition here, adjust the xml and image
-            if(image[pixel]!=0){
-                if(image[pixel+1]==0 && image[pixel+2]==0){
+            if(image[pixel]!=0 && image[pixel]!=255){
+                if((image[pixel+1]==0 && image[pixel+2]==0) || (image[pixel+1]==255 && image[pixel+2]==255)){
                     std::vector<unsigned int> temp;
                     temp = conv.newComposition(image[pixel], 0.5+rowNum-0.5*height, 0.5+columnNum-0.5*width);
                     idFound[temp[0]][temp[1]] = true;

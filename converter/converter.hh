@@ -11,11 +11,11 @@ class Converter {
         Converter(std::string level);
         Converter();
         ~Converter();
-        void updateComposition(unsigned int idG, unsigned int idB, float posX, float posZ);
-        std::vector<unsigned int> newComposition(unsigned int type, float posX, float posZ);
+        void updateComposition(unsigned int idG, unsigned int idB, float posX, float posZ); //updates the position of a composition
+        std::vector<unsigned int> newComposition(unsigned int type, float posX, float posZ);//creates a new composition and returns its ID
 	    void deleteComposition(unsigned int idG, unsigned int idB);
-	    void save();
-	    std::vector<unsigned int> getNextID();
+	    void save();                            //writes the xml to file
+	    std::vector<unsigned int> getNextID();  //returns the next unused ID
 
     private:
         std::vector<unsigned int> nextID;
