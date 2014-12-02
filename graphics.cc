@@ -1,19 +1,32 @@
 #include "graphics.hh"
 
-#include <iostream>
-#include <fstream>
 #include <iomanip>
 #include <sstream>
 
-#include <ACGL/OpenGL/glloaders/extensions.hh>
-#include <ACGL/Utils/FileHelpers.hh>
-#include <ACGL/Utils/StringHelpers.hh>
+#include <ACGL/OpenGL/Creator/ShaderProgramCreator.hh>
 
-#include "model.hh"
-
-using namespace std;
+Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane) {
+    this->windowSize = windowSize;
+    this->nearPlane = nearPlane;
+    this->farPlane = farPlane;
+}
 
 Graphics::Graphics() {
+}
+
+void Graphics::init() {
+    // construct VAO to give shader correct Attribute locations
+    ACGL::OpenGL::SharedArrayBuffer ab = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
+    ab->defineAttribute("aPosition", GL_FLOAT, 3);
+    ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
+    ab->defineAttribute("aNormal", GL_FLOAT, 3);
+    ACGL::OpenGL::SharedVertexArrayObject vao = std::make_shared<ACGL::OpenGL::VertexArrayObject>();
+    vao->attachAllAttributes(ab);
+
+    // look up all shader files starting with 'phong' and build a ShaderProgram from it:
+    shader = ACGL::OpenGL::ShaderProgramCreator("phong").attributeLocations(
+            vao->getAttributeLocations()).create();
+    shader->use();
 }
 
 GLFWwindow* Graphics::getWindow() {
@@ -47,18 +60,14 @@ void Graphics::setGLFWHintsForOpenGLVersion( unsigned int _version )
 
 bool Graphics::createWindow()
 {
-    /////////////////////////////////////////////////////////////////////////////////////
     // Initialise GLFW
-    //
     if ( !glfwInit() )
     {
-        ACGL::Utils::error() << "Failed to initialize GLFW" << endl;
+        ACGL::Utils::error() << "Failed to initialize GLFW" << std::endl;
         exit( -1 );
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////
     // Configure OpenGL context
-    //
     setGLFWHintsForOpenGLVersion( ACGL_OPENGL_VERSION );
 
     // activate multisampling (second parameter is the number of samples):
@@ -70,15 +79,11 @@ bool Graphics::createWindow()
     // define whether the window can get resized:
     glfwWindowHint(GLFW_RESIZABLE, true);
 
-    // non-decorated windows can be used as splash screens:
-    //glfwWindowHint( GLFW_DECORATED, false );
-
-    /////////////////////////////////////////////////////////////////////////////////////
     // try to create an OpenGL context in a window and check the supported OpenGL version:
     //                                                  R,G,B,A, Depth,Stencil
     window = glfwCreateWindow(windowSize.x, windowSize.y, "SWP MarbleGame Group C", NULL, NULL);
     if (!getWindow()) {
-        ACGL::Utils::error() << "Failed to open a GLFW window - requested OpenGL: " <<  ACGL_OPENGL_VERSION << endl;
+        ACGL::Utils::error() << "Failed to open a GLFW window - requested OpenGL: " <<  ACGL_OPENGL_VERSION << std::endl;
         return false;
     }
     glfwMakeContextCurrent(window);
@@ -86,14 +91,7 @@ bool Graphics::createWindow()
     return true;
 }
 
-Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane) {
-    this->windowSize = windowSize;
-    this->nearPlane = nearPlane;
-    this->farPlane = farPlane;
-}
-
-
-void Graphics::render(Level* level, ACGL::OpenGL::SharedShaderProgram shader)
+void Graphics::render(Level* level)
 {
     // clear the framebuffer:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -140,7 +138,7 @@ void Graphics::render(Level* level, ACGL::OpenGL::SharedShaderProgram shader)
     }
 
     // set fog Parameters
-    shader->setUniform("fogStart", (float)((farPlane-40.0f)/sqrt(2)));
+    shader->setUniform("fogEnd", (farPlane/2.0f)-10.0f);
     shader->setUniform("fogColor", level->getFogColor());
     shader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
 
@@ -148,8 +146,8 @@ void Graphics::render(Level* level, ACGL::OpenGL::SharedShaderProgram shader)
     shader->setUniform("ambientColor", level->getAmbientLight());
     shader->setUniform("camera", level->getCameraPosition());
 
-    // render the level(currently only a bunny):
-    level->render();
+    // render the level
+    level->render(shader);
 }
 
 void Graphics::setWindowSize(glm::uvec2 windowSize) {

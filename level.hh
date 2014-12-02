@@ -15,9 +15,9 @@ class Level {
         Level(std::string filePath);
         Level();
         ~Level();
-        void load(ACGL::OpenGL::SharedShaderProgram shader); // Shader is necessary for correct texture assigning
+        void load();
         void update(float runTime, glm::vec2 mouseDelta,bool wPressed, bool aPressed,bool sPressed, bool dPressed);
-        void render();
+        void render(ACGL::OpenGL::SharedShaderProgram shader);
         glm::vec3 getAmbientLight();
         Light* getDirectionalLight();
         std::vector<Light> getLights();
@@ -25,20 +25,21 @@ class Level {
         Camera* getCamera();
         glm::vec3 getCameraPosition();
         glm::vec4 getFogColor();
-        void setSkyboxSize(float size);
+        void setSkydomeSize(float size);
     private:
         std::string filePath;
-        std::vector<Object> objects;
+        std::vector<Object*> objects;
+        std::vector<Object*> physicObjects;
         std::vector<Light> lights;
         glm::vec3 ambientLight;
         glm::vec4 fogColor;
         Light directionalLight;
         Object* cameraCenter;
-        Object* skybox;
+        Object* skydome;
         Physics physics;
         Camera camera;
         Terrain terrain;
-        float skyboxSize;
+        float skydomeSize;
 };
 
 #endif
