@@ -1,7 +1,7 @@
 <composition>
-    <typeID>1</typeID>
+    <typeID>20</typeID>
     <object>
-        <filePath>../Levels/Geometry/1.obj</filePath>
+        <filePath>../Levels/Geometry/MarbleSmooth.obj</filePath>
         <xOffset>0.0</xOffset>
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
@@ -10,16 +10,9 @@
 </composition>
 
 <composition>
-    <typeID>2</typeID>
+    <typeID>40</typeID>
     <object>
-        <filePath>../Levels/Geometry/2.obj</filePath>
-        <xOffset>0.0</xOffset>
-        <yOffset>0.0</yOffset>
-        <zOffset>0.0</zOffset>
-        <scale>1.0</scale>
-    </object>
-    <object>
-        <filePath>../Levels/Geometry/3.obj</filePath>
+        <filePath>../Levels/Geometry/Block.obj</filePath>
         <xOffset>0.0</xOffset>
         <yOffset>1.0</yOffset>
         <zOffset>2.0</zOffset>
@@ -28,11 +21,47 @@
 </composition>
 
 <composition>
-    <typeID>3</typeID>
+    <typeID>60</typeID>
     <object>
-        <filePath>../Levels/Geometry/4.obj</filePath>
+        <filePath>../Levels/Geometry/Column.obj</filePath>
         <xOffset>0.0</xOffset>
         <yOffset>0.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <scale>1.0</scale>
+    </object>
+</composition>
+
+<composition>
+    <typeID>80</typeID>
+    <object>
+        <filePath>../Levels/Geometry/torch.obj</filePath>
+        <xOffset>0.0</xOffset>
+        <yOffset>0.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <scale>1.0</scale>
+    </object>
+</composition>
+
+<composition>
+    <typeID>100</typeID>
+    <object>
+        <filePath>../Levels/Geometry/Column.obj</filePath>
+        <xOffset>0.0</xOffset>
+        <yOffset>0.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <scale>1.0</scale>
+    </object>
+    <object>
+        <filePath>../Levels/Geometry/Column.obj</filePath>
+        <xOffset>2.0</xOffset>
+        <yOffset>0.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <scale>1.0</scale>
+    </object>
+    <object>
+        <filePath>../Levels/Geometry/Block.obj</filePath>
+        <xOffset>1.0</xOffset>
+        <yOffset>3.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
     </object>
