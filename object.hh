@@ -11,15 +11,14 @@
 
 class Object : public Entity {
     public:
-        Object(Model model, Material material, glm::vec3 position, glm::vec3 rotation,
-                ACGL::OpenGL::SharedShaderProgram shader);
+        Object(Model model, Material material, 
+                glm::vec3 position, glm::vec3 rotation);
         Object();
         ~Object();
-        void render();
+        void render(ACGL::OpenGL::SharedShaderProgram shader);
     private:
         Model model;
         Material material;
-        ACGL::OpenGL::SharedShaderProgram shader;
 };
 
 #endif
