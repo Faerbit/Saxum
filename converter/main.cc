@@ -7,6 +7,7 @@
 int main( int argc, char *argv[] ){
     if (argc <= 1){
         std::cout << "Converter needs the level (1,2,...) as input." << std::endl;
+        exit(-1);
     }
     std::string levelString = argv[1];
     Converter conv = Converter(levelString);
