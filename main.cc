@@ -3,10 +3,10 @@
 #include <iomanip>
 #include <sstream>
 
-void resizeCallback(GLFWwindow* window, int newWidth, int newHeight)
+static void resizeCallback(GLFWwindow* window, int newWidth, int newHeight)
 {
     // store the new window size and adjust the viewport:
-    app.getGraphics()->setWindowSize(glm::uvec2( newWidth, newHeight));
+    app.getGraphics()->resize(glm::uvec2( newWidth, newHeight));
     glViewport( 0, 0, newWidth, newHeight);
 }
 

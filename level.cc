@@ -96,9 +96,12 @@ void Level::load() {
 	physics.addTerrain(terrain.getHeightmapWidth(), terrain.getHeightmapHeight(), terrain.getHeightmap());
 }
 
-void Level::render(ACGL::OpenGL::SharedShaderProgram shader) {
+void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass) {
     for(unsigned int i = 0; i<objects.size(); i++) {
-        objects.at(i)->render(shader);
+        // do not project shadow of skydome 
+        if(lightingPass || objects.at(i) != skydome) {
+            objects.at(i)->render(shader, lightingPass);
+        }
     }
 }
 
