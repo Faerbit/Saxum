@@ -83,8 +83,17 @@ void main()
     float visibility = 1.0;
     if (shadowCoord.x > 0.0 && shadowCoord.x < 1.0) {
         if (shadowCoord.y > 0.0 && shadowCoord.y < 1.0) {
-            for (int i=0; i<16; i++) {
-                visibility -= 0.0625*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, (shadowCoord.z - bias)/shadowCoord.w)));
+            for (int i=0; i<4; i++) {
+                visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, (shadowCoord.z - bias)/shadowCoord.w)));
+            }
+            if (visibility == 1.0-(directionalIntensity/16)*4)
+            {
+                visibility = 1.0-directionalIntensity;
+            }
+            else if (visibility != 1.0) {
+                for (int i=0; i<12; i++) {
+                    visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, (shadowCoord.z - bias)/shadowCoord.w)));
+                }
             }
         }
     }
