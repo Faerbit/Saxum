@@ -12,13 +12,15 @@ Object::Object() {
 Object::~Object() {
 }
 
-void Object::render(ACGL::OpenGL::SharedShaderProgram shader) {
+void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass) {
+    if (lightingPass) {
     // set lightning parameters for this object
-    shader->setUniform("ambientFactor", material.getAmbientFactor());
-    shader->setUniform("diffuseFactor", material.getDiffuseFactor());
-    shader->setUniform("specularFactor", material.getSpecularFactor());
-    shader->setUniform("shininess", material.getShininess());
-    shader->setTexture("uTexture", material.getReference(), 0);
+        shader->setUniform("ambientFactor", material.getAmbientFactor());
+        shader->setUniform("diffuseFactor", material.getDiffuseFactor());
+        shader->setUniform("specularFactor", material.getSpecularFactor());
+        shader->setUniform("shininess", material.getShininess());
+        shader->setTexture("uTexture", material.getReference(), 0);
+    }
     // set model matrix
     glm::mat4 modelMatrix = glm::translate(getPosition()) * getRotation() * glm::scale<float>(glm::vec3(model.getScale()));
     shader->setUniform( "modelMatrix", modelMatrix);

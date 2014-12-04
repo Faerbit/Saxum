@@ -11,7 +11,7 @@ void Application::init()
     ignoredMouseUpdates = 0;
     cameraLock = true;
     // set Skybox size
-    level.setSkydomeSize((graphics.getFarPlane()/2.0f)-10.0f);
+    level.setSkydomeSize((graphics.getFarPlane())-31.0f);
 
     // define where shaders and textures can be found:
     ACGL::Base::Settings::the()->setResourcePath("../");
