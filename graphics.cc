@@ -29,7 +29,7 @@ void Graphics::init() {
     lightingShader = ShaderProgramCreator("phong").attributeLocations(
             vao->getAttributeLocations()).create();
 
-    depthTexture = SharedTexture2D( new Texture2D(glm::vec2(windowSize.x, windowSize.y), GL_DEPTH24_STENCIL8));
+    depthTexture = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH24_STENCIL8));
     depthTexture->setMinFilter(GL_LINEAR);
     depthTexture->setMagFilter(GL_LINEAR);
     depthTexture->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
@@ -57,7 +57,6 @@ void Graphics::render(Level* level)
     // render depth texture for sun
     framebuffer->bind(); 
     glClear(GL_DEPTH_BUFFER_BIT);
-    glCullFace(GL_FRONT);
     depthShader->use();
     glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
     glm::mat4 depthViewProjectionMatrix =  glm::ortho<float>(-20, 20, -20, 20, -20, 40) * 
@@ -71,7 +70,6 @@ void Graphics::render(Level* level)
     // final render pass
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glCullFace(GL_BACK);
 
     lightingShader->use();
 
