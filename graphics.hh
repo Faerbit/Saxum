@@ -30,8 +30,12 @@ class Graphics {
         GLFWwindow* window;
         ACGL::OpenGL::SharedShaderProgram lightingShader;
         ACGL::OpenGL::SharedShaderProgram depthShader;
-        ACGL::OpenGL::SharedTexture2D depthTexture;
-        ACGL::OpenGL::SharedFrameBufferObject framebuffer;
+        ACGL::OpenGL::SharedTexture2D depthTexture_near;
+        ACGL::OpenGL::SharedFrameBufferObject framebuffer_near;
+        ACGL::OpenGL::SharedTexture2D depthTexture_middle;
+        ACGL::OpenGL::SharedFrameBufferObject framebuffer_middle;
+        ACGL::OpenGL::SharedTexture2D depthTexture_far;
+        ACGL::OpenGL::SharedFrameBufferObject framebuffer_far;
 };
 
 #endif
