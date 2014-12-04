@@ -22,7 +22,6 @@ class Graphics {
         GLFWwindow* getWindow();
         void resize(glm::uvec2 windowSize);
         float getFarPlane();
-        ACGL::OpenGL::SharedFrameBufferObject framebuffer;
     private:
         void setGLFWHintsForOpenGLVersion( unsigned int _version );
         glm::uvec2 windowSize;
@@ -33,6 +32,7 @@ class Graphics {
         ACGL::OpenGL::SharedShaderProgram depthShader;
         ACGL::OpenGL::SharedTexture2D depthTexture_depth;
         ACGL::OpenGL::SharedTexture2D depthTexture_colour;
+        ACGL::OpenGL::SharedFrameBufferObject framebuffer;
 };
 
 #endif
