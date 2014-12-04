@@ -75,7 +75,7 @@ void Level::load() {
     //set lighting parameters
     ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
     fogColor = glm::vec4(0.10f, 0.14f, 0.14f, 1.0f);
-    directionalLight = Light(glm::vec3(-0.1f, 0.8f, -0.9f), glm::vec3(1.0f, 1.0f, 0.9f), 0.2f);
+    directionalLight = Light(glm::vec3(-1.0f, 1.5f, 1.0f), glm::vec3(1.0f, 1.0f, 0.9f), 0.2f);
     Light light = Light(glm::vec3(-3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 5.0f);
     lights.push_back(light);
     Light light2 = Light(glm::vec3(3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
