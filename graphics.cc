@@ -57,6 +57,7 @@ void Graphics::render(Level* level)
     // render depth texture for sun
     framebuffer->bind(); 
     glClear(GL_DEPTH_BUFFER_BIT);
+    glCullFace(GL_FRONT);
     depthShader->use();
     glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
     glm::mat4 depthViewProjectionMatrix =  glm::ortho<float>(-20, 20, -20, 20, -20, 40) * 
@@ -70,6 +71,7 @@ void Graphics::render(Level* level)
     // final render pass
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glCullFace(GL_BACK);
 
     lightingShader->use();
 
