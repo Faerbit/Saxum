@@ -59,7 +59,8 @@ void main()
     }
 
     // shadows 
-    float bias = 0.001;
+    float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
+    bias = clamp(bias, 0.0, 0.01);
     vec3 biasedShadowCoord = vec3(shadowCoord);
     biasedShadowCoord.z = shadowCoord.z - bias;
     float visibility = 1.0;
