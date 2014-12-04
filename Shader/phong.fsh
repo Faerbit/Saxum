@@ -68,6 +68,12 @@ float sampleShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
     return visibility;
 }
 
+float distanceToBorder(vec2 vector) {
+    float xDistance = min(vector.x, 1.0-vector.x);
+    float yDistance = min(vector.y, 1.0-vector.y);
+    return min(xDistance, yDistance);
+}
+
 void main()
 {   
     vec3 ambientColor = ambientFactor * ambientColor;
@@ -102,21 +108,16 @@ void main()
 
     // shadows 
     float visibility = 1.0;
-    if ((shadowCoord_far.x > 0.0 && shadowCoord_far.x < 1.0) &&
-        (shadowCoord_far.y > 0.0 && shadowCoord_far.y < 1.0)) {
-        if ((shadowCoord_middle.x > 0.0 && shadowCoord_middle.x < 1.0) &&
-            (shadowCoord_middle.y > 0.0 && shadowCoord_middle.y < 1.0)) {
-            if ((shadowCoord_near.x > 0.0 && shadowCoord_near.x < 1.0) &&
-            (shadowCoord_near.y > 0.0 && shadowCoord_near.y < 1.0)) {
+    if (distanceToBorder(shadowCoord_middle.xy) <= 0.5 && distanceToBorder(shadowCoord_middle.xy) > 0.0) {
+        if (distanceToBorder(shadowCoord_near.xy) <= 0.5 && distanceToBorder(shadowCoord_near.xy) > 0.0) {
                 visibility = sampleShadow(shadowMap_near, shadowCoord_near);
-            }
-            else {
-                visibility = sampleShadow(shadowMap_middle, shadowCoord_middle);
-            }
         }
         else {
-            visibility = sampleShadow(shadowMap_far, shadowCoord_far);
+            visibility = sampleShadow(shadowMap_middle, shadowCoord_middle);
         }
+    }
+    else {
+        visibility = sampleShadow(shadowMap_far, shadowCoord_far);
     }
 
     specularColor *= visibility;
