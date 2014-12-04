@@ -7,7 +7,7 @@
 #include "model.hh"
 class Terrain {
     public:
-        Terrain(std::string filePath);
+        Terrain(std::string levelNum);
         Terrain();
         ~Terrain();
         void load();
@@ -19,7 +19,7 @@ class Terrain {
 
     private:
         Material material;
-        std::string filePath;
+        std::string levelNum;
 	unsigned int heightmapHeight, heightmapWidth;
 	float** heightmap;				//can be accessed like 'float[][]'
 	bool heightmapChanged;
