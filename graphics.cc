@@ -5,6 +5,8 @@
 
 #include <ACGL/OpenGL/Creator/ShaderProgramCreator.hh>
 
+using namespace ACGL::OpenGL;
+
 Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane) {
     this->windowSize = windowSize;
     this->nearPlane = nearPlane;
@@ -16,17 +18,37 @@ Graphics::Graphics() {
 
 void Graphics::init() {
     // construct VAO to give shader correct Attribute locations
-    ACGL::OpenGL::SharedArrayBuffer ab = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
+    SharedArrayBuffer ab = SharedArrayBuffer(new ArrayBuffer());
     ab->defineAttribute("aPosition", GL_FLOAT, 3);
     ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
     ab->defineAttribute("aNormal", GL_FLOAT, 3);
-    ACGL::OpenGL::SharedVertexArrayObject vao = std::make_shared<ACGL::OpenGL::VertexArrayObject>();
+    SharedVertexArrayObject vao = SharedVertexArrayObject(new VertexArrayObject());
     vao->attachAllAttributes(ab);
 
     // look up all shader files starting with 'phong' and build a ShaderProgram from it:
-    shader = ACGL::OpenGL::ShaderProgramCreator("phong").attributeLocations(
+    lightingShader = ShaderProgramCreator("phong").attributeLocations(
             vao->getAttributeLocations()).create();
-    shader->use();
+
+    depthTexture_depth = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH24_STENCIL8));
+    depthTexture_depth->setMinFilter(GL_NEAREST);
+    depthTexture_depth->setMagFilter(GL_NEAREST);
+    depthTexture_depth->setWrapS(GL_CLAMP_TO_EDGE);
+    depthTexture_depth->setWrapT(GL_CLAMP_TO_EDGE);
+    depthTexture_colour = SharedTexture2D( new Texture2D(windowSize));
+    depthTexture_colour->setMinFilter(GL_LINEAR);
+    depthTexture_colour->setMagFilter(GL_LINEAR);
+    depthTexture_colour->setWrapS(GL_CLAMP_TO_EDGE);
+    depthTexture_colour->setWrapT(GL_CLAMP_TO_EDGE);
+
+    framebuffer = SharedFrameBufferObject(new FrameBufferObject());
+    framebuffer->attachColorTexture("fragmentDepth", depthTexture_colour);
+    framebuffer->setDepthTexture(depthTexture_depth);
+    framebuffer->validate();
+
+    depthShader = ShaderProgramCreator("depth")
+        .attributeLocations(vao->getAttributeLocations())
+        .fragmentDataLocations(framebuffer->getAttachmentLocations())
+        .create();
 }
 
 GLFWwindow* Graphics::getWindow() {
@@ -35,6 +57,121 @@ GLFWwindow* Graphics::getWindow() {
 
 glm::uvec2 Graphics::getWindowSize() {
     return windowSize;
+}
+
+void Graphics::render(Level* level)
+{
+    // render depth texture for sun
+    framebuffer->bind(); 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    depthShader->use();
+    glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
+    glm::mat4 depthViewProjectionMatrix =  glm::ortho<float>(-20, 20, -20, 20, -20, 40) * 
+        glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
+    depthShader->setUniform("viewProjectionMatrix", depthViewProjectionMatrix);
+    level->render(depthShader, false);
+    if (!framebuffer->isFrameBufferObjectComplete()) {
+        printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
+    }
+
+    // final render pass
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    lightingShader->use();
+
+    //set view and projection matrix
+    glm::mat4 lightingViewProjectionMatrix = buildFrustum(75.0f, 0.1f, farPlane, (float)windowSize.x/(float)windowSize.y) * buildViewMatrix(level);
+    lightingShader->setUniform("lightingViewProjectionMatrix", lightingViewProjectionMatrix);
+
+
+    // convert texture to homogenouse coordinates
+    glm::mat4 biasMatrix(
+    0.5, 0.0, 0.0, 0.0,
+    0.0, 0.5, 0.0, 0.0,
+    0.0, 0.0, 0.5, 0.0,
+    0.5, 0.5, 0.5, 1.0
+    );
+    glm::mat4 depthBiasMVP = biasMatrix*depthViewProjectionMatrix;
+    
+    lightingShader->setUniform("shadowMVP", depthBiasMVP);
+    lightingShader->setTexture("shadowMap", depthTexture_colour, 2);
+
+    //set lighting parameters
+    if (level->getLights().size() > 0) {
+        lightingShader->setUniform("lightCount", (int) level->getLights().size());
+
+        // TODO look into doing this less often
+        // Build light position array
+        glm::vec3 lightSources[level->getLights().size()];
+        for(unsigned int i = 0; i<level->getLights().size(); i++) {
+            lightSources[i] = level->getLights()[i].getPosition();
+        }
+        glUniform3fv(lightingShader->getUniformLocation("lightSources"),
+            sizeof(lightSources),  (GLfloat*) lightSources);
+        // Build light colour array
+        glm::vec3 lightColours[level->getLights().size()];
+        for(unsigned int i = 0; i<level->getLights().size(); i++) {
+            lightColours[i] = level->getLights()[i].getColour();
+        }
+        glUniform3fv(lightingShader->getUniformLocation("lightColors"),
+            sizeof(lightColours),  (GLfloat*) lightColours);
+        // Build light attenuation array
+        float lightIntensities[level->getLights().size()];
+        for(unsigned int i = 0; i<level->getLights().size(); i++) {
+            lightIntensities[i] = level->getLights()[i].getIntensity();
+        }
+        glUniform1fv(lightingShader->getUniformLocation("lightIntensities"),
+            sizeof(lightIntensities),  (GLfloat*) lightIntensities);
+    }
+    // set directional Light
+    if(level->getDirectionalLight()) {
+        lightingShader->setUniform("directionalLightVector",
+            level->getDirectionalLight()->getPosition());
+        lightingShader->setUniform("directionalColor",
+            level->getDirectionalLight()->getColour());
+        lightingShader->setUniform("directionalIntensity",
+            level->getDirectionalLight()->getIntensity());
+    }
+
+    // set fog Parameters
+    lightingShader->setUniform("fogEnd", (farPlane)-35.0f);
+    lightingShader->setUniform("fogColor", level->getFogColor());
+    lightingShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
+
+    // set Material Parameters
+    lightingShader->setUniform("ambientColor", level->getAmbientLight());
+    lightingShader->setUniform("camera", level->getCameraPosition());
+
+    // render the level
+    level->render(lightingShader, true);
+}
+
+void Graphics::resize(glm::uvec2 windowSize) {
+    this->windowSize = windowSize;
+    depthTexture_depth->resize(windowSize);
+    depthTexture_colour->resize(windowSize);
+}
+
+glm::mat4 Graphics::buildFrustum( float phiInDegree, float _near, float _far, float aspectRatio) {
+
+    float phiHalfInRadians = 0.5*phiInDegree * (M_PI/180.0);
+    float top = _near * tan( phiHalfInRadians );
+    float bottom = -top;
+    float left  = bottom * aspectRatio;
+    float right = -left;
+
+    return glm::frustum(left, right, bottom, top, _near, _far);
+}
+
+glm::mat4 Graphics::buildViewMatrix(Level* level) {
+    //construct lookAt (cameraPosition = cameraCenter + cameraVector
+    return glm::lookAt((level->getCameraCenter()->getPosition() + level->getCamera()->getVector()),
+            level->getCameraCenter()->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
+float Graphics::getFarPlane() {
+    return farPlane;
 }
 
 void Graphics::setGLFWHintsForOpenGLVersion( unsigned int _version )
@@ -89,88 +226,4 @@ bool Graphics::createWindow()
     glfwMakeContextCurrent(window);
     ACGL::init();
     return true;
-}
-
-void Graphics::render(Level* level)
-{
-    // clear the framebuffer:
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    //set view and projection matrix
-    shader->setUniform("projectionMatrix", buildFrustum(75.0f, 0.1f, 100.0f, (float)windowSize.x/(float)windowSize.y) );
-    shader->setUniform("viewMatrix", buildViewMatrix(level));
-
-    //set lighting parameters
-    if (level->getLights().size() > 0) {
-        shader->setUniform("lightCount", (int) level->getLights().size());
-
-        // TODO look into doing this less often
-        // Build light position array
-        glm::vec3 lightSources[level->getLights().size()];
-        for(unsigned int i = 0; i<level->getLights().size(); i++) {
-            lightSources[i] = level->getLights()[i].getPosition();
-        }
-        glUniform3fv(shader->getUniformLocation("lightSources"),
-            sizeof(lightSources),  (GLfloat*) lightSources);
-        // Build light colour array
-        glm::vec3 lightColours[level->getLights().size()];
-        for(unsigned int i = 0; i<level->getLights().size(); i++) {
-            lightColours[i] = level->getLights()[i].getColour();
-        }
-        glUniform3fv(shader->getUniformLocation("lightColors"),
-            sizeof(lightColours),  (GLfloat*) lightColours);
-        // Build light attenuation array
-        float lightIntensities[level->getLights().size()];
-        for(unsigned int i = 0; i<level->getLights().size(); i++) {
-            lightIntensities[i] = level->getLights()[i].getIntensity();
-        }
-        glUniform1fv(shader->getUniformLocation("lightIntensities"),
-            sizeof(lightIntensities),  (GLfloat*) lightIntensities);
-    }
-    // set directional Light
-    if(level->getDirectionalLight()) {
-        shader->setUniform("directionalLightVector",
-            level->getDirectionalLight()->getPosition());
-        shader->setUniform("directionalColor",
-            level->getDirectionalLight()->getColour());
-        shader->setUniform("directionalIntensity",
-            level->getDirectionalLight()->getIntensity());
-    }
-
-    // set fog Parameters
-    shader->setUniform("fogEnd", (farPlane/2.0f)-10.0f);
-    shader->setUniform("fogColor", level->getFogColor());
-    shader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
-
-    // set Material Parameters
-    shader->setUniform("ambientColor", level->getAmbientLight());
-    shader->setUniform("camera", level->getCameraPosition());
-
-    // render the level
-    level->render(shader);
-}
-
-void Graphics::setWindowSize(glm::uvec2 windowSize) {
-    this->windowSize = windowSize;
-}
-
-glm::mat4 Graphics::buildFrustum( float phiInDegree, float _near, float _far, float aspectRatio) {
-
-    float phiHalfInRadians = 0.5*phiInDegree * (M_PI/180.0);
-    float top = _near * tan( phiHalfInRadians );
-    float bottom = -top;
-    float left  = bottom * aspectRatio;
-    float right = -left;
-
-    return glm::frustum(left, right, bottom, top, _near, _far);
-}
-
-glm::mat4 Graphics::buildViewMatrix(Level* level) {
-    //construct lookAt (cameraPosition = cameraCenter + cameraVector
-    return glm::lookAt((level->getCameraCenter()->getPosition() + level->getCamera()->getVector()),
-            level->getCameraCenter()->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
-}
-
-float Graphics::getFarPlane() {
-    return farPlane;
 }

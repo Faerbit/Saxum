@@ -3,10 +3,12 @@
 in vec3 vNormal;
 in vec2 vTexCoord;
 in vec4 fragPosition;
+in vec4 shadowCoord;
 
 out vec4 oColor;
 
 uniform sampler2D uTexture;
+uniform sampler2D shadowMap;
 uniform vec3 ambientColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
@@ -30,6 +32,8 @@ void main()
     vec3 diffuseColor = vec3(0.0, 0.0, 0.0);
     vec3 specularColor = vec3(0.0, 0.0, 0.0);
 
+
+    // direction lighting
     if(length(directionalLightVector)>0.0f) {
         vec3 directionalVector = normalize(directionalLightVector);
         diffuseColor += clamp(dot(normalize(vNormal), directionalVector)
@@ -38,6 +42,8 @@ void main()
         specularColor += clamp(pow((dot((cameraVector+directionalVector),normalize(vNormal))/(length(cameraVector+directionalVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
         *specularFactor*directionalIntensity*directionalColor;
     }
+
+    // point lights
     for(int i = 0; i<lightCount; i++) {
         float distance = distance(lightSources[i], vec3(fragPosition));
         // only take lights into account with meaningful contribution
@@ -51,6 +57,20 @@ void main()
             *specularFactor*intensity*lightColors[i];
         }
     }
+
+    // shadows 
+    float bias = 0.005;
+    float visibility = 1.0;
+    if (shadowCoord.x > 0.0 && shadowCoord.x < 1.0) {
+        if (shadowCoord.y > 0.0 && shadowCoord.y < 1.0) {
+            if (texture(shadowMap, shadowCoord.xy).z < shadowCoord.z-bias) {
+                visibility = 0.5;
+            }
+        }
+    }
+
+    specularColor *= visibility;
+    diffuseColor  *= visibility;
 
     vec3 finalColor = specularColor + diffuseColor + ambientColor;
     float distanceCameraCenter = distance(cameraCenter, vec3(fragPosition));

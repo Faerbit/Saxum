@@ -4,6 +4,8 @@
 
 #include <GLFW/glfw3.h>
 #include <ACGL/Math/Math.hh>
+#include <ACGL/OpenGL/Objects/FrameBufferObject.hh>
+
 #include "level.hh"
 
 class Graphics {
@@ -18,15 +20,19 @@ class Graphics {
         glm::uvec2 getWindowSize();
         bool createWindow();
         GLFWwindow* getWindow();
-        void setWindowSize(glm::uvec2 windowSize);
+        void resize(glm::uvec2 windowSize);
         float getFarPlane();
+        ACGL::OpenGL::SharedFrameBufferObject framebuffer;
     private:
         void setGLFWHintsForOpenGLVersion( unsigned int _version );
         glm::uvec2 windowSize;
         float nearPlane;
         float farPlane;
         GLFWwindow* window;
-        ACGL::OpenGL::SharedShaderProgram shader;
+        ACGL::OpenGL::SharedShaderProgram lightingShader;
+        ACGL::OpenGL::SharedShaderProgram depthShader;
+        ACGL::OpenGL::SharedTexture2D depthTexture_depth;
+        ACGL::OpenGL::SharedTexture2D depthTexture_colour;
 };
 
 #endif
