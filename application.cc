@@ -7,6 +7,8 @@ Application::Application() {
 
 void Application::init()
 {
+    // choose Level             TODO: Choose this in a menu
+    this->level = Level("0");
     // Don't change this!
     ignoredMouseUpdates = 0;
     cameraLock = true;
