@@ -3,12 +3,16 @@
 in vec3 vNormal;
 in vec2 vTexCoord;
 in vec4 fragPosition;
-in vec4 shadowCoord;
+in vec4 shadowCoord_near;
+in vec4 shadowCoord_middle;
+in vec4 shadowCoord_far;
 
 out vec4 oColor;
 
 uniform sampler2D uTexture;
-uniform sampler2DShadow shadowMap;
+uniform sampler2DShadow shadowMap_near;
+uniform sampler2DShadow shadowMap_middle;
+uniform sampler2DShadow shadowMap_far;
 uniform vec3 ambientColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
@@ -45,6 +49,25 @@ vec2 poissonDisk[16] = vec2[](
    vec2( 0.14383161, -0.14100790 )
 );
 
+float sampleShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
+    float visibility = 1.0;
+    float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
+    bias = clamp(bias, 0.0, 0.01);
+    for (int i=0; i<4; i++) {
+        visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, (shadowCoord.z - bias)/shadowCoord.w)));
+    }
+    if (visibility == 1.0-(directionalIntensity/16)*4)
+    {
+        visibility = 1.0-directionalIntensity;
+    }
+    else if (visibility != 1.0) {
+        for (int i=0; i<12; i++) {
+            visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, (shadowCoord.z - bias)/shadowCoord.w)));
+        }
+    }
+    return visibility;
+}
+
 void main()
 {   
     vec3 ambientColor = ambientFactor * ambientColor;
@@ -78,23 +101,21 @@ void main()
     }
 
     // shadows 
-    float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
-    bias = clamp(bias, 0.0, 0.01);
     float visibility = 1.0;
-    if (shadowCoord.x > 0.0 && shadowCoord.x < 1.0) {
-        if (shadowCoord.y > 0.0 && shadowCoord.y < 1.0) {
-            for (int i=0; i<4; i++) {
-                visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, (shadowCoord.z - bias)/shadowCoord.w)));
+    if ((shadowCoord_far.x > 0.0 && shadowCoord_far.x < 1.0) &&
+        (shadowCoord_far.y > 0.0 && shadowCoord_far.y < 1.0)) {
+        if ((shadowCoord_middle.x > 0.0 && shadowCoord_middle.x < 1.0) &&
+            (shadowCoord_middle.y > 0.0 && shadowCoord_middle.y < 1.0)) {
+            if ((shadowCoord_near.x > 0.0 && shadowCoord_near.x < 1.0) &&
+            (shadowCoord_near.y > 0.0 && shadowCoord_near.y < 1.0)) {
+                visibility = sampleShadow(shadowMap_near, shadowCoord_near);
             }
-            if (visibility == 1.0-(directionalIntensity/16)*4)
-            {
-                visibility = 1.0-directionalIntensity;
+            else {
+                visibility = sampleShadow(shadowMap_middle, shadowCoord_middle);
             }
-            else if (visibility != 1.0) {
-                for (int i=0; i<12; i++) {
-                    visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, (shadowCoord.z - bias)/shadowCoord.w)));
-                }
-            }
+        }
+        else {
+            visibility = sampleShadow(shadowMap_far, shadowCoord_far);
         }
     }
 
