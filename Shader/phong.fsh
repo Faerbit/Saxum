@@ -8,7 +8,7 @@ in vec4 shadowCoord;
 out vec4 oColor;
 
 uniform sampler2D uTexture;
-uniform sampler2D shadowMap;
+uniform sampler2DShadow shadowMap;
 uniform vec3 ambientColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
@@ -59,13 +59,16 @@ void main()
     }
 
     // shadows 
-    float bias = 0.005;
+    float bias = 0.001;
+    vec3 biasedShadowCoord = vec3(shadowCoord);
+    biasedShadowCoord.z = shadowCoord.z - bias;
     float visibility = 1.0;
     if (shadowCoord.x > 0.0 && shadowCoord.x < 1.0) {
         if (shadowCoord.y > 0.0 && shadowCoord.y < 1.0) {
-            if (texture(shadowMap, shadowCoord.xy).z < shadowCoord.z-bias) {
-                visibility = 0.5;
-            }
+            visibility = texture(shadowMap, biasedShadowCoord);
+            //if (texture(shadowMap, vec3(shadowCoord), bias) < shadowCoord.z) {
+                //visibility = 0.5;
+            //}
         }
     }
 

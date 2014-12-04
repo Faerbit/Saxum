@@ -29,20 +29,13 @@ void Graphics::init() {
     lightingShader = ShaderProgramCreator("phong").attributeLocations(
             vao->getAttributeLocations()).create();
 
-    depthTexture_depth = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH24_STENCIL8));
-    depthTexture_depth->setMinFilter(GL_NEAREST);
-    depthTexture_depth->setMagFilter(GL_NEAREST);
-    depthTexture_depth->setWrapS(GL_CLAMP_TO_EDGE);
-    depthTexture_depth->setWrapT(GL_CLAMP_TO_EDGE);
-    depthTexture_colour = SharedTexture2D( new Texture2D(windowSize));
-    depthTexture_colour->setMinFilter(GL_LINEAR);
-    depthTexture_colour->setMagFilter(GL_LINEAR);
-    depthTexture_colour->setWrapS(GL_CLAMP_TO_EDGE);
-    depthTexture_colour->setWrapT(GL_CLAMP_TO_EDGE);
+    depthTexture = SharedTexture2D( new Texture2D(glm::vec2(windowSize.x, windowSize.y), GL_DEPTH24_STENCIL8));
+    depthTexture->setMinFilter(GL_LINEAR);
+    depthTexture->setMagFilter(GL_LINEAR);
+    depthTexture->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
 
     framebuffer = SharedFrameBufferObject(new FrameBufferObject());
-    framebuffer->attachColorTexture("fragmentDepth", depthTexture_colour);
-    framebuffer->setDepthTexture(depthTexture_depth);
+    framebuffer->setDepthTexture(depthTexture);
     framebuffer->validate();
 
     depthShader = ShaderProgramCreator("depth")
@@ -63,7 +56,7 @@ void Graphics::render(Level* level)
 {
     // render depth texture for sun
     framebuffer->bind(); 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
     depthShader->use();
     glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
     glm::mat4 depthViewProjectionMatrix =  glm::ortho<float>(-20, 20, -20, 20, -20, 40) * 
@@ -95,7 +88,7 @@ void Graphics::render(Level* level)
     glm::mat4 depthBiasMVP = biasMatrix*depthViewProjectionMatrix;
     
     lightingShader->setUniform("shadowMVP", depthBiasMVP);
-    lightingShader->setTexture("shadowMap", depthTexture_colour, 2);
+    lightingShader->setTexture("shadowMap", depthTexture, 1);
 
     //set lighting parameters
     if (level->getLights().size() > 0) {
@@ -149,8 +142,7 @@ void Graphics::render(Level* level)
 
 void Graphics::resize(glm::uvec2 windowSize) {
     this->windowSize = windowSize;
-    depthTexture_depth->resize(windowSize);
-    depthTexture_colour->resize(windowSize);
+    depthTexture->resize(glm::vec2(windowSize.x, windowSize.y));
 }
 
 glm::mat4 Graphics::buildFrustum( float phiInDegree, float _near, float _far, float aspectRatio) {
