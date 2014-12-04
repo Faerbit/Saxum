@@ -2,9 +2,9 @@
 
 
 
-Level::Level(std::string filePath){
-    this->filePath = filePath;
-    this->terrain = Terrain(filePath + "/terrain");
+Level::Level(std::string levelNum){
+    this->levelNum = levelNum;
+    this->terrain = Terrain(levelNum);
     skydomeSize = 50.0f;
 }
 
@@ -24,6 +24,31 @@ void Level::load() {
     
     // currently hard coded should later read this stuff out of a file
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
+    
+    /*Loading Objects via xml:
+    XMLDocument* doc = new XMLDocument();
+    const char* xmlFile = ("../Levels/ObjectSetups/Level" + levelNum + ".xml").c_str();
+    doc->LoadFile(xmlFile);
+    if (doc->ErrorID()!=0){
+        printf("Could not open ObjectSetupXml!\n");
+        exit(-1);
+    }
+    XMLDocument* compositions = new XMLDocument();
+    const char* compositionsFile = "../Levels/ObjectSetups/Compositions.xml";
+    compositions->LoadFile(compositionsFile);
+    if (compositions->ErrorID()!=0){
+        printf("Could not open Compositions!\n");
+        exit(-1);
+    }
+    XMLElement* thisComposition = compositions->FirstChildElement("composition");
+    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement()){
+        int thisType;
+        thisComposition->QueryIntAttribute("typeID", &thisType);
+        if(thisType == type){
+            ...
+        }
+    }
+    */
     
     //add player
     Model model = Model("MarbleSmooth.obj", 0.75f);
