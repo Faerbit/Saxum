@@ -35,6 +35,8 @@ void Graphics::init() {
     depthTexture_near = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH24_STENCIL8));
     depthTexture_near->setMinFilter(GL_NEAREST);
     depthTexture_near->setMagFilter(GL_NEAREST);
+    depthTexture_near->setWrapS(GL_CLAMP_TO_EDGE);
+    depthTexture_near->setWrapT(GL_CLAMP_TO_EDGE);
     depthTexture_near->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
 
     framebuffer_near = SharedFrameBufferObject(new FrameBufferObject());
@@ -44,6 +46,8 @@ void Graphics::init() {
     depthTexture_middle = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH24_STENCIL8));
     depthTexture_middle->setMinFilter(GL_NEAREST);
     depthTexture_middle->setMagFilter(GL_NEAREST);
+    depthTexture_middle->setWrapS(GL_CLAMP_TO_EDGE);
+    depthTexture_middle->setWrapT(GL_CLAMP_TO_EDGE);
     depthTexture_middle->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
 
     framebuffer_middle = SharedFrameBufferObject(new FrameBufferObject());
@@ -53,6 +57,8 @@ void Graphics::init() {
     depthTexture_far = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH24_STENCIL8));
     depthTexture_far->setMinFilter(GL_NEAREST);
     depthTexture_far->setMagFilter(GL_NEAREST);
+    depthTexture_far->setWrapS(GL_CLAMP_TO_EDGE);
+    depthTexture_far->setWrapT(GL_CLAMP_TO_EDGE);
     depthTexture_far->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
 
     framebuffer_far = SharedFrameBufferObject(new FrameBufferObject());
