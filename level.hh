@@ -28,6 +28,7 @@ class Level {
         glm::vec4 getFogColor();
         void setSkydomeSize(float size);
     private:
+        void errorCheck(tinyxml2::XMLError error);
         std::string levelNum;
         std::vector<Object*> objects;
         std::vector<Object*> physicObjects;
