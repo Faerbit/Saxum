@@ -1,5 +1,5 @@
 #include "level.hh"
-
+using namespace tinyxml2;
 
 
 Level::Level(std::string levelNum){
@@ -17,9 +17,30 @@ Level::~Level() {
     }
 }
 
-using namespace tinyxml2;
-void Level::load() {
 
+void Level::errorCheck(XMLError error){
+    if (error) {
+        printf("XMLError: ");
+        if (error == XML_WRONG_ATTRIBUTE_TYPE) {
+            printf("Wrong attribute type.\n");
+        }
+        else if (error == XML_NO_ATTRIBUTE) {
+            printf("No attribute.\n");
+        }
+        else if (error == XML_CAN_NOT_CONVERT_TEXT) {
+            printf("Can not convert text.\n");
+        }
+        else if (error == XML_NO_TEXT_NODE) {
+            printf("No text.\n");
+        }
+        else {
+            printf("Unknown error.\n");
+        }
+    }
+}
+
+void Level::load() {
+    XMLError error=XML_NO_ERROR;
     this->physics = Physics();
     this->physics.init();
     
@@ -43,22 +64,31 @@ void Level::load() {
     }
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-        int thisType;
-        thisComposition->QueryIntAttribute("typeID", &thisType);
+        int thisType = 0;
+        error = thisComposition->FirstChildElement("typeID")->QueryIntText(&thisType);
+        errorCheck(error);
         XMLElement* compositionType = compositions->FirstChildElement("composition");
         for(; compositionType; compositionType=compositionType->NextSiblingElement("composition")){
-            int compositionID;
-            compositionType->QueryIntAttribute("typeID", &compositionID);
+            int compositionID = 0;
+            error = compositionType->FirstChildElement("typeID")->QueryIntText(&compositionID);
+            errorCheck(error);
             if(thisType == compositionID){
                 XMLElement* object = compositionType->FirstChildElement("object");
                 for(; object; object=object->NextSiblingElement("object")){
-                
+                    const char* charModelPath = object->FirstChildElement("modelPath")->GetText();
+                    if(charModelPath == NULL){
+                        printf("XMLError: No modelPath found.\n");
+                    }
+                    std::string modelPath = charModelPath;
+                    float scale;
+                    object->FirstChildElement("scale")->QueryFloatText(&scale);
+                    Model model = Model(modelPath, scale);
+                    
                 }
                 XMLElement* light = compositionType->FirstChildElement("light");
                 for(; light; light=light->NextSiblingElement("light")){
                 
                 }
-                //Model model = Model("MarbleSmooth.obj", 0.75f);
             }
         }
     }
