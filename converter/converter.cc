@@ -30,7 +30,7 @@ Converter::Converter(std::string level){
     }else{
         XMLElement* thisComposition = doc->FirstChildElement("composition");
         int idGreen, idBlue;
-        for(; thisComposition; thisComposition=thisComposition->NextSiblingElement()){
+        for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
             thisComposition->QueryIntAttribute("idGreen", &idGreen);
             thisComposition->QueryIntAttribute("idBlue", &idBlue);
             if(idGreen > nextID[0] || (idGreen == nextID[0] && idBlue > nextID[1])){
@@ -96,7 +96,7 @@ std::vector<unsigned int> Converter::newComposition(unsigned int type, float pos
 void Converter::updateComposition(unsigned int idG, unsigned int idB, float posX, float posZ){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     int idGreen, idBlue;
-    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement()){
+    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
         thisComposition->QueryIntAttribute("idGreen", &idGreen);
         thisComposition->QueryIntAttribute("idBlue", &idBlue);
         if(idGreen == idG && idBlue == idB){
@@ -109,7 +109,7 @@ void Converter::updateComposition(unsigned int idG, unsigned int idB, float posX
 void Converter::deleteComposition(unsigned int idG, unsigned int idB){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     int idGreen, idBlue;
-    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement()){
+    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
         thisComposition->QueryIntAttribute("idGreen", &idGreen);
         thisComposition->QueryIntAttribute("idBlue", &idBlue);
         if(idGreen == idG && idBlue == idB){
@@ -129,7 +129,7 @@ std::vector<unsigned int> Converter::getNextID(){
 
 /*  finding a typeID in compositions:
     XMLElement* thisComposition = compositions->FirstChildElement("composition");
-    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement()){
+    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
         int thisType;
         thisComposition->QueryIntAttribute("typeID", &thisType);
         if(thisType == type){

@@ -9,7 +9,7 @@
 #include "material.hh"
 #include "camera.hh"
 #include "physics.hh"
-#include "converter/tinyxml2.hh"
+#include "tinyxml2.hh"
 
 class Level {
     public:
