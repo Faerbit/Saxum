@@ -17,6 +17,7 @@ Level::~Level() {
     }
 }
 
+using namespace tinyxml2;
 void Level::load() {
 
     this->physics = Physics();
@@ -25,7 +26,7 @@ void Level::load() {
     // currently hard coded should later read this stuff out of a file
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
     
-    /*Loading Objects via xml:
+    //Loading Objects via xml:
     XMLDocument* doc = new XMLDocument();
     const char* xmlFile = ("../Levels/ObjectSetups/Level" + levelNum + ".xml").c_str();
     doc->LoadFile(xmlFile);
@@ -40,20 +41,33 @@ void Level::load() {
         printf("Could not open Compositions!\n");
         exit(-1);
     }
-    XMLElement* thisComposition = compositions->FirstChildElement("composition");
-    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement()){
+    XMLElement* thisComposition = doc->FirstChildElement("composition");
+    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
         int thisType;
         thisComposition->QueryIntAttribute("typeID", &thisType);
-        if(thisType == type){
-            ...
+        XMLElement* compositionType = compositions->FirstChildElement("composition");
+        for(; compositionType; compositionType=compositionType->NextSiblingElement("composition")){
+            int compositionID;
+            compositionType->QueryIntAttribute("typeID", &compositionID);
+            if(thisType == compositionID){
+                XMLElement* object = compositionType->FirstChildElement("object");
+                for(; object; object=object->NextSiblingElement("object")){
+                
+                }
+                XMLElement* light = compositionType->FirstChildElement("light");
+                for(; light; light=light->NextSiblingElement("light")){
+                
+                }
+                //Model model = Model("MarbleSmooth.obj", 0.75f);
+            }
         }
     }
-    */
+    
     
     //add player
-    Model model = Model("MarbleSmooth.obj", 0.75f);
-    Material material = Material("marbleTexture_small.png", 0.1f, 0.5f, 0.5f, 3.0f);
-    Object* object = new Object(model, material, glm::vec3(2.0f, 10.0f, 2.0f),
+    Model marbleModel = Model("MarbleSmooth.obj", 0.75f);
+    Material marbleMaterial = Material("marbleTexture_small.png", 0.1f, 0.5f, 0.5f, 3.0f);
+    Object* object = new Object(marbleModel, marbleMaterial, glm::vec3(2.0f, 10.0f, 2.0f),
         glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(object);    
     physicObjects.push_back(object);

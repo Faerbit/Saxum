@@ -40,10 +40,20 @@
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
     </object>
+    <object>
+        <xOffset>0.0</xOffset>
+        <yOffset>1.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <rColour>1.0</rColour>
+        <gColour>1.0</gColour>
+        <bColour>1.0</bColour>
+        <intensity>5.0</intensity>
+        <scale>0.0</scale>
+    </object>
 </composition>
 
 <composition>
-    <typeID>100</typeID>
+    <typeID>99</typeID>
     <object>
         <filePath>../Levels/Geometry/Column.obj</filePath>
         <xOffset>0.0</xOffset>
@@ -62,6 +72,24 @@
         <filePath>../Levels/Geometry/Block.obj</filePath>
         <xOffset>1.0</xOffset>
         <yOffset>3.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <scale>1.0</scale>
+    </object>
+</composition>
+
+<composition>
+    <typeID>120</typeID>
+    <object>
+        <filePath>../Levels/Geometry/switch_inner.obj</filePath>
+        <xOffset>0.0</xOffset>
+        <yOffset>0.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <scale>1.0</scale>
+    </object>
+    <object>
+        <filePath>../Levels/Geometry/switch_outer.obj</filePath>
+        <xOffset>0.0</xOffset>
+        <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
     </object>
