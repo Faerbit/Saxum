@@ -64,7 +64,7 @@ void Level::load() {
     physics.addBox(1,3.0f,1,*blockObject2,2,physicObjects.size());
 
     Model columnModel = Model("Column.obj", 1.0f);
-    Material columnMaterial = Material("columnTexture2.png", 0.1f, 0.6, 0.4f, 2.0f);
+    Material columnMaterial = Material("ColumnTexture2.png", 0.1f, 0.6, 0.4f, 2.0f);
     Object* columnObject = new Object(columnModel, columnMaterial, glm::vec3(-2.0f, 7.0f, -2.0f),
             glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(columnObject);
