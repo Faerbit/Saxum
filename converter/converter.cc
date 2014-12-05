@@ -1,6 +1,7 @@
 #include "converter.hh"
 #include <fstream>
 #include <string>
+#include <sys/stat.h>
 
 using namespace tinyxml2;
 
@@ -14,10 +15,20 @@ Converter::Converter(std::string level){
         printf("Could not open Compositions!!!\n");
     }
     
+    //Create a backup of the current Level png file, if no backup exists
+    std::string pngFile = "../Levels/ObjectSetups/Level" + level + ".png";
+    std::string backupPNG = "../Levels/ObjectSetups/BackupLevel" + level + ".png";
+    struct stat buf;
+    if(stat(backupPNG.c_str(), &buf) != 0){
+        std::ifstream  src(pngFile, std::ios::binary);
+        std::ofstream  dst(backupPNG,  std::ios::binary);
+        dst << src.rdbuf();
+    }
+    
     //Create a backup of the current Level xml file
-    std::string backup = "../Levels/ObjectSetups/BackupLevel" + level + ".xml";
+    std::string backupXML = "../Levels/ObjectSetups/BackupLevel" + level + ".xml";
     std::ifstream  src(xmlFile, std::ios::binary);
-    std::ofstream  dst(backup,  std::ios::binary);
+    std::ofstream  dst(backupXML,  std::ios::binary);
     dst << src.rdbuf();
     
     //Load the Level xml file
