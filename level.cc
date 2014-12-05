@@ -67,27 +67,56 @@ void Level::load() {
         int thisType = 0;
         error = thisComposition->FirstChildElement("typeID")->QueryIntText(&thisType);
         errorCheck(error);
-        XMLElement* compositionType = compositions->FirstChildElement("composition");
-        for(; compositionType; compositionType=compositionType->NextSiblingElement("composition")){
-            int compositionID = 0;
-            error = compositionType->FirstChildElement("typeID")->QueryIntText(&compositionID);
+        XMLElement* composition = compositions->FirstChildElement("composition");
+        for(; composition; composition=composition->NextSiblingElement("composition")){
+            int compositionType = 0;
+            error = composition->FirstChildElement("typeID")->QueryIntText(&compositionType);
             errorCheck(error);
-            if(thisType == compositionID){
-                XMLElement* object = compositionType->FirstChildElement("object");
+            if(thisType == compositionType){
+                XMLElement* object = composition->FirstChildElement("object");
                 for(; object; object=object->NextSiblingElement("object")){
                     const char* charModelPath = object->FirstChildElement("modelPath")->GetText();
                     if(charModelPath == NULL){
-                        printf("XMLError: No modelPath found.\n");
+                        printf("XMLError: No modelPath found in object.\n");
                     }
                     std::string modelPath = charModelPath;
-                    float scale;
-                    object->FirstChildElement("scale")->QueryFloatText(&scale);
-                    //Model model = Model(modelPath, scale);
-                    
+                    float scaleObj, scaleComp;
+                    object->FirstChildElement("scale")->QueryFloatText(&scaleObj);
+                    thisComposition->FirstChildElement("scale")->QueryFloatText(&scaleComp);
+                    //Model model = Model(modelPath, scaleObj * scaleComp);
+                    XMLElement* objectData = compositions->FirstChildElement("objectData");
+                    for(; objectData; objectData=objectData->NextSiblingElement("objectData")){
+                        const char* charDataModelPath = objectData->FirstChildElement("modelPath")->GetText();
+                        if(charDataModelPath == NULL){
+                            printf("XMLError: No modelPath found in objectData.\n");
+                        }
+                        std::string dataModelPath = charDataModelPath;
+                        if(dataModelPath == modelPath){
+                            float ambientFactor, diffuseFactor, specularFactor, shininess;
+                            objectData->FirstChildElement("ambientFactor")->QueryFloatText(&ambientFactor);
+                            objectData->FirstChildElement("diffuseFactor")->QueryFloatText(&diffuseFactor);
+                            objectData->FirstChildElement("specularFactor")->QueryFloatText(&specularFactor);
+                            objectData->FirstChildElement("shininess")->QueryFloatText(&shininess);
+                            const char* charTexturePath = objectData->FirstChildElement("texturePath")->GetText();
+                            if(charTexturePath == NULL){
+                                printf("XMLError: No texturePath found in objectData.\n");
+                            }
+                            std::string texturePath = charTexturePath;
+                            //Material material = Material(texturePath, ambientFactor, diffuseFactor, specularFactor, shininess);
+                        }
+                    }
+                    //TODO calculate position and rotation
+                    //Object* object = new Object(model, material, position, rotation);
+                    //objects.push_back(object);
+                    //TODO if object has physics: physicObjects.push_back(object);
+                    //TODO add object to physics
+                    //if(compositionType == 20){
+                    //    cameraCenter = object;
+                    //}
                 }
-                XMLElement* light = compositionType->FirstChildElement("light");
+                XMLElement* light = composition->FirstChildElement("light");
                 for(; light; light=light->NextSiblingElement("light")){
-                
+                    //TODO add lights
                 }
             }
         }
