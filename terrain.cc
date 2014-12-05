@@ -1,8 +1,8 @@
 #include "terrain.hh"
 #include "lodepng.h"
 
-Terrain::Terrain(std::string filePath){
-    this->filePath = filePath;
+Terrain::Terrain(std::string levelNum){
+    this->levelNum = levelNum;
 }
 
 Terrain::Terrain(){
@@ -13,10 +13,8 @@ Terrain::~Terrain() {
 
 
 void Terrain::load() {
-    filePath = "../Levels/heightmapLvlTest.png";	//TODO remove this, its only for testing
-
     std::vector<unsigned char> image; //the raw pixels
-    unsigned error = lodepng::decode(image, heightmapWidth, heightmapHeight, filePath);
+    unsigned error = lodepng::decode(image, heightmapWidth, heightmapHeight, "../Levels/heightmapLvl" + levelNum + ".png");
     if (error) {
         std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
     }

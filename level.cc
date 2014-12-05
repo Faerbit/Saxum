@@ -1,10 +1,10 @@
 #include "level.hh"
+using namespace tinyxml2;
 
 
-
-Level::Level(std::string filePath){
-    this->filePath = filePath;
-    this->terrain = Terrain(filePath + "/terrain");
+Level::Level(std::string levelNum){
+    this->levelNum = levelNum;
+    this->terrain = Terrain(levelNum);
     skydomeSize = 50.0f;
 }
 
@@ -17,18 +17,87 @@ Level::~Level() {
     }
 }
 
-void Level::load() {
 
+void Level::errorCheck(XMLError error){
+    if (error) {
+        printf("XMLError: ");
+        if (error == XML_WRONG_ATTRIBUTE_TYPE) {
+            printf("Wrong attribute type.\n");
+        }
+        else if (error == XML_NO_ATTRIBUTE) {
+            printf("No attribute.\n");
+        }
+        else if (error == XML_CAN_NOT_CONVERT_TEXT) {
+            printf("Can not convert text.\n");
+        }
+        else if (error == XML_NO_TEXT_NODE) {
+            printf("No text.\n");
+        }
+        else {
+            printf("Unknown error.\n");
+        }
+    }
+}
+
+void Level::load() {
+    XMLError error=XML_NO_ERROR;
     this->physics = Physics();
     this->physics.init();
     
     // currently hard coded should later read this stuff out of a file
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
     
+    //Loading Objects via xml:
+    XMLDocument* doc = new XMLDocument();
+    const char* xmlFile = ("../Levels/ObjectSetups/Level" + levelNum + ".xml").c_str();
+    doc->LoadFile(xmlFile);
+    if (doc->ErrorID()!=0){
+        printf("Could not open ObjectSetupXml!\n");
+        exit(-1);
+    }
+    XMLDocument* compositions = new XMLDocument();
+    const char* compositionsFile = "../Levels/ObjectSetups/Compositions.xml";
+    compositions->LoadFile(compositionsFile);
+    if (compositions->ErrorID()!=0){
+        printf("Could not open Compositions!\n");
+        exit(-1);
+    }
+    XMLElement* thisComposition = doc->FirstChildElement("composition");
+    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
+        int thisType = 0;
+        error = thisComposition->FirstChildElement("typeID")->QueryIntText(&thisType);
+        errorCheck(error);
+        XMLElement* compositionType = compositions->FirstChildElement("composition");
+        for(; compositionType; compositionType=compositionType->NextSiblingElement("composition")){
+            int compositionID = 0;
+            error = compositionType->FirstChildElement("typeID")->QueryIntText(&compositionID);
+            errorCheck(error);
+            if(thisType == compositionID){
+                XMLElement* object = compositionType->FirstChildElement("object");
+                for(; object; object=object->NextSiblingElement("object")){
+                    const char* charModelPath = object->FirstChildElement("modelPath")->GetText();
+                    if(charModelPath == NULL){
+                        printf("XMLError: No modelPath found.\n");
+                    }
+                    std::string modelPath = charModelPath;
+                    float scale;
+                    object->FirstChildElement("scale")->QueryFloatText(&scale);
+                    Model model = Model(modelPath, scale);
+                    
+                }
+                XMLElement* light = compositionType->FirstChildElement("light");
+                for(; light; light=light->NextSiblingElement("light")){
+                
+                }
+            }
+        }
+    }
+    
+    
     //add player
-    Model model = Model("MarbleSmooth.obj", 0.75f);
-    Material material = Material("marbleTexture_small.png", 0.1f, 0.5f, 0.5f, 3.0f);
-    Object* object = new Object(model, material, glm::vec3(2.0f, 10.0f, 2.0f),
+    Model marbleModel = Model("MarbleSmooth.obj", 0.75f);
+    Material marbleMaterial = Material("marbleTexture_small.png", 0.1f, 0.5f, 0.5f, 3.0f);
+    Object* object = new Object(marbleModel, marbleMaterial, glm::vec3(2.0f, 10.0f, 2.0f),
         glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(object);    
     physicObjects.push_back(object);

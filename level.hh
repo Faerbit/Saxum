@@ -9,10 +9,11 @@
 #include "material.hh"
 #include "camera.hh"
 #include "physics.hh"
+#include "tinyxml2.hh"
 
 class Level {
     public:
-        Level(std::string filePath);
+        Level(std::string levelNum);
         Level();
         ~Level();
         void load();
@@ -27,7 +28,8 @@ class Level {
         glm::vec4 getFogColor();
         void setSkydomeSize(float size);
     private:
-        std::string filePath;
+        void errorCheck(tinyxml2::XMLError error);
+        std::string levelNum;
         std::vector<Object*> objects;
         std::vector<Object*> physicObjects;
         std::vector<Light> lights;
