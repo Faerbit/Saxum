@@ -1,7 +1,7 @@
 <composition>
     <typeID>20</typeID>
     <object>
-        <modelPath>MarbleSmooth.obj</modelPath>
+        <modelPath>marbleSmooth.obj</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
@@ -12,7 +12,7 @@
 <composition>
     <typeID>40</typeID>
     <object>
-        <modelPath>Block.obj</modelPath>
+        <modelPath>block.obj</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>1.0</yOffset>
         <zOffset>2.0</zOffset>
@@ -23,7 +23,7 @@
 <composition>
     <typeID>60</typeID>
     <object>
-        <modelPath>Column.obj</modelPath>
+        <modelPath>column.obj</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
@@ -54,21 +54,21 @@
 <composition>
     <typeID>99</typeID>
     <object>
-        <modelPath>Column.obj</modelPath>
+        <modelPath>column.obj</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
     </object>
     <object>
-        <modelPath>Column.obj</modelPath>
+        <modelPath>column.obj</modelPath>
         <xOffset>2.0</xOffset>
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
     </object>
     <object>
-        <modelPath>Block.obj</modelPath>
+        <modelPath>block.obj</modelPath>
         <xOffset>1.0</xOffset>
         <yOffset>3.0</yOffset>
         <zOffset>0.0</zOffset>
@@ -93,3 +93,53 @@
         <scale>1.0</scale>
     </object>
 </composition>
+
+
+
+<objectData>
+    <modelPath>marbleSmooth.obj</modelPath>
+    <ambientFactor></ambientFactor>
+    <diffuseFactor></diffuseFactor>
+    <specularFactor></specularFactor>
+    <shininess></shininess>
+</objectData>
+
+<objectData>
+    <modelPath>block.obj</modelPath>
+    <ambientFactor></ambientFactor>
+    <diffuseFactor></diffuseFactor>
+    <specularFactor></specularFactor>
+    <shininess></shininess>
+</objectData>
+
+<objectData>
+    <modelPath>column.obj</modelPath>
+    <ambientFactor></ambientFactor>
+    <diffuseFactor></diffuseFactor>
+    <specularFactor></specularFactor>
+    <shininess></shininess>
+</objectData>
+
+<objectData>
+    <modelPath>torch.obj</modelPath>
+    <ambientFactor></ambientFactor>
+    <diffuseFactor></diffuseFactor>
+    <specularFactor></specularFactor>
+    <shininess></shininess>
+</objectData>
+
+<objectData>
+    <modelPath>switch_inner.obj</modelPath>
+    <ambientFactor></ambientFactor>
+    <diffuseFactor></diffuseFactor>
+    <specularFactor></specularFactor>
+    <shininess></shininess>
+</objectData>
+
+<objectData>
+    <modelPath>switch_outer.obj</modelPath>
+    <ambientFactor></ambientFactor>
+    <diffuseFactor></diffuseFactor>
+    <specularFactor></specularFactor>
+    <shininess></shininess>
+</objectData>
