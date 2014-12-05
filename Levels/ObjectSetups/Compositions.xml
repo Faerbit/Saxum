@@ -98,48 +98,54 @@
 
 <objectData>
     <modelPath>marbleSmooth.obj</modelPath>
-    <ambientFactor></ambientFactor>
-    <diffuseFactor></diffuseFactor>
-    <specularFactor></specularFactor>
-    <shininess></shininess>
+    <texturePath>marbleTexture_small.png</texturePath>
+    <ambientFactor>0.1</ambientFactor>
+    <diffuseFactor>0.5</diffuseFactor>
+    <specularFactor>0.5</specularFactor>
+    <shininess>3.0</shininess>
 </objectData>
 
 <objectData>
     <modelPath>block.obj</modelPath>
-    <ambientFactor></ambientFactor>
-    <diffuseFactor></diffuseFactor>
-    <specularFactor></specularFactor>
-    <shininess></shininess>
+    <texturePath>blockTexture_small.png</texturePath>
+    <ambientFactor>0.1</ambientFactor>
+    <diffuseFactor>0.6</diffuseFactor>
+    <specularFactor>0.4</specularFactor>
+    <shininess>2.0</shininess>
 </objectData>
 
 <objectData>
     <modelPath>column.obj</modelPath>
-    <ambientFactor></ambientFactor>
-    <diffuseFactor></diffuseFactor>
-    <specularFactor></specularFactor>
-    <shininess></shininess>
+    <texturePath>columnTexture2.png</texturePath>
+    <ambientFactor>0.1</ambientFactor>
+    <diffuseFactor>0.6</diffuseFactor>
+    <specularFactor>0.4</specularFactor>
+    <shininess>2.0</shininess>
 </objectData>
 
 <objectData>
     <modelPath>torch.obj</modelPath>
-    <ambientFactor></ambientFactor>
-    <diffuseFactor></diffuseFactor>
-    <specularFactor></specularFactor>
-    <shininess></shininess>
+    <texturePath>torchTexture.png</texturePath>
+    <ambientFactor>0.1</ambientFactor>
+    <diffuseFactor>0.3</diffuseFactor>
+    <specularFactor>0.7</specularFactor>
+    <shininess>10.0</shininess>
 </objectData>
 
 <objectData>
     <modelPath>switch_inner.obj</modelPath>
-    <ambientFactor></ambientFactor>
-    <diffuseFactor></diffuseFactor>
-    <specularFactor></specularFactor>
-    <shininess></shininess>
+    <texturePath>switchTextureInner.png</texturePath>
+    <ambientFactor>0.1</ambientFactor>
+    <diffuseFactor>0.6</diffuseFactor>
+    <specularFactor>0.4</specularFactor>
+    <shininess>2.0</shininess>
 </objectData>
 
 <objectData>
     <modelPath>switch_outer.obj</modelPath>
-    <ambientFactor></ambientFactor>
-    <diffuseFactor></diffuseFactor>
-    <specularFactor></specularFactor>
-    <shininess></shininess>
+    <texturePath>switchTextureOuter.png</texturePath>
+    <ambientFactor>0.1</ambientFactor>
+    <diffuseFactor>0.6</diffuseFactor>
+    <specularFactor>0.4</specularFactor>
+    <shininess>2.0</shininess>
 </objectData>
