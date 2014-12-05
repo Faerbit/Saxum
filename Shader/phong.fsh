@@ -3,12 +3,16 @@
 in vec3 vNormal;
 in vec2 vTexCoord;
 in vec4 fragPosition;
-in vec4 shadowCoord;
+in vec4 shadowCoord_near;
+in vec4 shadowCoord_middle;
+in vec4 shadowCoord_far;
 
 out vec4 oColor;
 
 uniform sampler2D uTexture;
-uniform sampler2DShadow shadowMap;
+uniform sampler2DShadow shadowMap_near;
+uniform sampler2DShadow shadowMap_middle;
+uniform sampler2DShadow shadowMap_far;
 uniform vec3 ambientColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
@@ -25,6 +29,50 @@ uniform float lightIntensities[128];
 uniform float fogEnd;
 uniform vec4 fogColor;
 uniform vec3 cameraCenter;
+
+vec2 poissonDisk[16] = vec2[](
+   vec2( -0.94201624, -0.39906216 ),
+   vec2( 0.94558609, -0.76890725 ),
+   vec2( -0.094184101, -0.92938870 ),
+   vec2( 0.34495938, 0.29387760 ),
+   vec2( -0.91588581, 0.45771432 ),
+   vec2( -0.81544232, -0.87912464 ),
+   vec2( -0.38277543, 0.27676845 ),
+   vec2( 0.97484398, 0.75648379 ),
+   vec2( 0.44323325, -0.97511554 ),
+   vec2( 0.53742981, -0.47373420 ),
+   vec2( -0.26496911, -0.41893023 ),
+   vec2( 0.79197514, 0.19090188 ),
+   vec2( -0.24188840, 0.99706507 ),
+   vec2( -0.81409955, 0.91437590 ),
+   vec2( 0.19984126, 0.78641367 ),
+   vec2( 0.14383161, -0.14100790 )
+);
+
+float sampleShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
+    float visibility = 1.0;
+    float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
+    bias = clamp(bias, 0.0, 0.01);
+    for (int i=0; i<4; i++) {
+        visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, (shadowCoord.z - bias)/shadowCoord.w)));
+    }
+    if (visibility == 1.0-(directionalIntensity/16)*4)
+    {
+        visibility = 1.0-directionalIntensity;
+    }
+    else if (visibility != 1.0) {
+        for (int i=0; i<12; i++) {
+            visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, (shadowCoord.z - bias)/shadowCoord.w)));
+        }
+    }
+    return visibility;
+}
+
+float distanceToBorder(vec2 vector) {
+    float xDistance = min(vector.x, 1.0-vector.x);
+    float yDistance = min(vector.y, 1.0-vector.y);
+    return min(xDistance, yDistance);
+}
 
 void main()
 {   
@@ -59,18 +107,17 @@ void main()
     }
 
     // shadows 
-    float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
-    bias = clamp(bias, 0.0, 0.01);
-    vec3 biasedShadowCoord = vec3(shadowCoord);
-    biasedShadowCoord.z = shadowCoord.z - bias;
     float visibility = 1.0;
-    if (shadowCoord.x > 0.0 && shadowCoord.x < 1.0) {
-        if (shadowCoord.y > 0.0 && shadowCoord.y < 1.0) {
-            visibility = texture(shadowMap, biasedShadowCoord);
-            //if (texture(shadowMap, vec3(shadowCoord), bias) < shadowCoord.z) {
-                //visibility = 0.5;
-            //}
+    if (distanceToBorder(shadowCoord_middle.xy) <= 0.5 && distanceToBorder(shadowCoord_middle.xy) > 0.0) {
+        if (distanceToBorder(shadowCoord_near.xy) <= 0.5 && distanceToBorder(shadowCoord_near.xy) > 0.0) {
+                visibility = sampleShadow(shadowMap_near, shadowCoord_near);
         }
+        else {
+            visibility = sampleShadow(shadowMap_middle, shadowCoord_middle);
+        }
+    }
+    else {
+        visibility = sampleShadow(shadowMap_far, shadowCoord_far);
     }
 
     specularColor *= visibility;
