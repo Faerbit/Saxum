@@ -82,7 +82,7 @@ void Level::load() {
                     std::string modelPath = charModelPath;
                     float scale;
                     object->FirstChildElement("scale")->QueryFloatText(&scale);
-                    Model model = Model(modelPath, scale);
+                    //Model model = Model(modelPath, scale);
                     
                 }
                 XMLElement* light = compositionType->FirstChildElement("light");
@@ -95,7 +95,7 @@ void Level::load() {
     
     
     //add player
-    Model marbleModel = Model("MarbleSmooth.obj", 0.75f);
+    Model marbleModel = Model("marbleSmooth.obj", 0.75f);
     Material marbleMaterial = Material("marbleTexture_small.png", 0.1f, 0.5f, 0.5f, 3.0f);
     Object* object = new Object(marbleModel, marbleMaterial, glm::vec3(2.0f, 10.0f, 2.0f),
         glm::vec3(0.0f, 0.0f, 0.0f));
@@ -118,7 +118,7 @@ void Level::load() {
         glm::vec3(0.0f, 1.0472f, 0.0f));
     objects.push_back(torchObject);
     
-    Model blockModel = Model("Block.obj", 1.0f);
+    Model blockModel = Model("block.obj", 1.0f);
     Material blockMaterial = Material("blockTexture_small.png", 0.1f, 0.6, 0.4f, 2.0f);
     Object* blockObject = new Object(blockModel, blockMaterial, glm::vec3(0.0f, 10.0f, 0.0f),
             glm::vec3(0.0f, 0.0f, 0.0f));
@@ -132,8 +132,8 @@ void Level::load() {
     physicObjects.push_back(blockObject2);
     physics.addBox(1,3.0f,1,*blockObject2,2,physicObjects.size());
 
-    Model columnModel = Model("Column.obj", 1.0f);
-    Material columnMaterial = Material("ColumnTexture2.png", 0.1f, 0.6, 0.4f, 2.0f);
+    Model columnModel = Model("column.obj", 1.0f);
+    Material columnMaterial = Material("columnTexture2.png", 0.1f, 0.6, 0.4f, 2.0f);
     Object* columnObject = new Object(columnModel, columnMaterial, glm::vec3(-2.0f, 7.0f, -2.0f),
             glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(columnObject);
