@@ -100,8 +100,8 @@ void Level::load() {
                     errorCheck(error);
                     error = thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale);
                     errorCheck(error);
-                    //Model model = Model(modelPath, objectScale * compScale);
-                    //Material material;
+                    Model model = Model(modelPath, objectScale * compScale);
+                    Material material;
                     XMLElement* objectData = compositions->FirstChildElement("objectData");
                     for(; objectData; objectData=objectData->NextSiblingElement("objectData")){
                         const char* charDataModelPath = objectData->FirstChildElement("modelPath")->GetText();
@@ -124,7 +124,7 @@ void Level::load() {
                                 printf("XMLError: No texturePath found in objectData.\n");
                             }
                             std::string texturePath = charTexturePath;
-                            //material = Material(texturePath, ambientFactor, diffuseFactor, specularFactor, shininess);
+                            material = Material(texturePath, ambientFactor, diffuseFactor, specularFactor, shininess);
                         }
                     }
                     float compXPos, compYOffset, compZPos;
@@ -157,8 +157,8 @@ void Level::load() {
                                                     * glm::rotate(compRot.z, glm::vec3(0.0f, 0.0f, 1.0f))
                                                     * glm::vec4(objectOffset, 0);
                     glm::vec3 objectPosition = compPos + glm::vec3(rotatedObjectOffset.x,rotatedObjectOffset.y,rotatedObjectOffset.z);
-                    //Object* object = new Object(model, material, objectPosition, compRot);
-                    //objects.push_back(object);
+                    Object* object = new Object(model, material, objectPosition, compRot);
+                    objects.push_back(object);
                     //TODO if object has physics: physicObjects.push_back(object);      //should not all objects have physics in the end?
                     //TODO add object to physics
                     //if(compositionType == 20){
@@ -168,7 +168,48 @@ void Level::load() {
                 }
                 XMLElement* light = composition->FirstChildElement("light");
                 for(; light; light=light->NextSiblingElement("light")){
-                    //TODO add lights
+                    glm::vec3 compRot, lightOffset, lightColour;
+                    float compScale, compXPos, compYOffset, compZPos, lightIntensity;
+                    error = thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale);
+                    errorCheck(error);
+                    error = light->FirstChildElement("xOffset")->QueryFloatText(&lightOffset[0]);
+                    errorCheck(error);
+                    error = light->FirstChildElement("yOffset")->QueryFloatText(&lightOffset[1]);
+                    errorCheck(error);
+                    error = light->FirstChildElement("zOffset")->QueryFloatText(&lightOffset[2]);
+                    errorCheck(error);
+                    error = thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos);
+                    errorCheck(error);
+                    error = thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset);
+                    errorCheck(error);
+                    error = thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos);
+                    errorCheck(error);
+                    error = thisComposition->FirstChildElement("xRot")->QueryFloatText(&compRot[0]);
+                    errorCheck(error);
+                    error = thisComposition->FirstChildElement("yRot")->QueryFloatText(&compRot[1]);
+                    errorCheck(error);
+                    error = thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]);
+                    errorCheck(error);
+                    error = light->FirstChildElement("rColour")->QueryFloatText(&lightColour[0]);
+                    errorCheck(error);
+                    error = light->FirstChildElement("gColour")->QueryFloatText(&lightColour[1]);
+                    errorCheck(error);
+                    error = light->FirstChildElement("bColour")->QueryFloatText(&lightColour[2]);
+                    errorCheck(error);
+                    error = light->FirstChildElement("intensity")->QueryFloatText(&lightIntensity);
+                    errorCheck(error);
+                    glm::vec3 compPos = glm::vec3(compXPos,
+                                        compYOffset+terrain.getHeightmap()[int(compXPos-0.5+0.5*terrain.getHeightmapHeight())]
+                                                                          [int(compZPos-0.5+0.5*terrain.getHeightmapWidth())],
+                                        compZPos);
+                    lightOffset = lightOffset * compScale;
+                    glm::vec4 rotatedLightOffset = glm::rotate(compRot.x, glm::vec3(1.0f, 0.0f, 0.0f))
+                                                    * glm::rotate(compRot.y, glm::vec3(0.0f, 1.0f, 0.0f))
+                                                    * glm::rotate(compRot.z, glm::vec3(0.0f, 0.0f, 1.0f))
+                                                    * glm::vec4(lightOffset, 0);
+                    glm::vec3 lightPosition = compPos + glm::vec3(rotatedLightOffset.x,rotatedLightOffset.y,rotatedLightOffset.z);
+                    Light light = Light(lightPosition, lightColour, lightIntensity);
+                    lights.push_back(light);
                 }
             }
         }
@@ -227,9 +268,9 @@ void Level::load() {
     fogColor = glm::vec4(0.10f, 0.14f, 0.14f, 1.0f);
     directionalLight = Light(glm::vec3(-1.0f, 1.5f, 1.0f), glm::vec3(1.0f, 1.0f, 0.9f), 0.2f);
     Light light = Light(glm::vec3(-3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 5.0f);
-    lights.push_back(light);
+    //lights.push_back(light);
     Light light2 = Light(glm::vec3(3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
-    lights.push_back(light2);
+    //lights.push_back(light2);
 
     
 }
