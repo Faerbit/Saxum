@@ -58,7 +58,7 @@ Converter::Converter(){
 Converter::~Converter(){
 }
 
-std::vector<unsigned int> Converter::newComposition(unsigned int type, float posX, float posZ){
+std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     XMLElement* newComposition = doc->NewElement("composition");
     doc->InsertFirstChild(newComposition);
     
@@ -95,7 +95,7 @@ std::vector<unsigned int> Converter::newComposition(unsigned int type, float pos
     newComposition->InsertFirstChild(xRot);
     newComposition->InsertFirstChild(scale);
     
-    std::vector<unsigned int> ret = nextID;
+    std::vector<int> ret = nextID;
     nextID[1] += 1;
     if (nextID[1] == 255){
         nextID[1] = 0;
@@ -104,7 +104,7 @@ std::vector<unsigned int> Converter::newComposition(unsigned int type, float pos
     return ret;
 }
 
-void Converter::updateComposition(unsigned int idG, unsigned int idB, float posX, float posZ){
+void Converter::updateComposition(int idG, int idB, float posX, float posZ){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     int idGreen, idBlue;
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
@@ -117,7 +117,7 @@ void Converter::updateComposition(unsigned int idG, unsigned int idB, float posX
     }
 }
 
-void Converter::deleteComposition(unsigned int idG, unsigned int idB){
+void Converter::deleteComposition(int idG, int idB){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     int idGreen, idBlue;
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
@@ -134,7 +134,7 @@ void Converter::save(){
     doc->SaveFile(charXmlFile);
 }
 
-std::vector<unsigned int> Converter::getNextID(){
+std::vector<int> Converter::getNextID(){
     return nextID;
 }
 
