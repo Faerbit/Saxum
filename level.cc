@@ -128,7 +128,7 @@ void Level::load() {
                         }
                     }
                     float compXPos, compYOffset, compZPos;
-                    glm::vec3 objectOffset, compRot, compPos;
+                    glm::vec3 objectOffset, compRot;
                     error = object->FirstChildElement("xOffset")->QueryFloatText(&objectOffset[0]);
                     errorCheck(error);
                     error = object->FirstChildElement("yOffset")->QueryFloatText(&objectOffset[1]);
@@ -147,18 +147,23 @@ void Level::load() {
                     errorCheck(error);
                     error = thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]);
                     errorCheck(error);
-                    compPos = glm::vec3(compXPos,
+                    glm::vec3 compPos = glm::vec3(compXPos,
                                         compYOffset+terrain.getHeightmap()[int(compXPos-0.5+0.5*terrain.getHeightmapHeight())]
                                                                           [int(compZPos-0.5+0.5*terrain.getHeightmapWidth())],
                                         compZPos);
                     objectOffset = objectOffset * compScale;
-                    //TODO calculate position from objectOffset, compRot and compPos
-                    //Object* object = new Object(model, material, position, compRot);
+                    glm::vec4 rotatedObjectOffset = glm::rotate(compRot.x, glm::vec3(1.0f, 0.0f, 0.0f))
+                                                    * glm::rotate(compRot.y, glm::vec3(0.0f, 1.0f, 0.0f))
+                                                    * glm::rotate(compRot.z, glm::vec3(0.0f, 0.0f, 1.0f))
+                                                    * glm::vec4(objectOffset, 0);
+                    glm::vec3 objectPosition = compPos + glm::vec3(rotatedObjectOffset.x,rotatedObjectOffset.y,rotatedObjectOffset.z);
+                    //Object* object = new Object(model, material, objectPosition, compRot);
                     //objects.push_back(object);
-                    //TODO if object has physics: physicObjects.push_back(object);
+                    //TODO if object has physics: physicObjects.push_back(object);      //should not all objects have physics in the end?
                     //TODO add object to physics
                     //if(compositionType == 20){
                     //    cameraCenter = object;
+                    //    this->physics.addPlayer(1.25f,*object,8.0f,physicObjects.size());
                     //}
                 }
                 XMLElement* light = composition->FirstChildElement("light");
