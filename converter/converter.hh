@@ -19,6 +19,7 @@ class Converter {
 
     private:
         std::vector<unsigned int> nextID;
+        void errorCheck(XMLError error);
         std::string xmlFile;
         XMLDocument* doc = new XMLDocument();
         XMLDocument* compositions = new XMLDocument();
