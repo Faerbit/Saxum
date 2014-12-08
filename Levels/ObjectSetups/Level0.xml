@@ -3,6 +3,7 @@
     <xRot>0.0</xRot>
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
     <xPos>3.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>3.500000</zPos>
@@ -16,6 +17,7 @@
     <xRot>0.0</xRot>
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
     <xPos>3.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-0.500000</zPos>
@@ -29,6 +31,7 @@
     <xRot>0.0</xRot>
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
     <xPos>2.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-2.500000</zPos>
@@ -42,6 +45,7 @@
     <xRot>0.0</xRot>
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
     <xPos>1.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>0.500000</zPos>
@@ -55,6 +59,7 @@
     <xRot>0.0</xRot>
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
     <xPos>-0.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>1.500000</zPos>
@@ -68,6 +73,7 @@
     <xRot>0.0</xRot>
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
     <xPos>-0.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-1.500000</zPos>
@@ -81,6 +87,7 @@
     <xRot>0.0</xRot>
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
     <xPos>-2.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-1.500000</zPos>
@@ -94,6 +101,7 @@
     <xRot>0.0</xRot>
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
     <xPos>-3.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-3.500000</zPos>
@@ -107,6 +115,7 @@
     <xRot>0.0</xRot>
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
     <xPos>-4.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-4.500000</zPos>

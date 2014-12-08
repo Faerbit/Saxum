@@ -47,7 +47,22 @@ void Level::load() {
     // currently hard coded should later read this stuff out of a file
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
     
-    //Loading Objects via xml:
+    // load terrain
+    this->terrain.load();
+    Model terrainModel = Model(this->terrain.getModel());
+    // load a texture:
+    Material terrainMaterial = Material("seamlessTerrain.png", 0.1f, 0.8f, 0.2f, 3.0f);
+    //Create object
+    Object* terrainObject = new Object(terrainModel, terrainMaterial,
+	glm::vec3(-0.5f*(float)this->terrain.getHeightmapHeight(), 0.0f, -0.5f*(float)this->terrain.getHeightmapWidth()),
+        glm::vec3(0.0f, 0.0f, 0.0f));
+    objects.push_back(terrainObject);
+    
+    //addTerrainPhysic
+	physics.addTerrain(terrain.getHeightmapWidth(), terrain.getHeightmapHeight(), terrain.getHeightmap());
+    
+    
+    //Loading Objects via xml
     XMLDocument* doc = new XMLDocument();
     const char* xmlFile = ("../Levels/ObjectSetups/Level" + levelNum + ".xml").c_str();
     doc->LoadFile(xmlFile);
@@ -80,10 +95,13 @@ void Level::load() {
                         printf("XMLError: No modelPath found in object.\n");
                     }
                     std::string modelPath = charModelPath;
-                    float scaleObj, scaleComp;
-                    object->FirstChildElement("scale")->QueryFloatText(&scaleObj);
-                    thisComposition->FirstChildElement("scale")->QueryFloatText(&scaleComp);
-                    //Model model = Model(modelPath, scaleObj * scaleComp);
+                    float objectScale, compScale;
+                    error = object->FirstChildElement("scale")->QueryFloatText(&objectScale);
+                    errorCheck(error);
+                    error = thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale);
+                    errorCheck(error);
+                    //Model model = Model(modelPath, objectScale * compScale);
+                    //Material material;
                     XMLElement* objectData = compositions->FirstChildElement("objectData");
                     for(; objectData; objectData=objectData->NextSiblingElement("objectData")){
                         const char* charDataModelPath = objectData->FirstChildElement("modelPath")->GetText();
@@ -93,20 +111,49 @@ void Level::load() {
                         std::string dataModelPath = charDataModelPath;
                         if(dataModelPath == modelPath){
                             float ambientFactor, diffuseFactor, specularFactor, shininess;
-                            objectData->FirstChildElement("ambientFactor")->QueryFloatText(&ambientFactor);
-                            objectData->FirstChildElement("diffuseFactor")->QueryFloatText(&diffuseFactor);
-                            objectData->FirstChildElement("specularFactor")->QueryFloatText(&specularFactor);
-                            objectData->FirstChildElement("shininess")->QueryFloatText(&shininess);
+                            error = objectData->FirstChildElement("ambientFactor")->QueryFloatText(&ambientFactor);
+                            errorCheck(error);
+                            error = objectData->FirstChildElement("diffuseFactor")->QueryFloatText(&diffuseFactor);
+                            errorCheck(error);
+                            error = objectData->FirstChildElement("specularFactor")->QueryFloatText(&specularFactor);
+                            errorCheck(error);
+                            error = objectData->FirstChildElement("shininess")->QueryFloatText(&shininess);
+                            errorCheck(error);
                             const char* charTexturePath = objectData->FirstChildElement("texturePath")->GetText();
                             if(charTexturePath == NULL){
                                 printf("XMLError: No texturePath found in objectData.\n");
                             }
                             std::string texturePath = charTexturePath;
-                            //Material material = Material(texturePath, ambientFactor, diffuseFactor, specularFactor, shininess);
+                            //material = Material(texturePath, ambientFactor, diffuseFactor, specularFactor, shininess);
                         }
                     }
-                    //TODO calculate position and rotation
-                    //Object* object = new Object(model, material, position, rotation);
+                    float compXPos, compYOffset, compZPos;
+                    glm::vec3 objectOffset, compRot, compPos;
+                    error = object->FirstChildElement("xOffset")->QueryFloatText(&objectOffset[0]);
+                    errorCheck(error);
+                    error = object->FirstChildElement("yOffset")->QueryFloatText(&objectOffset[1]);
+                    errorCheck(error);
+                    error = object->FirstChildElement("zOffset")->QueryFloatText(&objectOffset[2]);
+                    errorCheck(error);
+                    error = thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos);
+                    errorCheck(error);
+                    error = thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset);
+                    errorCheck(error);
+                    error = thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos);
+                    errorCheck(error);
+                    error = thisComposition->FirstChildElement("xRot")->QueryFloatText(&compRot[0]);
+                    errorCheck(error);
+                    error = thisComposition->FirstChildElement("yRot")->QueryFloatText(&compRot[1]);
+                    errorCheck(error);
+                    error = thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]);
+                    errorCheck(error);
+                    compPos = glm::vec3(compXPos,
+                                        compYOffset+terrain.getHeightmap()[int(compXPos-0.5+0.5*terrain.getHeightmapHeight())]
+                                                                          [int(compZPos-0.5+0.5*terrain.getHeightmapWidth())],
+                                        compZPos);
+                    objectOffset = objectOffset * compScale;
+                    //TODO calculate position from objectOffset, compRot and compPos
+                    //Object* object = new Object(model, material, position, compRot);
                     //objects.push_back(object);
                     //TODO if object has physics: physicObjects.push_back(object);
                     //TODO add object to physics
@@ -179,19 +226,7 @@ void Level::load() {
     Light light2 = Light(glm::vec3(3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
     lights.push_back(light2);
 
-    // load terrain
-    this->terrain.load();
-    Model terrainModel = Model(this->terrain.getModel());
-    // load a texture:
-    Material terrainMaterial = Material("seamlessTerrain.png", 0.1f, 0.8f, 0.2f, 3.0f);
-    //Create object
-    Object* terrainObject = new Object(terrainModel, terrainMaterial,
-	glm::vec3(-0.5f*(float)this->terrain.getHeightmapHeight(), 0.0f, -0.5f*(float)this->terrain.getHeightmapWidth()),
-        glm::vec3(0.0f, 0.0f, 0.0f));
-    objects.push_back(terrainObject);
     
-    //addTerrainPhysic
-	physics.addTerrain(terrain.getHeightmapWidth(), terrain.getHeightmapHeight(), terrain.getHeightmap());
 }
 
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass) {
