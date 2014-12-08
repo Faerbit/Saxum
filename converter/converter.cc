@@ -12,7 +12,7 @@ Converter::Converter(std::string level){
     const char* charCompositions = "../Levels/ObjectSetups/Compositions.xml";
     compositions->LoadFile(charCompositions);
     if (compositions->ErrorID()!=0){
-        printf("Could not open Compositions!!!\n");
+        printf("Could not open Compositions!\n");
     }
     
     //Create a backup of the current Level png file, if no backup exists
