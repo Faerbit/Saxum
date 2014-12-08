@@ -13,7 +13,7 @@ Converter::Converter(std::string level){
     const char* charCompositions = "../Levels/ObjectSetups/Compositions.xml";
     compositions->LoadFile(charCompositions);
     if (compositions->ErrorID()!=0){
-        printf("Could not open Compositions!!!\n");
+        printf("Could not open Compositions!\n");
     }
     
     //Create a backup of the current Level png file, if no backup exists
@@ -62,7 +62,7 @@ Converter::Converter(){
 Converter::~Converter(){
 }
 
-std::vector<unsigned int> Converter::newComposition(unsigned int type, float posX, float posZ){
+std::vector<unsigned int> Converter::newComposition(int type, float posX, float posZ){
     XMLElement* newComposition = doc->NewElement("composition");
     doc->InsertFirstChild(newComposition);
     
@@ -111,7 +111,7 @@ std::vector<unsigned int> Converter::newComposition(unsigned int type, float pos
     return ret;
 }
 
-void Converter::updateComposition(unsigned int idG, unsigned int idB, float posX, float posZ){
+void Converter::updateComposition(int idG, int idB, float posX, float posZ){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     int idGreen = 0, idBlue = 0;
     bool compositionExists = false;
@@ -138,7 +138,7 @@ void Converter::updateComposition(unsigned int idG, unsigned int idB, float posX
     }
 }
 
-void Converter::deleteComposition(unsigned int idG, unsigned int idB){
+void Converter::deleteComposition(int idG, int idB){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     int idGreen, idBlue;
     XMLError error=XML_NO_ERROR;
