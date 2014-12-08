@@ -32,7 +32,7 @@
 </composition>
 
 <composition>
-    <typeID>80</typeID>
+    <typeID>99</typeID>
     <object>
         <modelPath>torch.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -42,17 +42,17 @@
     </object>
     <light>
         <xOffset>0.0</xOffset>
-        <yOffset>1.0</yOffset>
+        <yOffset>3</yOffset>
         <zOffset>0.0</zOffset>
         <rColour>1.0</rColour>
         <gColour>1.0</gColour>
         <bColour>1.0</bColour>
-        <intensity>5.0</intensity>
+        <intensity>4.0</intensity>
     </light>
 </composition>
 
 <composition>
-    <typeID>99</typeID>
+    <typeID>100</typeID>
     <object>
         <modelPath>column.obj</modelPath>
         <xOffset>0.0</xOffset>
