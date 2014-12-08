@@ -62,7 +62,7 @@ Converter::Converter(){
 Converter::~Converter(){
 }
 
-std::vector<unsigned int> Converter::newComposition(int type, float posX, float posZ){
+std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     XMLElement* newComposition = doc->NewElement("composition");
     doc->InsertFirstChild(newComposition);
     
@@ -102,7 +102,7 @@ std::vector<unsigned int> Converter::newComposition(int type, float posX, float 
     newComposition->InsertFirstChild(xRot);
     newComposition->InsertFirstChild(scale);
     
-    std::vector<unsigned int> ret = nextID;
+    std::vector<int> ret = nextID;
     nextID[1] += 1;
     if (nextID[1] == 255){
         nextID[1] = 0;
@@ -158,7 +158,7 @@ void Converter::save(){
     doc->SaveFile(charXmlFile);
 }
 
-std::vector<unsigned int> Converter::getNextID(){
+std::vector<int> Converter::getNextID(){
     return nextID;
 }
 
