@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <sys/stat.h>
+#include <iostream>
 
 using namespace tinyxml2;
 
@@ -41,9 +42,12 @@ Converter::Converter(std::string level){
     }else{
         XMLElement* thisComposition = doc->FirstChildElement("composition");
         int idGreen, idBlue;
+        XMLError error=XML_NO_ERROR;
         for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-            thisComposition->QueryIntAttribute("idGreen", &idGreen);
-            thisComposition->QueryIntAttribute("idBlue", &idBlue);
+            error = thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen);
+            errorCheck(error);
+            error = thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue);
+            errorCheck(error);
             if(idGreen > nextID[0] || (idGreen == nextID[0] && idBlue > nextID[1])){
                 nextID[0] = idGreen;
                 nextID[1] = idBlue;
@@ -68,6 +72,7 @@ std::vector<unsigned int> Converter::newComposition(unsigned int type, float pos
     XMLElement* zPos = doc->NewElement("zPos");
     XMLElement* yOffset = doc->NewElement("yOffset");
     XMLElement* xPos  = doc->NewElement("xPos");
+    XMLElement* manualPos  = doc->NewElement("manualPos");
     XMLElement* zRot  = doc->NewElement("zRot");
     XMLElement* yRot  = doc->NewElement("yRot");
     XMLElement* xRot  = doc->NewElement("xRot");
@@ -79,6 +84,7 @@ std::vector<unsigned int> Converter::newComposition(unsigned int type, float pos
     zPos->SetText(std::to_string(posZ).c_str());
     yOffset->SetText("0.0");
     xPos->SetText(std::to_string(posX).c_str());
+    manualPos->SetText("false");
     zRot->SetText("0.0");
     yRot->SetText("0.0");
     xRot->SetText("0.0");
@@ -90,6 +96,7 @@ std::vector<unsigned int> Converter::newComposition(unsigned int type, float pos
     newComposition->InsertFirstChild(zPos);
     newComposition->InsertFirstChild(yOffset);
     newComposition->InsertFirstChild(xPos);
+    newComposition->InsertFirstChild(manualPos);
     newComposition->InsertFirstChild(zRot);
     newComposition->InsertFirstChild(yRot);
     newComposition->InsertFirstChild(xRot);
@@ -106,23 +113,40 @@ std::vector<unsigned int> Converter::newComposition(unsigned int type, float pos
 
 void Converter::updateComposition(unsigned int idG, unsigned int idB, float posX, float posZ){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
-    int idGreen, idBlue;
+    int idGreen = 0, idBlue = 0;
+    bool compositionExists = false;
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-        thisComposition->QueryIntAttribute("idGreen", &idGreen);
-        thisComposition->QueryIntAttribute("idBlue", &idBlue);
+        XMLError error=XML_NO_ERROR;
+        error = thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen);
+        errorCheck(error);
+        error = thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue);
+        errorCheck(error);
         if(idGreen == idG && idBlue == idB){
-            thisComposition->FirstChildElement("xPos")->SetText(std::to_string(posX).c_str());
-            thisComposition->FirstChildElement("zPos")->SetText(std::to_string(posZ).c_str());
+            bool manualPos;
+            error=thisComposition->FirstChildElement("manualPos")->QueryBoolText(&manualPos);
+            errorCheck(error);
+            if(!manualPos){
+                thisComposition->FirstChildElement("xPos")->SetText(std::to_string(posX).c_str());
+                thisComposition->FirstChildElement("zPos")->SetText(std::to_string(posZ).c_str());
+            }
+            compositionExists = true;
         }
+    }
+    if(!compositionExists){
+        std::cout << "A composition has an ID in the png, but does'nt exist in the xml." << std::endl;
+        exit(-1);
     }
 }
 
 void Converter::deleteComposition(unsigned int idG, unsigned int idB){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     int idGreen, idBlue;
+    XMLError error=XML_NO_ERROR;
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-        thisComposition->QueryIntAttribute("idGreen", &idGreen);
-        thisComposition->QueryIntAttribute("idBlue", &idBlue);
+        error = thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen);
+        errorCheck(error);
+        error = thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue);
+        errorCheck(error);
         if(idGreen == idG && idBlue == idB){
             doc->DeleteChild(thisComposition);
         }
@@ -138,13 +162,23 @@ std::vector<unsigned int> Converter::getNextID(){
     return nextID;
 }
 
-/*  finding a typeID in compositions:
-    XMLElement* thisComposition = compositions->FirstChildElement("composition");
-    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-        int thisType;
-        thisComposition->QueryIntAttribute("typeID", &thisType);
-        if(thisType == type){
-            ...
+void Converter::errorCheck(XMLError error){
+    if (error) {
+        printf("XMLError: ");
+        if (error == XML_WRONG_ATTRIBUTE_TYPE) {
+            printf("Wrong attribute type.\n");
+        }
+        else if (error == XML_NO_ATTRIBUTE) {
+            printf("No attribute.\n");
+        }
+        else if (error == XML_CAN_NOT_CONVERT_TEXT) {
+            printf("Can not convert text.\n");
+        }
+        else if (error == XML_NO_TEXT_NODE) {
+            printf("No text.\n");
+        }
+        else {
+            printf("Unknown error.\n");
         }
     }
-*/
+}
