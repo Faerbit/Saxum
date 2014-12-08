@@ -40,7 +40,6 @@ void Level::errorCheck(XMLError error){
 }
 
 void Level::load() {
-    XMLError error=XML_NO_ERROR;
     this->physics = Physics();
     this->physics.init();
     
@@ -61,7 +60,6 @@ void Level::load() {
     //addTerrainPhysic
 	physics.addTerrain(terrain.getHeightmapWidth(), terrain.getHeightmapHeight(), terrain.getHeightmap());
     
-    
     //Loading Objects via xml
     XMLDocument* doc = new XMLDocument();
     const char* xmlFile = ("../Levels/ObjectSetups/Level" + levelNum + ".xml").c_str();
@@ -80,13 +78,11 @@ void Level::load() {
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
         int thisType = 0;
-        error = thisComposition->FirstChildElement("typeID")->QueryIntText(&thisType);
-        errorCheck(error);
+        errorCheck(thisComposition->FirstChildElement("typeID")->QueryIntText(&thisType));
         XMLElement* composition = compositions->FirstChildElement("composition");
         for(; composition; composition=composition->NextSiblingElement("composition")){
             int compositionType = 0;
-            error = composition->FirstChildElement("typeID")->QueryIntText(&compositionType);
-            errorCheck(error);
+            errorCheck(composition->FirstChildElement("typeID")->QueryIntText(&compositionType));
             if(thisType == compositionType){
                 XMLElement* object = composition->FirstChildElement("object");
                 for(; object; object=object->NextSiblingElement("object")){
@@ -96,10 +92,8 @@ void Level::load() {
                     }
                     std::string modelPath = charModelPath;
                     float objectScale, compScale;
-                    error = object->FirstChildElement("scale")->QueryFloatText(&objectScale);
-                    errorCheck(error);
-                    error = thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale);
-                    errorCheck(error);
+                    errorCheck(object->FirstChildElement("scale")->QueryFloatText(&objectScale));
+                    errorCheck(thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale));
                     Model model = Model(modelPath, objectScale * compScale);
                     Material material;
                     XMLElement* objectData = compositions->FirstChildElement("objectData");
@@ -111,14 +105,10 @@ void Level::load() {
                         std::string dataModelPath = charDataModelPath;
                         if(dataModelPath == modelPath){
                             float ambientFactor, diffuseFactor, specularFactor, shininess;
-                            error = objectData->FirstChildElement("ambientFactor")->QueryFloatText(&ambientFactor);
-                            errorCheck(error);
-                            error = objectData->FirstChildElement("diffuseFactor")->QueryFloatText(&diffuseFactor);
-                            errorCheck(error);
-                            error = objectData->FirstChildElement("specularFactor")->QueryFloatText(&specularFactor);
-                            errorCheck(error);
-                            error = objectData->FirstChildElement("shininess")->QueryFloatText(&shininess);
-                            errorCheck(error);
+                            errorCheck(objectData->FirstChildElement("ambientFactor")->QueryFloatText(&ambientFactor));
+                            errorCheck(objectData->FirstChildElement("diffuseFactor")->QueryFloatText(&diffuseFactor));
+                            errorCheck(objectData->FirstChildElement("specularFactor")->QueryFloatText(&specularFactor));
+                            errorCheck(objectData->FirstChildElement("shininess")->QueryFloatText(&shininess));
                             const char* charTexturePath = objectData->FirstChildElement("texturePath")->GetText();
                             if(charTexturePath == NULL){
                                 printf("XMLError: No texturePath found in objectData.\n");
@@ -129,24 +119,15 @@ void Level::load() {
                     }
                     float compXPos, compYOffset, compZPos;
                     glm::vec3 objectOffset, compRot;
-                    error = object->FirstChildElement("xOffset")->QueryFloatText(&objectOffset[0]);
-                    errorCheck(error);
-                    error = object->FirstChildElement("yOffset")->QueryFloatText(&objectOffset[1]);
-                    errorCheck(error);
-                    error = object->FirstChildElement("zOffset")->QueryFloatText(&objectOffset[2]);
-                    errorCheck(error);
-                    error = thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos);
-                    errorCheck(error);
-                    error = thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset);
-                    errorCheck(error);
-                    error = thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos);
-                    errorCheck(error);
-                    error = thisComposition->FirstChildElement("xRot")->QueryFloatText(&compRot[0]);
-                    errorCheck(error);
-                    error = thisComposition->FirstChildElement("yRot")->QueryFloatText(&compRot[1]);
-                    errorCheck(error);
-                    error = thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]);
-                    errorCheck(error);
+                    errorCheck(object->FirstChildElement("xOffset")->QueryFloatText(&objectOffset[0]));
+                    errorCheck(object->FirstChildElement("yOffset")->QueryFloatText(&objectOffset[1]));
+                    errorCheck(object->FirstChildElement("zOffset")->QueryFloatText(&objectOffset[2]));
+                    errorCheck(thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos));
+                    errorCheck(thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset));
+                    errorCheck(thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos));
+                    errorCheck(thisComposition->FirstChildElement("xRot")->QueryFloatText(&compRot[0]));
+                    errorCheck(thisComposition->FirstChildElement("yRot")->QueryFloatText(&compRot[1]));
+                    errorCheck(thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]));
                     glm::vec3 compPos = glm::vec3(compXPos,
                                         compYOffset+terrain.getHeightmap()[int(compXPos-0.5+0.5*terrain.getHeightmapHeight())]
                                                                           [int(compZPos-0.5+0.5*terrain.getHeightmapWidth())],
@@ -170,34 +151,20 @@ void Level::load() {
                 for(; light; light=light->NextSiblingElement("light")){
                     glm::vec3 compRot, lightOffset, lightColour;
                     float compScale, compXPos, compYOffset, compZPos, lightIntensity;
-                    error = thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale);
-                    errorCheck(error);
-                    error = light->FirstChildElement("xOffset")->QueryFloatText(&lightOffset[0]);
-                    errorCheck(error);
-                    error = light->FirstChildElement("yOffset")->QueryFloatText(&lightOffset[1]);
-                    errorCheck(error);
-                    error = light->FirstChildElement("zOffset")->QueryFloatText(&lightOffset[2]);
-                    errorCheck(error);
-                    error = thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos);
-                    errorCheck(error);
-                    error = thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset);
-                    errorCheck(error);
-                    error = thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos);
-                    errorCheck(error);
-                    error = thisComposition->FirstChildElement("xRot")->QueryFloatText(&compRot[0]);
-                    errorCheck(error);
-                    error = thisComposition->FirstChildElement("yRot")->QueryFloatText(&compRot[1]);
-                    errorCheck(error);
-                    error = thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]);
-                    errorCheck(error);
-                    error = light->FirstChildElement("rColour")->QueryFloatText(&lightColour[0]);
-                    errorCheck(error);
-                    error = light->FirstChildElement("gColour")->QueryFloatText(&lightColour[1]);
-                    errorCheck(error);
-                    error = light->FirstChildElement("bColour")->QueryFloatText(&lightColour[2]);
-                    errorCheck(error);
-                    error = light->FirstChildElement("intensity")->QueryFloatText(&lightIntensity);
-                    errorCheck(error);
+                    errorCheck(thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale));
+                    errorCheck(light->FirstChildElement("xOffset")->QueryFloatText(&lightOffset[0]));
+                    errorCheck(light->FirstChildElement("yOffset")->QueryFloatText(&lightOffset[1]));
+                    errorCheck(light->FirstChildElement("zOffset")->QueryFloatText(&lightOffset[2]));
+                    errorCheck(thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos));
+                    errorCheck(thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset));
+                    errorCheck(thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos));
+                    errorCheck(thisComposition->FirstChildElement("xRot")->QueryFloatText(&compRot[0]));
+                    errorCheck(thisComposition->FirstChildElement("yRot")->QueryFloatText(&compRot[1]));
+                    errorCheck(thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]));
+                    errorCheck(light->FirstChildElement("rColour")->QueryFloatText(&lightColour[0]));
+                    errorCheck(light->FirstChildElement("gColour")->QueryFloatText(&lightColour[1]));
+                    errorCheck(light->FirstChildElement("bColour")->QueryFloatText(&lightColour[2]));
+                    errorCheck(light->FirstChildElement("intensity")->QueryFloatText(&lightIntensity));
                     glm::vec3 compPos = glm::vec3(compXPos,
                                         compYOffset+terrain.getHeightmap()[int(compXPos-0.5+0.5*terrain.getHeightmapHeight())]
                                                                           [int(compZPos-0.5+0.5*terrain.getHeightmapWidth())],
