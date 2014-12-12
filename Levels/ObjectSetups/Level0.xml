@@ -32,11 +32,53 @@
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
+    <xPos>2.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-2.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>7</idBlue>
+    <typeID>99</typeID>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
     <xPos>1.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>0.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>6</idBlue>
+    <typeID>99</typeID>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-0.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>1.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>5</idBlue>
+    <typeID>99</typeID>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-0.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-1.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>4</idBlue>
     <typeID>99</typeID>
 </composition>
 
@@ -53,3 +95,58 @@
     <idBlue>3</idBlue>
     <typeID>99</typeID>
 </composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-3.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-3.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>2</idBlue>
+    <typeID>99</typeID>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-4.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-4.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>1</idBlue>
+    <typeID>99</typeID>
+</composition>
+
+<ambientLight>
+    <rColour>1.0</rColour>
+    <gColour>1.0</gColour>
+    <bColour>1.0</bColour>
+</ambientLight>
+
+<fogColour>
+    <rColour>0.10</rColour>
+    <gColour>0.14</gColour>
+    <bColour>0.14</bColour>
+    <alpha>1.0</alpha>
+</fogColour>
+
+<directionalLight>
+    <xOffset>-1.0</xOffset>
+    <yOffset>1.5</yOffset>
+    <zOffset>1.0</zOffset>
+    <rColour>1.0</rColour>
+    <gColour>1.0</gColour>
+    <bColour>0.9</bColour>
+    <intensity>0.2</intensity>
+</directionalLight>
+
+<skydome>
+    <texture>skydome.png</texture>
+</skydome>
