@@ -25,7 +25,7 @@ class Level {
         Object* getCameraCenter();
         Camera* getCamera();
         glm::vec3 getCameraPosition();
-        glm::vec4 getFogColor();
+        glm::vec4 getFogColour();
         void setSkydomeSize(float size);
     private:
         void errorCheck(tinyxml2::XMLError error);
@@ -34,7 +34,7 @@ class Level {
         std::vector<Object*> physicObjects;
         std::vector<Light> lights;
         glm::vec3 ambientLight;
-        glm::vec4 fogColor;
+        glm::vec4 fogColour;
         Light directionalLight;
         Object* cameraCenter;
         Object* skydome;

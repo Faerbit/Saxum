@@ -39,7 +39,61 @@ Converter::Converter(std::string level){
     doc->LoadFile(charXmlFile);
     if (doc->ErrorID()!=0){
         printf("Could not open xml, creating new xml.\n");
+        std::vector<XMLElement*> lightAttributes;
+        lightAttributes.push_back(doc->NewElement("xOffset"));
+        lightAttributes.push_back(doc->NewElement("yOffset"));
+        lightAttributes.push_back(doc->NewElement("zOffset"));
+        lightAttributes.push_back(doc->NewElement("rColour"));
+        lightAttributes.push_back(doc->NewElement("gColour"));
+        lightAttributes.push_back(doc->NewElement("bColour"));
+        lightAttributes.push_back(doc->NewElement("intensity"));
+        XMLElement* rColourAmbient = doc->NewElement("rColour");
+        XMLElement* gColourAmbient = doc->NewElement("gColour");
+        XMLElement* bColourAmbient = doc->NewElement("bColour");
+        XMLElement* rColourFog = doc->NewElement("rColour");
+        XMLElement* gColourFog = doc->NewElement("gColour");
+        XMLElement* bColourFog = doc->NewElement("bColour");
+        XMLElement* alphaFog = doc->NewElement("alpha");
         
+        lightAttributes[0]->SetText("-1.0");
+        lightAttributes[1]->SetText("1.5");
+        lightAttributes[2]->SetText("1.0");
+        lightAttributes[3]->SetText("1.0");
+        lightAttributes[4]->SetText("1.0");
+        lightAttributes[5]->SetText("0.9");
+        lightAttributes[6]->SetText("0.2");
+        rColourAmbient->SetText("1.0");
+        gColourAmbient->SetText("1.0");
+        bColourAmbient->SetText("1.0");
+        rColourFog->SetText("0.10");
+        gColourFog->SetText("0.14");
+        bColourFog->SetText("0.14");
+        alphaFog->SetText("1.0");
+        
+        XMLElement* ambientLight = doc->NewElement("ambientLight");
+        XMLElement* fogColour = doc->NewElement("fogColour");
+        XMLElement* directionalLight = doc->NewElement("directionalLight");
+        
+        ambientLight->InsertEndChild(rColourAmbient);
+        ambientLight->InsertEndChild(gColourAmbient);
+        ambientLight->InsertEndChild(bColourAmbient);
+        fogColour->InsertEndChild(rColourFog);
+        fogColour->InsertEndChild(gColourFog);
+        fogColour->InsertEndChild(bColourFog);
+        fogColour->InsertEndChild(alphaFog);
+        for(int i=0;i<7;i++){
+            directionalLight->InsertEndChild(lightAttributes[i]);
+        }
+        
+        XMLElement* skydome = doc->NewElement("skydome");
+        XMLElement* skydomeTexture = doc->NewElement("texture");
+        skydomeTexture->SetText("skydome.png");
+        skydome->InsertEndChild(skydomeTexture);
+        
+        doc->InsertEndChild(ambientLight);
+        doc->InsertEndChild(fogColour);
+        doc->InsertEndChild(directionalLight);
+        doc->InsertEndChild(skydome);
     }else{
         XMLElement* thisComposition = doc->FirstChildElement("composition");
         int idGreen, idBlue;

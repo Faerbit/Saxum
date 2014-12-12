@@ -60,7 +60,7 @@ void Level::load() {
     //addTerrainPhysic
 	physics.addTerrain(terrain.getHeightmapWidth(), terrain.getHeightmapHeight(), terrain.getHeightmap());
     
-    //Loading Objects via xml
+    //Loading from xml:
     XMLDocument* doc = new XMLDocument();
     const char* xmlFile = ("../Levels/ObjectSetups/Level" + levelNum + ".xml").c_str();
     doc->LoadFile(xmlFile);
@@ -68,6 +68,36 @@ void Level::load() {
         printf("Could not open ObjectSetupXml!\n");
         exit(-1);
     }
+    //load the skydome
+    XMLElement* skydomeElement = doc->FirstChildElement("skydome");
+    const char* charSkydomeTexture = skydomeElement->FirstChildElement("texture")->GetText();
+    if(charSkydomeTexture == NULL){
+        printf("XMLError: No skydomeTexture found.\n");
+    }
+    std::string skydomeTexture = charSkydomeTexture;
+    Model skydomeModel = Model("skydome.obj", skydomeSize);
+    Material skydomeMaterial = Material(skydomeTexture, 0.7f, 0.0f, 0.0f, 0.0f);
+    Object* skydomeObject = new Object(skydomeModel, skydomeMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 0.0f, 0.0f));
+    objects.push_back(skydomeObject);
+    skydome = skydomeObject;
+    //load lighting parameters
+    float rColour, gColour, bColour, alpha, xOffset, yOffset, zOffset;
+    XMLElement* ambientElement = doc->FirstChildElement("ambientLight");
+    errorCheck(ambientElement->FirstChildElement("rColour")->QueryFloatText(&rColour));
+    errorCheck(ambientElement->FirstChildElement("gColour")->QueryFloatText(&gColour));
+    errorCheck(ambientElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
+    ambientLight = glm::vec3(rColour,gColour,bColour);
+    XMLElement* fogElement = doc->FirstChildElement("ambientLight");
+    errorCheck(fogElement->FirstChildElement("rColour")->QueryFloatText(&rColour));
+    errorCheck(fogElement->FirstChildElement("gColour")->QueryFloatText(&gColour));
+    errorCheck(fogElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
+    errorCheck(fogElement->FirstChildElement("alpha")->QueryFloatText(&alpha));
+    fogColour = glm::vec4(rColour,gColour,bColour, alpha);
+    directionalLight = Light(glm::vec3(-1.0f, 1.5f, 1.0f), glm::vec3(1.0f, 1.0f, 0.9f), 0.2f);
+    
+    
+    //load Objects 
     XMLDocument* compositions = new XMLDocument();
     const char* compositionsFile = "../Levels/ObjectSetups/Compositions.xml";
     compositions->LoadFile(compositionsFile);
@@ -192,13 +222,6 @@ void Level::load() {
     physicObjects.push_back(object);
     this->physics.addPlayer(1.25f,*object,8.0f,physicObjects.size());
     cameraCenter = object;
-   
-    Model skydomeModel = Model("skydome.obj", skydomeSize);
-    Material skydomeMaterial = Material("skydome.png", 0.7f, 0.0f, 0.0f, 0.0f);
-    Object* skydomeObject = new Object(skydomeModel, skydomeMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f));
-    objects.push_back(skydomeObject);
-    skydome = skydomeObject;
 
     Model torchModel = Model("torch.obj", 0.75f);
     Material torchMaterial = Material("torchTexture.png", 0.1f, 0.3f, 0.7f, 10.0f);
@@ -227,18 +250,7 @@ void Level::load() {
             glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(columnObject);
 
-    //make non physics objects
-
-
-    //set lighting parameters
-    ambientLight = glm::vec3(1.0f, 1.0f, 1.0f);
-    fogColor = glm::vec4(0.10f, 0.14f, 0.14f, 1.0f);
-    directionalLight = Light(glm::vec3(-1.0f, 1.5f, 1.0f), glm::vec3(1.0f, 1.0f, 0.9f), 0.2f);
-    Light light = Light(glm::vec3(-3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 5.0f);
-    //lights.push_back(light);
-    Light light2 = Light(glm::vec3(3.0f, 7.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0f);
-    //lights.push_back(light2);
-
+    
     
 }
 
@@ -313,8 +325,8 @@ Light* Level::getDirectionalLight() {
     return &directionalLight;
 }
 
-glm::vec4 Level::getFogColor() {
-    return fogColor;
+glm::vec4 Level::getFogColour() {
+    return fogColour;
 }
 
 glm::vec3 Level::getCameraPosition() {
