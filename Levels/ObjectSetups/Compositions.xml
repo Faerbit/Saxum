@@ -98,7 +98,7 @@
 
 <objectData>
     <modelPath>marbleSmooth.obj</modelPath>
-    <texturePath>marbleTexture_small.png</texturePath>
+    <texturePath>MarbleTexture.png</texturePath>
     <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.5</diffuseFactor>
     <specularFactor>0.5</specularFactor>
