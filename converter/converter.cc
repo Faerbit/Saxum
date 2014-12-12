@@ -33,21 +33,19 @@ Converter::Converter(std::string level){
     dst << src.rdbuf();
     
     //Load the Level xml file
+    nextID.push_back(1);
+    nextID.push_back(1);
     const char* charXmlFile = xmlFile.c_str();
     doc->LoadFile(charXmlFile);
-    nextID.push_back(1);
-    nextID.push_back(1);
     if (doc->ErrorID()!=0){
         printf("Could not open xml, creating new xml.\n");
+        
     }else{
         XMLElement* thisComposition = doc->FirstChildElement("composition");
         int idGreen, idBlue;
-        XMLError error=XML_NO_ERROR;
         for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-            error = thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen);
-            errorCheck(error);
-            error = thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue);
-            errorCheck(error);
+            errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
+            errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
             if(idGreen > nextID[0] || (idGreen == nextID[0] && idBlue > nextID[1])){
                 nextID[0] = idGreen;
                 nextID[1] = idBlue;
@@ -116,15 +114,11 @@ void Converter::updateComposition(int idG, int idB, float posX, float posZ){
     int idGreen = 0, idBlue = 0;
     bool compositionExists = false;
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-        XMLError error=XML_NO_ERROR;
-        error = thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen);
-        errorCheck(error);
-        error = thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue);
-        errorCheck(error);
+        errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
+        errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
         if(idGreen == idG && idBlue == idB){
             bool manualPos;
-            error=thisComposition->FirstChildElement("manualPos")->QueryBoolText(&manualPos);
-            errorCheck(error);
+            errorCheck(thisComposition->FirstChildElement("manualPos")->QueryBoolText(&manualPos));
             if(!manualPos){
                 thisComposition->FirstChildElement("xPos")->SetText(std::to_string(posX).c_str());
                 thisComposition->FirstChildElement("zPos")->SetText(std::to_string(posZ).c_str());
@@ -141,12 +135,9 @@ void Converter::updateComposition(int idG, int idB, float posX, float posZ){
 void Converter::deleteComposition(int idG, int idB){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     int idGreen, idBlue;
-    XMLError error=XML_NO_ERROR;
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-        error = thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen);
-        errorCheck(error);
-        error = thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue);
-        errorCheck(error);
+        errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
+        errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
         if(idGreen == idG && idBlue == idB){
             doc->DeleteChild(thisComposition);
         }
