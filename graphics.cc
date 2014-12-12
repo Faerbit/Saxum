@@ -32,7 +32,7 @@ void Graphics::init() {
     depthShader = ShaderProgramCreator("depth")
         .attributeLocations(vao->getAttributeLocations()).create();
 
-    depthTexture_near = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH24_STENCIL8));
+    depthTexture_near = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT16));
     depthTexture_near->setMinFilter(GL_NEAREST);
     depthTexture_near->setMagFilter(GL_NEAREST);
     depthTexture_near->setWrapS(GL_CLAMP_TO_EDGE);
@@ -43,7 +43,7 @@ void Graphics::init() {
     framebuffer_near->setDepthTexture(depthTexture_near);
     framebuffer_near->validate();
 
-    depthTexture_middle = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH24_STENCIL8));
+    depthTexture_middle = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT16));
     depthTexture_middle->setMinFilter(GL_NEAREST);
     depthTexture_middle->setMagFilter(GL_NEAREST);
     depthTexture_middle->setWrapS(GL_CLAMP_TO_EDGE);
@@ -54,7 +54,7 @@ void Graphics::init() {
     framebuffer_middle->setDepthTexture(depthTexture_middle);
     framebuffer_middle->validate();
 
-    depthTexture_far = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH24_STENCIL8));
+    depthTexture_far = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT16));
     depthTexture_far->setMinFilter(GL_NEAREST);
     depthTexture_far->setMagFilter(GL_NEAREST);
     depthTexture_far->setWrapS(GL_CLAMP_TO_EDGE);
