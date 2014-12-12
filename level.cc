@@ -60,7 +60,7 @@ void Level::load() {
     
     //addTerrainPhysic
 	physics.addTerrain(terrain.getHeightmapWidth(), terrain.getHeightmapHeight(), terrain.getHeightmap());
-    
+
     //Loading from xml:
     XMLDocument* doc = new XMLDocument();
     const char* xmlFile = ("../Levels/ObjectSetups/Level" + levelNum + ".xml").c_str();
@@ -82,6 +82,7 @@ void Level::load() {
         glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(skydomeObject);
     skydome = skydomeObject;
+
     //load lighting parameters
     float rColour, gColour, bColour, alpha, xOffset, yOffset, zOffset, intensity;
     XMLElement* ambientElement = doc->FirstChildElement("ambientLight");
@@ -89,7 +90,7 @@ void Level::load() {
     errorCheck(ambientElement->FirstChildElement("gColour")->QueryFloatText(&gColour));
     errorCheck(ambientElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
     ambientLight = glm::vec3(rColour,gColour,bColour);
-    XMLElement* fogElement = doc->FirstChildElement("ambientLight");
+    XMLElement* fogElement = doc->FirstChildElement("fogColour");
     errorCheck(fogElement->FirstChildElement("rColour")->QueryFloatText(&rColour));
     errorCheck(fogElement->FirstChildElement("gColour")->QueryFloatText(&gColour));
     errorCheck(fogElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
@@ -104,6 +105,7 @@ void Level::load() {
     errorCheck(directionalElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
     errorCheck(directionalElement->FirstChildElement("intensity")->QueryFloatText(&intensity));
     directionalLight = Light(glm::vec3(xOffset,yOffset,zOffset), glm::vec3(rColour,gColour,bColour), intensity);
+
     //load Objects
     std::vector<int*> objectIdentifiers;  //The first entry is the index in objects, the others are idGreen, idBlue and objectNum.  
     XMLDocument* compositions = new XMLDocument();
@@ -193,7 +195,7 @@ void Level::load() {
                             objectIdentifier[2] = idBlue;
                             objectIdentifier[3] = objectNum;
                             objectIdentifiers.push_back(objectIdentifier);
-          //                  
+/*
                             physicObjects.push_back(object);
                             const char* charPhysicType = objectData->FirstChildElement("physicType")->GetText();
                             if(charPhysicType == NULL){
@@ -206,22 +208,23 @@ void Level::load() {
                                 errorCheck(objectData->FirstChildElement("radius")->QueryFloatText(&radius));
                                 errorCheck(objectData->FirstChildElement("mass")->QueryFloatText(&mass));
                                 this->physics.addPlayer(radius, *object, mass, physicObjects.size());
-                            }
-                            if (physicType.compare("Box") == 0){
+                            }else if (physicType.compare("Box") == 0){
                                 float width, height, length, mass;
                                 errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
                                 errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
                                 errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
                                 errorCheck(objectData->FirstChildElement("mass")->QueryFloatText(&mass));
                                 this->physics.addBox(width, height, length, *object, mass, physicObjects.size());
-                            }
-                            if (physicType.compare("TriangleMeshBody") == 0){
+                            }else if (physicType.compare("TriangleMeshBody") == 0){
                                 float mass, dampningL, dampningA;
                                 errorCheck(objectData->FirstChildElement("mass")->QueryFloatText(&mass));
                                 errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
                                 errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                                 this->physics.addTriangleMeshBody(*object, mass, dampningL, dampningA, physicObjects.size());
+                            } else{
+                                printf("XMLError: Not a valid physicType.\n");
                             }
+*/
                             if(compositionType == 20){
                                 cameraCenter = object;
                             }
@@ -230,7 +233,7 @@ void Level::load() {
                     
                     objectNum = objectNum + 1;
                 }//iterating over all objects of the composition
-                
+
                 //iterate over all lights of the composition
                 XMLElement* light = composition->FirstChildElement("light");
                 for(; light; light=light->NextSiblingElement("light")){
@@ -279,7 +282,7 @@ void Level::load() {
             //TODO add triggers
         }
     }
-        
+
     //add player (//TODO remove this as soon as we have a levelSetup with a player)
     Model marbleModel = Model("marbleSmooth.obj", 0.75f);
     Material marbleMaterial = Material("Marbletexture.png", 0.1f, 0.5f, 0.5f, 3.0f);
