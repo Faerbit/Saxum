@@ -225,7 +225,7 @@ void Level::load() {
     
     //add player
     Model marbleModel = Model("marbleSmooth.obj", 0.75f);
-    Material marbleMaterial = Material("marbleTexture_small.png", 0.1f, 0.5f, 0.5f, 3.0f);
+    Material marbleMaterial = Material("Marbletexture.png", 0.1f, 0.5f, 0.5f, 3.0f);
     Object* object = new Object(marbleModel, marbleMaterial, glm::vec3(2.0f, 10.0f, 2.0f),
         glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(object);    
