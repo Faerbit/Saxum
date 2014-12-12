@@ -225,10 +225,13 @@ void Level::load() {
                             if(compositionType == 20){
                                 cameraCenter = object;
                             }
-                        }
-                    }
+                        }//objectData found
+                    }//finding the objectData
+                    
                     objectNum = objectNum + 1;
-                }
+                }//iterating over all objects of the composition
+                
+                //iterate over all lights of the composition
                 XMLElement* light = composition->FirstChildElement("light");
                 for(; light; light=light->NextSiblingElement("light")){
                     glm::vec3 compRot, lightOffset, lightColour;
@@ -259,13 +262,25 @@ void Level::load() {
                     glm::vec3 lightPosition = compPos + glm::vec3(rotatedLightOffset.x,rotatedLightOffset.y,rotatedLightOffset.z);
                     Light light = Light(lightPosition, lightColour, lightIntensity);
                     lights.push_back(light);
-                }
-            }
+                }//iterating over all lights of the composition
+            }//corect composition found
+        }//iterating over all compositions in Compositions.xml
+    }//iterating over all compositions in Level.xml
+    
+    //load triggers
+    XMLElement* trigger = doc->FirstChildElement("trigger");
+    for(; trigger; trigger=trigger->NextSiblingElement("trigger")){
+        const char* charName = trigger->FirstChildElement("name")->GetText();
+        if(charName == NULL){
+            printf("XMLError: No name found for a trigger.\n");
+        }
+        std::string name = charName;
+        if (name.compare("-") != 0){
+            //TODO add triggers
         }
     }
-    
-    
-    //add player
+        
+    //add player (//TODO remove this as soon as we have a levelSetup with a player)
     Model marbleModel = Model("marbleSmooth.obj", 0.75f);
     Material marbleMaterial = Material("Marbletexture.png", 0.1f, 0.5f, 0.5f, 3.0f);
     Object* object = new Object(marbleModel, marbleMaterial, glm::vec3(2.0f, 10.0f, 2.0f),
