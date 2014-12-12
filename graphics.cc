@@ -180,7 +180,7 @@ void Graphics::render(Level* level)
 
     // set fog Parameters
     lightingShader->setUniform("fogEnd", (farPlane)-35.0f);
-    lightingShader->setUniform("fogColor", level->getFogColor());
+    lightingShader->setUniform("fogColor", level->getFogColour());
     lightingShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
 
     // set Material Parameters
