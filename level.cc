@@ -174,16 +174,37 @@ void Level::load() {
                             glm::vec3 objectPosition = compPos + glm::vec3(rotatedObjectOffset.x,rotatedObjectOffset.y,rotatedObjectOffset.z);
                             Object* object = new Object(model, material, objectPosition, compRot);
                             objects.push_back(object);
-                            //physicObjects.push_back(object);
+                            physicObjects.push_back(object);
                             const char* charPhysicType = objectData->FirstChildElement("physicType")->GetText();
                             if(charPhysicType == NULL){
                                 printf("XMLError: No physicType found.\n");
                             }
                             std::string physicType = charPhysicType;
-                            //TODO switch (physicType) and add object to physics
-                            //if(compositionType == 20){
-                            //    cameraCenter = object;
-                            //}
+                            //add Object to physics
+                            if (physicType.compare("Player") == 0){
+                                float radius, mass;
+                                errorCheck(objectData->FirstChildElement("radius")->QueryFloatText(&radius));
+                                errorCheck(objectData->FirstChildElement("mass")->QueryFloatText(&mass));
+                                this->physics.addPlayer(radius, *object, mass, physicObjects.size());
+                            }
+                            if (physicType.compare("Box") == 0){
+                                float width, height, length, mass;
+                                errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
+                                errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
+                                errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
+                                errorCheck(objectData->FirstChildElement("mass")->QueryFloatText(&mass));
+                                this->physics.addBox(width, height, length, *object, mass, physicObjects.size());
+                            }
+                            if (physicType.compare("TriangleMeshBody") == 0){
+                                float mass, dampningL, dampningA;
+                                errorCheck(objectData->FirstChildElement("mass")->QueryFloatText(&mass));
+                                errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
+                                errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
+                                this->physics.addTriangleMeshBody(*object, mass, dampningL, dampningA, physicObjects.size());
+                            }
+                            if(compositionType == 20){
+                                cameraCenter = object;
+                            }
                         }
                     }
                 }
