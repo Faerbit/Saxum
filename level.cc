@@ -1,4 +1,5 @@
 #include "level.hh"
+#include <string>
 using namespace tinyxml2;
 
 
@@ -82,7 +83,7 @@ void Level::load() {
     objects.push_back(skydomeObject);
     skydome = skydomeObject;
     //load lighting parameters
-    float rColour, gColour, bColour, alpha, xOffset, yOffset, zOffset;
+    float rColour, gColour, bColour, alpha, xOffset, yOffset, zOffset, intensity;
     XMLElement* ambientElement = doc->FirstChildElement("ambientLight");
     errorCheck(ambientElement->FirstChildElement("rColour")->QueryFloatText(&rColour));
     errorCheck(ambientElement->FirstChildElement("gColour")->QueryFloatText(&gColour));
@@ -94,9 +95,15 @@ void Level::load() {
     errorCheck(fogElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
     errorCheck(fogElement->FirstChildElement("alpha")->QueryFloatText(&alpha));
     fogColour = glm::vec4(rColour,gColour,bColour, alpha);
-    directionalLight = Light(glm::vec3(-1.0f, 1.5f, 1.0f), glm::vec3(1.0f, 1.0f, 0.9f), 0.2f);
-    
-    
+    XMLElement* directionalElement = doc->FirstChildElement("directionalLight");
+    errorCheck(directionalElement->FirstChildElement("xOffset")->QueryFloatText(&xOffset));
+    errorCheck(directionalElement->FirstChildElement("yOffset")->QueryFloatText(&yOffset));
+    errorCheck(directionalElement->FirstChildElement("zOffset")->QueryFloatText(&zOffset));
+    errorCheck(directionalElement->FirstChildElement("rColour")->QueryFloatText(&rColour));
+    errorCheck(directionalElement->FirstChildElement("gColour")->QueryFloatText(&gColour));
+    errorCheck(directionalElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
+    errorCheck(directionalElement->FirstChildElement("intensity")->QueryFloatText(&intensity));
+    directionalLight = Light(glm::vec3(xOffset,yOffset,zOffset), glm::vec3(rColour,gColour,bColour), intensity);
     //load Objects 
     XMLDocument* compositions = new XMLDocument();
     const char* compositionsFile = "../Levels/ObjectSetups/Compositions.xml";
@@ -125,7 +132,6 @@ void Level::load() {
                     errorCheck(object->FirstChildElement("scale")->QueryFloatText(&objectScale));
                     errorCheck(thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale));
                     Model model = Model(modelPath, objectScale * compScale);
-                    Material material;
                     XMLElement* objectData = compositions->FirstChildElement("objectData");
                     for(; objectData; objectData=objectData->NextSiblingElement("objectData")){
                         const char* charDataModelPath = objectData->FirstChildElement("modelPath")->GetText();
@@ -144,38 +150,42 @@ void Level::load() {
                                 printf("XMLError: No texturePath found in objectData.\n");
                             }
                             std::string texturePath = charTexturePath;
-                            material = Material(texturePath, ambientFactor, diffuseFactor, specularFactor, shininess);
+                            Material material = Material(texturePath, ambientFactor, diffuseFactor, specularFactor, shininess);
+                            float compXPos, compYOffset, compZPos;
+                            glm::vec3 objectOffset, compRot;
+                            errorCheck(object->FirstChildElement("xOffset")->QueryFloatText(&objectOffset[0]));
+                            errorCheck(object->FirstChildElement("yOffset")->QueryFloatText(&objectOffset[1]));
+                            errorCheck(object->FirstChildElement("zOffset")->QueryFloatText(&objectOffset[2]));
+                            errorCheck(thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos));
+                            errorCheck(thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset));
+                            errorCheck(thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos));
+                            errorCheck(thisComposition->FirstChildElement("xRot")->QueryFloatText(&compRot[0]));
+                            errorCheck(thisComposition->FirstChildElement("yRot")->QueryFloatText(&compRot[1]));
+                            errorCheck(thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]));
+                            glm::vec3 compPos = glm::vec3(compXPos,
+                                                          compYOffset+terrain.getHeightmap()[int(compXPos-0.5+0.5*terrain.getHeightmapHeight())]
+                                                                                            [int(compZPos-0.5+0.5*terrain.getHeightmapWidth())],
+                                                          compZPos);
+                            objectOffset = objectOffset * compScale;
+                            glm::vec4 rotatedObjectOffset = glm::rotate(compRot.x, glm::vec3(1.0f, 0.0f, 0.0f))
+                                                            * glm::rotate(compRot.y, glm::vec3(0.0f, 1.0f, 0.0f))
+                                                            * glm::rotate(compRot.z, glm::vec3(0.0f, 0.0f, 1.0f))
+                                                            * glm::vec4(objectOffset, 0);
+                            glm::vec3 objectPosition = compPos + glm::vec3(rotatedObjectOffset.x,rotatedObjectOffset.y,rotatedObjectOffset.z);
+                            Object* object = new Object(model, material, objectPosition, compRot);
+                            objects.push_back(object);
+                            //physicObjects.push_back(object);
+                            const char* charPhysicType = objectData->FirstChildElement("physicType")->GetText();
+                            if(charPhysicType == NULL){
+                                printf("XMLError: No physicType found.\n");
+                            }
+                            std::string physicType = charPhysicType;
+                            //TODO switch (physicType) and add object to physics
+                            //if(compositionType == 20){
+                            //    cameraCenter = object;
+                            //}
                         }
                     }
-                    float compXPos, compYOffset, compZPos;
-                    glm::vec3 objectOffset, compRot;
-                    errorCheck(object->FirstChildElement("xOffset")->QueryFloatText(&objectOffset[0]));
-                    errorCheck(object->FirstChildElement("yOffset")->QueryFloatText(&objectOffset[1]));
-                    errorCheck(object->FirstChildElement("zOffset")->QueryFloatText(&objectOffset[2]));
-                    errorCheck(thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos));
-                    errorCheck(thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset));
-                    errorCheck(thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos));
-                    errorCheck(thisComposition->FirstChildElement("xRot")->QueryFloatText(&compRot[0]));
-                    errorCheck(thisComposition->FirstChildElement("yRot")->QueryFloatText(&compRot[1]));
-                    errorCheck(thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]));
-                    glm::vec3 compPos = glm::vec3(compXPos,
-                                        compYOffset+terrain.getHeightmap()[int(compXPos-0.5+0.5*terrain.getHeightmapHeight())]
-                                                                          [int(compZPos-0.5+0.5*terrain.getHeightmapWidth())],
-                                        compZPos);
-                    objectOffset = objectOffset * compScale;
-                    glm::vec4 rotatedObjectOffset = glm::rotate(compRot.x, glm::vec3(1.0f, 0.0f, 0.0f))
-                                                    * glm::rotate(compRot.y, glm::vec3(0.0f, 1.0f, 0.0f))
-                                                    * glm::rotate(compRot.z, glm::vec3(0.0f, 0.0f, 1.0f))
-                                                    * glm::vec4(objectOffset, 0);
-                    glm::vec3 objectPosition = compPos + glm::vec3(rotatedObjectOffset.x,rotatedObjectOffset.y,rotatedObjectOffset.z);
-                    Object* object = new Object(model, material, objectPosition, compRot);
-                    objects.push_back(object);
-                    //TODO if object has physics: physicObjects.push_back(object);      //should not all objects have physics in the end?
-                    //TODO add object to physics
-                    //if(compositionType == 20){
-                    //    cameraCenter = object;
-                    //    this->physics.addPlayer(1.25f,*object,8.0f,physicObjects.size());
-                    //}
                 }
                 XMLElement* light = composition->FirstChildElement("light");
                 for(; light; light=light->NextSiblingElement("light")){
@@ -222,36 +232,6 @@ void Level::load() {
     physicObjects.push_back(object);
     this->physics.addPlayer(1.25f,*object,8.0f,physicObjects.size());
     cameraCenter = object;
-
-    Model torchModel = Model("torch.obj", 0.75f);
-    Material torchMaterial = Material("torchTexture.png", 0.1f, 0.3f, 0.7f, 10.0f);
-    //Create object
-    Object* torchObject = new Object(torchModel, torchMaterial, glm::vec3(-3.0f, 6.0f, 0.0f),
-        glm::vec3(0.0f, 1.0472f, 0.0f));
-    objects.push_back(torchObject);
-    
-    Model blockModel = Model("block.obj", 1.0f);
-    Material blockMaterial = Material("blockTexture_small.png", 0.1f, 0.6, 0.4f, 2.0f);
-    Object* blockObject = new Object(blockModel, blockMaterial, glm::vec3(0.0f, 10.0f, 0.0f),
-            glm::vec3(0.0f, 0.0f, 0.0f));
-    objects.push_back(blockObject);
-    physicObjects.push_back(blockObject);
-    physics.addBox(1,3.0f,1,*blockObject,2,physicObjects.size());
-    
-    Object* blockObject2 = new Object(blockModel, blockMaterial, glm::vec3(5.0f, 10.0f, 5.0f),
-            glm::vec3(0.0f, 0.0f, 0.0f));
-    objects.push_back(blockObject2);
-    physicObjects.push_back(blockObject2);
-    physics.addBox(1,3.0f,1,*blockObject2,2,physicObjects.size());
-
-    Model columnModel = Model("column.obj", 1.0f);
-    Material columnMaterial = Material("columnTexture2.png", 0.1f, 0.6, 0.4f, 2.0f);
-    Object* columnObject = new Object(columnModel, columnMaterial, glm::vec3(-2.0f, 7.0f, -2.0f),
-            glm::vec3(0.0f, 0.0f, 0.0f));
-    objects.push_back(columnObject);
-
-    
-    
 }
 
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass) {

@@ -5,7 +5,7 @@
         <xOffset>0.0</xOffset>
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
-        <scale>1.0</scale>
+        <scale>0.75</scale>
     </object>
 </composition>
 
@@ -103,6 +103,7 @@
     <diffuseFactor>0.5</diffuseFactor>
     <specularFactor>0.5</specularFactor>
     <shininess>3.0</shininess>
+    <physicType>Player</physicType>
 </objectData>
 
 <objectData>
@@ -112,6 +113,11 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
+    <physicType>Box</physicType>
+    <width>1.0</width>
+    <height>1.0</height>
+    <length>3.0</length>
+    <mass>2.0</mass>
 </objectData>
 
 <objectData>
@@ -121,6 +127,10 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
+    <physicType>TriangleMeshBody</physicType>
+    <mass>2.0</mass>
+    <dampningL></dampningL>
+    <dampningA></dampningA>
 </objectData>
 
 <objectData>
@@ -130,6 +140,10 @@
     <diffuseFactor>0.3</diffuseFactor>
     <specularFactor>0.7</specularFactor>
     <shininess>10.0</shininess>
+    <physicType>TriangleMeshBody</physicType>
+    <mass>0.0</mass>
+    <dampningL></dampningL>
+    <dampningA></dampningA>
 </objectData>
 
 <objectData>
@@ -139,6 +153,10 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
+    <physicType>TriangleMeshBody</physicType>
+    <mass>1.0</mass>
+    <dampningL></dampningL>
+    <dampningA></dampningA>
 </objectData>
 
 <objectData>
@@ -148,4 +166,8 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
+    <physicType>TriangleMeshBody</physicType>
+    <mass>0.0</mass>
+    <dampningL></dampningL>
+    <dampningA></dampningA>
 </objectData>
