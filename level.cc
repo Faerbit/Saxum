@@ -104,7 +104,8 @@ void Level::load() {
     errorCheck(directionalElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
     errorCheck(directionalElement->FirstChildElement("intensity")->QueryFloatText(&intensity));
     directionalLight = Light(glm::vec3(xOffset,yOffset,zOffset), glm::vec3(rColour,gColour,bColour), intensity);
-    //load Objects 
+    //load Objects
+    std::vector<int*> objectIdentifiers;  //The first entry is the index in objects, the others are idGreen, idBlue and objectNum.  
     XMLDocument* compositions = new XMLDocument();
     const char* compositionsFile = "../Levels/ObjectSetups/Compositions.xml";
     compositions->LoadFile(compositionsFile);
@@ -112,16 +113,21 @@ void Level::load() {
         printf("Could not open Compositions!\n");
         exit(-1);
     }
+    //iterate over all compositions in Level.xml
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
         int thisType = 0;
         errorCheck(thisComposition->FirstChildElement("typeID")->QueryIntText(&thisType));
+        //iterate over all compositions in Compositions.xml to find the one corresponding to the current composition
         XMLElement* composition = compositions->FirstChildElement("composition");
         for(; composition; composition=composition->NextSiblingElement("composition")){
             int compositionType = 0;
             errorCheck(composition->FirstChildElement("typeID")->QueryIntText(&compositionType));
+            //corect composition found
             if(thisType == compositionType){
+                //iterate over all objects of the composition
                 XMLElement* object = composition->FirstChildElement("object");
+                int objectNum = 0;
                 for(; object; object=object->NextSiblingElement("object")){
                     const char* charModelPath = object->FirstChildElement("modelPath")->GetText();
                     if(charModelPath == NULL){
@@ -132,6 +138,7 @@ void Level::load() {
                     errorCheck(object->FirstChildElement("scale")->QueryFloatText(&objectScale));
                     errorCheck(thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale));
                     Model model = Model(modelPath, objectScale * compScale);
+                    //find the objectData for the current object
                     XMLElement* objectData = compositions->FirstChildElement("objectData");
                     for(; objectData; objectData=objectData->NextSiblingElement("objectData")){
                         const char* charDataModelPath = objectData->FirstChildElement("modelPath")->GetText();
@@ -139,7 +146,9 @@ void Level::load() {
                             printf("XMLError: No modelPath found in objectData.\n");
                         }
                         std::string dataModelPath = charDataModelPath;
+                        //objectData found
                         if(dataModelPath == modelPath){
+                            //create the object
                             float ambientFactor, diffuseFactor, specularFactor, shininess;
                             errorCheck(objectData->FirstChildElement("ambientFactor")->QueryFloatText(&ambientFactor));
                             errorCheck(objectData->FirstChildElement("diffuseFactor")->QueryFloatText(&diffuseFactor));
@@ -174,13 +183,24 @@ void Level::load() {
                             glm::vec3 objectPosition = compPos + glm::vec3(rotatedObjectOffset.x,rotatedObjectOffset.y,rotatedObjectOffset.z);
                             Object* object = new Object(model, material, objectPosition, compRot);
                             objects.push_back(object);
+                            //create an identifier for this object
+                            int* objectIdentifier = new int[4];
+                            objectIdentifier[0] = objects.size()-1;
+                            int idGreen, idBlue;
+                            errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
+                            errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
+                            objectIdentifier[1] = idGreen;
+                            objectIdentifier[2] = idBlue;
+                            objectIdentifier[3] = objectNum;
+                            objectIdentifiers.push_back(objectIdentifier);
+          //                  
                             physicObjects.push_back(object);
                             const char* charPhysicType = objectData->FirstChildElement("physicType")->GetText();
                             if(charPhysicType == NULL){
                                 printf("XMLError: No physicType found.\n");
                             }
                             std::string physicType = charPhysicType;
-                            //add Object to physics
+                            //add object to physics
                             if (physicType.compare("Player") == 0){
                                 float radius, mass;
                                 errorCheck(objectData->FirstChildElement("radius")->QueryFloatText(&radius));
@@ -207,6 +227,7 @@ void Level::load() {
                             }
                         }
                     }
+                    objectNum = objectNum + 1;
                 }
                 XMLElement* light = composition->FirstChildElement("light");
                 for(; light; light=light->NextSiblingElement("light")){
