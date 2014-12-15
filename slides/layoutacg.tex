@@ -1,0 +1,39 @@
+\mode<presentation>
+{
+    \usetheme{Darmstadt}
+    \useoutertheme{miniframes}
+    \usecolortheme{acg}
+    
+    \setbeamercovered{transparent}
+    \setbeamertemplate{navigation symbols}{}
+    \setbeamertemplate{footline}
+    {
+        \includegraphics[width=\paperwidth]{images/logo.png}
+        \vspace*{-0.8cm}
+        \begin{center}
+            \color{ACGorange}\large{\insertpagenumber}
+        \end{center}
+        \vspace*{-0.8cm}
+        \begin{flushright}
+            \textcolor{ACGwhite}{\footnotesize{}} \hspace*{0.95cm}
+        \end{flushright}
+        \vspace*{-0.3cm}
+    }
+    
+    \setbeamertemplate{headline}
+    {
+        \vspace*{0.1cm}
+        \includegraphics[width=\paperwidth]{images/line.png}
+        \vspace*{-0.1cm}
+        \huge
+        \begin{center}
+            \invisible{Ag}
+            \color{ACGorange}\insertsubsection
+            \invisible{Ag}
+        \end{center}
+        \vspace*{-0.1cm}
+        \includegraphics[width=\paperwidth]{images/line.png}
+        \vspace*{-0.3cm}
+    }
+}
+ 
