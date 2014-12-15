@@ -294,11 +294,12 @@ void Level::load() {
     cameraCenter = object;
 }
 
-void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass, glm::mat4 viewProjectionMatrix) {
+void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
+        glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs) {
     for(unsigned int i = 0; i<objects.size(); i++) {
         // do not project shadow of skydome 
         if(lightingPass || objects.at(i) != skydome) {
-            objects.at(i)->render(shader, lightingPass, viewProjectionMatrix);
+            objects.at(i)->render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
         }
     }
 }
