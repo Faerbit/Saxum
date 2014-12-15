@@ -204,11 +204,8 @@ void Graphics::render()
     glm::mat4 depthBiasVP_middle = biasMatrix*depthViewProjectionMatrix_middle;
     glm::mat4 depthBiasVP_far = biasMatrix*depthViewProjectionMatrix_far;
 
-    //lightingShader->setUniform("shadowMVP_near", depthBiasVP_near);
     lightingShader->setTexture("shadowMap_near", depthTexture_near, 1);
-    //lightingShader->setUniform("shadowMVP_middle", depthBiasVP_middle);
     lightingShader->setTexture("shadowMap_middle", depthTexture_middle, 2);
-    //lightingShader->setUniform("shadowMVP_far", depthBiasVP_far);
     lightingShader->setTexture("shadowMap_far", depthTexture_far, 3);
 
     // set fog Parameters
