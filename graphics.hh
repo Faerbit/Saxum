@@ -14,8 +14,6 @@ class Graphics {
         Graphics();
         void init(Level* level);
         void render();
-        // to build the projection matrix:
-        glm::mat4 buildFrustum( float phiInDegree, float near, float far, float aspectRatio);
         glm::mat4 buildViewMatrix(Level* level);
         glm::uvec2 getWindowSize();
         bool createWindow();

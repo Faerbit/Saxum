@@ -97,7 +97,7 @@ void Graphics::render()
     depthShader->use();
     // render depth textures for point lights
     glViewport(0, 0, cube_size, cube_size);
-    glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(45.0f, 0.1f,  farPlane, (float)cube_size/(float)cube_size);
+    glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  farPlane);
     glm::vec3 looking_directions[6] = {glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
         glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
 
@@ -110,7 +110,7 @@ void Graphics::render()
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
                 level->getLights()->at(i_pointlight).getPosition() + looking_directions[i_face], glm::vec3(0.0f, 1.0f, 0.0f));
             depthShader->setUniform("viewProjectionMatrix", depthViewProjectionMatrix_face);
-            level->render(depthShader, false);
+            level->render(depthShader, false, &depthViewProjectionMatrix_face);
             if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
@@ -124,8 +124,7 @@ void Graphics::render()
     glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
     glm::mat4 depthViewProjectionMatrix_near =  glm::ortho<float>(-5, 5, -5, 5, -5, 5) * 
         glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-    depthShader->setUniform("viewProjectionMatrix", depthViewProjectionMatrix_near);
-    level->render(depthShader, false);
+    level->render(depthShader, false, &depthViewProjectionMatrix_near);
     if (!framebuffer_near->isFrameBufferObjectComplete()) {
         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
     }
@@ -135,8 +134,7 @@ void Graphics::render()
     glClear(GL_DEPTH_BUFFER_BIT);
     glm::mat4 depthViewProjectionMatrix_middle =  glm::ortho<float>(-20, 20, -20, 20, -20, 20) * 
         glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-    depthShader->setUniform("viewProjectionMatrix", depthViewProjectionMatrix_middle);
-    level->render(depthShader, false);
+    level->render(depthShader, false, &depthViewProjectionMatrix_middle);
     if (!framebuffer_middle->isFrameBufferObjectComplete()) {
         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
     }
@@ -146,8 +144,7 @@ void Graphics::render()
     glClear(GL_DEPTH_BUFFER_BIT);
     glm::mat4 depthViewProjectionMatrix_far =  glm::ortho<float>(-farPlane/2.0f, farPlane/2.0f, -farPlane/2.0f, farPlane/2.0f, -farPlane/2.0f, farPlane/2.0f) * 
         glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-    depthShader->setUniform("viewProjectionMatrix", depthViewProjectionMatrix_far);
-    level->render(depthShader, false);
+    level->render(depthShader, false, &depthViewProjectionMatrix_far);
     if (!framebuffer_far->isFrameBufferObjectComplete()) {
         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
     }
@@ -157,10 +154,6 @@ void Graphics::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     lightingShader->use();
-
-    //set view and projection matrix
-    glm::mat4 lightingViewProjectionMatrix = buildFrustum(75.0f, 0.1f, farPlane, (float)windowSize.x/(float)windowSize.y) * buildViewMatrix(level);
-    lightingShader->setUniform("lightingViewProjectionMatrix", lightingViewProjectionMatrix);
 
     //set lighting parameters
     if (level->getLights()->size() > 0) {
@@ -207,15 +200,12 @@ void Graphics::render()
     0.0, 0.0, 0.5, 0.0,
     0.5, 0.5, 0.5, 1.0
     );
-    glm::mat4 depthBiasMVP_near = biasMatrix*depthViewProjectionMatrix_near;
-    glm::mat4 depthBiasMVP_middle = biasMatrix*depthViewProjectionMatrix_middle;
-    glm::mat4 depthBiasMVP_far = biasMatrix*depthViewProjectionMatrix_far;
+    glm::mat4 depthBiasVP_near = biasMatrix*depthViewProjectionMatrix_near;
+    glm::mat4 depthBiasVP_middle = biasMatrix*depthViewProjectionMatrix_middle;
+    glm::mat4 depthBiasVP_far = biasMatrix*depthViewProjectionMatrix_far;
 
-    lightingShader->setUniform("shadowMVP_near", depthBiasMVP_near);
     lightingShader->setTexture("shadowMap_near", depthTexture_near, 1);
-    lightingShader->setUniform("shadowMVP_middle", depthBiasMVP_middle);
     lightingShader->setTexture("shadowMap_middle", depthTexture_middle, 2);
-    lightingShader->setUniform("shadowMVP_far", depthBiasMVP_far);
     lightingShader->setTexture("shadowMap_far", depthTexture_far, 3);
 
     // set fog Parameters
@@ -227,8 +217,16 @@ void Graphics::render()
     lightingShader->setUniform("ambientColor", level->getAmbientLight());
     lightingShader->setUniform("camera", level->getCameraPosition());
 
+    //set view and projection matrix
+    glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
+
+    std::vector<glm::mat4> shadowVPs = std::vector<glm::mat4>();
+    shadowVPs.push_back(depthBiasVP_near);
+    shadowVPs.push_back(depthBiasVP_middle);
+    shadowVPs.push_back(depthBiasVP_far);
+
     // render the level
-    level->render(lightingShader, true);
+    level->render(lightingShader, true, &lightingViewProjectionMatrix, &shadowVPs);
 }
 
 void Graphics::resize(glm::uvec2 windowSize) {
@@ -238,19 +236,8 @@ void Graphics::resize(glm::uvec2 windowSize) {
     depthTexture_far->resize(glm::vec2(windowSize.x, windowSize.y));
 }
 
-glm::mat4 Graphics::buildFrustum( float phiInDegree, float _near, float _far, float aspectRatio) {
-
-    float phiHalfInRadians = 0.5*phiInDegree * (M_PI/180.0);
-    float top = _near * tan( phiHalfInRadians );
-    float bottom = -top;
-    float left  = bottom * aspectRatio;
-    float right = -left;
-
-    return glm::frustum(left, right, bottom, top, _near, _far);
-}
-
 glm::mat4 Graphics::buildViewMatrix(Level* level) {
-    //construct lookAt (cameraPosition = cameraCenter + cameraVector
+    //construct lookAt (cameraPosition = cameraCenter + cameraVector)
     return glm::lookAt((level->getCameraCenter()->getPosition() + level->getCamera()->getVector()),
             level->getCameraCenter()->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
 }
