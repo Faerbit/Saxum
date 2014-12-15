@@ -13,7 +13,7 @@ uniform sampler2D uTexture;
 uniform sampler2DShadow shadowMap_near;
 uniform sampler2DShadow shadowMap_middle;
 uniform sampler2DShadow shadowMap_far;
-//uniform samplerCubeShadow shadowMap_cube;
+uniform samplerCubeShadow shadowMap_cube;
 uniform vec3 ambientColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
@@ -111,7 +111,7 @@ void main()
             vec3 cameraVector = normalize(camera - vec3(fragPosition));
             specularColor += clamp(pow((dot((cameraVector+lightVector),normalize(vNormal))/(length(cameraVector+lightVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
             *specularFactor*intensity*lightColors[i];
-            //visibility = samplePointShadow(shadowMap_cube, lightDirection);
+            visibility = samplePointShadow(shadowMap_cube, lightDirection);
         }
     }
 
