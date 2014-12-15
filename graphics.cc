@@ -145,28 +145,28 @@ void Graphics::render()
     lightingShader->setTexture("shadowMap_far", depthTexture_far, 3);
 
     //set lighting parameters
-    if (level->getLights().size() > 0) {
-        lightingShader->setUniform("lightCount", (int) level->getLights().size());
+    if (level->getLights()->size() > 0) {
+        lightingShader->setUniform("lightCount", (int) level->getLights()->size());
 
         // TODO look into doing this less often
         // Build light position array
-        glm::vec3 lightSources[level->getLights().size()];
-        for(unsigned int i = 0; i<level->getLights().size(); i++) {
-            lightSources[i] = level->getLights()[i].getPosition();
+        glm::vec3 lightSources[level->getLights()->size()];
+        for(unsigned int i = 0; i<level->getLights()->size(); i++) {
+            lightSources[i] = level->getLights()->at(i).getPosition();
         }
         glUniform3fv(lightingShader->getUniformLocation("lightSources"),
             sizeof(lightSources),  (GLfloat*) lightSources);
         // Build light colour array
-        glm::vec3 lightColours[level->getLights().size()];
-        for(unsigned int i = 0; i<level->getLights().size(); i++) {
-            lightColours[i] = level->getLights()[i].getColour();
+        glm::vec3 lightColours[level->getLights()->size()];
+        for(unsigned int i = 0; i<level->getLights()->size(); i++) {
+            lightColours[i] = level->getLights()->at(i).getColour();
         }
         glUniform3fv(lightingShader->getUniformLocation("lightColors"),
             sizeof(lightColours),  (GLfloat*) lightColours);
         // Build light attenuation array
-        float lightIntensities[level->getLights().size()];
-        for(unsigned int i = 0; i<level->getLights().size(); i++) {
-            lightIntensities[i] = level->getLights()[i].getIntensity();
+        float lightIntensities[level->getLights()->size()];
+        for(unsigned int i = 0; i<level->getLights()->size(); i++) {
+            lightIntensities[i] = level->getLights()->at(i).getIntensity();
         }
         glUniform1fv(lightingShader->getUniformLocation("lightIntensities"),
             sizeof(lightIntensities),  (GLfloat*) lightIntensities);

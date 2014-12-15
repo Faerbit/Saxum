@@ -21,7 +21,7 @@ class Level {
         void render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass);
         glm::vec3 getAmbientLight();
         Light* getDirectionalLight();
-        std::vector<Light> getLights();
+        std::vector<Light>* getLights();
         Object* getCameraCenter();
         Camera* getCamera();
         glm::vec3 getCameraPosition();
