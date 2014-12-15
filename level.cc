@@ -107,7 +107,7 @@ void Level::load() {
     directionalLight = Light(glm::vec3(xOffset,yOffset,zOffset), glm::vec3(rColour,gColour,bColour), intensity);
 
     //load Objects
-    std::vector<int*> objectIdentifiers;  //The first entry is the index in objects, the others are idGreen, idBlue and objectNum.  
+    std::vector<std::vector<int>> objectIdentifiers = std::vector<std::vector<int>>();  //The first entry is the index in objects, the others are idGreen, idBlue and objectNum.  
     XMLDocument* compositions = new XMLDocument();
     const char* compositionsFile = "../Levels/ObjectSetups/Compositions.xml";
     compositions->LoadFile(compositionsFile);
@@ -186,7 +186,7 @@ void Level::load() {
                             Object* object = new Object(model, material, objectPosition, compRot);
                             objects.push_back(object);
                             //create an identifier for this object
-                            int* objectIdentifier = new int[4];
+                            std::vector<int> objectIdentifier = std::vector<int>(4);
                             objectIdentifier[0] = objects.size()-1;
                             int idGreen, idBlue;
                             errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
@@ -221,8 +221,7 @@ void Level::load() {
                                 errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                                 std::string bulletModelPath = modelPath.substr(0, modelPath.length()-3);
                                 bulletModelPath += "bullet";
-                                //this->physics.addRigidBodyFromFile(*object, mass, dampningL, dampningA, bulletModelPath, physicObjects.size());
-                                this->physics.addBox(1, 1, 1, *object, mass, physicObjects.size());
+                                this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size());
                             } else{
                                 printf("XMLError: Not a valid physicType.\n");
                             }
@@ -282,35 +281,65 @@ void Level::load() {
         std::string name = charName;
         if (name.compare("-") != 0){
             float xPos, yPos, zPos, distance;
-            std::vector<float> position;
+            glm::vec3 position;
             bool isBigger;
-            int idGreen, idBlue, objectNum;
+            int idGreen, idBlue, objectNum, functionPointer_int;
             errorCheck(xmlTrigger->FirstChildElement("xPosition")->QueryFloatText(&xPos));
             errorCheck(xmlTrigger->FirstChildElement("yPosition")->QueryFloatText(&yPos));
             errorCheck(xmlTrigger->FirstChildElement("zPosition")->QueryFloatText(&zPos));
             errorCheck(xmlTrigger->FirstChildElement("distance")->QueryFloatText(&distance));
-            position.push_back(xPos);
-            position.push_back(yPos);
-            position.push_back(zPos);
+            position = glm::vec3(xPos, yPos, zPos);
             errorCheck(xmlTrigger->FirstChildElement("isBiggerThan")->QueryBoolText(&isBigger));
             errorCheck(xmlTrigger->FirstChildElement("idGreen")->QueryIntText(&idGreen));
             errorCheck(xmlTrigger->FirstChildElement("idBlue")->QueryIntText(&idBlue));
             errorCheck(xmlTrigger->FirstChildElement("objectNum")->QueryIntText(&objectNum));
-            //TODO find the object
-            //Trigger trigger = Trigger::Trigger(position, distance, isBigger, Object* object, void (*functionPointer)());
-            //triggers.push_back(trigger);
+            Object* object=0;
+            for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
+                                printf("objectIdentifiers: %d, %d, %d, %d\n", objectIdentifiers[i][0], objectIdentifiers[i][1], objectIdentifiers[i][2], objectIdentifiers[i][3]);
+                if (objectIdentifiers[i][1]==idGreen && objectIdentifiers[i][2]==idBlue && objectIdentifiers[i][3]==objectNum){
+                    object = objects[objectIdentifiers[i][0]];
+                }
+            }
+            errorCheck(xmlTrigger->FirstChildElement("functionPointer")->QueryIntText(&functionPointer_int));
+            void (*functionPointer)() = NULL;
+            switch(functionPointer_int) {
+                case 0:
+                    functionPointer =  &trigger_function_0;
+                    break;
+                case 1:
+                    functionPointer =  &trigger_function_1;
+                    break;
+                case 2:
+                    functionPointer =  &trigger_function_2;
+                    break;
+                case 3:
+                    functionPointer =  &trigger_function_3;
+                    break;
+                case 4:
+                    functionPointer =  &trigger_function_4;
+                    break;
+                default:
+                    printf("Trigger function could not be found.");
+            }
+            if (object != 0) {
+                Trigger trigger = Trigger(position, distance, isBigger, object, functionPointer);
+                triggers.push_back(trigger);
+            }
+            else {
+                printf("Trigger object not found.\n");
+            }
         }
     }
 
     //add player (//TODO remove this as soon as we have a levelSetup with a player)
-    Model marbleModel = Model("marbleSmooth.obj", 0.75f);
+    /*Model marbleModel = Model("marbleSmooth.obj", 0.75f);
     Material marbleMaterial = Material("Marbletexture.png", 0.1f, 0.5f, 0.5f, 3.0f);
-    Object* object = new Object(marbleModel, marbleMaterial, glm::vec3(2.0f, 10.0f, 2.0f),
+    Object* object = new Object(marbleModel, marbleMaterial, glm::vec3(240.0f, 30.0f, -240.0f),
         glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(object);    
     physicObjects.push_back(object);
     this->physics.addPlayer(1.25f,*object,8.0f,physicObjects.size());
-    cameraCenter = object;
+    cameraCenter = object;*/
 }
 
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
@@ -363,6 +392,10 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     
     skydome->setPosition(glm::vec3(cameraCenter->getPosition().x, 
         0.0f, cameraCenter->getPosition().z));
+        
+    for(unsigned int i = 0; i<triggers.size(); i++) {
+        triggers.at(i).triggerUpdate();
+    }
 }
 
 glm::vec3 Level::getAmbientLight() {
@@ -395,4 +428,20 @@ glm::vec3 Level::getCameraPosition() {
 
 void Level::setSkydomeSize(float size) {
     skydomeSize = size;
+}
+
+void Level::trigger_function_0() {
+    exit(0);
+}
+
+void Level::trigger_function_1() {
+}
+
+void Level::trigger_function_2() {
+}
+
+void Level::trigger_function_3() {
+}
+
+void Level::trigger_function_4() {
 }
