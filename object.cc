@@ -25,8 +25,8 @@ void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         // set model matrix
         shader->setUniform( "modelMatrix", modelMatrix);
         // set shadowMVPs
-        glm::mat4 shadowMVPs[35];
-        for(unsigned int i = 0; (i<shadowVPs->size() && i<35); i++) {
+        glm::mat4 shadowMVPs[5];
+        for(unsigned int i = 0; (i<shadowVPs->size() && i<5); i++) {
             shadowMVPs[i] = shadowVPs->at(i) * modelMatrix;
         }
         glUniformMatrix4fv(shader->getUniformLocation("shadowMVPs"),
