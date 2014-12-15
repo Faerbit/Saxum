@@ -316,7 +316,7 @@ void Level::load() {
                     functionPointer =  &trigger_function_4;
                     break;
                 default:
-                    printf("Trigger function could not be found.");
+                    printf("Trigger function could not be found.\n");
             }
             if (object != 0) {
                 Trigger trigger = Trigger(position, distance, isBigger, object, functionPointer);
@@ -418,7 +418,11 @@ void Level::setSkydomeSize(float size) {
 }
 
 void Level::trigger_function_0() {
-    exit(0);
+    static bool triggered = false;
+    if (!triggered) {
+        printf("Trigger 0 triggered.\n");
+    }
+    triggered = true;
 }
 
 void Level::trigger_function_1() {
