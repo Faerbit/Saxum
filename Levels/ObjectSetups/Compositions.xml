@@ -54,6 +54,18 @@
         <intensity>4.0</intensity>
     </light>
 </composition>
+<composition>
+    <typeID>85</typeID>
+    <light>
+        <xOffset>0.0</xOffset>
+        <yOffset>1</yOffset>
+        <zOffset>0.0</zOffset>
+        <rColour>1.0</rColour>
+        <gColour>1.0</gColour>
+        <bColour>1.0</bColour>
+        <intensity>4.0</intensity>
+    </light>
+</composition>
 
 <!-- Block on 2 Pillars -->
 <composition>
