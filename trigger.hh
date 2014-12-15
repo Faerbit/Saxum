@@ -6,12 +6,12 @@
 
 class Trigger {
     public:
-        Trigger(std::vector<float> position, float distance, bool isBigger, Object* object, void (*functionPointer)());
+        Trigger(glm::vec3 position, float distance, bool isBigger, Object* object, void (*functionPointer)());
 	    Trigger();
         ~Trigger();
         void triggerUpdate();
     private:
-        std::vector<float> position;
+        glm::vec3 position;
         float distance;
         bool isBigger;
         Object* object;
