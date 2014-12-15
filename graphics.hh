@@ -38,6 +38,7 @@ class Graphics {
         ACGL::OpenGL::SharedFrameBufferObject framebuffer_cube;
         static const int cube_size;
         Level* level;
+        GLuint cubeMapArrays; 
 };
 
 #endif

@@ -70,17 +70,18 @@ void Graphics::init(Level* level) {
     framebuffer_far->setDepthTexture(depthTexture_far);
     framebuffer_far->validate();
 
-    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(level->getLights()->size());
-    for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {
-        depth_cubeMaps.at(i) = SharedTextureCubeMap(new TextureCubeMap(glm::vec2(cube_size, cube_size), GL_DEPTH_COMPONENT16));
-        depth_cubeMaps.at(i)->setMinFilter(GL_NEAREST);
-        depth_cubeMaps.at(i)->setMagFilter(GL_NEAREST);
-        depth_cubeMaps.at(i)->setWrapS(GL_CLAMP_TO_EDGE);
-        depth_cubeMaps.at(i)->setWrapT(GL_CLAMP_TO_EDGE);
-        depth_cubeMaps.at(i)->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
-    }
-
     framebuffer_cube = SharedFrameBufferObject(new FrameBufferObject());
+    glGenTextures(1, &cubeMapArrays);
+    glBindTexture(GL_TEXTURE_CUBE_MAP_ARRAY, cubeMapArrays);
+    for (unsigned int i_pointlight = 0; i_pointlight<level->getLights()->size(); i_pointlight++) {
+        glTexImage3D(GL_TEXTURE_CUBE_MAP_ARRAY, i_pointlight, GL_RED, cube_size, cube_size, level->getLights()->size()*6, 0, GL_RED, GL_FLOAT, NULL);
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 }
 
 GLFWwindow* Graphics::getWindow() {
@@ -105,16 +106,15 @@ void Graphics::render()
     for (unsigned int i_pointlight = 0; i_pointlight<level->getLights()->size(); i_pointlight++) {
         // render each side of the cube
         for (int i_face = 0; i_face<6; i_face++) {
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
-            glClear(GL_DEPTH_BUFFER_BIT);
+            //glFramebufferTextureLayer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, cubeMapArrays, i_pointlight, i_face);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
                 level->getLights()->at(i_pointlight).getPosition() + looking_directions[i_face], glm::vec3(0.0f, 1.0f, 0.0f));
-            depthShader->setUniform("viewProjectionMatrix", depthViewProjectionMatrix_face);
-            level->render(depthShader, false, &depthViewProjectionMatrix_face);
-            if (!framebuffer_cube->isFrameBufferObjectComplete()) {
-                printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
-            }
+            //level->render(depthShader, false, &depthViewProjectionMatrix_face);
         }
+    }
+    if (!framebuffer_cube->isFrameBufferObjectComplete()) {
+        printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
     }
     // render depth texture for sun
     glViewport(0, 0, windowSize.x, windowSize.y);
@@ -125,9 +125,9 @@ void Graphics::render()
     glm::mat4 depthViewProjectionMatrix_near =  glm::ortho<float>(-5, 5, -5, 5, -5, 5) * 
         glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
     level->render(depthShader, false, &depthViewProjectionMatrix_near);
-    if (!framebuffer_near->isFrameBufferObjectComplete()) {
+    /*if (!framebuffer_near->isFrameBufferObjectComplete()) {
         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
-    }
+    }*/
 
     // middle pass
     framebuffer_middle->bind(); 
@@ -135,9 +135,9 @@ void Graphics::render()
     glm::mat4 depthViewProjectionMatrix_middle =  glm::ortho<float>(-20, 20, -20, 20, -20, 20) * 
         glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
     level->render(depthShader, false, &depthViewProjectionMatrix_middle);
-    if (!framebuffer_middle->isFrameBufferObjectComplete()) {
+    /*if (!framebuffer_middle->isFrameBufferObjectComplete()) {
         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
-    }
+    }*/
     
     // far pass
     framebuffer_far->bind(); 
@@ -145,9 +145,9 @@ void Graphics::render()
     glm::mat4 depthViewProjectionMatrix_far =  glm::ortho<float>(-farPlane/2.0f, farPlane/2.0f, -farPlane/2.0f, farPlane/2.0f, -farPlane/2.0f, farPlane/2.0f) * 
         glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
     level->render(depthShader, false, &depthViewProjectionMatrix_far);
-    if (!framebuffer_far->isFrameBufferObjectComplete()) {
+    /*if (!framebuffer_far->isFrameBufferObjectComplete()) {
         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
-    }
+    }*/
 
     // final render pass
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
