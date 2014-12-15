@@ -6,6 +6,7 @@
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>0.75</scale>
+        <mass>8.0</mass>
     </object>
 </composition>
 
@@ -17,6 +18,7 @@
         <yOffset>1.0</yOffset>
         <zOffset>2.0</zOffset>
         <scale>1.0</scale>
+        <mass>2.0</mass>
     </object>
 </composition>
 
@@ -28,6 +30,7 @@
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
+        <mass>2.0</mass>
     </object>
 </composition>
 
@@ -39,6 +42,7 @@
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
+        <mass>0.0</mass>
     </object>
     <light>
         <xOffset>0.0</xOffset>
@@ -59,6 +63,7 @@
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
+        <mass>0.0</mass>
     </object>
     <object>
         <modelPath>column.obj</modelPath>
@@ -66,6 +71,7 @@
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
+        <mass>0.0</mass>
     </object>
     <object>
         <modelPath>block.obj</modelPath>
@@ -73,6 +79,7 @@
         <yOffset>3.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
+        <mass>0.0</mass>
     </object>
 </composition>
 
@@ -84,6 +91,7 @@
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
+        <mass>1.0</mass>
     </object>
     <object>
         <modelPath>switch_outer.obj</modelPath>
@@ -91,6 +99,7 @@
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
+        <mass>0.0</mass>
     </object>
 </composition>
 
@@ -107,7 +116,6 @@
     <shininess>3.0</shininess>
     <physicType>Player</physicType>
     <radius>1.25</radius>
-    <mass>8.0</mass>
 </objectData>
 
 <objectData>
@@ -121,7 +129,6 @@
     <width>1.0</width>
     <height>1.0</height>
     <length>3.0</length>
-    <mass>2.0</mass>
 </objectData>
 
 <objectData>
@@ -131,8 +138,7 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
-    <physicType>TriangleMeshBody</physicType>
-    <mass>2.0</mass>
+    <physicType>TriangleMesh</physicType>
     <dampningL>1.0</dampningL>
     <dampningA>1.0</dampningA>
 </objectData>
@@ -144,8 +150,7 @@
     <diffuseFactor>0.3</diffuseFactor>
     <specularFactor>0.7</specularFactor>
     <shininess>10.0</shininess>
-    <physicType>TriangleMeshBody</physicType>
-    <mass>0.0</mass>
+    <physicType>TriangleMesh</physicType>
     <dampningL>1.0</dampningL>
     <dampningA>1.0</dampningA>
 </objectData>
@@ -157,10 +162,9 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
-    <physicType>TriangleMeshBody</physicType>
-    <mass>1.0</mass>
-    <dampningL>1.0</dampningL>
-    <dampningA>1.0</dampningA>
+    <physicType>TriangleMesh</physicType>
+    <dampningL>0.5</dampningL>
+    <dampningA>0.5</dampningA>
 </objectData>
 
 <objectData>
@@ -170,8 +174,7 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
-    <physicType>TriangleMeshBody</physicType>
-    <mass>0.0</mass>
+    <physicType>TriangleMesh</physicType>
     <dampningL>1.0</dampningL>
     <dampningA>1.0</dampningA>
 </objectData>
