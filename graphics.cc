@@ -97,7 +97,7 @@ void Graphics::render()
     depthShader->use();
     // render depth textures for point lights
     glViewport(0, 0, cube_size, cube_size);
-    glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(45.0f, 0.1f,  farPlane, (float)cube_size/(float)cube_size);
+    glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  farPlane);
     glm::vec3 looking_directions[6] = {glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
         glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
 
@@ -159,7 +159,7 @@ void Graphics::render()
     lightingShader->use();
 
     //set view and projection matrix
-    glm::mat4 lightingViewProjectionMatrix = buildFrustum(75.0f, 0.1f, farPlane, (float)windowSize.x/(float)windowSize.y) * buildViewMatrix(level);
+    glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
     lightingShader->setUniform("lightingViewProjectionMatrix", lightingViewProjectionMatrix);
 
     //set lighting parameters
@@ -236,17 +236,6 @@ void Graphics::resize(glm::uvec2 windowSize) {
     depthTexture_near->resize(glm::vec2(windowSize.x, windowSize.y));
     depthTexture_middle->resize(glm::vec2(windowSize.x, windowSize.y));
     depthTexture_far->resize(glm::vec2(windowSize.x, windowSize.y));
-}
-
-glm::mat4 Graphics::buildFrustum( float phiInDegree, float _near, float _far, float aspectRatio) {
-
-    float phiHalfInRadians = 0.5*phiInDegree * (M_PI/180.0);
-    float top = _near * tan( phiHalfInRadians );
-    float bottom = -top;
-    float left  = bottom * aspectRatio;
-    float right = -left;
-
-    return glm::frustum(left, right, bottom, top, _near, _far);
 }
 
 glm::mat4 Graphics::buildViewMatrix(Level* level) {
