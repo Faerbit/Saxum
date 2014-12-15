@@ -7,6 +7,8 @@
 
 using namespace ACGL::OpenGL;
 
+const int Graphics::cube_size = 1024;
+
 Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane) {
     this->windowSize = windowSize;
     this->nearPlane = nearPlane;
@@ -67,6 +69,18 @@ void Graphics::init(Level* level) {
     framebuffer_far = SharedFrameBufferObject(new FrameBufferObject());
     framebuffer_far->setDepthTexture(depthTexture_far);
     framebuffer_far->validate();
+
+    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(level->getLights()->size());
+    for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {
+        depth_cubeMaps.at(i) = SharedTextureCubeMap(new TextureCubeMap(glm::vec2(cube_size, cube_size), GL_DEPTH_COMPONENT16));
+        depth_cubeMaps.at(i)->setMinFilter(GL_NEAREST);
+        depth_cubeMaps.at(i)->setMagFilter(GL_NEAREST);
+        depth_cubeMaps.at(i)->setWrapS(GL_CLAMP_TO_EDGE);
+        depth_cubeMaps.at(i)->setWrapT(GL_CLAMP_TO_EDGE);
+        depth_cubeMaps.at(i)->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
+    }
+
+    framebuffer_cube = SharedFrameBufferObject(new FrameBufferObject());
 }
 
 GLFWwindow* Graphics::getWindow() {
@@ -79,11 +93,34 @@ glm::uvec2 Graphics::getWindowSize() {
 
 void Graphics::render()
 {
+    // At first render shadows
+    depthShader->use();
+    // render depth textures for point lights
+    glViewport(0, 0, cube_size, cube_size);
+    glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(45.0f, 0.1f,  farPlane, (float)cube_size/(float)cube_size);
+    glm::vec3 looking_directions[6] = {glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
+        glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
+
+    framebuffer_cube->bind();
+    for (unsigned int i_pointlight = 0; i_pointlight<level->getLights()->size(); i_pointlight++) {
+        // render each side of the cube
+        for (int i_face = 0; i_face<6; i_face++) {
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
+            glClear(GL_DEPTH_BUFFER_BIT);
+            glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
+                level->getLights()->at(i_pointlight).getPosition() + looking_directions[i_face], glm::vec3(0.0f, 1.0f, 0.0f));
+            depthShader->setUniform("viewProjectionMatrix", depthViewProjectionMatrix_face);
+            level->render(depthShader, false);
+            if (!framebuffer_cube->isFrameBufferObjectComplete()) {
+                printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
+            }
+        }
+    }
     // render depth texture for sun
+    glViewport(0, 0, windowSize.x, windowSize.y);
     // near pass
     framebuffer_near->bind(); 
     glClear(GL_DEPTH_BUFFER_BIT);
-    depthShader->use();
     glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
     glm::mat4 depthViewProjectionMatrix_near =  glm::ortho<float>(-5, 5, -5, 5, -5, 5) * 
         glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
@@ -125,30 +162,12 @@ void Graphics::render()
     glm::mat4 lightingViewProjectionMatrix = buildFrustum(75.0f, 0.1f, farPlane, (float)windowSize.x/(float)windowSize.y) * buildViewMatrix(level);
     lightingShader->setUniform("lightingViewProjectionMatrix", lightingViewProjectionMatrix);
 
-
-    // convert texture to homogenouse coordinates
-    glm::mat4 biasMatrix(
-    0.5, 0.0, 0.0, 0.0,
-    0.0, 0.5, 0.0, 0.0,
-    0.0, 0.0, 0.5, 0.0,
-    0.5, 0.5, 0.5, 1.0
-    );
-    glm::mat4 depthBiasMVP_near = biasMatrix*depthViewProjectionMatrix_near;
-    glm::mat4 depthBiasMVP_middle = biasMatrix*depthViewProjectionMatrix_middle;
-    glm::mat4 depthBiasMVP_far = biasMatrix*depthViewProjectionMatrix_far;
-    
-    lightingShader->setUniform("shadowMVP_near", depthBiasMVP_near);
-    lightingShader->setTexture("shadowMap_near", depthTexture_near, 1);
-    lightingShader->setUniform("shadowMVP_middle", depthBiasMVP_middle);
-    lightingShader->setTexture("shadowMap_middle", depthTexture_middle, 2);
-    lightingShader->setUniform("shadowMVP_far", depthBiasMVP_far);
-    lightingShader->setTexture("shadowMap_far", depthTexture_far, 3);
-
     //set lighting parameters
     if (level->getLights()->size() > 0) {
         lightingShader->setUniform("lightCount", (int) level->getLights()->size());
 
-        // TODO look into doing this less often
+        // TODO look into doing this less often, offload to another thread?
+        // TODO figure out how to deal with bigger numbers of lights. load the nearest on demand?
         // Build light position array
         glm::vec3 lightSources[level->getLights()->size()];
         for(unsigned int i = 0; i<level->getLights()->size(); i++) {
@@ -180,6 +199,24 @@ void Graphics::render()
         lightingShader->setUniform("directionalIntensity",
             level->getDirectionalLight()->getIntensity());
     }
+
+    // convert texture to homogenouse coordinates
+    glm::mat4 biasMatrix(
+    0.5, 0.0, 0.0, 0.0,
+    0.0, 0.5, 0.0, 0.0,
+    0.0, 0.0, 0.5, 0.0,
+    0.5, 0.5, 0.5, 1.0
+    );
+    glm::mat4 depthBiasMVP_near = biasMatrix*depthViewProjectionMatrix_near;
+    glm::mat4 depthBiasMVP_middle = biasMatrix*depthViewProjectionMatrix_middle;
+    glm::mat4 depthBiasMVP_far = biasMatrix*depthViewProjectionMatrix_far;
+
+    lightingShader->setUniform("shadowMVP_near", depthBiasMVP_near);
+    lightingShader->setTexture("shadowMap_near", depthTexture_near, 1);
+    lightingShader->setUniform("shadowMVP_middle", depthBiasMVP_middle);
+    lightingShader->setTexture("shadowMap_middle", depthTexture_middle, 2);
+    lightingShader->setUniform("shadowMVP_far", depthBiasMVP_far);
+    lightingShader->setTexture("shadowMap_far", depthTexture_far, 3);
 
     // set fog Parameters
     lightingShader->setUniform("fogEnd", (farPlane)-35.0f);
