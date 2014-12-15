@@ -2,9 +2,7 @@
 
 uniform mat4 modelMatrix;
 uniform mat4 modelViewProjectionMatrix;
-uniform mat4 shadowMVP_near;
-uniform mat4 shadowMVP_middle;
-uniform mat4 shadowMVP_far;
+uniform mat4 shadowMVPs[35];
 
 in vec3 aPosition;
 in vec3 aNormal;
@@ -22,8 +20,8 @@ void main()
     fragPosition = modelMatrix * vec4(aPosition, 1.0);
     vNormal     = inverse(transpose(mat3(modelMatrix))) * aNormal;
     vTexCoord   = aTexCoord;
-    shadowCoord_near = shadowMVP_near * modelMatrix * vec4(aPosition, 1.0);
-    shadowCoord_middle = shadowMVP_middle * modelMatrix * vec4(aPosition, 1.0);
-    shadowCoord_far = shadowMVP_far * modelMatrix * vec4(aPosition, 1.0);
+    shadowCoord_near = shadowMVPs[0] * vec4(aPosition, 1.0);
+    shadowCoord_middle = shadowMVPs[1] * vec4(aPosition, 1.0);
+    shadowCoord_far = shadowMVPs[2] * vec4(aPosition, 1.0);
     gl_Position = modelViewProjectionMatrix * vec4(aPosition, 1.0);
 }

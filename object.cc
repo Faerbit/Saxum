@@ -12,7 +12,8 @@ Object::Object() {
 Object::~Object() {
 }
 
-void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass, glm::mat4 viewProjectionMatrix) {
+void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
+    glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs) {
     glm::mat4 modelMatrix = glm::translate(getPosition()) * getRotation() * glm::scale<float>(glm::vec3(model.getScale()));
     if (lightingPass) {
     // set lightning parameters for this object
@@ -23,8 +24,15 @@ void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         shader->setTexture("uTexture", material.getReference(), 0);
         // set model matrix
         shader->setUniform( "modelMatrix", modelMatrix);
+        // set shadowMVPs
+        glm::mat4 shadowMVPs[35];
+        for(unsigned int i = 0; (i<shadowVPs->size() && i<35); i++) {
+            shadowMVPs[i] = shadowVPs->at(i) * modelMatrix;
+        }
+        glUniformMatrix4fv(shader->getUniformLocation("shadowMVPs"),
+                sizeof(shadowMVPs), false, (GLfloat*) shadowMVPs);
     }
-    glm::mat4 mvp = viewProjectionMatrix * modelMatrix;
+    glm::mat4 mvp = (*viewProjectionMatrix) * modelMatrix;
     shader->setUniform("modelViewProjectionMatrix", mvp);
     // draw
     model.getReference()->render();
