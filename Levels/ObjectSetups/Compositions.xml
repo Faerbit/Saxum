@@ -162,9 +162,10 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
-    <physicType>TriangleMesh</physicType>
-    <dampningL>0.5</dampningL>
-    <dampningA>0.5</dampningA>
+    <physicType>Box</physicType>
+    <width>0.5</width>
+    <height>0.5</height>
+    <length>0.5</length>
 </objectData>
 
 <objectData>
