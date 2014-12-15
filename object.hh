@@ -15,7 +15,8 @@ class Object : public Entity {
                 glm::vec3 position, glm::vec3 rotation);
         Object();
         ~Object();
-        void render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass);
+        void render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
+            glm::mat4* viewProjcetionMatrix, std::vector<glm::mat4>* shadowVPs);
     private:
         Model model;
         Material material;
