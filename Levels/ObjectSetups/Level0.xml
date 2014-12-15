@@ -4,62 +4,6 @@
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
-    <xPos>3.500000</xPos>
-    <yOffset>0.0</yOffset>
-    <zPos>3.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>9</idBlue>
-    <typeID>99</typeID>
-</composition>
-
-<composition>
-    <scale>1.0</scale>
-    <xRot>0.0</xRot>
-    <yRot>0.0</yRot>
-    <zRot>0.0</zRot>
-    <manualPos>false</manualPos>
-    <xPos>3.500000</xPos>
-    <yOffset>0.0</yOffset>
-    <zPos>-0.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>8</idBlue>
-    <typeID>99</typeID>
-</composition>
-
-<composition>
-    <scale>1.0</scale>
-    <xRot>0.0</xRot>
-    <yRot>0.0</yRot>
-    <zRot>0.0</zRot>
-    <manualPos>false</manualPos>
-    <xPos>2.500000</xPos>
-    <yOffset>0.0</yOffset>
-    <zPos>-2.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>7</idBlue>
-    <typeID>99</typeID>
-</composition>
-
-<composition>
-    <scale>1.0</scale>
-    <xRot>0.0</xRot>
-    <yRot>0.0</yRot>
-    <zRot>0.0</zRot>
-    <manualPos>false</manualPos>
-    <xPos>1.500000</xPos>
-    <yOffset>0.0</yOffset>
-    <zPos>0.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>6</idBlue>
-    <typeID>99</typeID>
-</composition>
-
-<composition>
-    <scale>1.0</scale>
-    <xRot>0.0</xRot>
-    <yRot>0.0</yRot>
-    <zRot>0.0</zRot>
-    <manualPos>false</manualPos>
     <xPos>-0.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>1.500000</zPos>
@@ -74,53 +18,11 @@
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
-    <xPos>-0.500000</xPos>
-    <yOffset>0.0</yOffset>
-    <zPos>-1.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>4</idBlue>
-    <typeID>99</typeID>
-</composition>
-
-<composition>
-    <scale>1.0</scale>
-    <xRot>0.0</xRot>
-    <yRot>0.0</yRot>
-    <zRot>0.0</zRot>
-    <manualPos>false</manualPos>
     <xPos>-2.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-1.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>3</idBlue>
-    <typeID>99</typeID>
-</composition>
-
-<composition>
-    <scale>1.0</scale>
-    <xRot>0.0</xRot>
-    <yRot>0.0</yRot>
-    <zRot>0.0</zRot>
-    <manualPos>false</manualPos>
-    <xPos>-3.500000</xPos>
-    <yOffset>0.0</yOffset>
-    <zPos>-3.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>2</idBlue>
-    <typeID>99</typeID>
-</composition>
-
-<composition>
-    <scale>1.0</scale>
-    <xRot>0.0</xRot>
-    <yRot>0.0</yRot>
-    <zRot>0.0</zRot>
-    <manualPos>false</manualPos>
-    <xPos>-4.500000</xPos>
-    <yOffset>0.0</yOffset>
-    <zPos>-4.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>1</idBlue>
     <typeID>99</typeID>
 </composition>
 
