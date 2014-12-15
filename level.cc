@@ -2,7 +2,7 @@
 #include <string>
 using namespace tinyxml2;
 
-
+//dowadiddydiddydumdiddydo
 Level::Level(std::string levelNum){
     this->levelNum = levelNum;
     this->terrain = Terrain(levelNum);
@@ -11,14 +11,14 @@ Level::Level(std::string levelNum){
 
 Level::Level() {
 }
-
+//there she was just walking down the street singing
 Level::~Level() {
     for(unsigned int i = 0; i<objects.size(); i++) {
         delete(objects.at(i));
     }
 }
 
-
+//dowadiddydiddydumdiddydoo!
 void Level::errorCheck(XMLError error){
     if (error) {
         printf("XMLError: ");
@@ -221,8 +221,7 @@ void Level::load() {
                                 errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                                 std::string bulletModelPath = modelPath.substr(0, modelPath.length()-3);
                                 bulletModelPath += "bullet";
-                                //this->physics.addRigidBodyFromFile(*object, mass, dampningL, dampningA, bulletModelPath, physicObjects.size());
-                                this->physics.addBox(1, 1, 1, *object, mass, physicObjects.size());
+                                this->physics.addTriangleMeshBody(*object,modelPath,mass,0.5,0.5,physicObjects.size()); 
                             } else{
                                 printf("XMLError: Not a valid physicType.\n");
                             }
@@ -305,7 +304,7 @@ void Level::load() {
     //add player (//TODO remove this as soon as we have a levelSetup with a player)
     Model marbleModel = Model("marbleSmooth.obj", 0.75f);
     Material marbleMaterial = Material("Marbletexture.png", 0.1f, 0.5f, 0.5f, 3.0f);
-    Object* object = new Object(marbleModel, marbleMaterial, glm::vec3(2.0f, 10.0f, 2.0f),
+    Object* object = new Object(marbleModel, marbleMaterial, glm::vec3(2.0f, 20.0f, 2.0f),
         glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(object);    
     physicObjects.push_back(object);
@@ -335,7 +334,7 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
         camera.updateRotation(mouseDelta/100.0f);
     }    
     
-    float str = 20;
+    float str = 30;
     
     if(wPressed){
         physics.rollForward(camera.getVector(),str);
