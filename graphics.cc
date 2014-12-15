@@ -112,7 +112,7 @@ void Graphics::render()
             glClear(GL_DEPTH_BUFFER_BIT);
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
                 level->getLights()->at(i_pointlight).getPosition() + looking_directions[i_face], glm::vec3(0.0f, 1.0f, 0.0f));
-            level->render(depthShader, false, &depthViewProjectionMatrix_face);
+            //level->render(depthShader, false, &depthViewProjectionMatrix_face);
             if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
