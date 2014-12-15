@@ -13,6 +13,7 @@ uniform sampler2D uTexture;
 uniform sampler2DShadow shadowMap_near;
 uniform sampler2DShadow shadowMap_middle;
 uniform sampler2DShadow shadowMap_far;
+uniform samplerCubeShadow shadowMap_cube;
 uniform vec3 ambientColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
@@ -49,7 +50,7 @@ vec2 poissonDisk[16] = vec2[](
    vec2( 0.14383161, -0.14100790 )
 );
 
-float sampleShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
+float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
     float visibility = 1.0;
     float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
     bias = clamp(bias, 0.0, 0.01);
@@ -66,6 +67,11 @@ float sampleShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
         }
     }
     return visibility;
+}
+
+float samplePointShadow(samplerCubeShadow shadowMap, vec3 lightDirection) {
+    float bias = 0.005;
+    return texture(shadowMap, vec4(lightDirection.xyz , length(lightDirection) - bias));
 }
 
 float distanceToBorder(vec2 vector) {
@@ -92,8 +98,10 @@ void main()
     }
 
     // point lights
+    float visibility = 1.0;
     for(int i = 0; i<lightCount; i++) {
-        float distance = distance(lightSources[i], vec3(fragPosition));
+        vec3 lightDirection = vec3(fragPosition) - lightSources[i];
+        float distance = length(lightDirection);
         // only take lights into account with meaningful contribution
         if (distance > 0.001f) {
             vec3 lightVector = normalize(lightSources[i]-vec3(fragPosition));
@@ -103,21 +111,21 @@ void main()
             vec3 cameraVector = normalize(camera - vec3(fragPosition));
             specularColor += clamp(pow((dot((cameraVector+lightVector),normalize(vNormal))/(length(cameraVector+lightVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
             *specularFactor*intensity*lightColors[i];
+            visibility = samplePointShadow(shadowMap_cube, lightDirection);
         }
     }
 
     // shadows 
-    float visibility = 1.0;
     if (distanceToBorder(shadowCoord_middle.xy) <= 0.5 && distanceToBorder(shadowCoord_middle.xy) > 0.0) {
         if (distanceToBorder(shadowCoord_near.xy) <= 0.5 && distanceToBorder(shadowCoord_near.xy) > 0.0) {
-                visibility = sampleShadow(shadowMap_near, shadowCoord_near);
+                visibility *= sampleDirectionalShadow(shadowMap_near, shadowCoord_near);
         }
         else {
-            visibility = sampleShadow(shadowMap_middle, shadowCoord_middle);
+            visibility *= sampleDirectionalShadow(shadowMap_middle, shadowCoord_middle);
         }
     }
     else {
-        visibility = sampleShadow(shadowMap_far, shadowCoord_far);
+        visibility *= sampleDirectionalShadow(shadowMap_far, shadowCoord_far);
     }
 
     specularColor *= visibility;
