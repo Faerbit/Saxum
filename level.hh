@@ -29,6 +29,11 @@ class Level {
         glm::vec3 getCameraPosition();
         glm::vec4 getFogColour();
         void setSkydomeSize(float size);
+        static void trigger_function_0();
+        static void trigger_function_1();
+        static void trigger_function_2();
+        static void trigger_function_3();
+        static void trigger_function_4();
     private:
         void errorCheck(tinyxml2::XMLError error);
         std::string levelNum;
