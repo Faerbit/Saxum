@@ -128,16 +128,16 @@ void Level::load() {
             //corect composition found
             if(thisType == compositionType){
                 //iterate over all objects of the composition
-                XMLElement* object = composition->FirstChildElement("object");
+                XMLElement* xmlObject = composition->FirstChildElement("object");
                 int objectNum = 0;
-                for(; object; object=object->NextSiblingElement("object")){
-                    const char* charModelPath = object->FirstChildElement("modelPath")->GetText();
+                for(; xmlObject; xmlObject=xmlObject->NextSiblingElement("object")){
+                    const char* charModelPath = xmlObject->FirstChildElement("modelPath")->GetText();
                     if(charModelPath == NULL){
                         printf("XMLError: No modelPath found in object.\n");
                     }
                     std::string modelPath = charModelPath;
                     float objectScale, compScale;
-                    errorCheck(object->FirstChildElement("scale")->QueryFloatText(&objectScale));
+                    errorCheck(xmlObject->FirstChildElement("scale")->QueryFloatText(&objectScale));
                     errorCheck(thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale));
                     Model model = Model(modelPath, objectScale * compScale);
                     //find the objectData for the current object
@@ -164,9 +164,9 @@ void Level::load() {
                             Material material = Material(texturePath, ambientFactor, diffuseFactor, specularFactor, shininess);
                             float compXPos, compYOffset, compZPos;
                             glm::vec3 objectOffset, compRot;
-                            errorCheck(object->FirstChildElement("xOffset")->QueryFloatText(&objectOffset[0]));
-                            errorCheck(object->FirstChildElement("yOffset")->QueryFloatText(&objectOffset[1]));
-                            errorCheck(object->FirstChildElement("zOffset")->QueryFloatText(&objectOffset[2]));
+                            errorCheck(xmlObject->FirstChildElement("xOffset")->QueryFloatText(&objectOffset[0]));
+                            errorCheck(xmlObject->FirstChildElement("yOffset")->QueryFloatText(&objectOffset[1]));
+                            errorCheck(xmlObject->FirstChildElement("zOffset")->QueryFloatText(&objectOffset[2]));
                             errorCheck(thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos));
                             errorCheck(thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset));
                             errorCheck(thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos));
@@ -195,7 +195,7 @@ void Level::load() {
                             objectIdentifier[2] = idBlue;
                             objectIdentifier[3] = objectNum;
                             objectIdentifiers.push_back(objectIdentifier);
-/*
+
                             physicObjects.push_back(object);
                             const char* charPhysicType = objectData->FirstChildElement("physicType")->GetText();
                             if(charPhysicType == NULL){
@@ -203,28 +203,30 @@ void Level::load() {
                             }
                             std::string physicType = charPhysicType;
                             //add object to physics
+                            float mass;
+                            errorCheck(xmlObject->FirstChildElement("mass")->QueryFloatText(&mass));
                             if (physicType.compare("Player") == 0){
-                                float radius, mass;
+                                float radius;
                                 errorCheck(objectData->FirstChildElement("radius")->QueryFloatText(&radius));
-                                errorCheck(objectData->FirstChildElement("mass")->QueryFloatText(&mass));
                                 this->physics.addPlayer(radius, *object, mass, physicObjects.size());
                             }else if (physicType.compare("Box") == 0){
-                                float width, height, length, mass;
+                                float width, height, length;
                                 errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
                                 errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
                                 errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
-                                errorCheck(objectData->FirstChildElement("mass")->QueryFloatText(&mass));
                                 this->physics.addBox(width, height, length, *object, mass, physicObjects.size());
-                            }else if (physicType.compare("TriangleMeshBody") == 0){
-                                float mass, dampningL, dampningA;
-                                errorCheck(objectData->FirstChildElement("mass")->QueryFloatText(&mass));
+                            }else if (physicType.compare("TriangleMesh") == 0){
+                                float dampningL, dampningA;
                                 errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
                                 errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
-                                this->physics.addTriangleMeshBody(*object, mass, dampningL, dampningA, physicObjects.size());
+                                std::string bulletModelPath = modelPath.substr(0, modelPath.length()-3);
+                                bulletModelPath += "bullet";
+                                //this->physics.addRigidBodyFromFile(*object, mass, dampningL, dampningA, bulletModelPath, physicObjects.size());
+                                this->physics.addBox(1, 1, 1, *object, mass, physicObjects.size());
                             } else{
                                 printf("XMLError: Not a valid physicType.\n");
                             }
-*/
+
                             if(compositionType == 20){
                                 cameraCenter = object;
                             }
