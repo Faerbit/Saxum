@@ -149,7 +149,7 @@ void Level::load() {
                         }
                         std::string dataModelPath = charDataModelPath;
                         //objectData found
-                        if(dataModelPath == modelPath){
+                        if(dataModelPath.compare(modelPath) == 0){
                             //create the object
                             float ambientFactor, diffuseFactor, specularFactor, shininess;
                             errorCheck(objectData->FirstChildElement("ambientFactor")->QueryFloatText(&ambientFactor));
@@ -237,24 +237,24 @@ void Level::load() {
                 }//iterating over all objects of the composition
 
                 //iterate over all lights of the composition
-                XMLElement* light = composition->FirstChildElement("light");
-                for(; light; light=light->NextSiblingElement("light")){
+                XMLElement* xmlLight = composition->FirstChildElement("light");
+                for(; xmlLight; xmlLight=xmlLight->NextSiblingElement("light")){
                     glm::vec3 compRot, lightOffset, lightColour;
                     float compScale, compXPos, compYOffset, compZPos, lightIntensity;
                     errorCheck(thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale));
-                    errorCheck(light->FirstChildElement("xOffset")->QueryFloatText(&lightOffset[0]));
-                    errorCheck(light->FirstChildElement("yOffset")->QueryFloatText(&lightOffset[1]));
-                    errorCheck(light->FirstChildElement("zOffset")->QueryFloatText(&lightOffset[2]));
+                    errorCheck(xmlLight->FirstChildElement("xOffset")->QueryFloatText(&lightOffset[0]));
+                    errorCheck(xmlLight->FirstChildElement("yOffset")->QueryFloatText(&lightOffset[1]));
+                    errorCheck(xmlLight->FirstChildElement("zOffset")->QueryFloatText(&lightOffset[2]));
                     errorCheck(thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos));
                     errorCheck(thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset));
                     errorCheck(thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos));
                     errorCheck(thisComposition->FirstChildElement("xRot")->QueryFloatText(&compRot[0]));
                     errorCheck(thisComposition->FirstChildElement("yRot")->QueryFloatText(&compRot[1]));
                     errorCheck(thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]));
-                    errorCheck(light->FirstChildElement("rColour")->QueryFloatText(&lightColour[0]));
-                    errorCheck(light->FirstChildElement("gColour")->QueryFloatText(&lightColour[1]));
-                    errorCheck(light->FirstChildElement("bColour")->QueryFloatText(&lightColour[2]));
-                    errorCheck(light->FirstChildElement("intensity")->QueryFloatText(&lightIntensity));
+                    errorCheck(xmlLight->FirstChildElement("rColour")->QueryFloatText(&lightColour[0]));
+                    errorCheck(xmlLight->FirstChildElement("gColour")->QueryFloatText(&lightColour[1]));
+                    errorCheck(xmlLight->FirstChildElement("bColour")->QueryFloatText(&lightColour[2]));
+                    errorCheck(xmlLight->FirstChildElement("intensity")->QueryFloatText(&lightIntensity));
                     glm::vec3 compPos = glm::vec3(compXPos,
                                         compYOffset+terrain.getHeightmap()[int(compXPos-0.5+0.5*terrain.getHeightmapHeight())]
                                                                           [int(compZPos-0.5+0.5*terrain.getHeightmapWidth())],
@@ -273,15 +273,32 @@ void Level::load() {
     }//iterating over all compositions in Level.xml
     
     //load triggers
-    XMLElement* trigger = doc->FirstChildElement("trigger");
-    for(; trigger; trigger=trigger->NextSiblingElement("trigger")){
-        const char* charName = trigger->FirstChildElement("name")->GetText();
+    XMLElement* xmlTrigger = doc->FirstChildElement("trigger");
+    for(; xmlTrigger; xmlTrigger=xmlTrigger->NextSiblingElement("trigger")){
+        const char* charName = xmlTrigger->FirstChildElement("name")->GetText();
         if(charName == NULL){
             printf("XMLError: No name found for a trigger.\n");
         }
         std::string name = charName;
         if (name.compare("-") != 0){
-            //TODO add triggers
+            float xPos, yPos, zPos, distance;
+            std::vector<float> position;
+            bool isBigger;
+            int idGreen, idBlue, objectNum;
+            errorCheck(xmlTrigger->FirstChildElement("xPosition")->QueryFloatText(&xPos));
+            errorCheck(xmlTrigger->FirstChildElement("yPosition")->QueryFloatText(&yPos));
+            errorCheck(xmlTrigger->FirstChildElement("zPosition")->QueryFloatText(&zPos));
+            errorCheck(xmlTrigger->FirstChildElement("distance")->QueryFloatText(&distance));
+            position.push_back(xPos);
+            position.push_back(yPos);
+            position.push_back(zPos);
+            errorCheck(xmlTrigger->FirstChildElement("isBiggerThan")->QueryBoolText(&isBigger));
+            errorCheck(xmlTrigger->FirstChildElement("idGreen")->QueryIntText(&idGreen));
+            errorCheck(xmlTrigger->FirstChildElement("idBlue")->QueryIntText(&idBlue));
+            errorCheck(xmlTrigger->FirstChildElement("objectNum")->QueryIntText(&objectNum));
+            //TODO find the object
+            //Trigger trigger = Trigger::Trigger(position, distance, isBigger, Object* object, void (*functionPointer)());
+            //triggers.push_back(trigger);
         }
     }
 
