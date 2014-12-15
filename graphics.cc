@@ -110,7 +110,7 @@ void Graphics::render()
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
                 level->getLights()->at(i_pointlight).getPosition() + looking_directions[i_face], glm::vec3(0.0f, 1.0f, 0.0f));
             depthShader->setUniform("viewProjectionMatrix", depthViewProjectionMatrix_face);
-            level->render(depthShader, false, depthViewProjectionMatrix_face);
+            level->render(depthShader, false, &depthViewProjectionMatrix_face);
             if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
@@ -124,7 +124,7 @@ void Graphics::render()
     glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
     glm::mat4 depthViewProjectionMatrix_near =  glm::ortho<float>(-5, 5, -5, 5, -5, 5) * 
         glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-    level->render(depthShader, false, depthViewProjectionMatrix_near);
+    level->render(depthShader, false, &depthViewProjectionMatrix_near);
     if (!framebuffer_near->isFrameBufferObjectComplete()) {
         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
     }
@@ -134,7 +134,7 @@ void Graphics::render()
     glClear(GL_DEPTH_BUFFER_BIT);
     glm::mat4 depthViewProjectionMatrix_middle =  glm::ortho<float>(-20, 20, -20, 20, -20, 20) * 
         glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-    level->render(depthShader, false, depthViewProjectionMatrix_middle);
+    level->render(depthShader, false, &depthViewProjectionMatrix_middle);
     if (!framebuffer_middle->isFrameBufferObjectComplete()) {
         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
     }
@@ -144,7 +144,7 @@ void Graphics::render()
     glClear(GL_DEPTH_BUFFER_BIT);
     glm::mat4 depthViewProjectionMatrix_far =  glm::ortho<float>(-farPlane/2.0f, farPlane/2.0f, -farPlane/2.0f, farPlane/2.0f, -farPlane/2.0f, farPlane/2.0f) * 
         glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-    level->render(depthShader, false, depthViewProjectionMatrix_far);
+    level->render(depthShader, false, &depthViewProjectionMatrix_far);
     if (!framebuffer_far->isFrameBufferObjectComplete()) {
         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
     }
@@ -200,15 +200,15 @@ void Graphics::render()
     0.0, 0.0, 0.5, 0.0,
     0.5, 0.5, 0.5, 1.0
     );
-    glm::mat4 depthBiasMVP_near = biasMatrix*depthViewProjectionMatrix_near;
-    glm::mat4 depthBiasMVP_middle = biasMatrix*depthViewProjectionMatrix_middle;
-    glm::mat4 depthBiasMVP_far = biasMatrix*depthViewProjectionMatrix_far;
+    glm::mat4 depthBiasVP_near = biasMatrix*depthViewProjectionMatrix_near;
+    glm::mat4 depthBiasVP_middle = biasMatrix*depthViewProjectionMatrix_middle;
+    glm::mat4 depthBiasVP_far = biasMatrix*depthViewProjectionMatrix_far;
 
-    lightingShader->setUniform("shadowMVP_near", depthBiasMVP_near);
+    //lightingShader->setUniform("shadowMVP_near", depthBiasVP_near);
     lightingShader->setTexture("shadowMap_near", depthTexture_near, 1);
-    lightingShader->setUniform("shadowMVP_middle", depthBiasMVP_middle);
+    //lightingShader->setUniform("shadowMVP_middle", depthBiasVP_middle);
     lightingShader->setTexture("shadowMap_middle", depthTexture_middle, 2);
-    lightingShader->setUniform("shadowMVP_far", depthBiasMVP_far);
+    //lightingShader->setUniform("shadowMVP_far", depthBiasVP_far);
     lightingShader->setTexture("shadowMap_far", depthTexture_far, 3);
 
     // set fog Parameters
@@ -223,8 +223,13 @@ void Graphics::render()
     //set view and projection matrix
     glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
 
+    std::vector<glm::mat4> shadowVPs = std::vector<glm::mat4>();
+    shadowVPs.push_back(depthBiasVP_near);
+    shadowVPs.push_back(depthBiasVP_middle);
+    shadowVPs.push_back(depthBiasVP_far);
+
     // render the level
-    level->render(lightingShader, true, lightingViewProjectionMatrix);
+    level->render(lightingShader, true, &lightingViewProjectionMatrix, &shadowVPs);
 }
 
 void Graphics::resize(glm::uvec2 windowSize) {
