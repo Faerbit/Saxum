@@ -18,7 +18,7 @@
         <yOffset>1.0</yOffset>
         <zOffset>2.0</zOffset>
         <scale>1.5</scale>
-        <mass>0.0</mass>
+        <mass>25.0</mass>
     </object>
 </composition>
 
@@ -30,7 +30,7 @@
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
-        <mass>2.0</mass>
+        <mass>0.0</mass>
     </object>
 </composition>
 
@@ -128,7 +128,7 @@
     <shininess>2.0</shininess>
     <physicType>Box</physicType>
     <width>5.0</width>
-    <height>1.0</height>
+    <height>6.0</height>
     <length>1.8</length>
 </objectData>
 
