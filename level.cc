@@ -349,8 +349,8 @@ glm::vec3 Level::getAmbientLight() {
     return ambientLight;
 }
 
-std::vector<Light> Level::getLights() {
-    return lights;
+std::vector<Light>* Level::getLights() {
+    return &lights;
 }
 
 Camera* Level::getCamera() {
