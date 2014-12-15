@@ -293,7 +293,6 @@ void Level::load() {
             errorCheck(xmlTrigger->FirstChildElement("objectNum")->QueryIntText(&objectNum));
             Object* object=0;
             for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
-                                printf("objectIdentifiers: %d, %d, %d, %d\n", objectIdentifiers[i][0], objectIdentifiers[i][1], objectIdentifiers[i][2], objectIdentifiers[i][3]);
                 if (objectIdentifiers[i][1]==idGreen && objectIdentifiers[i][2]==idBlue && objectIdentifiers[i][3]==objectNum){
                     object = objects[objectIdentifiers[i][0]];
                 }
