@@ -12,8 +12,8 @@ class Graphics {
     public:
         Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane);
         Graphics();
-        void init();
-        void render(Level* level);
+        void init(Level* level);
+        void render();
         // to build the projection matrix:
         glm::mat4 buildFrustum( float phiInDegree, float near, float far, float aspectRatio);
         glm::mat4 buildViewMatrix(Level* level);
@@ -36,6 +36,7 @@ class Graphics {
         ACGL::OpenGL::SharedFrameBufferObject framebuffer_middle;
         ACGL::OpenGL::SharedTexture2D depthTexture_far;
         ACGL::OpenGL::SharedFrameBufferObject framebuffer_far;
+        Level* level;
 };
 
 #endif
