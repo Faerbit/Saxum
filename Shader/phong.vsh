@@ -2,7 +2,7 @@
 
 uniform mat4 modelMatrix;
 uniform mat4 modelViewProjectionMatrix;
-uniform mat4 shadowMVPs[35];
+uniform mat4 shadowMVPs[5];
 
 in vec3 aPosition;
 in vec3 aNormal;
