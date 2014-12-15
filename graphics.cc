@@ -70,8 +70,10 @@ void Graphics::init(Level* level) {
     framebuffer_far->setDepthTexture(depthTexture_far);
     framebuffer_far->validate();
 
-    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(level->getLights()->size());
-    for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {
+    /*depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(level->getLights()->size());
+    for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {*/
+    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(1);
+    for (unsigned int i = 0; i<1; i++) {
         depth_cubeMaps.at(i) = SharedTextureCubeMap(new TextureCubeMap(glm::vec2(cube_size, cube_size), GL_DEPTH_COMPONENT16));
         depth_cubeMaps.at(i)->setMinFilter(GL_NEAREST);
         depth_cubeMaps.at(i)->setMagFilter(GL_NEAREST);
@@ -102,14 +104,14 @@ void Graphics::render()
         glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
 
     framebuffer_cube->bind();
-    for (unsigned int i_pointlight = 0; i_pointlight<level->getLights()->size(); i_pointlight++) {
+    //for (unsigned int i_pointlight = 0; i_pointlight<level->getLights()->size(); i_pointlight++) {
+    for (unsigned int i_pointlight = 0; i_pointlight<1; i_pointlight++) {
         // render each side of the cube
         for (int i_face = 0; i_face<6; i_face++) {
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
             glClear(GL_DEPTH_BUFFER_BIT);
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
                 level->getLights()->at(i_pointlight).getPosition() + looking_directions[i_face], glm::vec3(0.0f, 1.0f, 0.0f));
-            depthShader->setUniform("viewProjectionMatrix", depthViewProjectionMatrix_face);
             level->render(depthShader, false, &depthViewProjectionMatrix_face);
             if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
@@ -182,6 +184,8 @@ void Graphics::render()
         }
         glUniform1fv(lightingShader->getUniformLocation("lightIntensities"),
             sizeof(lightIntensities),  (GLfloat*) lightIntensities);
+
+        lightingShader->setTexture("shadowMap_cube", depth_cubeMaps.at(0), 4);
     }
     // set directional Light
     if(level->getDirectionalLight()) {
