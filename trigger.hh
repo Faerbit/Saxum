@@ -5,7 +5,7 @@
 
 class Trigger {
     public:
-        Trigger(std::vec<float> position, float distance, bool isBigger, objectIndex, int functionPointer);
+        Trigger(std::vector<float> position, float distance, bool isBigger, int objectIndex, int functionPointer);
 	    Trigger();
         ~Trigger();
     private:
