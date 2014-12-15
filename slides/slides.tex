@@ -1,0 +1,135 @@
+%*****************************************************************************%
+% This LaTeX-Template is based on the beamer package:                         %
+% http://latex-beamer.sourceforge.net                                         %
+%                                                                             %
+% For further details on how to create beamer slides you can check their      %
+% documentation:                                                              %
+% http://mirror.ctan.org/macros/latex/contrib/beamer/doc/beameruserguide.pdf  %
+%                                                                             %
+% The layout fits the current standard of the acg color scheme.               %
+% Version: 1.0                                                                %
+% Authors: Lars Krecklau <krecklau@informatik.rwth-aachen.de>                 %
+%*****************************************************************************%
+\documentclass{beamer}
+
+\usepackage{graphicx}
+\usepackage[german]{babel}
+
+% Place in these lines your title and the author's names:
+\newcommand{\myTitle}{Milestone 2 - Marble Race Game - Group C}
+\newcommand{\myAutors}{Fabian Klemp, Steffen F\"undgens, Simon Froitzheim, Jasper Manousek}
+\newcommand{\myAutorsFoot}{\myAutors}
+
+% If you want to draw images by latex:
+% http://www.texample.net/tikz/
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes}
+
+% Apply the acg layout
+\include{layoutacg}
+
+% Setup the title page
+\title{\myTitle}
+\author{\myAutors}
+\institute{RWTH Aachen University}
+\date{\today}
+\subject{\myTitle}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\section{\myTitle}
+
+\subsection{Steffen}
+
+\begin{frame}
+    \begin{itemize}
+    \item Level Editor:
+    \begin{itemize}
+        \item Create Heightmap
+        \item Create LevelX.png
+        \item Run our Converter
+    \end{itemize}
+    \uncover<2->{ Basic Triggers:
+    \begin{itemize}
+        \item need some work ...
+\end{itemize}}
+    \uncover<3->{ Future Work:
+    \begin{itemize}
+        \item make Triggers more awesome
+        \item Implement a seperate loading thread (split up level and only load closest stuff)
+\end{itemize}}
+    \end{itemize}
+\end{frame}
+
+\subsection{Japser}
+
+\begin{frame}
+    \begin{itemize}
+    \item Physics:
+    \begin{itemize}
+        \item Changed control behaviour of the marble
+        \item Implemented several collision shapes
+        \item Implemented MeshCollision
+        \item Scaling Problems
+    \end{itemize}
+    \uncover<2->{ Future Work:
+    \begin{itemize}
+        \item Make Physics more roboust
+        \item Camera collision(already started)
+        \item Animations(Sliding Door, Canon, ...)
+\end{itemize}}
+    \end{itemize}
+\end{frame}
+
+\subsection{Simon}
+\begin{frame}
+    \begin{itemize}
+    \item Modeling/Texturing:
+    \begin{itemize}
+        \item Improved marble texture
+        \item Improved textures on other objects
+    \end{itemize}
+    \uncover<2->{ Future Work:
+    \begin{itemize}
+        \item Design a half-pipe
+        \item Design an actual level
+\end{itemize}}
+    \end{itemize}
+\end{frame}
+
+\subsection{Fabian}
+\begin{frame}
+    \includegraphics[width=9cm]{images/sketch}
+\end{frame}
+
+\begin{frame}
+    \begin{itemize}
+    \item Graphics:
+    \begin{itemize}
+        \item Implemented fog
+        \item Implemented a skydome
+        \item Implemented Shadow mapping
+        \begin{itemize}
+            \item Sun shadow works mostly (has a bug)
+            \item Started point light shadows (huge mess)
+        \end{itemize}
+    \end{itemize}
+    \uncover<2->{ Future Work:
+    \begin{itemize}
+        \item Finish working on shadows
+        \item Implement bump mapping
+        \item Particle Systems
+        \item (Screen Space Ambient Occlusion)
+\end{itemize}}
+    \end{itemize}
+\end{frame}
+\subsection{Demo}
+\begin{frame}
+    \includegraphics[width=8.5cm]{images/demo}
+\end{frame}
+
+\end{document}
