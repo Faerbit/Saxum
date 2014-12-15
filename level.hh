@@ -18,7 +18,7 @@ class Level {
         ~Level();
         void load();
         void update(float runTime, glm::vec2 mouseDelta,bool wPressed, bool aPressed,bool sPressed, bool dPressed);
-        void render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass);
+        void render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass, glm::mat4 viewProjectionMatrix);
         glm::vec3 getAmbientLight();
         Light* getDirectionalLight();
         std::vector<Light>* getLights();
