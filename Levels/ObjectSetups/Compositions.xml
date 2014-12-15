@@ -5,7 +5,7 @@
         <xOffset>0.0</xOffset>
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
-        <scale>0.75</scale>
+        <scale>1.0</scale>
         <mass>8.0</mass>
     </object>
 </composition>
@@ -17,8 +17,8 @@
         <xOffset>0.0</xOffset>
         <yOffset>1.0</yOffset>
         <zOffset>2.0</zOffset>
-        <scale>1.0</scale>
-        <mass>2.0</mass>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
     </object>
 </composition>
 
@@ -35,7 +35,7 @@
 </composition>
 
 <composition>
-    <typeID>99</typeID>
+    <typeID>80</typeID>
     <object>
         <modelPath>torch.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -55,14 +55,15 @@
     </light>
 </composition>
 
+<!-- Block on 2 Pillars -->
 <composition>
-    <typeID>100</typeID>
+    <typeID>99</typeID>
     <object>
         <modelPath>column.obj</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
-        <scale>1.0</scale>
+        <scale>1.5</scale>
         <mass>0.0</mass>
     </object>
     <object>
@@ -70,7 +71,7 @@
         <xOffset>2.0</xOffset>
         <yOffset>0.0</yOffset>
         <zOffset>0.0</zOffset>
-        <scale>1.0</scale>
+        <scale>1.5</scale>
         <mass>0.0</mass>
     </object>
     <object>
@@ -78,7 +79,7 @@
         <xOffset>1.0</xOffset>
         <yOffset>3.0</yOffset>
         <zOffset>0.0</zOffset>
-        <scale>1.0</scale>
+        <scale>1.5</scale>
         <mass>0.0</mass>
     </object>
 </composition>
@@ -126,9 +127,9 @@
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
     <physicType>Box</physicType>
-    <width>1.0</width>
+    <width>5.0</width>
     <height>1.0</height>
-    <length>3.0</length>
+    <length>1.8</length>
 </objectData>
 
 <objectData>
