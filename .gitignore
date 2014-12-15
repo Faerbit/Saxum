@@ -5,4 +5,4 @@ CMakeLists.txt.user
 *.cbp
 *~
 *.zip
-
+*.db
