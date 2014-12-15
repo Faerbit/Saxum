@@ -16,7 +16,10 @@ Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane) {
 Graphics::Graphics() {
 }
 
-void Graphics::init() {
+void Graphics::init(Level* level) {
+    // save Level
+    this->level = level;
+
     // construct VAO to give shader correct Attribute locations
     SharedArrayBuffer ab = SharedArrayBuffer(new ArrayBuffer());
     ab->defineAttribute("aPosition", GL_FLOAT, 3);
@@ -74,7 +77,7 @@ glm::uvec2 Graphics::getWindowSize() {
     return windowSize;
 }
 
-void Graphics::render(Level* level)
+void Graphics::render()
 {
     // render depth texture for sun
     // near pass

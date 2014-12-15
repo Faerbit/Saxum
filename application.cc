@@ -21,10 +21,10 @@ void Application::init()
     ACGL::Base::Settings::the()->setTexturePath("Levels/Textures/");
     ACGL::Base::Settings::the()->setGeometryPath("Levels/Geometry/");
 
-    graphics.init();
-
     // load Level
     level.load();
+
+    graphics.init(&level);
 
     // just in case: check for errors
     openGLCriticalError();
