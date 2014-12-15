@@ -10,6 +10,7 @@
 #include "camera.hh"
 #include "physics.hh"
 #include "tinyxml2.hh"
+#include "trigger.hh"
 
 class Level {
     public:
@@ -34,6 +35,7 @@ class Level {
         std::vector<Object*> objects;
         std::vector<Object*> physicObjects;
         std::vector<Light> lights;
+        std::vector<Trigger> triggers;
         glm::vec3 ambientLight;
         glm::vec4 fogColour;
         Light directionalLight;
