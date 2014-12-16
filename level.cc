@@ -270,40 +270,43 @@ void Level::load() {
     }//iterating over all compositions in Level.xml
     
     //load triggers
-    XMLElement* xmlTrigger = doc->FirstChildElement("trigger");
-    for(; xmlTrigger; xmlTrigger=xmlTrigger->NextSiblingElement("trigger")){
-        const char* charName = xmlTrigger->FirstChildElement("name")->GetText();
-        if(charName == NULL){
-            printf("XMLError: No name found for a trigger.\n");
-        }
-        std::string name = charName;
-        if (name.compare("-") != 0){
-            float xPos, yPos, zPos, distance;
-            glm::vec3 position;
-            bool isBigger;
-            int idGreen, idBlue, objectNum, functionPointer_int;
-            errorCheck(xmlTrigger->FirstChildElement("xPosition")->QueryFloatText(&xPos));
-            errorCheck(xmlTrigger->FirstChildElement("yPosition")->QueryFloatText(&yPos));
-            errorCheck(xmlTrigger->FirstChildElement("zPosition")->QueryFloatText(&zPos));
-            errorCheck(xmlTrigger->FirstChildElement("distance")->QueryFloatText(&distance));
-            position = glm::vec3(xPos, yPos, zPos);
-            errorCheck(xmlTrigger->FirstChildElement("isBiggerThan")->QueryBoolText(&isBigger));
-            errorCheck(xmlTrigger->FirstChildElement("idGreen")->QueryIntText(&idGreen));
-            errorCheck(xmlTrigger->FirstChildElement("idBlue")->QueryIntText(&idBlue));
-            errorCheck(xmlTrigger->FirstChildElement("objectNum")->QueryIntText(&objectNum));
-            Object* object=0;
-            for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
-                if (objectIdentifiers[i][1]==idGreen && objectIdentifiers[i][2]==idBlue && objectIdentifiers[i][3]==objectNum){
-                    object = objects[objectIdentifiers[i][0]];
+    XMLElement* composition = doc->FirstChildElement("composition");
+    for(; composition; composition=composition->NextSiblingElement("composition")){
+        XMLElement* xmlTrigger = composition->FirstChildElement("trigger");
+        for(; xmlTrigger; xmlTrigger=xmlTrigger->NextSiblingElement("trigger")){
+            const char* charName = xmlTrigger->FirstChildElement("name")->GetText();
+            if(charName == NULL){
+                printf("XMLError: No name found for a trigger.\n");
+            }
+            std::string name = charName;
+            if (name.compare("-") != 0){
+                float xPos, yPos, zPos, distance;
+                glm::vec3 position;
+                bool isBigger;
+                int idGreen, idBlue, objectNum, functionPointer_int;
+                errorCheck(xmlTrigger->FirstChildElement("xPosition")->QueryFloatText(&xPos));
+                errorCheck(xmlTrigger->FirstChildElement("yPosition")->QueryFloatText(&yPos));
+                errorCheck(xmlTrigger->FirstChildElement("zPosition")->QueryFloatText(&zPos));
+                errorCheck(xmlTrigger->FirstChildElement("distance")->QueryFloatText(&distance));
+                position = glm::vec3(xPos, yPos, zPos);
+                errorCheck(xmlTrigger->FirstChildElement("isBiggerThan")->QueryBoolText(&isBigger));
+                errorCheck(composition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
+                errorCheck(composition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
+                errorCheck(xmlTrigger->FirstChildElement("objectNum")->QueryIntText(&objectNum));
+                Object* object=0;
+                for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
+                    if (objectIdentifiers[i][1]==idGreen && objectIdentifiers[i][2]==idBlue && objectIdentifiers[i][3]==objectNum){
+                        object = objects[objectIdentifiers[i][0]];
+                    }
                 }
-            }
-            errorCheck(xmlTrigger->FirstChildElement("functionPointer")->QueryIntText(&functionPointer_int));
-            if (object != 0) {
-                Trigger trigger = Trigger(position, distance, isBigger, object, functionPointer_int, this);
-                triggers.push_back(trigger);
-            }
-            else {
-                printf("Trigger object not found.\n");
+                errorCheck(xmlTrigger->FirstChildElement("functionPointer")->QueryIntText(&functionPointer_int));
+                if (object != 0) {
+                    Trigger trigger = Trigger(position, distance, isBigger, object, functionPointer_int, this);
+                    triggers.push_back(trigger);
+                }
+                else {
+                    printf("Trigger object not found.\n");
+                }
             }
         }
     }
