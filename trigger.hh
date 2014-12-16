@@ -4,9 +4,11 @@
 #include <vector>
 #include "object.hh"
 
+class Level;
+
 class Trigger {
     public:
-        Trigger(glm::vec3 position, float distance, bool isBigger, Object* object, void (*functionPointer)());
+        Trigger(glm::vec3 position, float distance, bool isBigger, Object* object, void (*functionPointer)(Level*), Level* level);
 	    Trigger();
         ~Trigger();
         void triggerUpdate();
@@ -15,7 +17,8 @@ class Trigger {
         float distance;
         bool isBigger;
         Object* object;
-        void (*functionPointer)();
+        void (*functionPointer)(Level*);
+        Level* level;
 };
 
 #endif
