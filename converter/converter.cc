@@ -30,7 +30,7 @@ Converter::Converter(std::string level){
     std::string backupXML = "../Levels/ObjectSetups/BackupLevel" + level + ".xml";
     std::ifstream  src(xmlFile, std::ios::binary);
     std::ofstream  dst(backupXML,  std::ios::binary);
-    dst << src.rdbuf();
+    
     
     //Load the Level xml file
     nextID.push_back(1);
@@ -95,41 +95,8 @@ Converter::Converter(std::string level){
         doc->InsertEndChild(fogColour);
         doc->InsertEndChild(directionalLight);
         doc->InsertEndChild(skydome);
-        
-        //Create a Dummy-trigger
-        XMLElement* trigger = doc->NewElement("trigger");
-        doc->InsertEndChild(trigger);
-        XMLElement* name = doc->NewElement("name");
-        XMLElement* xPosition = doc->NewElement("xPosition");
-        XMLElement* yPosition = doc->NewElement("yPosition");
-        XMLElement* zPosition = doc->NewElement("zPosition");
-        XMLElement* distance = doc->NewElement("distance");
-        XMLElement* isBiggerThan = doc->NewElement("isBiggerThan");
-        XMLElement* idGreen = doc->NewElement("idGreen");
-        XMLElement* idBlue = doc->NewElement("idBlue");
-        XMLElement* objectNum = doc->NewElement("objectNum");
-        XMLElement* functionPointer = doc->NewElement("functionPointer");
-        name->SetText("-");
-        xPosition->SetText("0.0");
-        yPosition->SetText("0.0");
-        zPosition->SetText("0.0");
-        distance->SetText("1.0");
-        isBiggerThan->SetText("false");
-        idGreen->SetText("0");
-        idBlue->SetText("0");
-        objectNum->SetText("1");
-        functionPointer->SetText("-");
-        trigger->InsertEndChild(name);
-        trigger->InsertEndChild(xPosition);
-        trigger->InsertEndChild(yPosition);
-        trigger->InsertEndChild(zPosition);
-        trigger->InsertEndChild(distance);
-        trigger->InsertEndChild(isBiggerThan);
-        trigger->InsertEndChild(idGreen);
-        trigger->InsertEndChild(idBlue);
-        trigger->InsertEndChild(objectNum);
-        trigger->InsertEndChild(functionPointer);
     }else{
+        dst << src.rdbuf();
         XMLElement* thisComposition = doc->FirstChildElement("composition");
         int idGreen, idBlue;
         for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
@@ -189,6 +156,39 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     newComposition->InsertFirstChild(xRot);
     newComposition->InsertFirstChild(scale);
     
+    //Create a Dummy-trigger
+    XMLElement* trigger = doc->NewElement("trigger");
+    newComposition->InsertEndChild(trigger);
+    XMLElement* name = doc->NewElement("name");
+    XMLElement* xPosition = doc->NewElement("xPosition");
+    XMLElement* yPosition = doc->NewElement("yPosition");
+    XMLElement* zPosition = doc->NewElement("zPosition");
+    XMLElement* distance = doc->NewElement("distance");
+    XMLElement* isBiggerThan = doc->NewElement("isBiggerThan");
+    XMLElement* objectNum = doc->NewElement("objectNum");
+    XMLElement* functionPointer = doc->NewElement("functionPointer");
+    //XMLElement* targetIdGreen = doc->NewElement("targetIdGreen");
+    //XMLElement* targetIdBlue = doc->NewElement("targetIdBlue");
+    name->SetText("-");
+    xPosition->SetText("0.0");
+    yPosition->SetText("0.0");
+    zPosition->SetText("0.0");
+    distance->SetText("1.0");
+    isBiggerThan->SetText("false");
+    objectNum->SetText("1");
+    functionPointer->SetText("-");
+    //targetIdGreen->SetText("0");
+    //targetIdBlue->SetText("0");
+    trigger->InsertEndChild(name);
+    trigger->InsertEndChild(xPosition);
+    trigger->InsertEndChild(yPosition);
+    trigger->InsertEndChild(zPosition);
+    trigger->InsertEndChild(distance);
+    trigger->InsertEndChild(isBiggerThan);
+    trigger->InsertEndChild(objectNum);
+    trigger->InsertEndChild(functionPointer);
+    //trigger->InsertEndChild(targetIdGreen);
+    //trigger->InsertEndChild(targetIdBlue);
     std::vector<int> ret = nextID;
     nextID[1] += 1;
     if (nextID[1] == 255){

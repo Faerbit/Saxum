@@ -10,6 +10,16 @@
     <idGreen>1</idGreen>
     <idBlue>5</idBlue>
     <typeID>20</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0.0</xPosition>
+        <yPosition>0.0</yPosition>
+        <zPosition>0.0</zPosition>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>1</objectNum>
+        <functionPointer>-</functionPointer>
+    </trigger>
 </composition>
 
 <composition>
@@ -19,11 +29,21 @@
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
     <xPos>5.500000</xPos>
-    <yOffset>1.0</yOffset>
+    <yOffset>0.0</yOffset>
     <zPos>-5.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>4</idBlue>
     <typeID>40</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0.0</xPosition>
+        <yPosition>0.0</yPosition>
+        <zPosition>0.0</zPosition>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>1</objectNum>
+        <functionPointer>-</functionPointer>
+    </trigger>
 </composition>
 
 <composition>
@@ -38,6 +58,16 @@
     <idGreen>1</idGreen>
     <idBlue>3</idBlue>
     <typeID>85</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0.0</xPosition>
+        <yPosition>0.0</yPosition>
+        <zPosition>0.0</zPosition>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>1</objectNum>
+        <functionPointer>-</functionPointer>
+    </trigger>
 </composition>
 
 <composition>
@@ -47,11 +77,21 @@
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
     <xPos>-1.500000</xPos>
-    <yOffset>1.0</yOffset>
+    <yOffset>0.0</yOffset>
     <zPos>-4.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>2</idBlue>
     <typeID>40</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0.0</xPosition>
+        <yPosition>0.0</yPosition>
+        <zPosition>0.0</zPosition>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>1</objectNum>
+        <functionPointer>-</functionPointer>
+    </trigger>
 </composition>
 
 <composition>
@@ -61,11 +101,21 @@
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
     <xPos>-4.500000</xPos>
-    <yOffset>1.0</yOffset>
+    <yOffset>0.0</yOffset>
     <zPos>1.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>1</idBlue>
     <typeID>40</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0.0</xPosition>
+        <yPosition>0.0</yPosition>
+        <zPosition>0.0</zPosition>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>1</objectNum>
+        <functionPointer>-</functionPointer>
+    </trigger>
 </composition>
 
 <ambientLight>
@@ -94,29 +144,3 @@
 <skydome>
     <texture>skydome.png</texture>
 </skydome>
-
-<trigger>
-    <name>bla</name>
-    <xPosition>25.0</xPosition>
-    <yPosition>14.0</yPosition>
-    <zPosition>5.5</zPosition>
-    <distance>5.0</distance>
-    <isBiggerThan>false</isBiggerThan>
-    <idGreen>1</idGreen>
-    <idBlue>5</idBlue>
-    <objectNum>0</objectNum>
-    <functionPointer>0</functionPointer>
-</trigger>
-
-<trigger>
-    <name>-</name>
-    <xPosition>0.0</xPosition>
-    <yPosition>0.0</yPosition>
-    <zPosition>0.0</zPosition>
-    <distance>1.0</distance>
-    <isBiggerThan>false</isBiggerThan>
-    <idGreen>0</idGreen>
-    <idBlue>0</idBlue>
-    <objectNum>0</objectNum>
-    <functionPointer>-</functionPointer>
-</trigger>
