@@ -7,6 +7,8 @@ Application::Application() {
 
 void Application::init()
 {
+    // init random generator
+    std::srand(std::time(NULL));
     // choose Level             TODO: Choose this in a menu
     this->level = Level("1");
     // Don't change this!
