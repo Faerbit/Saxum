@@ -298,12 +298,12 @@ void Level::load() {
                 }
             }
             errorCheck(xmlTrigger->FirstChildElement("functionPointer")->QueryIntText(&functionPointer_int));
-            void (*functionPointer)() = NULL;
+            void (*functionPointer)(Level*) = NULL;
             switch(functionPointer_int) {
                 case 0:
                     functionPointer =  &trigger_function_0;
                     break;
-                case 1:
+                /*case 1:
                     functionPointer =  &trigger_function_1;
                     break;
                 case 2:
@@ -314,12 +314,12 @@ void Level::load() {
                     break;
                 case 4:
                     functionPointer =  &trigger_function_4;
-                    break;
+                    break;*/
                 default:
                     printf("Trigger function could not be found.\n");
             }
             if (object != 0) {
-                Trigger trigger = Trigger(position, distance, isBigger, object, functionPointer);
+                Trigger trigger = Trigger(position, distance, isBigger, object, functionPointer, this);
                 triggers.push_back(trigger);
             }
             else {
@@ -417,15 +417,22 @@ void Level::setSkydomeSize(float size) {
     skydomeSize = size;
 }
 
-void Level::trigger_function_0() {
+void Level::trigger_function_0(Level* level) {
     static bool triggered = false;
     if (!triggered) {
         printf("Trigger 0 triggered.\n");
+        int rand = std::rand() % level->getObjects()->size();
+        printf("%d, %d\n", rand, level->getObjects()->size());
+        level->getObjects()->erase(level->getObjects()->begin() + rand);
     }
     triggered = true;
 }
 
-void Level::trigger_function_1() {
+std::vector<Object*>* Level::getObjects() {
+    return &objects;
+}
+
+/*void Level::trigger_function_1() {
 }
 
 void Level::trigger_function_2() {
@@ -435,4 +442,4 @@ void Level::trigger_function_3() {
 }
 
 void Level::trigger_function_4() {
-}
+}*/
