@@ -11,14 +11,14 @@
     <idBlue>5</idBlue>
     <typeID>20</typeID>
     <trigger>
-        <name>-</name>
-        <xPosition>0.0</xPosition>
-        <yPosition>0.0</yPosition>
-        <zPosition>0.0</zPosition>
-        <distance>1.0</distance>
+        <name>deleteRandomObject</name>
+        <xPosition>10.0</xPosition>
+        <yPosition>14.0</yPosition>
+        <zPosition>5.0</zPosition>
+        <distance>3.0</distance>
         <isBiggerThan>false</isBiggerThan>
-        <objectNum>1</objectNum>
-        <functionPointer>-</functionPointer>
+        <objectNum>0</objectNum>
+        <functionPointer>0</functionPointer>
     </trigger>
 </composition>
 
@@ -29,7 +29,7 @@
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
     <xPos>5.500000</xPos>
-    <yOffset>0.0</yOffset>
+    <yOffset>1.0</yOffset>
     <zPos>-5.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>4</idBlue>
@@ -41,7 +41,7 @@
         <zPosition>0.0</zPosition>
         <distance>1.0</distance>
         <isBiggerThan>false</isBiggerThan>
-        <objectNum>1</objectNum>
+        <objectNum>0</objectNum>
         <functionPointer>-</functionPointer>
     </trigger>
 </composition>
@@ -53,7 +53,7 @@
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
     <xPos>0.500000</xPos>
-    <yOffset>0.0</yOffset>
+    <yOffset>1.0</yOffset>
     <zPos>5.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>3</idBlue>
@@ -65,7 +65,7 @@
         <zPosition>0.0</zPosition>
         <distance>1.0</distance>
         <isBiggerThan>false</isBiggerThan>
-        <objectNum>1</objectNum>
+        <objectNum>0</objectNum>
         <functionPointer>-</functionPointer>
     </trigger>
 </composition>
@@ -77,7 +77,7 @@
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
     <xPos>-1.500000</xPos>
-    <yOffset>0.0</yOffset>
+    <yOffset>1.0</yOffset>
     <zPos>-4.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>2</idBlue>
@@ -89,7 +89,7 @@
         <zPosition>0.0</zPosition>
         <distance>1.0</distance>
         <isBiggerThan>false</isBiggerThan>
-        <objectNum>1</objectNum>
+        <objectNum>0</objectNum>
         <functionPointer>-</functionPointer>
     </trigger>
 </composition>
@@ -101,7 +101,7 @@
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
     <xPos>-4.500000</xPos>
-    <yOffset>0.0</yOffset>
+    <yOffset>1.0</yOffset>
     <zPos>1.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>1</idBlue>
@@ -113,7 +113,7 @@
         <zPosition>0.0</zPosition>
         <distance>1.0</distance>
         <isBiggerThan>false</isBiggerThan>
-        <objectNum>1</objectNum>
+        <objectNum>0</objectNum>
         <functionPointer>-</functionPointer>
     </trigger>
 </composition>
