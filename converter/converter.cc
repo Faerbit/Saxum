@@ -175,7 +175,7 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     zPosition->SetText("0.0");
     distance->SetText("1.0");
     isBiggerThan->SetText("false");
-    objectNum->SetText("1");
+    objectNum->SetText("0");
     functionPointer->SetText("-");
     //targetIdGreen->SetText("0");
     //targetIdBlue->SetText("0");
