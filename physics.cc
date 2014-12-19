@@ -177,7 +177,7 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
     //finally start making body        
     btTriangleMesh* triMesh = new btTriangleMesh();
     
-    for(unsigned i = 2; i < vertexIndices.size();i++)
+    for(unsigned i = 2; i < vertexIndices.size();i+=3)
     {
         triMesh->addTriangle(temp_vertices[vertexIndices[i]],temp_vertices[vertexIndices[i-1]],temp_vertices[vertexIndices[i-2]]);           
     }
