@@ -72,8 +72,8 @@ void Graphics::init(Level* level) {
 
     /*depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(level->getLights()->size());
     for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {*/
-    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(1);
-    for (unsigned int i = 0; i<1; i++) {
+    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(std::min(int(level->getLights()->size()), 1));
+    for (unsigned int i = 0; i<1 && i<depth_cubeMaps.size(); i++) {
         depth_cubeMaps.at(i) = SharedTextureCubeMap(new TextureCubeMap(glm::vec2(cube_size, cube_size), GL_DEPTH_COMPONENT16));
         depth_cubeMaps.at(i)->setMinFilter(GL_NEAREST);
         depth_cubeMaps.at(i)->setMagFilter(GL_NEAREST);
@@ -105,7 +105,7 @@ void Graphics::render()
 
     framebuffer_cube->bind();
     //for (unsigned int i_pointlight = 0; i_pointlight<level->getLights()->size(); i_pointlight++) {
-    for (unsigned int i_pointlight = 0; i_pointlight<1; i_pointlight++) {
+    for (unsigned int i_pointlight = 0; i_pointlight<1 && i_pointlight<level->getLights()->size(); i_pointlight++) {
         // render each side of the cube
         for (int i_face = 0; i_face<6; i_face++) {
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
