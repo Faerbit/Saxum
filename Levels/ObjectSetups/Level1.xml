@@ -57,7 +57,7 @@
     <zPos>5.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>3</idBlue>
-    <typeID>85</typeID>
+    <typeID>80</typeID>
     <trigger>
         <name>-</name>
         <xPosition>0.0</xPosition>
