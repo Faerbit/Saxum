@@ -281,14 +281,39 @@ void Level::load() {
             std::string name = charName;
             if (name.compare("-") != 0){
                 float xPos, yPos, zPos, distance;
-                glm::vec3 position;
                 bool isBigger;
                 int idGreen, idBlue, objectNum, functionPointer_int;
+                
                 errorCheck(xmlTrigger->FirstChildElement("xPosition")->QueryFloatText(&xPos));
                 errorCheck(xmlTrigger->FirstChildElement("yPosition")->QueryFloatText(&yPos));
                 errorCheck(xmlTrigger->FirstChildElement("zPosition")->QueryFloatText(&zPos));
+                glm::vec3 position = glm::vec3(xPos, yPos, zPos);
+                const char* charTarget = xmlTrigger->FirstChildElement("targetIdGreen")->GetText();
+                if(charTarget == NULL){
+                    printf("XMLError: No targetIdGreen found for a trigger.\n");
+                }
+                std::string stringTarget = charTarget;
+                if (stringTarget.compare("-") != 0){
+                    int targetIdGreen = 0, targetIdBlue = 0;
+                    errorCheck(xmlTrigger->FirstChildElement("targetIdGreen")->QueryIntText(&targetIdGreen));
+                    errorCheck(xmlTrigger->FirstChildElement("targetIdBlue")->QueryIntText(&targetIdBlue));
+                    XMLElement* thisComposition = doc->FirstChildElement("composition");
+                    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
+                        int thisIdGreen, thisIdBlue;
+                        errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&thisIdGreen));
+                        errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&thisIdBlue));
+                        if (targetIdGreen == thisIdGreen && targetIdBlue == thisIdBlue){
+                            glm::vec3 targetPosition; 
+                            errorCheck(thisComposition->FirstChildElement("xPos")->QueryFloatText(&targetPosition[0]));
+                            errorCheck(thisComposition->FirstChildElement("yOffset")->QueryFloatText(&targetPosition[1]));
+                            errorCheck(thisComposition->FirstChildElement("zPos")->QueryFloatText(&targetPosition[2]));
+                            targetPosition[1] += terrain.getHeightmap()[int(targetPosition[0]-0.5+0.5*terrain.getHeightmapHeight())]
+                                                                       [int(targetPosition[2]-0.5+0.5*terrain.getHeightmapWidth())];
+                            position += targetPosition;
+                        }
+                    }
+                }
                 errorCheck(xmlTrigger->FirstChildElement("distance")->QueryFloatText(&distance));
-                position = glm::vec3(xPos, yPos, zPos);
                 errorCheck(xmlTrigger->FirstChildElement("isBiggerThan")->QueryBoolText(&isBigger));
                 errorCheck(composition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
                 errorCheck(composition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
