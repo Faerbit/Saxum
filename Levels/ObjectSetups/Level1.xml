@@ -11,11 +11,25 @@
     <idBlue>5</idBlue>
     <typeID>20</typeID>
     <trigger>
-        <name>deleteRandomObject</name>
+        <name>deleteRandomObjectToTheRight</name>
         <xPosition>10.0</xPosition>
         <yPosition>14.0</yPosition>
         <zPosition>5.0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
         <distance>3.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <functionPointer>0</functionPointer>
+    </trigger>
+    <trigger>
+        <name>deleteRandomObjectAtTorch</name>
+        <xPosition>0.0</xPosition>
+        <yPosition>0.0</yPosition>
+        <zPosition>0.0</zPosition>
+        <targetIdGreen>1</targetIdGreen>
+        <targetIdBlue>3</targetIdBlue>
+        <distance>2.0</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <functionPointer>0</functionPointer>
@@ -39,6 +53,8 @@
         <xPosition>0.0</xPosition>
         <yPosition>0.0</yPosition>
         <zPosition>0.0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
         <distance>1.0</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
@@ -63,6 +79,8 @@
         <xPosition>0.0</xPosition>
         <yPosition>0.0</yPosition>
         <zPosition>0.0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
         <distance>1.0</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
@@ -87,6 +105,8 @@
         <xPosition>0.0</xPosition>
         <yPosition>0.0</yPosition>
         <zPosition>0.0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
         <distance>1.0</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
@@ -111,6 +131,8 @@
         <xPosition>0.0</xPosition>
         <yPosition>0.0</yPosition>
         <zPosition>0.0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
         <distance>1.0</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
