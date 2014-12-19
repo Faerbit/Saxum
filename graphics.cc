@@ -212,8 +212,9 @@ void Graphics::render()
     lightingShader->setTexture("shadowMap_middle", depthTexture_middle, 2);
     lightingShader->setTexture("shadowMap_far", depthTexture_far, 3);
 
+    lightingShader->setUniform("farPlane", farPlane);
+
     // set fog Parameters
-    lightingShader->setUniform("fogEnd", (farPlane)-35.0f);
     lightingShader->setUniform("fogColor", level->getFogColour());
     lightingShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
 

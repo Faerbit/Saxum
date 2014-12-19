@@ -27,7 +27,7 @@ uniform float directionalIntensity;
 uniform vec3 lightSources[32];
 uniform vec3 lightColors[32];
 uniform float lightIntensities[32];
-uniform float fogEnd;
+uniform float farPlane;
 uniform vec4 fogColor;
 uniform vec3 cameraCenter;
 
@@ -133,7 +133,7 @@ void main()
 
     vec3 finalColor = specularColor + diffuseColor + ambientColor;
     float distanceCameraCenter = distance(cameraCenter, vec3(fragPosition));
-    float fogFactor = clamp((1.0 - (fogEnd-distanceCameraCenter)/30.0), 0.0, 1.0);
+    float fogFactor = clamp((1.0 - ((farPlane - 35.0) -distanceCameraCenter)/30.0), 0.0, 1.0);
     fogFactor *= clamp((1.0-((fragPosition.y-8.0)/30.0)), 0.0, 1.0);
 
     vec4 texture = texture(uTexture, vTexCoord).rgba;
