@@ -120,11 +120,11 @@ void Physics::addPlayer(float rad, Entity entity, float mass, unsigned indice)
 
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia);
 
-    info.m_friction = 5;
+    info.m_friction = 0.9;
 
 	playerBall = new btRigidBody(info);
     
-    playerBall->setDamping(0.1f,0.3f);
+    playerBall->setDamping(0.1f,0.7f);
     
 	world->addRigidBody(playerBall);
 
