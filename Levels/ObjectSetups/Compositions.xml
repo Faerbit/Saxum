@@ -1,3 +1,4 @@
+<!-- Marble -->
 <composition>
     <typeID>20</typeID>
     <object>
@@ -10,6 +11,7 @@
     </object>
 </composition>
 
+<!-- Block -->
 <composition>
     <typeID>40</typeID>
     <object>
@@ -22,6 +24,7 @@
     </object>
 </composition>
 
+<!-- Column -->
 <composition>
     <typeID>60</typeID>
     <object>
@@ -34,6 +37,7 @@
     </object>
 </composition>
 
+<!-- Torch with Lightsource -->
 <composition>
     <typeID>80</typeID>
     <object>
@@ -54,6 +58,8 @@
         <intensity>4.0</intensity>
     </light>
 </composition>
+
+<!-- Lightsource -->
 <composition>
     <typeID>85</typeID>
     <light>
@@ -69,7 +75,7 @@
 
 <!-- Block on 2 Pillars -->
 <composition>
-    <typeID>99</typeID>
+    <typeID>100</typeID>
     <object>
         <modelPath>column.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -96,6 +102,7 @@
     </object>
 </composition>
 
+<!-- Switch -->
 <composition>
     <typeID>120</typeID>
     <object>
@@ -128,7 +135,7 @@
     <specularFactor>0.5</specularFactor>
     <shininess>3.0</shininess>
     <physicType>Player</physicType>
-    <radius>1.25</radius>
+    <radius>1.5</radius>
 </objectData>
 
 <objectData>
