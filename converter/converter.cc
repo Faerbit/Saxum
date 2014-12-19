@@ -163,32 +163,35 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     XMLElement* xPosition = doc->NewElement("xPosition");
     XMLElement* yPosition = doc->NewElement("yPosition");
     XMLElement* zPosition = doc->NewElement("zPosition");
+    XMLElement* targetIdGreen = doc->NewElement("targetIdGreen");
+    XMLElement* targetIdBlue = doc->NewElement("targetIdBlue");
     XMLElement* distance = doc->NewElement("distance");
     XMLElement* isBiggerThan = doc->NewElement("isBiggerThan");
     XMLElement* objectNum = doc->NewElement("objectNum");
     XMLElement* functionPointer = doc->NewElement("functionPointer");
-    //XMLElement* targetIdGreen = doc->NewElement("targetIdGreen");
-    //XMLElement* targetIdBlue = doc->NewElement("targetIdBlue");
+    
     name->SetText("-");
-    xPosition->SetText("0.0");
-    yPosition->SetText("0.0");
-    zPosition->SetText("0.0");
+    xPosition->SetText("0");
+    yPosition->SetText("0");
+    zPosition->SetText("0");
+    targetIdGreen->SetText("-");
+    targetIdBlue->SetText("-");
     distance->SetText("1.0");
     isBiggerThan->SetText("false");
     objectNum->SetText("0");
     functionPointer->SetText("-");
-    //targetIdGreen->SetText("0");
-    //targetIdBlue->SetText("0");
+    
     trigger->InsertEndChild(name);
     trigger->InsertEndChild(xPosition);
     trigger->InsertEndChild(yPosition);
     trigger->InsertEndChild(zPosition);
+    trigger->InsertEndChild(targetIdGreen);
+    trigger->InsertEndChild(targetIdBlue);
     trigger->InsertEndChild(distance);
     trigger->InsertEndChild(isBiggerThan);
     trigger->InsertEndChild(objectNum);
     trigger->InsertEndChild(functionPointer);
-    //trigger->InsertEndChild(targetIdGreen);
-    //trigger->InsertEndChild(targetIdBlue);
+    
     std::vector<int> ret = nextID;
     nextID[1] += 1;
     if (nextID[1] == 255){
