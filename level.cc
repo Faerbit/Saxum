@@ -334,7 +334,7 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
         camera.updateRotation(mouseDelta/100.0f);
     }    
     
-    float str = 30;
+    float str = 100;
     
     if(wPressed){
         physics.rollForward(camera.getVector(),str);
