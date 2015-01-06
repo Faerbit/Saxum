@@ -59,7 +59,7 @@ class Physics {
     void addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA,unsigned indice);
 	void addTerrain(int width, int length, float** heightData);
     void addTerrainTriangles(int width, int length, float** heightData); //add the terrain as a trimesh instead of a heightmap
-	void addPlayer(float rad, Entity entity, float mass, unsigned indice); //use these AFTER physicObjects.push_back(object)! if mass == 0 then the object is unmoveable
+	void addPlayer(float friction, float rad, Entity entity, float mass, unsigned indice); //use these AFTER physicObjects.push_back(object)! if mass == 0 then the object is unmoveable
 	void addSphere(float rad, Entity entity, float mass, unsigned indice); //The Indice should be set to physicObjects.size()
 	void addBox(float width, float height, float length, Entity entity, float mass, unsigned indice); //this is used to ensuer that the system is synchronized
 

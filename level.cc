@@ -69,6 +69,13 @@ void Level::load() {
         printf("Could not open ObjectSetupXml!\n");
         exit(-1);
     }
+    
+    //load global physic parameter
+    float friction;
+    XMLElement* physicsElement = doc->FirstChildElement("physics");
+    errorCheck(physicsElement->FirstChildElement("strength")->QueryFloatText(&strength));
+    errorCheck(physicsElement->FirstChildElement("friction")->QueryFloatText(&friction));
+    
     //load the skydome
     XMLElement* skydomeElement = doc->FirstChildElement("skydome");
     const char* charSkydomeTexture = skydomeElement->FirstChildElement("texture")->GetText();
@@ -208,7 +215,7 @@ void Level::load() {
                             if (physicType.compare("Player") == 0){
                                 float radius;
                                 errorCheck(objectData->FirstChildElement("radius")->QueryFloatText(&radius));
-                                this->physics.addPlayer(radius, *object, mass, physicObjects.size());
+                                this->physics.addPlayer(friction, radius, *object, mass, physicObjects.size());
                             }else if (physicType.compare("Box") == 0){
                                 float width, height, length;
                                 errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
@@ -359,19 +366,17 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
         camera.updateRotation(mouseDelta/100.0f);
     }    
     
-    float str = 100;
-    
     if(wPressed){
-        physics.rollForward(camera.getVector(),str);
+        physics.rollForward(camera.getVector(),strength);
     }
     if(aPressed) {
-        physics.rollLeft(camera.getVector(),str);
+        physics.rollLeft(camera.getVector(),strength);
     }
     if(sPressed) {
-        physics.rollBack(camera.getVector(),str);
+        physics.rollBack(camera.getVector(),strength);
     }
     if(dPressed){
-        physics.rollRight(camera.getVector(),str);
+        physics.rollRight(camera.getVector(),strength);
     }
     
     physics.takeUpdateStep(runTime);
