@@ -39,7 +39,7 @@ Converter::Converter(std::string level){
     doc->LoadFile(charXmlFile);
     if (doc->ErrorID()!=0){
         printf("Could not open xml, creating new xml.\n");
-        //Create all global Elements with Dummy-Values
+        //Create all global Lightingparameters with Dummy-Values
         std::vector<XMLElement*> lightAttributes;
         lightAttributes.push_back(doc->NewElement("xOffset"));
         lightAttributes.push_back(doc->NewElement("yOffset"));
@@ -85,16 +85,27 @@ Converter::Converter(std::string level){
         for(int i=0;i<7;i++){
             directionalLight->InsertEndChild(lightAttributes[i]);
         }
+        doc->InsertEndChild(ambientLight);
+        doc->InsertEndChild(fogColour);
+        doc->InsertEndChild(directionalLight);
         
+        //Create global skydome Element
         XMLElement* skydome = doc->NewElement("skydome");
         XMLElement* skydomeTexture = doc->NewElement("texture");
         skydomeTexture->SetText("skydome.png");
         skydome->InsertEndChild(skydomeTexture);
-        
-        doc->InsertEndChild(ambientLight);
-        doc->InsertEndChild(fogColour);
-        doc->InsertEndChild(directionalLight);
         doc->InsertEndChild(skydome);
+        
+        //Create global physics parameters
+        XMLElement* physics = doc->NewElement("physics");
+        XMLElement* friction = doc->NewElement("friction");
+        XMLElement* strength = doc->NewElement("strength");
+        friction->SetText("0.9");
+        strength->SetText("100.0");
+        physics->InsertEndChild(friction);
+        physics->InsertEndChild(strength);
+        doc->InsertEndChild(physics);
+        
     }else{
         dst << src.rdbuf();
         XMLElement* thisComposition = doc->FirstChildElement("composition");

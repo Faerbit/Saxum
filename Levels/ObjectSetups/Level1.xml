@@ -166,3 +166,8 @@
 <skydome>
     <texture>skydome.png</texture>
 </skydome>
+
+<physics>
+    <friction>0.9</friction>
+    <strength>100.0</strength>
+</physics>
