@@ -104,7 +104,7 @@ void Physics::addStaticGroundPlane()
 
 
 //players and objects
-void Physics::addPlayer(float rad, Entity entity, float mass, unsigned indice)
+void Physics::addPlayer(float friction, float rad, Entity entity, float mass, unsigned indice)
 {
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
@@ -120,7 +120,7 @@ void Physics::addPlayer(float rad, Entity entity, float mass, unsigned indice)
 
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia);
 
-    info.m_friction = 0.9;
+    info.m_friction = friction;
 
 	playerBall = new btRigidBody(info);
     

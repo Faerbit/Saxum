@@ -46,6 +46,7 @@ class Level {
         Camera camera;
         Terrain terrain;
         float skydomeSize;
+        float strength;
 };
 
 #endif
