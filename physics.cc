@@ -104,7 +104,7 @@ void Physics::addStaticGroundPlane()
 
 
 //players and objects
-void Physics::addPlayer(float friction, float rad, Entity entity, float mass, unsigned indice)
+void Physics::addPlayer(float friction, float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
 {
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
@@ -124,7 +124,7 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, un
 
 	playerBall = new btRigidBody(info);
     
-    playerBall->setDamping(0.1f,0.7f);
+    playerBall->setDamping(dampningL, dampningA);
     
 	world->addRigidBody(playerBall);
 
@@ -207,7 +207,7 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 }
 
-void Physics::addBox(float width, float height, float length, Entity entity, float mass, unsigned indice)
+void Physics::addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
 {
 	
 	if(bodies.size() == indice)
@@ -227,7 +227,7 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
 	
 	btRigidBody* body = new btRigidBody(info);	
 	
-    body->setDamping(0.8f,0.9f);
+    body->setDamping(dampningL, dampningA);
     
 	world->addRigidBody(body);
 
@@ -237,7 +237,7 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 }
 
-void Physics::addSphere(float rad, Entity entity, float mass, unsigned indice)
+void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
 {
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
@@ -256,7 +256,7 @@ void Physics::addSphere(float rad, Entity entity, float mass, unsigned indice)
 
 	btRigidBody* body = new btRigidBody(info);
 	
-    body->setDamping(0.2f,0.4f);
+    body->setDamping(dampningL, dampningA);
 
 	world->addRigidBody(body);
 
