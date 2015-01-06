@@ -212,20 +212,21 @@ void Level::load() {
                             //add object to physics
                             float mass;
                             errorCheck(xmlObject->FirstChildElement("mass")->QueryFloatText(&mass));
+                            float dampningL, dampningA;
+                            errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
+                            errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                             if (physicType.compare("Player") == 0){
                                 float radius;
                                 errorCheck(objectData->FirstChildElement("radius")->QueryFloatText(&radius));
-                                this->physics.addPlayer(friction, radius, *object, mass, physicObjects.size());
+                                this->physics.addPlayer(friction, radius, *object, mass, dampningL, dampningA, physicObjects.size());
                             }else if (physicType.compare("Box") == 0){
                                 float width, height, length;
                                 errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
                                 errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
                                 errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
-                                this->physics.addBox(width, height, length, *object, mass, physicObjects.size());
+                                this->physics.addBox(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size());
                             }else if (physicType.compare("TriangleMesh") == 0){
-                                float dampningL, dampningA;
-                                errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
-                                errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
+                                
                                 this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size());
                             } else{
                                 printf("XMLError: Not a valid physicType.\n");

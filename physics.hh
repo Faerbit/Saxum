@@ -53,15 +53,15 @@ class Physics {
 	glm::vec3 getPos(int i);
 	glm::mat4 getRotation(int i);
 	void addStaticGroundPlane();
-	void addCamera(float rad,float distance); //Do NOT impliment before Player has been created;
+	void addCamera(float rad, float distance); //Do NOT impliment before Player has been created;
 	glm::vec3 getCameraPosition();
-	void addRigidBodyFromFile(Entity entity, float mass, float dampningL, float dampningA, std::string modelLocation,unsigned indice);
-    void addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA,unsigned indice);
+	void addRigidBodyFromFile(Entity entity, float mass, float dampningL, float dampningA, std::string modelLocation, unsigned indice);
+    void addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA, unsigned indice);
 	void addTerrain(int width, int length, float** heightData);
     void addTerrainTriangles(int width, int length, float** heightData); //add the terrain as a trimesh instead of a heightmap
-	void addPlayer(float friction, float rad, Entity entity, float mass, unsigned indice); //use these AFTER physicObjects.push_back(object)! if mass == 0 then the object is unmoveable
-	void addSphere(float rad, Entity entity, float mass, unsigned indice); //The Indice should be set to physicObjects.size()
-	void addBox(float width, float height, float length, Entity entity, float mass, unsigned indice); //this is used to ensuer that the system is synchronized
+	void addPlayer(float friction, float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice); //use these AFTER physicObjects.push_back(object)! if mass == 0 then the object is unmoveable
+	void addSphere(float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice); //The Indice should be set to physicObjects.size()
+	void addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice); //this is used to ensuer that the system is synchronized
 
     private:
 	btRigidBody* playerBall;    //allows for easier access to the ball
