@@ -136,6 +136,8 @@
     <shininess>3.0</shininess>
     <physicType>Player</physicType>
     <radius>1.5</radius>
+    <dampningL>0.1</dampningL>
+    <dampningA>0.7</dampningA>
 </objectData>
 
 <objectData>
@@ -149,6 +151,8 @@
     <width>5.0</width>
     <height>6.0</height>
     <length>1.8</length>
+    <dampningL>0.8</dampningL>
+    <dampningA>0.9</dampningA>
 </objectData>
 
 <objectData>
@@ -186,6 +190,8 @@
     <width>0.5</width>
     <height>0.5</height>
     <length>0.5</length>
+    <dampningL>1.0</dampningL>
+    <dampningA>1.0</dampningA>
 </objectData>
 
 <objectData>
