@@ -106,7 +106,7 @@ ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 # Linux:
 #
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    SET(LIBRARIES ${LIBRARIES} -lXrandr -lGL -lXi  -pthread -lm -lX11 -lXxf86vm)
+    SET(LIBRARIES ${LIBRARIES} -lXrandr -lGL -lXi  -pthread -lm -lX11 -lXxf86vm -ldl)
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 #
 #
@@ -130,6 +130,20 @@ else()
     SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/src/LinearMath/libLinearMath.a)
     SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/bullet/build/src/BulletSoftBody/libBulletSoftBody.a)
 endif()
+
+# Include Lua
+
+FILE(GLOB_RECURSE HEADER_FILES_LUA ${CMAKE_SOURCE_DIR}/extern/lua/src/*.h)
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/extern/lua/src)
+SET(HEADER_FILES ${HEADER_FILES} ${HEADER_FILES_LUA})
+
+FILE(GLOB_RECURSE HEADER_FILES_LUA_BRIDGE ${CMAKE_SOURCE_DIR}/extern/luabridge/*.h)
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/extern/luabridge)
+SET(HEADER_FILES ${HEADER_FILES} ${HEADER_FILES_LUA_BRIDGE})
+
+SET (LIBRARIES ${LIBRARIES} ${CMAKE_SOURCE_DIR}/extern/lua/src/liblua.a)
 
 
 ADD_EXECUTABLE(MarbleRaceGroupC ${SOURCE_FILES} ${HEADER_FILES} ${SHADER_FILES} ${README_FILES})
