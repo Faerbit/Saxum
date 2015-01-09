@@ -1,5 +1,11 @@
 #include "level.hh"
 #include <string>
+extern "C" {
+#include "extern/lua/src/lua.h"
+#include "extern/lua/src/lualib.h"
+#include "extern/lua/src/lauxlib.h"
+}
+#include "extern/luabridge/LuaBridge.h"
 using namespace tinyxml2;
 
 //dowadiddydiddydumdiddydo
@@ -41,6 +47,26 @@ void Level::errorCheck(XMLError error){
 }
 
 void Level::load() {
+    //Intialize lua state
+    lua_State *L = nullptr;
+    // Check if there's an existing state and close it
+    if(L != nullptr){
+        lua_close(L);
+        L = nullptr;
+    }
+    // Create a new lua state
+    L = luaL_newstate();
+    luaL_openlibs(L);
+    //Expose the class Level and its functions
+    luabridge::getGlobalNamespace(L)
+        .beginClass<Level>("Level")
+        .addFunction("getObjects", &Level::getObjects)
+        .endClass();
+    //Push the level as a global variable
+    luabridge::push(L, this);
+    lua_setglobal(L, "Level");
+    
+    
     this->physics = Physics();
     this->physics.init();
     
@@ -334,7 +360,7 @@ void Level::load() {
                 }
                 errorCheck(xmlTrigger->FirstChildElement("functionPointer")->QueryIntText(&functionPointer_int));
                 if (object != 0) {
-                    Trigger trigger = Trigger(position, distance, isBigger, object, functionPointer_int, this);
+                    Trigger trigger = Trigger(position, distance, isBigger, object, functionPointer_int, L, this);
                     triggers.push_back(trigger);
                 }
                 else {
