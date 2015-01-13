@@ -20,7 +20,10 @@
         <distance>3.0</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
-        <functionPointer>0</functionPointer>
+        <luaScript>deleteRandomObject</luaScript>
+        <toChangeIdGreen>1</toChangeIdGreen>
+        <toChangeIdBlue>5</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
     </trigger>
     <trigger>
         <name>deleteRandomObjectAtTorch</name>
@@ -32,7 +35,10 @@
         <distance>2.0</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
-        <functionPointer>0</functionPointer>
+        <luaScript>deleteRandomObject</luaScript>
+        <toChangeIdGreen>1</toChangeIdGreen>
+        <toChangeIdBlue>5</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
     </trigger>
 </composition>
 
@@ -58,7 +64,10 @@
         <distance>1.0</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
-        <functionPointer>-</functionPointer>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>-</toChangeIdGreen>
+        <toChangeIdBlue>-</toChangeIdBlue>
+        <toChangeObjNum>-</toChangeObjNum>
     </trigger>
 </composition>
 
@@ -84,7 +93,10 @@
         <distance>1.0</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
-        <functionPointer>-</functionPointer>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>-</toChangeIdGreen>
+        <toChangeIdBlue>-</toChangeIdBlue>
+        <toChangeObjNum>-</toChangeObjNum>
     </trigger>
 </composition>
 
@@ -110,7 +122,10 @@
         <distance>1.0</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
-        <functionPointer>-</functionPointer>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>-</toChangeIdGreen>
+        <toChangeIdBlue>-</toChangeIdBlue>
+        <toChangeObjNum>-</toChangeObjNum>
     </trigger>
 </composition>
 
@@ -136,7 +151,10 @@
         <distance>1.0</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
-        <functionPointer>-</functionPointer>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>-</toChangeIdGreen>
+        <toChangeIdBlue>-</toChangeIdBlue>
+        <toChangeObjNum>-</toChangeObjNum>
     </trigger>
 </composition>
 

@@ -1,36 +1,22 @@
 #include "trigger.hh"
 #include "level.hh"
 
-Trigger::Trigger(glm::vec3 position, float distance, bool isBigger, Object* object, int functionPointer_int, lua_State* L, Level* level) {
+Trigger::Trigger(glm::vec3 position, float distance, bool isBigger, Object* object, std::string luaScript, lua_State* L, int objectToChange, Level* level) {
     this->position=position;
     this->distance=distance;
     this->isBigger=isBigger;
     this->object=object;
-    void (*functionPointer)(Level*) = NULL;
-    switch(functionPointer_int) {
-        case 0:
-            this->functionPointer =  &Trigger::trigger_function_0;
-            break;
-        case 1:
-            this->functionPointer =  &Trigger::trigger_function_1;
-            break;
-        case 2:
-            this->functionPointer =  &Trigger::trigger_function_2;
-            break;
-        case 3:
-            this->functionPointer =  &Trigger::trigger_function_3;
-            break;
-        case 4:
-            this->functionPointer =  &Trigger::trigger_function_4;
-            break;
-        default:
-            printf("Trigger function could not be found.\n");
-    }
+    this->triggerLuaScript=("../Levels/scripts/" + luaScript + ".lua").c_str();
+    printf("Hallo\n");
+    printf(this->triggerLuaScript);
+    printf("Hallo\n");
+    printf("\n");
     this->level = level;
     this->L = L;
     if(L == nullptr){
         printf("L is NULL in trigger!\n");
     }
+    this->objectToChange = objectToChange;
     triggered = false;
 }
 
@@ -43,15 +29,21 @@ Trigger::~Trigger(){
 void Trigger::triggerUpdate(){
     if (!triggered){
         if (isBigger && (glm::distance(object->getPosition(), position) > distance)) {
-            (this->*functionPointer)(level);
-            luaL_dofile(L, "../Levels/scripts/Level1/deleteRandomObject.lua");
-            luabridge::getGlobal(L, "trigger")();
+            printf(triggerLuaScript);
+            printf("\n");
+            printf(triggerLuaScript);
+            printf("\nTriggering\n");
+            //luaL_dofile(L, luaScript);
+            //luabridge::getGlobal(L, "trigger")(objectToChange);
             triggered = true;
         }
         else if (!isBigger && (glm::distance(object->getPosition(), position) < distance)) {
-            (this->*functionPointer)(level);
-            luaL_dofile(L, "../Levels/scripts/Level1/deleteRandomObject.lua");
-            luabridge::getGlobal(L, "trigger")();
+            printf(triggerLuaScript);
+            printf("\n");
+            printf(triggerLuaScript);
+            printf("\nTriggering\n");
+            //luaL_dofile(L, luaScript);
+            //luabridge::getGlobal(L, "trigger")(objectToChange);
             triggered = true;
         }
     }
