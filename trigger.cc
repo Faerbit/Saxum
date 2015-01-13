@@ -34,3 +34,13 @@ void Trigger::triggerUpdate(){
         }
     }
 }
+
+bool Trigger::deleteNotification(int deletedObjectIndex){
+    if (deletedObjectIndex < objectToChange){
+        objectToChange-=1;
+    }
+    if (deletedObjectIndex == objectToChange){
+        return true;
+    }
+    return false;
+}
