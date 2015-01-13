@@ -7,6 +7,13 @@
 #include <string>
 #include <stdio.h>
 
+extern "C" {
+#include "extern/lua/src/lua.h"
+#include "extern/lua/src/lualib.h"
+#include "extern/lua/src/lauxlib.h"
+}
+#include "extern/luabridge/LuaBridge.h"
+
 #include "entity.hh"
 
 #include "extern/bullet/src/BulletDynamics/Dynamics/btRigidBody.h"
@@ -44,7 +51,7 @@ class Physics {
     public:
     Physics();
 	~Physics();
-	void init();
+	void init(lua_State* L);
 	void takeUpdateStep(float timeDiff); //must be used in level.update to proagate the physics
 	void rollForward(glm::vec3 camPos, float strength); //self explainitory
 	void rollLeft(glm::vec3 camPos, float strength);
