@@ -26,16 +26,16 @@
         <toChangeObjNum>0</toChangeObjNum>
     </trigger>
     <trigger>
-        <name>deleteRandomObjectAtTorch</name>
+        <name>deleteMarbleAtTorch</name>
         <xPosition>0.0</xPosition>
         <yPosition>0.0</yPosition>
         <zPosition>0.0</zPosition>
         <targetIdGreen>1</targetIdGreen>
         <targetIdBlue>3</targetIdBlue>
-        <distance>2.0</distance>
+        <distance>2.5</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
-        <luaScript>deleteRandomObject</luaScript>
+        <luaScript>deleteObject</luaScript>
         <toChangeIdGreen>1</toChangeIdGreen>
         <toChangeIdBlue>5</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>
