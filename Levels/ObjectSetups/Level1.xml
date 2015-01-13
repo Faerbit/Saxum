@@ -21,8 +21,8 @@
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>deleteRandomObject</luaScript>
-        <toChangeIdGreen>1</toChangeIdGreen>
-        <toChangeIdBlue>5</toChangeIdBlue>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>
     </trigger>
     <trigger>
@@ -65,9 +65,9 @@
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>-</luaScript>
-        <toChangeIdGreen>-</toChangeIdGreen>
-        <toChangeIdBlue>-</toChangeIdBlue>
-        <toChangeObjNum>-</toChangeObjNum>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
     </trigger>
 </composition>
 
@@ -94,9 +94,9 @@
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>-</luaScript>
-        <toChangeIdGreen>-</toChangeIdGreen>
-        <toChangeIdBlue>-</toChangeIdBlue>
-        <toChangeObjNum>-</toChangeObjNum>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
     </trigger>
 </composition>
 
@@ -123,9 +123,9 @@
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>-</luaScript>
-        <toChangeIdGreen>-</toChangeIdGreen>
-        <toChangeIdBlue>-</toChangeIdBlue>
-        <toChangeObjNum>-</toChangeObjNum>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
     </trigger>
 </composition>
 
@@ -152,9 +152,9 @@
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>-</luaScript>
-        <toChangeIdGreen>-</toChangeIdGreen>
-        <toChangeIdBlue>-</toChangeIdBlue>
-        <toChangeObjNum>-</toChangeObjNum>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
     </trigger>
 </composition>
 

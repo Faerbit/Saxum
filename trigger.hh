@@ -18,6 +18,7 @@ class Trigger {
 	    Trigger();
         ~Trigger();
         void triggerUpdate();
+        bool deleteNotification(int deletedObjectIndex);
     private:
         glm::vec3 position;
         float distance;

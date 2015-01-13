@@ -365,7 +365,7 @@ void Level::load() {
                 }
                 std::string luaScript = charLuaScript;
                 
-                int toChangeIdGreen, toChangeIdBlue, toChangeObjNum, objectToChange=0;
+                int toChangeIdGreen, toChangeIdBlue, toChangeObjNum, objectToChange=-1;
                 errorCheck(xmlTrigger->FirstChildElement("toChangeIdGreen")->QueryIntText(&toChangeIdGreen));
                 errorCheck(xmlTrigger->FirstChildElement("toChangeIdBlue")->QueryIntText(&toChangeIdBlue));
                 errorCheck(xmlTrigger->FirstChildElement("toChangeObjNum")->QueryIntText(&toChangeObjNum));
@@ -375,13 +375,8 @@ void Level::load() {
                     }
                 }
                 if (object != 0) {
-                    if (objectToChange != 0) {
-                        Trigger trigger = Trigger(position, distance, isBigger, object, luaScript, L, objectToChange);
-                        triggers.push_back(trigger);
-                    }
-                    else {
-                        printf("Object to be changed by a trigger not found.\n");
-                    }
+                    Trigger trigger = Trigger(position, distance, isBigger, object, luaScript, L, objectToChange);
+                    triggers.push_back(trigger);
                 }
                 else {
                     printf("Triggering object not found.\n");
@@ -484,6 +479,11 @@ std::vector<Object*>* Level::getObjects() {
 
 void Level::deleteObject(int objectIndex){
     objects.erase(objects.begin() + objectIndex);
+    for(unsigned int i = 0; i<triggers.size(); i++) {
+        if(triggers.at(i).deleteNotification(objectIndex)){
+            triggers.erase(triggers.begin() + i);
+        }
+    }
 }
 
 int Level::getObjectCount(){
