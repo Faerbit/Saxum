@@ -376,7 +376,7 @@ void Level::load() {
                 }
                 if (object != 0) {
                     if (objectToChange != 0) {
-                        Trigger trigger = Trigger(position, distance, isBigger, object, luaScript, L, objectToChange, this);
+                        Trigger trigger = Trigger(position, distance, isBigger, object, luaScript, L, objectToChange);
                         triggers.push_back(trigger);
                     }
                     else {
@@ -484,7 +484,6 @@ std::vector<Object*>* Level::getObjects() {
 
 void Level::deleteObject(int objectIndex){
     objects.erase(objects.begin() + objectIndex);
-    printf("Deleting an object.\n");
 }
 
 int Level::getObjectCount(){
