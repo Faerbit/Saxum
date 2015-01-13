@@ -57,19 +57,19 @@ void Level::load() {
     // Create a new lua state
     L = luaL_newstate();
     luaL_openlibs(L);
-    //Expose the class Level and its functions
+    //Expose the class Level and its functions to Lua
     luabridge::getGlobalNamespace(L)
         .beginClass<Level>("Level")
         .addFunction("deleteObject", &Level::deleteObject)
         .addFunction("getObjectCount", &Level::getObjectCount)
         .endClass();
-    //Push the level as a global variable
+    //Push the level to Lua as a global variable
     luabridge::push(L, this);
-    lua_setglobal(L, "this_level");
+    lua_setglobal(L, "level");
     
     
     this->physics = Physics();
-    this->physics.init();
+    this->physics.init(L);
     
     // currently hard coded should later read this stuff out of a file
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
