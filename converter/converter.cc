@@ -194,9 +194,9 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     isBiggerThan->SetText("false");
     objectNum->SetText("0");
     luaScript->SetText("-");
-    toChangeIdGreen->SetText("-");
-    toChangeIdBlue->SetText("-");
-    toChangeObjNum->SetText("-");
+    toChangeIdGreen->SetText("0");
+    toChangeIdBlue->SetText("0");
+    toChangeObjNum->SetText("0");
     
     trigger->InsertEndChild(name);
     trigger->InsertEndChild(xPosition);
