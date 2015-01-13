@@ -8,15 +8,23 @@ Physics::Physics() {
 Physics::~Physics() {
 }
 
-void Physics::init()
+void Physics::init(lua_State* L)
 {
 	colConfig = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(colConfig);
 	broadphase = new btDbvtBroadphase();
 	solver = new btSequentialImpulseConstraintSolver();
 	world = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,colConfig);
+    world->setGravity(btVector3(0,-10,-0));
 	
-	world->setGravity(btVector3(0,-10,-0));	
+	//Expose the class Physics and its functions
+    luabridge::getGlobalNamespace(L)
+        .beginClass<Physics>("Physics")
+        //.addFunction("", &Physics::)
+        .endClass();
+    //Push the physics to Lua as a global variable
+    luabridge::push(L, this);
+    lua_setglobal(L, "physics");
 }
 
 void Physics::takeUpdateStep(float timeDiff)

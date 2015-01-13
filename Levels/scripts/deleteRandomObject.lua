@@ -1,10 +1,14 @@
 function trigger(objectToChange)
-    if(not this_level) then
-        print("No level found!")
+    if(not level) then
+        print("No level found in Lua!")
         return
     end
-    a = this_level:getObjectCount()
+    if(not physics) then
+        print("No physics found in Lua!")
+        return
+    end
+    a = level:getObjectCount()
     rand = math.random(0, a - 1)
-    this_level:deleteObject(rand)
+    level:deleteObject(rand)
     print("Triggered from Lua!")
 end
