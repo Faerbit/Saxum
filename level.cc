@@ -60,11 +60,12 @@ void Level::load() {
     //Expose the class Level and its functions
     luabridge::getGlobalNamespace(L)
         .beginClass<Level>("Level")
-        .addFunction("getObjects", &Level::getObjects)
+        .addFunction("deleteObject", &Level::deleteObject)
+        .addFunction("getObjectCount", &Level::getObjectCount)
         .endClass();
     //Push the level as a global variable
     luabridge::push(L, this);
-    lua_setglobal(L, "Level");
+    lua_setglobal(L, "this_level");
     
     
     this->physics = Physics();
@@ -316,7 +317,7 @@ void Level::load() {
             if (name.compare("-") != 0){
                 float xPos, yPos, zPos, distance;
                 bool isBigger;
-                int idGreen, idBlue, objectNum, functionPointer_int;
+                int idGreen, idBlue, objectNum;
                 
                 errorCheck(xmlTrigger->FirstChildElement("xPosition")->QueryFloatText(&xPos));
                 errorCheck(xmlTrigger->FirstChildElement("yPosition")->QueryFloatText(&yPos));
@@ -358,13 +359,32 @@ void Level::load() {
                         object = objects[objectIdentifiers[i][0]];
                     }
                 }
-                errorCheck(xmlTrigger->FirstChildElement("functionPointer")->QueryIntText(&functionPointer_int));
+                const char* charLuaScript = xmlTrigger->FirstChildElement("luaScript")->GetText();
+                if(charLuaScript == NULL){
+                    printf("XMLError: No Lua script found for a trigger.\n");
+                }
+                std::string luaScript = charLuaScript;
+                
+                int toChangeIdGreen, toChangeIdBlue, toChangeObjNum, objectToChange=0;
+                errorCheck(xmlTrigger->FirstChildElement("toChangeIdGreen")->QueryIntText(&toChangeIdGreen));
+                errorCheck(xmlTrigger->FirstChildElement("toChangeIdBlue")->QueryIntText(&toChangeIdBlue));
+                errorCheck(xmlTrigger->FirstChildElement("toChangeObjNum")->QueryIntText(&toChangeObjNum));
+                for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
+                    if (objectIdentifiers[i][1]==toChangeIdGreen && objectIdentifiers[i][2]==toChangeIdBlue && objectIdentifiers[i][3]==toChangeObjNum){
+                        objectToChange = objectIdentifiers[i][0];
+                    }
+                }
                 if (object != 0) {
-                    Trigger trigger = Trigger(position, distance, isBigger, object, functionPointer_int, L, this);
-                    triggers.push_back(trigger);
+                    if (objectToChange != 0) {
+                        Trigger trigger = Trigger(position, distance, isBigger, object, luaScript, L, objectToChange, this);
+                        triggers.push_back(trigger);
+                    }
+                    else {
+                        printf("Object to be changed by a trigger not found.\n");
+                    }
                 }
                 else {
-                    printf("Trigger object not found.\n");
+                    printf("Triggering object not found.\n");
                 }
             }
         }
@@ -461,3 +481,19 @@ void Level::setSkydomeSize(float size) {
 std::vector<Object*>* Level::getObjects() {
     return &objects;
 }
+
+void Level::deleteObject(int objectIndex){
+    objects.erase(objects.begin() + objectIndex);
+    printf("Deleting an object.\n");
+}
+
+int Level::getObjectCount(){
+    return objects.size();
+}
+
+
+
+
+
+
+

@@ -179,7 +179,10 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     XMLElement* distance = doc->NewElement("distance");
     XMLElement* isBiggerThan = doc->NewElement("isBiggerThan");
     XMLElement* objectNum = doc->NewElement("objectNum");
-    XMLElement* functionPointer = doc->NewElement("functionPointer");
+    XMLElement* luaScript = doc->NewElement("luaScript");
+    XMLElement* toChangeIdGreen = doc->NewElement("toChangeIdGreen");
+    XMLElement* toChangeIdBlue = doc->NewElement("toChangeIdBlue");
+    XMLElement* toChangeObjNum = doc->NewElement("toChangeObjNum");
     
     name->SetText("-");
     xPosition->SetText("0");
@@ -190,7 +193,10 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     distance->SetText("1.0");
     isBiggerThan->SetText("false");
     objectNum->SetText("0");
-    functionPointer->SetText("-");
+    luaScript->SetText("-");
+    toChangeIdGreen->SetText("-");
+    toChangeIdBlue->SetText("-");
+    toChangeObjNum->SetText("-");
     
     trigger->InsertEndChild(name);
     trigger->InsertEndChild(xPosition);
@@ -201,7 +207,10 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     trigger->InsertEndChild(distance);
     trigger->InsertEndChild(isBiggerThan);
     trigger->InsertEndChild(objectNum);
-    trigger->InsertEndChild(functionPointer);
+    trigger->InsertEndChild(luaScript);
+    trigger->InsertEndChild(toChangeIdGreen);
+    trigger->InsertEndChild(toChangeIdBlue);
+    trigger->InsertEndChild(toChangeObjNum);
     
     std::vector<int> ret = nextID;
     nextID[1] += 1;
