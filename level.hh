@@ -30,6 +30,8 @@ class Level {
         glm::vec4 getFogColour();
         void setSkydomeSize(float size);
         std::vector<Object*>* getObjects();
+        void deleteObject(int objectIndex);
+        int getObjectCount();
     private:
         void errorCheck(tinyxml2::XMLError error);
         std::string levelNum;
