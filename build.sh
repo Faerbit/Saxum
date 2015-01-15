@@ -18,6 +18,18 @@ fi
 currentDir=$(pwd)
 threads=$(($(nproc)+1))
 
+#building lua
+
+cd extern/lua/
+if [[ $1 == "windows" ]]
+then
+    make mingw
+else
+    make linux
+fi
+cd $currentDir
+
+
 #building bullet
 
 cd extern/bullet/
