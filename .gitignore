@@ -1,6 +1,6 @@
 binaries
 build
-Makefile
+/Makefile
 CMakeLists.txt.user
 *.cbp
 *~
