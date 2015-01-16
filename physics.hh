@@ -69,6 +69,10 @@ class Physics {
 	void addPlayer(float friction, float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice); //use these AFTER physicObjects.push_back(object)! if mass == 0 then the object is unmoveable
 	void addSphere(float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice); //The Indice should be set to physicObjects.size()
 	void addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice); //this is used to ensuer that the system is synchronized
+	void addPositionConstraint(int bodyIndice, float strength, glm::vec3 position);
+	void removePositionConstraint(int bodyIndice);
+
+    struct positionConstraint{btRigidBody* body; float strength; btVector3 position;};
 
     private:
 	btRigidBody* playerBall;    //allows for easier access to the ball
@@ -76,6 +80,7 @@ class Physics {
 	btRigidBody* cameraBody;
 	std::vector<btRigidBody*> bodies; //list of all bodies. bodies are also in world, but save again to ease cleaning up process.
         btRigidBody* staticGroundBody;
+    std::vector<positionConstraint> allPositionConstraints;
     
 	btDynamicsWorld* world; //contains physical attributes of the world.
 	btDispatcher* dispatcher; //
