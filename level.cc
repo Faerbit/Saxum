@@ -81,7 +81,7 @@ void Level::load() {
     Material terrainMaterial = Material("seamlessTerrain.png", 0.1f, 0.8f, 0.2f, 3.0f);
     //Create object
     Object* terrainObject = new Object(terrainModel, terrainMaterial,
-	glm::vec3(-0.5f*(float)this->terrain.getHeightmapHeight(), 0.0f, -0.5f*(float)this->terrain.getHeightmapWidth()),
+	glm::vec3(-0.5*(float)this->terrain.getHeightmapHeight(), 0.0f, -0.5f*(float)this->terrain.getHeightmapWidth()),
         glm::vec3(0.0f, 0.0f, 0.0f));
     objects.push_back(terrainObject);
     

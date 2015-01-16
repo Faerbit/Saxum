@@ -1,4 +1,4 @@
-<!-- Marble -->
+ 	<!-- Marble -->
 <composition>
     <typeID>20</typeID>
     <object>
@@ -18,7 +18,7 @@
         <modelPath>block.obj</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>1.0</yOffset>
-        <zOffset>2.0</zOffset>
+        <zOffset>0.0</zOffset>
         <scale>1.5</scale>
         <mass>25.0</mass>
     </object>
@@ -123,6 +123,19 @@
     </object>
 </composition>
 
+<!-- Static Block -->
+<composition>
+   <typeID>140</typeID>
+    <object>
+        <modelPath>block.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>10.0</yOffset>
+        <zOffset>2.0</zOffset>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+</composition>
+
 
 
 
@@ -136,7 +149,7 @@
     <shininess>3.0</shininess>
     <physicType>Player</physicType>
     <radius>1.5</radius>
-    <dampningL>0.1</dampningL>
+    <dampningL>0.2 </dampningL>
     <dampningA>0.7</dampningA>
 </objectData>
 
@@ -149,7 +162,7 @@
     <shininess>2.0</shininess>
     <physicType>Box</physicType>
     <width>5.0</width>
-    <height>6.0</height>
+    <height>3</height>
     <length>1.8</length>
     <dampningL>0.8</dampningL>
     <dampningA>0.9</dampningA>
