@@ -7,8 +7,8 @@
     <xPos>210.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-220.500000</zPos>
-    <idGreen>2</idGreen>
-    <idBlue>11</idBlue>
+    <idGreen>1</idGreen>
+    <idBlue>67</idBlue>
     <typeID>20</typeID>
     <trigger>
         <name>-</name>
@@ -36,8 +36,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-126.500000</zPos>
-    <idGreen>2</idGreen>
-    <idBlue>10</idBlue>
+    <idGreen>1</idGreen>
+    <idBlue>66</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -65,8 +65,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-127.500000</zPos>
-    <idGreen>2</idGreen>
-    <idBlue>9</idBlue>
+    <idGreen>1</idGreen>
+    <idBlue>65</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -94,8 +94,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-128.500000</zPos>
-    <idGreen>2</idGreen>
-    <idBlue>8</idBlue>
+    <idGreen>1</idGreen>
+    <idBlue>64</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -123,8 +123,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-129.500000</zPos>
-    <idGreen>2</idGreen>
-    <idBlue>7</idBlue>
+    <idGreen>1</idGreen>
+    <idBlue>63</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -152,8 +152,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-130.500000</zPos>
-    <idGreen>2</idGreen>
-    <idBlue>6</idBlue>
+    <idGreen>1</idGreen>
+    <idBlue>62</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -181,8 +181,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-131.500000</zPos>
-    <idGreen>2</idGreen>
-    <idBlue>5</idBlue>
+    <idGreen>1</idGreen>
+    <idBlue>61</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -210,8 +210,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-132.500000</zPos>
-    <idGreen>2</idGreen>
-    <idBlue>4</idBlue>
+    <idGreen>1</idGreen>
+    <idBlue>60</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -239,8 +239,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-133.500000</zPos>
-    <idGreen>2</idGreen>
-    <idBlue>3</idBlue>
+    <idGreen>1</idGreen>
+    <idBlue>59</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -268,8 +268,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-134.500000</zPos>
-    <idGreen>2</idGreen>
-    <idBlue>2</idBlue>
+    <idGreen>1</idGreen>
+    <idBlue>58</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -297,8 +297,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-135.500000</zPos>
-    <idGreen>2</idGreen>
-    <idBlue>1</idBlue>
+    <idGreen>1</idGreen>
+    <idBlue>57</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -326,8 +326,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-136.500000</zPos>
-    <idGreen>2</idGreen>
-    <idBlue>0</idBlue>
+    <idGreen>1</idGreen>
+    <idBlue>56</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -356,7 +356,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-137.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>254</idBlue>
+    <idBlue>55</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -385,7 +385,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-138.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>253</idBlue>
+    <idBlue>54</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -414,7 +414,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-139.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>252</idBlue>
+    <idBlue>53</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -443,7 +443,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-140.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>251</idBlue>
+    <idBlue>52</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -472,7 +472,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-141.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>250</idBlue>
+    <idBlue>51</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -501,7 +501,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-142.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>249</idBlue>
+    <idBlue>50</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -530,7 +530,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-143.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>248</idBlue>
+    <idBlue>49</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -559,7 +559,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-144.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>247</idBlue>
+    <idBlue>48</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -588,7 +588,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-145.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>246</idBlue>
+    <idBlue>47</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -617,7 +617,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-146.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>245</idBlue>
+    <idBlue>46</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -646,7 +646,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-147.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>244</idBlue>
+    <idBlue>45</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -675,7 +675,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-148.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>243</idBlue>
+    <idBlue>44</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -704,7 +704,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-149.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>242</idBlue>
+    <idBlue>43</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -733,7 +733,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-150.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>241</idBlue>
+    <idBlue>42</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -762,7 +762,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-151.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>240</idBlue>
+    <idBlue>41</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -791,7 +791,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-152.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>239</idBlue>
+    <idBlue>40</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -820,7 +820,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-153.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>238</idBlue>
+    <idBlue>39</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -849,7 +849,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-154.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>237</idBlue>
+    <idBlue>38</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -878,7 +878,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-155.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>236</idBlue>
+    <idBlue>37</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -907,7 +907,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-156.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>235</idBlue>
+    <idBlue>36</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -936,7 +936,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-157.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>234</idBlue>
+    <idBlue>35</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -965,7 +965,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-158.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>233</idBlue>
+    <idBlue>34</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -994,7 +994,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-159.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>232</idBlue>
+    <idBlue>33</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1023,7 +1023,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-160.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>231</idBlue>
+    <idBlue>32</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1052,7 +1052,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-161.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>230</idBlue>
+    <idBlue>31</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1081,7 +1081,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-162.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>229</idBlue>
+    <idBlue>30</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1110,7 +1110,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-163.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>228</idBlue>
+    <idBlue>29</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1139,7 +1139,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-164.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>227</idBlue>
+    <idBlue>28</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1168,7 +1168,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-165.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>226</idBlue>
+    <idBlue>27</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1197,7 +1197,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-166.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>225</idBlue>
+    <idBlue>26</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1226,7 +1226,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-167.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>224</idBlue>
+    <idBlue>25</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1255,7 +1255,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-168.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>223</idBlue>
+    <idBlue>24</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1284,7 +1284,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-169.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>222</idBlue>
+    <idBlue>23</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1313,7 +1313,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-170.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>221</idBlue>
+    <idBlue>22</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1342,7 +1342,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-171.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>220</idBlue>
+    <idBlue>21</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1371,7 +1371,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-172.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>219</idBlue>
+    <idBlue>20</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1400,7 +1400,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-173.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>218</idBlue>
+    <idBlue>19</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1429,7 +1429,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-174.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>217</idBlue>
+    <idBlue>18</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1458,7 +1458,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-175.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>216</idBlue>
+    <idBlue>17</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1487,7 +1487,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-176.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>215</idBlue>
+    <idBlue>16</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1516,7 +1516,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-177.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>214</idBlue>
+    <idBlue>15</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1545,7 +1545,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-178.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>213</idBlue>
+    <idBlue>14</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1574,7 +1574,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-179.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>212</idBlue>
+    <idBlue>13</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1603,7 +1603,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-180.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>211</idBlue>
+    <idBlue>12</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1632,7 +1632,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-181.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>210</idBlue>
+    <idBlue>11</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1661,7 +1661,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-182.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>209</idBlue>
+    <idBlue>10</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1690,7 +1690,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-183.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>208</idBlue>
+    <idBlue>9</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1719,7 +1719,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-184.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>207</idBlue>
+    <idBlue>8</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1748,7 +1748,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-185.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>206</idBlue>
+    <idBlue>7</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1777,7 +1777,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-186.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>205</idBlue>
+    <idBlue>6</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1806,7 +1806,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-187.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>204</idBlue>
+    <idBlue>5</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1835,7 +1835,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-188.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>203</idBlue>
+    <idBlue>4</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1864,7 +1864,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-189.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>202</idBlue>
+    <idBlue>3</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1893,7 +1893,7 @@
     <yOffset>0.0</yOffset>
     <zPos>-190.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>201</idBlue>
+    <idBlue>2</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -1922,37 +1922,8 @@
     <yOffset>0.0</yOffset>
     <zPos>-191.500000</zPos>
     <idGreen>1</idGreen>
-    <idBlue>200</idBlue>
+    <idBlue>1</idBlue>
     <typeID>140</typeID>
-    <trigger>
-        <name>-</name>
-        <xPosition>0</xPosition>
-        <yPosition>0</yPosition>
-        <zPosition>0</zPosition>
-        <targetIdGreen>-</targetIdGreen>
-        <targetIdBlue>-</targetIdBlue>
-        <distance>1.0</distance>
-        <isBiggerThan>false</isBiggerThan>
-        <objectNum>0</objectNum>
-        <luaScript>-</luaScript>
-        <toChangeIdGreen>0</toChangeIdGreen>
-        <toChangeIdBlue>0</toChangeIdBlue>
-        <toChangeObjNum>0</toChangeObjNum>
-    </trigger>
-</composition>
-
-<composition>
-    <scale>1.0</scale>
-    <xRot>0.0</xRot>
-    <yRot>0.0</yRot>
-    <zRot>0.0</zRot>
-    <manualPos>false</manualPos>
-    <xPos>210.500000</xPos>
-    <yOffset>0.0</yOffset>
-    <zPos>-220.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>200</idBlue>
-    <typeID>20</typeID>
     <trigger>
         <name>-</name>
         <xPosition>0</xPosition>
