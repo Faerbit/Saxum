@@ -1,0 +1,19 @@
+function trigger(objectToChange)
+    if(not level) then
+        print("No level found in Lua!")
+        return
+    end
+    if(not physics) then
+        print("No physics found in Lua!")
+        return
+    end
+    
+    if(not openDoorCounter) then
+        openDoorCounter = 0
+    end
+    openDoorCounter = openDoorCounter + 1
+    
+    if (openDoorCounter == 3) then
+    
+    end
+end
