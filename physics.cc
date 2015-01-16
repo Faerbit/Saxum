@@ -28,9 +28,38 @@ void Physics::init(lua_State* L)
 }
 
 void Physics::takeUpdateStep(float timeDiff)
-{    
+{            
 	world->stepSimulation(timeDiff);
+	for(unsigned i = 0; i < allPositionConstraints.size();i++)
+	{
+	    if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition())
+	    {
+	        btVector3 dir = allPositionConstraints[i].body->getCenterOfMassPosition() - allPositionConstraints[i].position;
+	        allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength);
+	    }	
+	}
+	
 }
+
+void Physics::removePositionConstraint(int bodyIndice)
+{
+	for(unsigned i = 0; i < allPositionConstraints.size();i++)
+	{
+	    if(allPositionConstraints[i].body == bodies[i] )
+	    {
+	        allPositionConstraints.erase(allPositionConstraints.begin()+i);
+	    }
+	}
+}
+
+void Physics::addPositionConstraint(int bodyIndice, float strength, glm::vec3 position)
+{
+    positionConstraint cons;
+    cons.body = bodies[bodyIndice];
+    cons.strength = strength;
+    cons.position = btVector3(position.x,position.y,position.z);
+    allPositionConstraints.push_back(cons);
+}   
 
 //TERRAIN SUBSET
 void Physics::addTerrainTriangles(int width, int length, float** heightData)
@@ -44,7 +73,8 @@ void Physics::addTerrainTriangles(int width, int length, float** heightData)
             btVector3 v1(i+1,heightData[j][i+1],j);
             btVector3 v2(i,heightData[j+1][i],j+1);   
             
-            trimesh->addTriangle(v0,v1,v2);                             
+            trimesh->addTriangle(v0,v1,v2);     
+                                    
         }    
     }
     for(int i = 1; i < width;i++)
@@ -100,17 +130,6 @@ void Physics::addTerrain(int width, int length, float** heightData)
 	world->addRigidBody(terrainBody, COL_TERRAIN, COL_TERRAIN | COL_OBJECTS);
 }
 
-void Physics::addStaticGroundPlane()
-{
-	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
-	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
-	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
-        staticGroundBody = new btRigidBody(groundRigidBodyCI);
-
-        world->addRigidBody(staticGroundBody);
-}
-
-
 //players and objects
 void Physics::addPlayer(float friction, float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
 {
@@ -129,6 +148,7 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia);
 
     info.m_friction = friction;
+    info.m_restitution = 0.0f;
 
 	playerBall = new btRigidBody(info);
     
@@ -387,6 +407,18 @@ void Physics::rollRight(glm::vec3 camPos,float strength)
     pos.normalize();
     pos *= strength;
     playerBall->applyTorque(-pos);
+}
+
+//not used right now
+
+void Physics::addStaticGroundPlane()
+{
+	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
+	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
+	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
+        staticGroundBody = new btRigidBody(groundRigidBodyCI);
+
+        world->addRigidBody(staticGroundBody);
 }
 
 /*
