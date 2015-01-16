@@ -11,7 +11,6 @@ Trigger::Trigger(glm::vec3 position, float distance, bool isBigger, Object* obje
         printf("L is NULL in trigger!\n");
     }
     this->objectToChange = objectToChange;
-    triggered = false;
 }
 
 Trigger::Trigger(){
@@ -21,18 +20,14 @@ Trigger::~Trigger(){
 }
 
 void Trigger::triggerUpdate(){
-    if (!triggered){
         if (isBigger && (glm::distance(object->getPosition(), position) > distance)) {
             luaL_dofile(L, luaScript.c_str());
             luabridge::getGlobal(L, "trigger")(objectToChange);
-            triggered = true;
         }
         else if (!isBigger && (glm::distance(object->getPosition(), position) < distance)) {
             luaL_dofile(L, luaScript.c_str());
             luabridge::getGlobal(L, "trigger")(objectToChange);
-            triggered = true;
         }
-    }
 }
 
 bool Trigger::deleteNotification(int deletedObjectIndex){
