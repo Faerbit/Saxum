@@ -1,4 +1,4 @@
-<!-- Marble -->
+ 	<!-- Marble -->
 <composition>
     <typeID>20</typeID>
     <object>
@@ -149,7 +149,7 @@
     <shininess>3.0</shininess>
     <physicType>Player</physicType>
     <radius>1.5</radius>
-    <dampningL>0.3</dampningL>
+    <dampningL>0.2 </dampningL>
     <dampningA>0.7</dampningA>
 </objectData>
 
