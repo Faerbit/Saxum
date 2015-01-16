@@ -22,7 +22,7 @@ void Terrain::load() {
     for(unsigned int rowNum = 0; rowNum < this->heightmapHeight; rowNum++){				//read in the heightmap
 	    this->heightmap[rowNum] = new float[this->heightmapWidth];
         for(unsigned int columnNum = 0; columnNum < this->heightmapWidth; columnNum++){
-	        this->heightmap[rowNum][columnNum] = (float)(image[(rowNum*heightmapWidth+columnNum)*4]) / 16;
+	        this->heightmap[rowNum][columnNum] = (float)(image[(rowNum*heightmapWidth+columnNum)*4]) / 8;  //<--heightmap is scaled here
         }
     }
     
