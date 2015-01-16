@@ -25,7 +25,6 @@ class Trigger {
         bool isBigger;
         Object* object;
         std::string luaScript;
-        bool triggered;
         lua_State* L;
         int objectToChange;
 };
