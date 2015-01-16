@@ -123,6 +123,19 @@
     </object>
 </composition>
 
+<!-- Static Block -->
+<composition>
+   <typeID>140</typeID>
+    <object>
+        <modelPath>block.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>10.0</yOffset>
+        <zOffset>2.0</zOffset>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+</composition>
+
 
 
 
@@ -136,7 +149,7 @@
     <shininess>3.0</shininess>
     <physicType>Player</physicType>
     <radius>1.5</radius>
-    <dampningL>0.1</dampningL>
+    <dampningL>0.3</dampningL>
     <dampningA>0.7</dampningA>
 </objectData>
 
