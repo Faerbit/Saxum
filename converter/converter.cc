@@ -98,14 +98,32 @@ Converter::Converter(std::string level){
         
         //Create global physics parameters
         XMLElement* physics = doc->NewElement("physics");
-        XMLElement* friction = doc->NewElement("friction");
-        XMLElement* strength = doc->NewElement("strength");
-        friction->SetText("0.9");
-        strength->SetText("100.0");
-        physics->InsertEndChild(friction);
-        physics->InsertEndChild(strength);
+        XMLElement* playerFriction = doc->NewElement("friction");
+        XMLElement* playerStrength = doc->NewElement("strength");
+        playerFriction->SetText("0.9");
+        playerStrength->SetText("100.0");
+        physics->InsertEndChild(playerFriction);
+        physics->InsertEndChild(playerStrength);
         doc->InsertEndChild(physics);
         
+        //create positionConstraint Dummy
+        XMLElement* positionConstraint = doc->NewElement("positionConstraint");
+        XMLElement* positionConstraintObjectNum = doc->NewElement("objectNum");
+        XMLElement* positionConstraintXPos = doc->NewElement("xPosition");
+        XMLElement* positionConstraintYPos = doc->NewElement("yPosition");
+        XMLElement* positionConstraintZPos = doc->NewElement("zPosition");
+        XMLElement* positionConstraintStrength = doc->NewElement("strength");
+        positionConstraintObjectNum->SetText("0");
+        positionConstraintXPos->SetText("0.0");
+        positionConstraintYPos->SetText("0.0");
+        positionConstraintZPos->SetText("0.0");
+        positionConstraintStrength->SetText("100.0");
+        positionConstraint->InsertEndChild(positionConstraintObjectNum);
+        positionConstraint->InsertEndChild(positionConstraintXPos);
+        positionConstraint->InsertEndChild(positionConstraintYPos);
+        positionConstraint->InsertEndChild(positionConstraintZPos);
+        positionConstraint->InsertEndChild(positionConstraintStrength);
+        doc->InsertEndChild(positionConstraint);
     }else{
         dst << src.rdbuf();
         XMLElement* thisComposition = doc->FirstChildElement("composition");
