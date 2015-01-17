@@ -7,10 +7,6 @@ function trigger(objectToChange)
             print("No level found in Lua!")
             return
         end
-        if(not physics) then
-            print("No physics found in Lua!")
-            return
-        end
         level:deleteObject(objectToChange)
         triggeredDeleteObject = true
         print("deleteObject")
