@@ -69,7 +69,7 @@ void Level::load() {
     
     
     this->physics = Physics();
-    this->physics.init(L);
+    this->physics.init();
     
     // currently hard coded should later read this stuff out of a file
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
