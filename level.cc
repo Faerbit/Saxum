@@ -387,7 +387,31 @@ void Level::load() {
                 }
             }
         }
-    }
+    }//triggers
+    
+    //load positionConstraints
+    composition = doc->FirstChildElement("composition");
+    for(; composition; composition=composition->NextSiblingElement("composition")){
+        XMLElement* positionConstraint = composition->FirstChildElement("positionConstraint");
+        for(; positionConstraint; positionConstraint=positionConstraint->NextSiblingElement("positionConstraint")){
+            float xPos, yPos, zPos, strength;
+            int objectNum, idGreen, idBlue, objectIndex;
+            errorCheck(positionConstraint->FirstChildElement("xPosition")->QueryFloatText(&xPos));
+            errorCheck(positionConstraint->FirstChildElement("yPosition")->QueryFloatText(&yPos));
+            errorCheck(positionConstraint->FirstChildElement("zPosition")->QueryFloatText(&zPos));
+            errorCheck(positionConstraint->FirstChildElement("strength")->QueryFloatText(&strength));
+            errorCheck(positionConstraint->FirstChildElement("objectNum")->QueryIntText(&objectNum));
+            errorCheck(composition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
+            errorCheck(composition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
+            for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
+                if (objectIdentifiers[i][1]==idGreen && objectIdentifiers[i][2]==idBlue && objectIdentifiers[i][3]==objectNum){
+                    objectIndex = objectIdentifiers[i][0];
+                }
+            }
+            glm::vec3 position = glm::vec3(xPos, yPos, zPos);
+            physics.addPositionConstraint(objectIndex, strength, position);
+        }
+    }//positionConstraints
 }
 
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
