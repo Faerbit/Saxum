@@ -1,6 +1,7 @@
  	<!-- Marble -->
 <composition>
     <typeID>20</typeID>
+    <ignoreHeightmap>false</ignoreHeightmap>
     <object>
         <modelPath>marbleSmooth.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -14,6 +15,7 @@
 <!-- Block -->
 <composition>
     <typeID>40</typeID>
+    <ignoreHeightmap>false</ignoreHeightmap>
     <object>
         <modelPath>block.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -27,6 +29,7 @@
 <!-- Column -->
 <composition>
     <typeID>60</typeID>
+    <ignoreHeightmap>false</ignoreHeightmap>
     <object>
         <modelPath>column.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -40,6 +43,7 @@
 <!-- Torch with Lightsource -->
 <composition>
     <typeID>80</typeID>
+    <ignoreHeightmap>false</ignoreHeightmap>
     <object>
         <modelPath>torch.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -62,6 +66,7 @@
 <!-- Lightsource -->
 <composition>
     <typeID>85</typeID>
+    <ignoreHeightmap>false</ignoreHeightmap>
     <light>
         <xOffset>0.0</xOffset>
         <yOffset>1</yOffset>
@@ -76,6 +81,7 @@
 <!-- Block on 2 Pillars -->
 <composition>
     <typeID>100</typeID>
+    <ignoreHeightmap>false</ignoreHeightmap>
     <object>
         <modelPath>column.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -105,6 +111,7 @@
 <!-- Switch -->
 <composition>
     <typeID>120</typeID>
+    <ignoreHeightmap>false</ignoreHeightmap>
     <object>
         <modelPath>switch_inner.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -123,13 +130,14 @@
     </object>
 </composition>
 
-<!-- Static Block -->
+<!-- Bridge Block -->
 <composition>
-   <typeID>140</typeID>
+    <typeID>140</typeID>
+    <ignoreHeightmap>true</ignoreHeightmap>
     <object>
         <modelPath>block.obj</modelPath>
         <xOffset>0.0</xOffset>
-        <yOffset>10.0</yOffset>
+        <yOffset>20.0</yOffset>
         <zOffset>2.0</zOffset>
         <scale>1.5</scale>
         <mass>0.0</mass>

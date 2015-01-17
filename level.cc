@@ -207,10 +207,13 @@ void Level::load() {
                             errorCheck(thisComposition->FirstChildElement("xRot")->QueryFloatText(&compRot[0]));
                             errorCheck(thisComposition->FirstChildElement("yRot")->QueryFloatText(&compRot[1]));
                             errorCheck(thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]));
-                            glm::vec3 compPos = glm::vec3(compXPos,
-                                                          compYOffset+terrain.getHeightmap()[int(compXPos-0.5+0.5*terrain.getHeightmapHeight())]
-                                                                                            [int(compZPos-0.5+0.5*terrain.getHeightmapWidth())],
-                                                          compZPos);
+                            bool ignoreHeightmap;
+                            errorCheck(composition->FirstChildElement("ignoreHeightmap")->QueryBoolText(&ignoreHeightmap));
+                            if (!ignoreHeightmap){
+                                compYOffset = compYOffset+terrain.getHeightmap()[int(compXPos-0.5+0.5*terrain.getHeightmapHeight())]
+                                                                                [int(compZPos-0.5+0.5*terrain.getHeightmapWidth())];
+                            }
+                            glm::vec3 compPos = glm::vec3(compXPos, compYOffset, compZPos);
                             objectOffset = objectOffset * compScale;
                             glm::vec4 rotatedObjectOffset = glm::rotate(compRot.x, glm::vec3(1.0f, 0.0f, 0.0f))
                                                             * glm::rotate(compRot.y, glm::vec3(0.0f, 1.0f, 0.0f))
