@@ -34,9 +34,9 @@ void Physics::takeUpdateStep(float timeDiff)
 
 void Physics::removePositionConstraint(int bodyIndice)
 {
-	for(unsigned i = 0; i < allPositionConstraints.size();i++)
+	for(unsigned i = 0; i < allPositionConstraints.size(); i++)
 	{
-	    if(allPositionConstraints[i].body == bodies[i] )
+	    if(allPositionConstraints[i].body == bodies[bodyIndice])
 	    {
 	        allPositionConstraints.erase(allPositionConstraints.begin()+i);
 	    }

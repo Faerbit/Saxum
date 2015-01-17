@@ -32,6 +32,7 @@ class Level {
         std::vector<Object*>* getObjects();
         void deleteObject(int objectIndex);
         int getObjectCount();
+        void moveObject(int objectIndex, float strength, float xPos, float yPos, float zPos);
     private:
         void errorCheck(tinyxml2::XMLError error);
         std::string levelNum;

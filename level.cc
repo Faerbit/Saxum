@@ -62,6 +62,7 @@ void Level::load() {
         .beginClass<Level>("Level")
         .addFunction("deleteObject", &Level::deleteObject)
         .addFunction("getObjectCount", &Level::getObjectCount)
+        .addFunction("moveObject", &Level::moveObject)
         .endClass();
     //Push the level to Lua as a global variable
     luabridge::push(L, this);
@@ -493,7 +494,11 @@ int Level::getObjectCount(){
     return objects.size();
 }
 
-
+void Level::moveObject(int objectIndex, float strength, float xPos, float yPos, float zPos){
+    glm::vec3 position = glm::vec3(xPos, yPos, zPos);
+    physics.removePositionConstraint(objectIndex);
+    physics.addPositionConstraint(objectIndex, strength, position);
+}   
 
 
 
