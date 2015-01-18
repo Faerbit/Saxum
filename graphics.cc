@@ -37,38 +37,16 @@ void Graphics::init(Level* level) {
     depthShader = ShaderProgramCreator("depth")
         .attributeLocations(vao->getAttributeLocations()).create();
 
-    depthTexture_near = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT16));
-    depthTexture_near->setMinFilter(GL_NEAREST);
-    depthTexture_near->setMagFilter(GL_NEAREST);
-    depthTexture_near->setWrapS(GL_CLAMP_TO_EDGE);
-    depthTexture_near->setWrapT(GL_CLAMP_TO_EDGE);
-    depthTexture_near->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
+    depthTexture = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT16));
+    depthTexture->setMinFilter(GL_NEAREST);
+    depthTexture->setMagFilter(GL_NEAREST);
+    depthTexture->setWrapS(GL_CLAMP_TO_EDGE);
+    depthTexture->setWrapT(GL_CLAMP_TO_EDGE);
+    depthTexture->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
 
-    framebuffer_near = SharedFrameBufferObject(new FrameBufferObject());
-    framebuffer_near->setDepthTexture(depthTexture_near);
-    framebuffer_near->validate();
-
-    depthTexture_middle = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT16));
-    depthTexture_middle->setMinFilter(GL_NEAREST);
-    depthTexture_middle->setMagFilter(GL_NEAREST);
-    depthTexture_middle->setWrapS(GL_CLAMP_TO_EDGE);
-    depthTexture_middle->setWrapT(GL_CLAMP_TO_EDGE);
-    depthTexture_middle->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
-
-    framebuffer_middle = SharedFrameBufferObject(new FrameBufferObject());
-    framebuffer_middle->setDepthTexture(depthTexture_middle);
-    framebuffer_middle->validate();
-
-    depthTexture_far = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT16));
-    depthTexture_far->setMinFilter(GL_NEAREST);
-    depthTexture_far->setMagFilter(GL_NEAREST);
-    depthTexture_far->setWrapS(GL_CLAMP_TO_EDGE);
-    depthTexture_far->setWrapT(GL_CLAMP_TO_EDGE);
-    depthTexture_far->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
-
-    framebuffer_far = SharedFrameBufferObject(new FrameBufferObject());
-    framebuffer_far->setDepthTexture(depthTexture_far);
-    framebuffer_far->validate();
+    framebuffer = SharedFrameBufferObject(new FrameBufferObject());
+    framebuffer->setDepthTexture(depthTexture);
+    framebuffer->validate();
 
     /*depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(level->getLights()->size());
     for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {*/
@@ -120,34 +98,15 @@ void Graphics::render()
     }
     // render depth texture for sun
     glViewport(0, 0, windowSize.x, windowSize.y);
-    // near pass
-    framebuffer_near->bind(); 
-    glClear(GL_DEPTH_BUFFER_BIT);
-    glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
-    glm::mat4 depthViewProjectionMatrix_near =  glm::ortho<float>(-5, 5, -5, 5, -5, 5) * 
-        glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-    level->render(depthShader, false, &depthViewProjectionMatrix_near);
-    if (!framebuffer_near->isFrameBufferObjectComplete()) {
-        printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
-    }
-
-    // middle pass
-    framebuffer_middle->bind(); 
-    glClear(GL_DEPTH_BUFFER_BIT);
-    glm::mat4 depthViewProjectionMatrix_middle =  glm::ortho<float>(-20, 20, -20, 20, -20, 20) * 
-        glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-    level->render(depthShader, false, &depthViewProjectionMatrix_middle);
-    if (!framebuffer_middle->isFrameBufferObjectComplete()) {
-        printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
-    }
     
     // far pass
-    framebuffer_far->bind(); 
+    framebuffer->bind(); 
     glClear(GL_DEPTH_BUFFER_BIT);
-    glm::mat4 depthViewProjectionMatrix_far =  glm::ortho<float>(-farPlane/2.0f, farPlane/2.0f, -farPlane/2.0f, farPlane/2.0f, -farPlane/2.0f, farPlane/2.0f) * 
+    glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
+    glm::mat4 depthViewProjectionMatrix =  glm::ortho<float>(-farPlane/2.0f, farPlane/2.0f, -farPlane/2.0f, farPlane/2.0f, -farPlane/2.0f, farPlane/2.0f) * 
         glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-    level->render(depthShader, false, &depthViewProjectionMatrix_far);
-    if (!framebuffer_far->isFrameBufferObjectComplete()) {
+    level->render(depthShader, false, &depthViewProjectionMatrix);
+    if (!framebuffer->isFrameBufferObjectComplete()) {
         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
     }
 
@@ -204,13 +163,9 @@ void Graphics::render()
     0.0, 0.0, 0.5, 0.0,
     0.5, 0.5, 0.5, 1.0
     );
-    glm::mat4 depthBiasVP_near = biasMatrix*depthViewProjectionMatrix_near;
-    glm::mat4 depthBiasVP_middle = biasMatrix*depthViewProjectionMatrix_middle;
-    glm::mat4 depthBiasVP_far = biasMatrix*depthViewProjectionMatrix_far;
+    glm::mat4 depthBiasVP = biasMatrix*depthViewProjectionMatrix;
 
-    lightingShader->setTexture("shadowMap_near", depthTexture_near, 1);
-    lightingShader->setTexture("shadowMap_middle", depthTexture_middle, 2);
-    lightingShader->setTexture("shadowMap_far", depthTexture_far, 3);
+    lightingShader->setTexture("shadowMap", depthTexture, 1);
 
     lightingShader->setUniform("farPlane", farPlane);
 
@@ -226,9 +181,7 @@ void Graphics::render()
     glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
 
     std::vector<glm::mat4> shadowVPs = std::vector<glm::mat4>();
-    shadowVPs.push_back(depthBiasVP_near);
-    shadowVPs.push_back(depthBiasVP_middle);
-    shadowVPs.push_back(depthBiasVP_far);
+    shadowVPs.push_back(depthBiasVP);
 
     // render the level
     level->render(lightingShader, true, &lightingViewProjectionMatrix, &shadowVPs);
@@ -236,9 +189,7 @@ void Graphics::render()
 
 void Graphics::resize(glm::uvec2 windowSize) {
     this->windowSize = windowSize;
-    depthTexture_near->resize(glm::vec2(windowSize.x, windowSize.y));
-    depthTexture_middle->resize(glm::vec2(windowSize.x, windowSize.y));
-    depthTexture_far->resize(glm::vec2(windowSize.x, windowSize.y));
+    depthTexture->resize(glm::vec2(windowSize.x, windowSize.y));
 }
 
 glm::mat4 Graphics::buildViewMatrix(Level* level) {

@@ -3,16 +3,12 @@
 in vec3 vNormal;
 in vec2 vTexCoord;
 in vec4 fragPosition;
-in vec4 shadowCoord_near;
-in vec4 shadowCoord_middle;
-in vec4 shadowCoord_far;
+in vec4 shadowCoord;
 
 out vec4 oColor;
 
 uniform sampler2D uTexture;
-uniform sampler2DShadow shadowMap_near;
-uniform sampler2DShadow shadowMap_middle;
-uniform sampler2DShadow shadowMap_far;
+uniform sampler2DShadow shadowMap;
 uniform samplerCubeShadow shadowMap_cube;
 uniform vec3 ambientColor;
 uniform float ambientFactor;
@@ -116,17 +112,7 @@ void main()
     }
 
     // shadows 
-    if (distanceToBorder(shadowCoord_middle.xy) <= 0.5 && distanceToBorder(shadowCoord_middle.xy) > 0.0) {
-        if (distanceToBorder(shadowCoord_near.xy) <= 0.5 && distanceToBorder(shadowCoord_near.xy) > 0.0) {
-                visibility *= sampleDirectionalShadow(shadowMap_near, shadowCoord_near);
-        }
-        else {
-            visibility *= sampleDirectionalShadow(shadowMap_middle, shadowCoord_middle);
-        }
-    }
-    else {
-        visibility *= sampleDirectionalShadow(shadowMap_far, shadowCoord_far);
-    }
+    visibility *= sampleDirectionalShadow(shadowMap, shadowCoord);
 
     specularColor *= visibility;
     diffuseColor  *= visibility;
