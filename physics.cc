@@ -148,7 +148,7 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
 
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia);
 
-    info.m_friction = friction;
+    info.m_friction = friction*2;
     info.m_restitution = 0.0f;
 
 	playerBall = new btRigidBody(info);
@@ -229,7 +229,7 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
 	
 	bodies.push_back(body);
 	
-	world->addRigidBody(body);
+	world->addRigidBody(body,COL_OBJECTS, objectsPhysicsCollision);
     
     
 	if(bodies.size() != indice)
@@ -366,7 +366,7 @@ void Physics::addCamera(float rad, float distance)
 	
     cameraBody->setDamping(0.9f,1.0f);
 
-	world->addRigidBody(cameraBody);
+	world->addRigidBody(cameraBody,COL_OBJECTS, objectsPhysicsCollision);
 		
     cameraBody->setSleepingThresholds(0,0);
     
