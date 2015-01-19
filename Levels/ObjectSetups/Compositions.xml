@@ -115,7 +115,7 @@
     <object>
         <modelPath>switch_inner.obj</modelPath>
         <xOffset>0.0</xOffset>
-        <yOffset>0.0</yOffset>
+        <yOffset>3</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
         <mass>1.0</mass>
@@ -123,7 +123,7 @@
     <object>
         <modelPath>switch_outer.obj</modelPath>
         <xOffset>0.0</xOffset>
-        <yOffset>0.0</yOffset>
+        <yOffset>2</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.0</scale>
         <mass>0.0</mass>
@@ -150,7 +150,7 @@
     <ignoreHeightmap>true</ignoreHeightmap>
     <object>
         <modelPath>block.obj</modelPath>
-        <xOffset>0.0</xOffset>
+        <xOffset>0.0</xOffset>  
         <yOffset>20.0</yOffset>
         <zOffset>0.0</zOffset>
         <scale>1.5</scale>
@@ -196,8 +196,19 @@
     </object>
 </composition>
  
-
-
+<!-- Light Block -->
+<composition>
+    <typeID>200</typeID>
+    <ignoreHeightmap>false</ignoreHeightmap>
+    <object>
+        <modelPath>block.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>5.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <scale>1.5</scale>
+        <mass>1.0</mass>
+    </object>
+</composition>
 
 
 
@@ -242,14 +253,14 @@
 </objectData>
 
 <objectData>
-    <modelPath>torch.obj</modelPath>
+    <modelPath>torch.obj</modelPath>    
     <texturePath>torchTexture.png</texturePath>
     <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.3</diffuseFactor>
     <specularFactor>0.7</specularFactor>
     <shininess>10.0</shininess>
     <physicType>TriangleMesh</physicType>
-    <dampningL>1.0</dampningL>
+    <dampningL>1</dampningL>
     <dampningA>1.0</dampningA>
 </objectData>
 
@@ -258,13 +269,13 @@
     <texturePath>switchTextureInner.png</texturePath>
     <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
-    <specularFactor>0.4</specularFactor>
+    <specularFactor>0.4</specularFactor>        
     <shininess>2.0</shininess>
-    <physicType>Box</physicType>
-    <width>0.5</width>
-    <height>0.5</height>
-    <length>0.5</length>
-    <dampningL>1.0</dampningL>
+    <physicType>Button</physicType>
+    <width>2</width>
+    <height>1</height>
+    <length>2</length>
+    <dampningL>0.5</dampningL>
     <dampningA>1.0</dampningA>
 </objectData>
 
@@ -276,6 +287,6 @@
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
     <physicType>TriangleMesh</physicType>
-    <dampningL>1.0</dampningL>
-    <dampningA>1.0</dampningA>
+    <dampningL>0.555</dampningL>
+    <dampningA>0.5</dampningA>
 </objectData>
