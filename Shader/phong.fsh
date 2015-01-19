@@ -47,7 +47,6 @@ vec2 poissonDisk[16] = vec2[](
 );
 
 float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
-    float nearPlane = 0.1;
     float visibility = 1.0;
     float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
     bias = clamp(bias, 0.0, 0.01);
@@ -121,7 +120,7 @@ void main()
     vec3 finalColor = specularColor + diffuseColor + ambientColor;
     float distanceCameraCenter = distance(cameraCenter, vec3(fragPosition));
     float fogFactor = clamp((1.0 - ((farPlane - 35.0) -distanceCameraCenter)/30.0), 0.0, 1.0);
-    fogFactor *= clamp((1.0-((fragPosition.y-8.0)/30.0)), 0.0, 1.0);
+    fogFactor *= clamp((1.0-((fragPosition.y-40.0)/30.0)), 0.0, 1.0);
 
     vec4 texture = texture(uTexture, vTexCoord).rgba;
     oColor = vec4(finalColor, 1.0f)*texture;
