@@ -247,6 +247,9 @@ void Converter::updateComposition(int idG, int idB, float posX, float posZ){
         errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
         errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
         if(idGreen == idG && idBlue == idB){
+            if (compositionExists){
+                std::cout << "An ID is used for multiple compositions in the xml." << std::endl;
+            }
             bool manualPos;
             errorCheck(thisComposition->FirstChildElement("manualPos")->QueryBoolText(&manualPos));
             if(!manualPos){
