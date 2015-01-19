@@ -54,7 +54,8 @@ class Physics {
 	glm::vec3 getPos(int i);
 	glm::mat4 getRotation(int i);
 	void addStaticGroundPlane();
-	void addCamera(float rad, float distance); //Do NOT impliment before Player has been created;
+	void addCamera(); //Do NOT impliment before Player has been created;
+	void updateCameraPos(glm::vec2 mouseMovement, float strength);
 	glm::vec3 getCameraPosition();
 	void addRigidBodyFromFile(Entity entity, float mass, float dampningL, float dampningA, std::string modelLocation, unsigned indice);
     void addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA, unsigned indice);
