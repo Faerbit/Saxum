@@ -21,6 +21,7 @@
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btTriangleMesh.h"
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btCollisionShape.h"
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btConvexTriangleMeshShape.h"
+#include "extern/bullet/src/BulletCollision/CollisionShapes/btCylinderShape.h"
 
 #include "extern/bullet/src/BulletDynamics/ConstraintSolver/btConstraintSolver.h"
 #include "extern/bullet/src/BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"//YAY!
@@ -64,6 +65,7 @@ class Physics {
 	void addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice); //this is used to ensuer that the system is synchronized
 	void addPositionConstraint(int bodyIndice, float strength, glm::vec3 position);
 	void removePositionConstraint(int bodyIndice);
+	void addButton(float radius, float height, Entity entity, float mass, float dampningL, float dampningA, unsigned indice);
 
     struct positionConstraint{btRigidBody* body; float strength; btVector3 position;};
 
@@ -80,6 +82,10 @@ class Physics {
 	btCollisionConfiguration* colConfig; //defines the type of collision detection.
 	btBroadphaseInterface* broadphase; //defines how objects are culled from collision detection.
 	btConstraintSolver* solver; //solver for forces and impulses.
+    int objectsPhysicsCollision = 1 | 2 | 4;
+    int specialPhysicsCollision = 2 | 4;
+    int terrainPhysicsCollision = 2;
+    
 };
 
 enum collisionTypes{
@@ -89,6 +95,7 @@ enum collisionTypes{
     COL_OBJECTS_NO_TERRAIN = 4
 };
 
+//world->addRigidBody(playerBall,COL_OBJECTS_NO_TERRAIN, COL_OBJECTS);
 class btDistanceConstraint : public btPoint2PointConstraint
 {
 protected:
