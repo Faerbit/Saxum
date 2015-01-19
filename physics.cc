@@ -30,6 +30,16 @@ void Physics::takeUpdateStep(float timeDiff)
 	    }	
 	}
 	
+	
+	/*- cameraBody->getCenterOfMassPosition(); // gives vector from player to camera
+	position.normalize();
+	position *=5;
+	position += playerBall->getCenterOfMassPosition(); //is the position 5 units away from the player in the direction of the camera
+	 
+	
+	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
+	cameraBody->applyCentralForce(dir);
+	*/
 }
 
 void Physics::removePositionConstraint(int bodyIndice)
@@ -112,7 +122,7 @@ void Physics::addTerrain(int width, int length, float** heightData)
 
 	btRigidBody* tBody = new btRigidBody(0,new btDefaultMotionState(),terrianShape);
 
-	tBody->getWorldTransform().setOrigin(btVector3(0,((float)highest - 1)/2,0));
+	tBody->getWorldTransform().setOrigin(btVector3(0,((float)highest)/2,0));
 
 	//tBody->getWoorldTransform().setRotation(btQuaternion(0,0,0,1));
 
@@ -127,7 +137,7 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 
-	btSphereShape* sphere = new btSphereShape(rad);
+	btSphereShape* sphere = new btSphereShape(rad/1.5f);
 	btVector3 inertia(0,0,0);
 	if(mass != 0.0)
 	{
