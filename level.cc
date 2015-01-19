@@ -256,12 +256,19 @@ void Level::load() {
                                 errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
                                 errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
                                 this->physics.addBox(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size());
+                            }else if (physicType.compare("Button") == 0){
+                                float width, height, length;
+                                errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
+                                errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
+                                errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
+                                this->physics.addButton(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size());
                             }else if (physicType.compare("TriangleMesh") == 0){
-                                
                                 this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size());
                             } else{
                                 printf("XMLError: Not a valid physicType.\n");
+                                exit(-1);
                             }
+                            
 
                             if(compositionType == 20){
                                 cameraCenter = object;
