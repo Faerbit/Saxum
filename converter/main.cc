@@ -54,8 +54,8 @@ int main( int argc, char *argv[] ){
     }
     
     //delete compositions that were not in the png anymore
-    for (int i=1; i<=conv.getNextID()[1]; i++){
-        for (int j=1; j<256; j++){
+    for (int i=0; i<=conv.getNextID()[1]; i++){
+        for (int j=0; j<256; j++){
             if (! idFound[i][j]){
                 conv.deleteComposition(i,j);
             }
