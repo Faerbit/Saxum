@@ -30,7 +30,15 @@ void Physics::takeUpdateStep(float timeDiff)
 	    }	
 	}
 	
-	
+	btVector3 position = playerBall->getCenterOfMassPosition() ;
+	position.normalize();
+	position *=5;
+	position += playerBall->getCenterOfMassPosition(); //is the position 5 units away from the player in the direction of the camera
+	 
+	 
+	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
+	cameraBody->applyCentralForce(dir);
+	 
 	/*- cameraBody->getCenterOfMassPosition(); // gives vector from player to camera
 	position.normalize();
 	position *=5;
@@ -40,6 +48,7 @@ void Physics::takeUpdateStep(float timeDiff)
 	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
 	cameraBody->applyCentralForce(dir);
 	*/
+	
 }
 
 void Physics::removePositionConstraint(int bodyIndice)
@@ -162,7 +171,8 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
     playerBall->setSleepingThresholds(0,0);
 	if(bodies.size() != indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
-
+    
+    addCamera();
 }
 
 void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA,unsigned indice)
@@ -353,9 +363,9 @@ void Physics::addTriangleMeshBody(Entity entity, float mass, float dampningL, fl
 	
 }*/
 
-void Physics::addCamera(float rad, float distance)
+void Physics::addCamera()
 {
-    btSphereShape* sphere = new btSphereShape(rad);
+    btSphereShape* sphere = new btSphereShape(0.5f);
 
 	btVector3 inertia(0,0,0);
 	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,0,0)));
@@ -371,10 +381,10 @@ void Physics::addCamera(float rad, float distance)
     cameraBody->setSleepingThresholds(0,0);
     
     
-    btVector3 pivotInA(5,0,0);
+    /*btVector3 pivotInA(5,0,0);
     btVector3 pivotInB(-5, 0, 0);
     btDistanceConstraint* pdc = new btDistanceConstraint(*cameraBody,*playerBall,pivotInA,pivotInB, distance);
-    world->addConstraint(pdc);
+    world->addConstraint(pdc);*/
 }
 
 
@@ -402,6 +412,18 @@ glm::mat4 Physics::getRotation(int i)
 	    glm::vec3(quat.getAxis().getX(), quat.getAxis().getY(), quat.getAxis().getZ())
 	);
 	return matrix;
+}
+
+void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength)
+{
+    btVector3 change =  playerBall->getCenterOfMassPosition()-cameraBody->getCenterOfMassPosition();;
+    change.setY(0);
+    change.normalize();
+    change *= mouseMovement.x;
+    change = btCross(btVector3(0,1,0),change);
+    change.setY(mouseMovement.y);
+    change*=strength;
+        
 }
 
 void Physics::rollForward(glm::vec3 camPos,float strength)

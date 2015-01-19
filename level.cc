@@ -434,6 +434,7 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     else {
         mouseDelta.x = -mouseDelta.x;
         camera.updateRotation(mouseDelta/100.0f);
+        physics.updateCameraPos(mouseDelta, 0.01f);
     }    
     
     if(wPressed){
