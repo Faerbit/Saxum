@@ -221,7 +221,11 @@ void Level::load() {
                                                             * glm::rotate(compRot.z, glm::vec3(0.0f, 0.0f, 1.0f))
                                                             * glm::vec4(objectOffset, 0);
                             glm::vec3 objectPosition = compPos + glm::vec3(rotatedObjectOffset.x,rotatedObjectOffset.y,rotatedObjectOffset.z);
-                            Object* object = new Object(model, material, objectPosition, compRot);
+                            glm::vec3 objectRot;
+                            errorCheck(xmlObject->FirstChildElement("xRot")->QueryFloatText(&objectRot[0]));
+                            errorCheck(xmlObject->FirstChildElement("yRot")->QueryFloatText(&objectRot[1]));
+                            errorCheck(xmlObject->FirstChildElement("zRot")->QueryFloatText(&objectRot[2]));
+                            Object* object = new Object(model, material, objectPosition, compRot+objectRot);
                             objects.push_back(object);
                             //create an identifier for this object
                             std::vector<int> objectIdentifier = std::vector<int>(4);
@@ -425,7 +429,7 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs) {
     for(unsigned int i = 0; i<objects.size(); i++) {
         // do not project shadow of skydome 
-        if(lightingPass || objects.at(i) != skydome) {
+        if(lightingPass || (objects.at(i) != skydome && i!=0)) {
             objects.at(i)->render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
         }
     }
