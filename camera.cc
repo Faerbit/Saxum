@@ -60,6 +60,27 @@ void Camera:: updateDistance(float distance) {
     updatePosition();
 }
 
+void Camera::setPosition(glm::vec3 pos)
+{
+    position = pos;    
+}
+
+glm::vec3 Camera::getPosition()
+{
+    return position;
+}
+
+void Camera::setDirection(glm::vec3 dir)
+{
+    direction = dir;
+}
+
+glm::vec3 Camera::getDirection()
+{
+    return direction;
+}
+
+
 void Camera::updatePosition() {
     glm::vec4 cameraVector = glm::vec4(0.0f, 0.0f, distance, 0.0f);
     // rotate vector
