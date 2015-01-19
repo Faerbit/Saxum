@@ -212,7 +212,7 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
     }
     
     btBvhTriangleMeshShape* shape = new btBvhTriangleMeshShape(triMesh,true);
-    shape->setLocalScaling(btVector3(0.5f,0.5f,0.5f));
+    shape->setLocalScaling(btVector3(1.5,1.5,1.5));
 	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
 	
     btVector3 inertia(0,0,0);	
