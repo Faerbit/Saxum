@@ -67,6 +67,7 @@ class Physics {
 	void addPositionConstraint(int bodyIndice, float strength, glm::vec3 position);
 	void removePositionConstraint(int bodyIndice);
 	void addButton(float radius, float height, Entity entity, float mass, float dampningL, float dampningA, unsigned indice);
+	glm::vec3 getCameraToPlayer();
 
     struct positionConstraint{btRigidBody* body; float strength; btVector3 position;};
 
