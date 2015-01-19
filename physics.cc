@@ -30,6 +30,16 @@ void Physics::takeUpdateStep(float timeDiff)
 	    }	
 	}
 	
+	
+	/*- cameraBody->getCenterOfMassPosition(); // gives vector from player to camera
+	position.normalize();
+	position *=5;
+	position += playerBall->getCenterOfMassPosition(); //is the position 5 units away from the player in the direction of the camera
+	 
+	
+	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
+	cameraBody->applyCentralForce(dir);
+	*/
 }
 
 void Physics::removePositionConstraint(int bodyIndice)
@@ -87,7 +97,7 @@ void Physics::addTerrainTriangles(int width, int length, float** heightData)
 	
 	terrainBody = tBody;
 	
-	world->addRigidBody(tBody);
+	world->addRigidBody(tBody,COL_TERRAIN,COL_OBJECTS);
     
 }
 
@@ -112,7 +122,7 @@ void Physics::addTerrain(int width, int length, float** heightData)
 
 	btRigidBody* tBody = new btRigidBody(0,new btDefaultMotionState(),terrianShape);
 
-	tBody->getWorldTransform().setOrigin(btVector3(0,((float)highest - 1)/2,0));
+	tBody->getWorldTransform().setOrigin(btVector3(0,((float)highest)/2,0));
 
 	//tBody->getWoorldTransform().setRotation(btQuaternion(0,0,0,1));
 
@@ -127,7 +137,7 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 
-	btSphereShape* sphere = new btSphereShape(rad);
+	btSphereShape* sphere = new btSphereShape(rad/1.5f);
 	btVector3 inertia(0,0,0);
 	if(mass != 0.0)
 	{
@@ -138,14 +148,14 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
 
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia);
 
-    info.m_friction = friction;
+    info.m_friction = friction*2;
     info.m_restitution = 0.0f;
 
 	playerBall = new btRigidBody(info);
     
     playerBall->setDamping(dampningL, dampningA);
     
-	world->addRigidBody(playerBall);
+	world->addRigidBody(playerBall,COL_OBJECTS,COL_OBJECTS|COL_OBJECTS_NO_TERRAIN|COL_TERRAIN);
 
 	bodies.push_back(playerBall);
     
@@ -202,7 +212,7 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
     }
     
     btBvhTriangleMeshShape* shape = new btBvhTriangleMeshShape(triMesh,true);
-    
+    shape->setLocalScaling(btVector3(1.5,1.5,1.5));
 	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
 	
     btVector3 inertia(0,0,0);	
@@ -219,11 +229,39 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
 	
 	bodies.push_back(body);
 	
-	world->addRigidBody(body);
+	world->addRigidBody(body,COL_OBJECTS, objectsPhysicsCollision);
     
     
 	if(bodies.size() != indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
+}
+
+void Physics::addButton(float radius, float height, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
+{
+    
+	if(bodies.size() == indice)
+		throw std::invalid_argument( "Bodies out of Sync" );  
+	btCylinderShape* shape = new btCylinderShape(btVector3(height/2, radius,radius));
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z))); 
+	
+	btVector3 inertia(0,0,0);	
+	if(mass != 0.0)
+	{
+		shape->calculateLocalInertia((btScalar)mass,inertia);
+	}
+		
+	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,shape,inertia);
+	
+	btRigidBody* body = new btRigidBody(info);	
+	
+    body->setDamping(dampningL, dampningA);
+    
+	world->addRigidBody(body,COL_OBJECTS_NO_TERRAIN, specialPhysicsCollision);
+	
+	bodies.push_back(body);
+			
+	if(bodies.size() != indice)
+		throw std::invalid_argument( "Bodies out of Sync" ); 	
 }
 
 void Physics::addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
@@ -248,8 +286,8 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
 	
     body->setDamping(dampningL, dampningA);
     
-	world->addRigidBody(body);
-
+	world->addRigidBody(body,COL_OBJECTS, objectsPhysicsCollision);
+	
 	bodies.push_back(body);
 			
 	if(bodies.size() != indice)
@@ -277,7 +315,7 @@ void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, f
 	
     body->setDamping(dampningL, dampningA);
 
-	world->addRigidBody(body);
+	world->addRigidBody(body,COL_OBJECTS, objectsPhysicsCollision);
 
 	bodies.push_back(body);
 		
@@ -328,7 +366,7 @@ void Physics::addCamera(float rad, float distance)
 	
     cameraBody->setDamping(0.9f,1.0f);
 
-	world->addRigidBody(cameraBody);
+	world->addRigidBody(cameraBody,COL_OBJECTS, objectsPhysicsCollision);
 		
     cameraBody->setSleepingThresholds(0,0);
     

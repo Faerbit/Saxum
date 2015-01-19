@@ -224,6 +224,21 @@
     </object>
 </composition>
 
+<!-- Wall -->
+<composition>
+    <typeID>180</typeID>
+    <ignoreHeightmap>true</ignoreHeightmap>
+    <object>
+        <modelPath>SimpleWall.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>40.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+</composition>
+ 
+
 
 
 
@@ -237,7 +252,7 @@
     <shininess>3.0</shininess>
     <physicType>Player</physicType>
     <radius>1.5</radius>
-    <dampningL>0.2 </dampningL>
+    <dampningL>0.15 </dampningL>
     <dampningA>0.7</dampningA>
 </objectData>
 
@@ -249,9 +264,9 @@
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
     <physicType>Box</physicType>
-    <width>5.0</width>
+    <width>6</width>
     <height>3</height>
-    <length>1.8</length>
+    <length>3</length>
     <dampningL>0.8</dampningL>
     <dampningA>0.9</dampningA>
 </objectData>
