@@ -38,6 +38,7 @@ void Physics::takeUpdateStep(float timeDiff)
 	 
 	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
 	cameraBody->applyCentralForce(dir);
+	cameraBody->applyCentralForce(btVector3(0,10,0));
 	 
 	/*- cameraBody->getCenterOfMassPosition(); // gives vector from player to camera
 	position.normalize();
@@ -374,7 +375,7 @@ void Physics::addCamera()
 	
 	cameraBody = new btRigidBody(info);
 	
-    cameraBody->setDamping(0.95f,1.0f);
+    cameraBody->setDamping(1,0.5);
 
 	world->addRigidBody(cameraBody,COL_OBJECTS, objectsPhysicsCollision);
 		
@@ -430,6 +431,8 @@ void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength)
     change = btCross(btVector3(0,1,0),change);
     change.setY(mouseMovement.y);
     change*=strength;
+    
+    cameraBody->applyCentralForce(change);
         
 }
 
