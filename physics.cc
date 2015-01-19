@@ -368,13 +368,13 @@ void Physics::addCamera()
     btSphereShape* sphere = new btSphereShape(0.5f);
 
 	btVector3 inertia(0,0,0);
-	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,0,0)));
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),playerBall->getCenterOfMassPosition()+btVector3(5,5,5)));
 	
 	btRigidBody::btRigidBodyConstructionInfo info(1/(playerBall->getInvMass()/100),motion,sphere,inertia);
 	
 	cameraBody = new btRigidBody(info);
 	
-    cameraBody->setDamping(0.9f,1.0f);
+    cameraBody->setDamping(0.95f,1.0f);
 
 	world->addRigidBody(cameraBody,COL_OBJECTS, objectsPhysicsCollision);
 		
@@ -392,6 +392,13 @@ void Physics::addCamera()
 glm::vec3 Physics::getCameraPosition()
 {
 	btVector3 origin = cameraBody->getCenterOfMassPosition();
+	glm::vec3 save(origin.getX(),origin.getY(),origin.getZ());
+	return save;
+}
+
+glm::vec3 Physics::getCameraToPlayer()
+{
+	btVector3 origin = playerBall->getCenterOfMassPosition() - cameraBody->getCenterOfMassPosition();
 	glm::vec3 save(origin.getX(),origin.getY(),origin.getZ());
 	return save;
 }
@@ -459,6 +466,7 @@ void Physics::rollRight(glm::vec3 camPos,float strength)
     pos *= strength;
     playerBall->applyTorque(-pos);
 }
+
 
 //not used right now
 
