@@ -47,11 +47,12 @@ vec2 poissonDisk[16] = vec2[](
 );
 
 float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
+    float nearPlane = 0.1;
     float visibility = 1.0;
     float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
     bias = clamp(bias, 0.0, 0.01);
     for (int i=0; i<4; i++) {
-        visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, (shadowCoord.z - bias)/shadowCoord.w)));
+        visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, shadowCoord.z - bias)));
     }
     if (visibility == 1.0-(directionalIntensity/16)*4)
     {
@@ -59,7 +60,7 @@ float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
     }
     else if (visibility != 1.0) {
         for (int i=0; i<12; i++) {
-            visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, (shadowCoord.z - bias)/shadowCoord.w)));
+            visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, shadowCoord.z - bias)));
         }
     }
     return visibility;
