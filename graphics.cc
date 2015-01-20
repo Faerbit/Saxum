@@ -86,13 +86,14 @@ void Graphics::render()
     depthShader->use();
     // render depth textures for point lights
     glViewport(0, 0, cube_size, cube_size);
-    glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  farPlane);
+    glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.01f,  farPlane);
     glm::vec3 looking_directions[6] = {glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
         glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
 
     framebuffer_cube->bind();
     //for (unsigned int i_pointlight = 0; i_pointlight<level->getLights()->size(); i_pointlight++) {
     for (unsigned int i_pointlight = 0; i_pointlight<1 && i_pointlight<level->getLights()->size(); i_pointlight++) {
+        depthShader->setUniform("cameraPosition", level->getLights()->at(i_pointlight).getPosition());
         // render each side of the cube
         for (int i_face = 0; i_face<6; i_face++) {
             framebuffer_cube2->bind();
@@ -161,6 +162,8 @@ void Graphics::render()
         }
         glUniform1fv(lightingShader->getUniformLocation("lightIntensities"),
             sizeof(lightIntensities),  (GLfloat*) lightIntensities);
+
+        // Calculate light source position in camera screen space
 
         lightingShader->setTexture("shadowMap_cube", depth_cubeMaps.at(0), 4);
     }
