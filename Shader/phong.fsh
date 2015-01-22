@@ -66,8 +66,12 @@ float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
 }
 
 float samplePointShadow(samplerCubeShadow shadowMap, vec3 lightDirection) {
+    float nearPlane = 0.1;
+    float A = -(farPlane+nearPlane)/(farPlane-nearPlane);
+    float B = -2*(farPlane*nearPlane)/(farPlane - nearPlane);
+    float compValue = 0.5*(-A*length(lightDirection) + B)/length(lightDirection) + 0.5;
     float bias = 0.005;
-    return texture(shadowMap, vec4(lightDirection.xyz , length(lightDirection) - bias));
+    return texture(shadowMap, vec4(lightDirection.xyz , compValue - bias));
 }
 
 float distanceToBorder(vec2 vector) {
