@@ -25,7 +25,7 @@ void Physics::takeUpdateStep(float timeDiff)
 	{
 	    if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition())
 	    {
-	        btVector3 dir = allPositionConstraints[i].body->getCenterOfMassPosition() - allPositionConstraints[i].position;
+	        btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
 	        allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength);
 	    }	
 	}
@@ -176,7 +176,7 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
     addCamera();
 }
 
-void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA,unsigned indice)
+void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA,unsigned indice,bool rotate)
 {//TODO look at convexHullShapes
     
 	if(bodies.size() == indice)
@@ -247,7 +247,7 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 }
 
-void Physics::addButton(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
+void Physics::addButton(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate)
 {
     
 	if(bodies.size() == indice)
@@ -277,7 +277,7 @@ void Physics::addButton(float width, float height, float length, Entity entity, 
 		throw std::invalid_argument( "Bodies out of Sync" ); 	
 }
 
-void Physics::addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
+void Physics::addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate)
 {
 	
 	if(bodies.size() == indice)
@@ -307,7 +307,7 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 }
 
-void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
+void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate)
 {
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
