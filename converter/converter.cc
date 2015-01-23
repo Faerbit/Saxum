@@ -33,8 +33,14 @@ Converter::Converter(std::string level){
     
     
     //Load the Level xml file
+    nextID.push_back(0);
     nextID.push_back(1);
-    nextID.push_back(1);
+    for (int i=0; i<256; i++){
+        for (int j=0; j<256; j++){
+            idUsed[i][j] = false;
+        }
+    }
+    idUsed[0][0] = true;
     const char* charXmlFile = xmlFile.c_str();
     doc->LoadFile(charXmlFile);
     if (doc->ErrorID()!=0){
@@ -127,14 +133,11 @@ Converter::Converter(std::string level){
     }else{
         dst << src.rdbuf();
         XMLElement* thisComposition = doc->FirstChildElement("composition");
-        int idGreen, idBlue;
         for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
+            int idGreen = 0, idBlue = 0;
             errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
             errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
-            if(idGreen > nextID[0] || (idGreen == nextID[0] && idBlue > nextID[1])){
-                nextID[0] = idGreen;
-                nextID[1] = idBlue;
-            }
+            idUsed[idGreen][idBlue] = true;
         }
     }
 }
@@ -148,6 +151,17 @@ Converter::~Converter(){
 std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     XMLElement* newComposition = doc->NewElement("composition");
     doc->InsertFirstChild(newComposition);
+    while(idUsed[nextID[0]][nextID[1]]){
+        nextID[1] += 1;
+        if (nextID[1] == 256){
+            nextID[1] = 0;
+            nextID[0] +=1;
+            if (nextID[0] == 256){
+                std::cout << "Can not have more than 65535 compositions." << std::endl;
+                exit(-1);
+            }
+        }
+    }
     
     XMLElement* typeID = doc->NewElement("typeID");
     XMLElement* idBlue = doc->NewElement("idBlue");
@@ -230,13 +244,8 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     trigger->InsertEndChild(toChangeIdBlue);
     trigger->InsertEndChild(toChangeObjNum);
     
-    std::vector<int> ret = nextID;
-    nextID[1] += 1;
-    if (nextID[1] == 255){
-        nextID[1] = 0;
-        nextID[0] +=1;
-    }
-    return ret;
+    idUsed[nextID[0]][nextID[1]] = true;
+    return nextID;
 }
 
 void Converter::updateComposition(int idG, int idB, float posX, float posZ){
@@ -249,6 +258,7 @@ void Converter::updateComposition(int idG, int idB, float posX, float posZ){
         if(idGreen == idG && idBlue == idB){
             if (compositionExists){
                 std::cout << "An ID is used for multiple compositions in the xml." << std::endl;
+                exit(-1);
             }
             bool manualPos;
             errorCheck(thisComposition->FirstChildElement("manualPos")->QueryBoolText(&manualPos));
@@ -267,8 +277,8 @@ void Converter::updateComposition(int idG, int idB, float posX, float posZ){
 
 void Converter::deleteComposition(int idG, int idB){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
-    int idGreen, idBlue;
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
+    int idGreen = 0, idBlue = 0;
         errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
         errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
         if(idGreen == idG && idBlue == idB){
@@ -304,5 +314,6 @@ void Converter::errorCheck(XMLError error){
         else {
             printf("Unknown error.\n");
         }
+        exit(-1);
     }
 }
