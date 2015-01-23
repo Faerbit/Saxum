@@ -25,6 +25,7 @@ int main( int argc, char *argv[] ){
     unsigned error = lodepng::decode(image, width, height, filePath);
     if (error) {
         std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+        exit(-1);
     }
     
     //iterate over all pixels of the image
@@ -33,13 +34,13 @@ int main( int argc, char *argv[] ){
             unsigned int pixel = (rowNum*width+columnNum)*4;
             //if there is a composition here, adjust the xml and image
             if(image[pixel]!=0 && image[pixel]!=255){
-                if((image[pixel+1]==0 && image[pixel+2]==0) || (image[pixel+1]==255 && image[pixel+2]==255)){
+                if(image[pixel+1]==0 && image[pixel+2]==0){//composition has no ID
                     std::vector<int> temp;
                     temp = conv.newComposition(image[pixel], 0.5+rowNum-0.5*height, 0.5+columnNum-0.5*width);
                     idFound[temp[0]][temp[1]] = true;
                     image[pixel+1] = temp[0];
                     image[pixel+2] = temp[1];
-                }else{
+                }else{//composition has an ID
                     conv.updateComposition(image[pixel+1], image[pixel+2], 0.5+rowNum-0.5*height, 0.5+columnNum-0.5*width);
                     idFound[image[pixel+1]][image[pixel+2]] = true;
                 }
@@ -51,10 +52,11 @@ int main( int argc, char *argv[] ){
     error = lodepng::encode(filePath, image, width, height);
     if(error) {
         std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
+        exit(-1);
     }
     
     //delete compositions that were not in the png anymore
-    for (int i=0; i<=conv.getNextID()[1]; i++){
+    for (int i=0; i<256; i++){
         for (int j=0; j<256; j++){
             if (! idFound[i][j]){
                 conv.deleteComposition(i,j);
