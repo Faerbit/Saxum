@@ -43,6 +43,7 @@ void Level::errorCheck(XMLError error){
         else {
             printf("Unknown error.\n");
         }
+        exit(-1);
     }
 }
 
@@ -109,6 +110,7 @@ void Level::load() {
     const char* charSkydomeTexture = skydomeElement->FirstChildElement("texture")->GetText();
     if(charSkydomeTexture == NULL){
         printf("XMLError: No skydomeTexture found.\n");
+        exit(-1);
     }
     std::string skydomeTexture = charSkydomeTexture;
     Model skydomeModel = Model("skydome.obj", skydomeSize);
@@ -169,6 +171,7 @@ void Level::load() {
                     const char* charModelPath = xmlObject->FirstChildElement("modelPath")->GetText();
                     if(charModelPath == NULL){
                         printf("XMLError: No modelPath found in object.\n");
+                        exit(-1);
                     }
                     std::string modelPath = charModelPath;
                     float objectScale, compScale;
@@ -181,6 +184,7 @@ void Level::load() {
                         const char* charDataModelPath = objectData->FirstChildElement("modelPath")->GetText();
                         if(charDataModelPath == NULL){
                             printf("XMLError: No modelPath found in objectData.\n");
+                            exit(-1);
                         }
                         std::string dataModelPath = charDataModelPath;
                         //objectData found
@@ -194,6 +198,7 @@ void Level::load() {
                             const char* charTexturePath = objectData->FirstChildElement("texturePath")->GetText();
                             if(charTexturePath == NULL){
                                 printf("XMLError: No texturePath found in objectData.\n");
+                                exit(-1);
                             }
                             std::string texturePath = charTexturePath;
                             Material material = Material(texturePath, ambientFactor, diffuseFactor, specularFactor, shininess);
@@ -242,6 +247,7 @@ void Level::load() {
                             const char* charPhysicType = objectData->FirstChildElement("physicType")->GetText();
                             if(charPhysicType == NULL){
                                 printf("XMLError: No physicType found.\n");
+                                exit(-1);
                             }
                             std::string physicType = charPhysicType;
                             //add object to physics
@@ -328,6 +334,7 @@ void Level::load() {
             const char* charName = xmlTrigger->FirstChildElement("name")->GetText();
             if(charName == NULL){
                 printf("XMLError: No name found for a trigger.\n");
+                exit(-1);
             }
             std::string name = charName;
             if (name.compare("-") != 0){
@@ -342,6 +349,7 @@ void Level::load() {
                 const char* charTarget = xmlTrigger->FirstChildElement("targetIdGreen")->GetText();
                 if(charTarget == NULL){
                     printf("XMLError: No targetIdGreen found for a trigger.\n");
+                    exit(-1);
                 }
                 std::string stringTarget = charTarget;
                 if (stringTarget.compare("-") != 0){
@@ -378,6 +386,7 @@ void Level::load() {
                 const char* charLuaScript = xmlTrigger->FirstChildElement("luaScript")->GetText();
                 if(charLuaScript == NULL){
                     printf("XMLError: No Lua script found for a trigger.\n");
+                    exit(-1);
                 }
                 std::string luaScript = charLuaScript;
                 
@@ -396,6 +405,7 @@ void Level::load() {
                 }
                 else {
                     printf("Triggering object not found.\n");
+                    exit(-1);
                 }
             }
         }
