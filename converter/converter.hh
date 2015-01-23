@@ -20,6 +20,7 @@ class Converter {
     private:
         void errorCheck(XMLError error);
         std::vector<int> nextID;
+        bool idUsed[256][256];
         std::string xmlFile;
         XMLDocument* doc = new XMLDocument();
         XMLDocument* compositions = new XMLDocument();
