@@ -48,8 +48,8 @@ void Camera::updateRotation(glm::vec2 rotation) {
 }
 
 void Camera:: updateDistance(float distance) {
-    if (this->distance + distance <= 1.0f) {
-        this->distance = 1.0f;
+    if (this->distance + distance <= 2.5f) {
+        this->distance = 2.5f;
     }
     else if (this->distance + distance >= 30.0f) {
         this->distance = 30.f;
