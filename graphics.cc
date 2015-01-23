@@ -61,6 +61,15 @@ void Graphics::init(Level* level) {
     }
 
     framebuffer_cube = SharedFrameBufferObject(new FrameBufferObject());
+
+    depthTexture_cube = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT16));
+    depthTexture_cube->setMinFilter(GL_NEAREST);
+    depthTexture_cube->setMagFilter(GL_NEAREST);
+    depthTexture_cube->setWrapS(GL_CLAMP_TO_EDGE);
+    depthTexture_cube->setWrapT(GL_CLAMP_TO_EDGE);
+    depthTexture_cube->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
+    framebuffer_cube2 = SharedFrameBufferObject(new FrameBufferObject());
+    framebuffer_cube2->setDepthTexture(depthTexture_cube);
 }
 
 GLFWwindow* Graphics::getWindow() {
@@ -86,11 +95,20 @@ void Graphics::render()
     for (unsigned int i_pointlight = 0; i_pointlight<1 && i_pointlight<level->getLights()->size(); i_pointlight++) {
         // render each side of the cube
         for (int i_face = 0; i_face<6; i_face++) {
+            framebuffer_cube2->bind();
+            glClear(GL_DEPTH_BUFFER_BIT);
+            framebuffer_cube->bind();
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
             glClear(GL_DEPTH_BUFFER_BIT);
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
                 level->getLights()->at(i_pointlight).getPosition() + looking_directions[i_face], glm::vec3(0.0f, 1.0f, 0.0f));
-            //level->render(depthShader, false, &depthViewProjectionMatrix_face);
+            level->render(depthShader, false, &depthViewProjectionMatrix_face);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer_cube->getObjectName());
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer_cube2->getObjectName());
+            glBlitFramebuffer(0, 0, cube_size, cube_size, cube_size, cube_size, 0, 0, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer_cube2->getObjectName());
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer_cube->getObjectName());
+            glBlitFramebuffer(0, 0, cube_size, cube_size, 0, 0, cube_size, cube_size, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
             if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
@@ -194,8 +212,11 @@ void Graphics::resize(glm::uvec2 windowSize) {
 
 glm::mat4 Graphics::buildViewMatrix(Level* level) {
     //construct lookAt (cameraPosition = cameraCenter + cameraVector)
+    //return glm::lookAt(level->getCamera()->getPosition(), level->getCamera()->getPosition() + level->getCamera()->getDirection(), glm::vec3(0.0f, 1.0f, 0.0f));
+    
     return glm::lookAt((level->getCameraCenter()->getPosition() + level->getCamera()->getVector()),
             level->getCameraCenter()->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
+            
 }
 
 float Graphics::getFarPlane() {

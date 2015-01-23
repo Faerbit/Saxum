@@ -54,18 +54,20 @@ class Physics {
 	glm::vec3 getPos(int i);
 	glm::mat4 getRotation(int i);
 	void addStaticGroundPlane();
-	void addCamera(float rad, float distance); //Do NOT impliment before Player has been created;
+	void addCamera(); //Do NOT impliment before Player has been created;
+	void updateCameraPos(glm::vec2 mouseMovement, float strength);
 	glm::vec3 getCameraPosition();
 	void addRigidBodyFromFile(Entity entity, float mass, float dampningL, float dampningA, std::string modelLocation, unsigned indice);
-    void addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA, unsigned indice);
+    void addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA, unsigned indice,bool rotate);
 	void addTerrain(int width, int length, float** heightData);
     void addTerrainTriangles(int width, int length, float** heightData); //add the terrain as a trimesh instead of a heightmap
 	void addPlayer(float friction, float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice); //use these AFTER physicObjects.push_back(object)! if mass == 0 then the object is unmoveable
-	void addSphere(float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice); //The Indice should be set to physicObjects.size()
-	void addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice); //this is used to ensuer that the system is synchronized
+	void addSphere(float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate); //The Indice should be set to physicObjects.size()
+	void addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate); //this is used to ensuer that the system is synchronized
 	void addPositionConstraint(int bodyIndice, float strength, glm::vec3 position);
 	void removePositionConstraint(int bodyIndice);
-	void addButton(float radius, float height, Entity entity, float mass, float dampningL, float dampningA, unsigned indice);
+	void addButton(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate);
+	glm::vec3 getCameraToPlayer();
 
     struct positionConstraint{btRigidBody* body; float strength; btVector3 position;};
 
