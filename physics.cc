@@ -247,21 +247,23 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 }
 
-void Physics::addButton(float radius, float height, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
+void Physics::addButton(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
 {
     
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" );  
-	btCylinderShape* shape = new btCylinderShape(btVector3(height/2, radius,radius));
+		
+		btBoxShape* box = new btBoxShape(btVector3(width/2,height/2,length/2));	
+		
 	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z))); 
 	
 	btVector3 inertia(0,0,0);	
 	if(mass != 0.0)
 	{
-		shape->calculateLocalInertia((btScalar)mass,inertia);
+		box->calculateLocalInertia((btScalar)mass,inertia);
 	}
 		
-	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,shape,inertia);
+	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,box,inertia);
 	
 	btRigidBody* body = new btRigidBody(info);	
 	
