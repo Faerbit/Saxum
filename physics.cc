@@ -25,12 +25,21 @@ void Physics::takeUpdateStep(float timeDiff)
 	{
 	    if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition())
 	    {
-	        btVector3 dir = allPositionConstraints[i].body->getCenterOfMassPosition() - allPositionConstraints[i].position;
+	        btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
 	        allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength);
 	    }	
 	}
 	
-	
+	btVector3 position = playerBall->getCenterOfMassPosition() ;
+	position.normalize();
+	position *=5;
+	position += playerBall->getCenterOfMassPosition(); //is the position 5 units away from the player in the direction of the camera
+	 
+	 
+	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
+	cameraBody->applyCentralForce(dir);
+	cameraBody->applyCentralForce(btVector3(0,10,0));
+	 
 	/*- cameraBody->getCenterOfMassPosition(); // gives vector from player to camera
 	position.normalize();
 	position *=5;
@@ -40,6 +49,7 @@ void Physics::takeUpdateStep(float timeDiff)
 	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
 	cameraBody->applyCentralForce(dir);
 	*/
+	
 }
 
 void Physics::removePositionConstraint(int bodyIndice)
@@ -162,10 +172,11 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
     playerBall->setSleepingThresholds(0,0);
 	if(bodies.size() != indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
-
+    
+    addCamera();
 }
 
-void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA,unsigned indice)
+void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA,unsigned indice,bool rotate)
 {//TODO look at convexHullShapes
     
 	if(bodies.size() == indice)
@@ -236,21 +247,23 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 }
 
-void Physics::addButton(float radius, float height, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
+void Physics::addButton(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate)
 {
     
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" );  
-	btCylinderShape* shape = new btCylinderShape(btVector3(height/2, radius,radius));
+		
+		btBoxShape* box = new btBoxShape(btVector3(width/2,height/2,length/2));	
+		
 	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z))); 
 	
 	btVector3 inertia(0,0,0);	
 	if(mass != 0.0)
 	{
-		shape->calculateLocalInertia((btScalar)mass,inertia);
+		box->calculateLocalInertia((btScalar)mass,inertia);
 	}
 		
-	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,shape,inertia);
+	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,box,inertia);
 	
 	btRigidBody* body = new btRigidBody(info);	
 	
@@ -264,7 +277,7 @@ void Physics::addButton(float radius, float height, Entity entity, float mass, f
 		throw std::invalid_argument( "Bodies out of Sync" ); 	
 }
 
-void Physics::addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
+void Physics::addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate)
 {
 	
 	if(bodies.size() == indice)
@@ -294,7 +307,7 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 }
 
-void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
+void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate)
 {
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" ); 
@@ -353,28 +366,28 @@ void Physics::addTriangleMeshBody(Entity entity, float mass, float dampningL, fl
 	
 }*/
 
-void Physics::addCamera(float rad, float distance)
+void Physics::addCamera()
 {
-    btSphereShape* sphere = new btSphereShape(rad);
+    btSphereShape* sphere = new btSphereShape(0.5f);
 
 	btVector3 inertia(0,0,0);
-	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,0,0)));
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),playerBall->getCenterOfMassPosition()+btVector3(5,5,5)));
 	
 	btRigidBody::btRigidBodyConstructionInfo info(1/(playerBall->getInvMass()/100),motion,sphere,inertia);
 	
 	cameraBody = new btRigidBody(info);
 	
-    cameraBody->setDamping(0.9f,1.0f);
+    cameraBody->setDamping(1,0.5);
 
 	world->addRigidBody(cameraBody,COL_OBJECTS, objectsPhysicsCollision);
 		
     cameraBody->setSleepingThresholds(0,0);
     
     
-    btVector3 pivotInA(5,0,0);
+    /*btVector3 pivotInA(5,0,0);
     btVector3 pivotInB(-5, 0, 0);
     btDistanceConstraint* pdc = new btDistanceConstraint(*cameraBody,*playerBall,pivotInA,pivotInB, distance);
-    world->addConstraint(pdc);
+    world->addConstraint(pdc);*/
 }
 
 
@@ -382,6 +395,13 @@ void Physics::addCamera(float rad, float distance)
 glm::vec3 Physics::getCameraPosition()
 {
 	btVector3 origin = cameraBody->getCenterOfMassPosition();
+	glm::vec3 save(origin.getX(),origin.getY(),origin.getZ());
+	return save;
+}
+
+glm::vec3 Physics::getCameraToPlayer()
+{
+	btVector3 origin = playerBall->getCenterOfMassPosition() - cameraBody->getCenterOfMassPosition();
 	glm::vec3 save(origin.getX(),origin.getY(),origin.getZ());
 	return save;
 }
@@ -402,6 +422,20 @@ glm::mat4 Physics::getRotation(int i)
 	    glm::vec3(quat.getAxis().getX(), quat.getAxis().getY(), quat.getAxis().getZ())
 	);
 	return matrix;
+}
+
+void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength)
+{
+    btVector3 change =  playerBall->getCenterOfMassPosition()-cameraBody->getCenterOfMassPosition();;
+    change.setY(0);
+    change.normalize();
+    change *= mouseMovement.x;
+    change = btCross(btVector3(0,1,0),change);
+    change.setY(mouseMovement.y);
+    change*=strength;
+    
+    cameraBody->applyCentralForce(change);
+        
 }
 
 void Physics::rollForward(glm::vec3 camPos,float strength)
@@ -437,6 +471,7 @@ void Physics::rollRight(glm::vec3 camPos,float strength)
     pos *= strength;
     playerBall->applyTorque(-pos);
 }
+
 
 //not used right now
 

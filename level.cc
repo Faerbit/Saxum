@@ -248,6 +248,7 @@ void Level::load() {
                             float mass;
                             errorCheck(xmlObject->FirstChildElement("mass")->QueryFloatText(&mass));
                             float dampningL, dampningA;
+                            bool rotate = true;
                             errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
                             errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                             if (physicType.compare("Player") == 0){
@@ -259,13 +260,20 @@ void Level::load() {
                                 errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
                                 errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
                                 errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
-                                this->physics.addBox(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size());
+                                this->physics.addBox(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size(), rotate);
+                            }else if (physicType.compare("Button") == 0){
+                                float width, height, length;
+                                errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
+                                errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
+                                errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
+                                this->physics.addButton(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size(), rotate);
                             }else if (physicType.compare("TriangleMesh") == 0){
-                                
-                                this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size());
+                                this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size(), rotate);
                             } else{
                                 printf("XMLError: Not a valid physicType.\n");
+                                exit(-1);
                             }
+                            
 
                             if(compositionType == 20){
                                 cameraCenter = object;
@@ -422,7 +430,7 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs) {
     for(unsigned int i = 0; i<objects.size(); i++) {
         // do not project shadow of skydome 
-        if(lightingPass || objects.at(i) != skydome) {
+        if(lightingPass || (objects.at(i) != skydome /*&& i!=0*/)) {
             objects.at(i)->render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
         }
     }
@@ -438,6 +446,10 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     else {
         mouseDelta.x = -mouseDelta.x;
         camera.updateRotation(mouseDelta/100.0f);
+        physics.updateCameraPos(mouseDelta, 0.01f);
+        
+        camera.setPosition(physics.getCameraPosition());
+        camera.setDirection(physics.getCameraToPlayer());
     }    
     
     if(wPressed){

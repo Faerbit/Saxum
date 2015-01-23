@@ -48,8 +48,8 @@ void Camera::updateRotation(glm::vec2 rotation) {
 }
 
 void Camera:: updateDistance(float distance) {
-    if (this->distance + distance <= 1.0f) {
-        this->distance = 1.0f;
+    if (this->distance + distance <= 2.5f) {
+        this->distance = 2.5f;
     }
     else if (this->distance + distance >= 30.0f) {
         this->distance = 30.f;
@@ -59,6 +59,27 @@ void Camera:: updateDistance(float distance) {
     }
     updatePosition();
 }
+
+void Camera::setPosition(glm::vec3 pos)
+{
+    position = pos;    
+}
+
+glm::vec3 Camera::getPosition()
+{
+    return position;
+}
+
+void Camera::setDirection(glm::vec3 dir)
+{
+    direction = dir;
+}
+
+glm::vec3 Camera::getDirection()
+{
+    return direction;
+}
+
 
 void Camera::updatePosition() {
     glm::vec4 cameraVector = glm::vec4(0.0f, 0.0f, distance, 0.0f);
