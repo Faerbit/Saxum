@@ -68,8 +68,6 @@ void Graphics::init(Level* level) {
     depthTexture_cube->setWrapS(GL_CLAMP_TO_EDGE);
     depthTexture_cube->setWrapT(GL_CLAMP_TO_EDGE);
     depthTexture_cube->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
-    framebuffer_cube2 = SharedFrameBufferObject(new FrameBufferObject());
-    framebuffer_cube2->setDepthTexture(depthTexture_cube);
 }
 
 GLFWwindow* Graphics::getWindow() {
@@ -87,7 +85,7 @@ void Graphics::render()
     // render depth textures for point lights
     glViewport(0, 0, cube_size, cube_size);
     glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  farPlane);
-    glm::vec3 looking_directions[6] = {glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
+    glm::vec3 looking_directions[6] = {glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
         glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
 
     framebuffer_cube->bind();
@@ -103,12 +101,6 @@ void Graphics::render()
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
                 level->getLights()->at(i_pointlight).getPosition() + looking_directions[i_face], glm::vec3(0.0f, 1.0f, 0.0f));
             level->render(depthShader, false, &depthViewProjectionMatrix_face);
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer_cube->getObjectName());
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer_cube2->getObjectName());
-            glBlitFramebuffer(0, 0, cube_size, cube_size, cube_size, cube_size, 0, 0, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer_cube2->getObjectName());
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer_cube->getObjectName());
-            glBlitFramebuffer(0, 0, cube_size, cube_size, 0, 0, cube_size, cube_size, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
             if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
