@@ -93,8 +93,6 @@ void Graphics::render()
     for (unsigned int i_pointlight = 0; i_pointlight<1 && i_pointlight<level->getLights()->size(); i_pointlight++) {
         // render each side of the cube
         for (int i_face = 0; i_face<6; i_face++) {
-            glClear(GL_DEPTH_BUFFER_BIT);
-            framebuffer_cube->bind();
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
             glClear(GL_DEPTH_BUFFER_BIT);
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
