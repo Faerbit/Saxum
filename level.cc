@@ -254,7 +254,8 @@ void Level::load() {
                             float mass;
                             errorCheck(xmlObject->FirstChildElement("mass")->QueryFloatText(&mass));
                             float dampningL, dampningA;
-                            bool rotate = true;
+                            XMLElement* constraint = thisComposition->FirstChildElement("positionConstraint");
+                            bool rotate = (constraint == NULL);
                             errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
                             errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                             if (physicType.compare("Player") == 0){
@@ -417,7 +418,7 @@ void Level::load() {
         XMLElement* positionConstraint = composition->FirstChildElement("positionConstraint");
         for(; positionConstraint; positionConstraint=positionConstraint->NextSiblingElement("positionConstraint")){
             float xPos, yPos, zPos, strength;
-            int objectNum, idGreen, idBlue, objectIndex;
+            int objectNum=0, idGreen=0, idBlue=0, objectIndex=0;
             errorCheck(positionConstraint->FirstChildElement("xPosition")->QueryFloatText(&xPos));
             errorCheck(positionConstraint->FirstChildElement("yPosition")->QueryFloatText(&yPos));
             errorCheck(positionConstraint->FirstChildElement("zPosition")->QueryFloatText(&zPos));
