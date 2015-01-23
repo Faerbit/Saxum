@@ -45,12 +45,12 @@ void Terrain::makeTriangleMesh(){
     float* abData = new float[numVertices * floatsPerVertex];
 
     while(rowNum < this->heightmapHeight){							//traversing the Triangle Strip!
-	set_abData(abData, dataCount, rowNum, columnNum);
-	dataCount += floatsPerVertex;
-	if (isUp){
-	    rowNum = rowNum + 1;
-	    isUp = false;
-	}
+	    set_abData(abData, dataCount, rowNum, columnNum);
+	    dataCount += floatsPerVertex;
+	    if (isUp){
+	        rowNum = rowNum + 1;
+	        isUp = false;
+	    }
         else if (movingRight) {
             if (columnNum == this->heightmapWidth - 1) {
                 set_abData(abData, dataCount, rowNum, columnNum);
