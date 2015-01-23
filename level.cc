@@ -248,6 +248,7 @@ void Level::load() {
                             float mass;
                             errorCheck(xmlObject->FirstChildElement("mass")->QueryFloatText(&mass));
                             float dampningL, dampningA;
+                            bool rotate = true;
                             errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
                             errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                             if (physicType.compare("Player") == 0){
@@ -259,15 +260,15 @@ void Level::load() {
                                 errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
                                 errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
                                 errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
-                                this->physics.addBox(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size());
+                                this->physics.addBox(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size(), rotate);
                             }else if (physicType.compare("Button") == 0){
                                 float width, height, length;
                                 errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
                                 errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
                                 errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
-                                this->physics.addButton(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size());
+                                this->physics.addButton(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size(), rotate);
                             }else if (physicType.compare("TriangleMesh") == 0){
-                                this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size());
+                                this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size(), rotate);
                             } else{
                                 printf("XMLError: Not a valid physicType.\n");
                                 exit(-1);
