@@ -230,6 +230,9 @@
     <ignoreHeightmap>true</ignoreHeightmap>
     <object>
         <modelPath>SimpleWall.obj</modelPath>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
         <xOffset>0.0</xOffset>
         <yOffset>40.0</yOffset>
         <zOffset>0.0</zOffset>
@@ -244,11 +247,14 @@
     <ignoreHeightmap>false</ignoreHeightmap>
     <object>
         <modelPath>block.obj</modelPath>
-        <xOffset>0.0</xOffset>
-        <yOffset>5.0</yOffset>
+        <xOffset>0.0</xOffset>  
+        <yOffset>20.0</yOffset>
         <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
         <scale>1.5</scale>
-        <mass>1.0</mass>
+        <mass>2.0</mass>
     </object>
 </composition>
 
