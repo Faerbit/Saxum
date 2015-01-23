@@ -83,6 +83,9 @@
         <xOffset>0.0</xOffset>
         <yOffset>1.0</yOffset>
         <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
         <rColour>1.0</rColour>
         <gColour>1.0</gColour>
         <bColour>1.0</bColour>
@@ -229,10 +232,13 @@
     <typeID>180</typeID>
     <ignoreHeightmap>true</ignoreHeightmap>
     <object>
-        <modelPath>SimpleWall.obj</modelPath>
+        <modelPath>simpleWall.obj</modelPath>
         <xOffset>0.0</xOffset>
-        <yOffset>40.0</yOffset>
+        <yOffset>25.0</yOffset>
         <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
         <scale>1.5</scale>
         <mass>0.0</mass>
     </object>
@@ -247,6 +253,9 @@
         <xOffset>0.0</xOffset>
         <yOffset>5.0</yOffset>
         <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
         <scale>1.5</scale>
         <mass>1.0</mass>
     </object>
@@ -324,6 +333,18 @@
 <objectData>
     <modelPath>switch_outer.obj</modelPath>
     <texturePath>switchTextureOuter.png</texturePath>
+    <ambientFactor>0.1</ambientFactor>
+    <diffuseFactor>0.6</diffuseFactor>
+    <specularFactor>0.4</specularFactor>
+    <shininess>2.0</shininess>
+    <physicType>TriangleMesh</physicType>
+    <dampningL>0.555</dampningL>
+    <dampningA>0.5</dampningA>
+</objectData>
+
+<objectData>
+    <modelPath>simpleWall.obj</modelPath>
+    <texturePath>simpleWallTexture.png</texturePath>
     <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
