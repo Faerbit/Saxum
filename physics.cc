@@ -25,7 +25,7 @@ void Physics::takeUpdateStep(float timeDiff)
 	{
 	    if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition())
 	    {
-	        btVector3 dir = allPositionConstraints[i].body->getCenterOfMassPosition() - allPositionConstraints[i].position;
+	        btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
 	        allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength);
 	    }	
 	}
