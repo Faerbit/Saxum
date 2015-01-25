@@ -8,6 +8,7 @@
 using namespace ACGL::OpenGL;
 
 const int Graphics::cube_size = 1024;
+const double lightUpdateDelay = 0.5f;
 
 Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane) {
     this->windowSize = windowSize;
@@ -16,12 +17,14 @@ Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane) {
 }
 
 Graphics::Graphics() {
-    lastUpdate = 0.0f;
 }
 
 void Graphics::init(Level* level) {
     // save Level
     this->level = level;
+
+    // update lights on creation
+    lastUpdate = -lightUpdateDelay;
 
     // construct VAO to give shader correct Attribute locations
     SharedArrayBuffer ab = SharedArrayBuffer(new ArrayBuffer());
@@ -128,7 +131,7 @@ void Graphics::render(double time)
 
     // TODO look into doing this less often, offload to another thread?
     // TODO figure out how to deal with bigger numbers of lights. load the nearest on demand?
-    double nextUpdate = lastUpdate + 0.5f;
+    double nextUpdate = lastUpdate + lightUpdateDelay;
     if (time >= nextUpdate)
     {
         updateLights();
