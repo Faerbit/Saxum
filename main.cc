@@ -49,7 +49,7 @@ static void focusCallback(GLFWwindow* window, int focused) {
 
 int main( int argc, char *argv[] )
 {
-    //Application app = Application();
+    // app gets created as global variable, to work properly with GLFW
 
     // Create OpenGL capable window:
     if ( !app.getGraphics()->createWindow() ) {
