@@ -16,6 +16,7 @@ Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane) {
 }
 
 Graphics::Graphics() {
+    lastUpdate = 0.0f;
 }
 
 void Graphics::init(Level* level) {
@@ -74,7 +75,7 @@ glm::uvec2 Graphics::getWindowSize() {
     return windowSize;
 }
 
-void Graphics::render()
+void Graphics::render(double time)
 {
     // At first render shadows
     depthShader->use();
@@ -119,44 +120,19 @@ void Graphics::render()
 
     lightingShader->use();
 
-    //set lighting parameters
     if (level->getLights()->size() > 0) {
-        lightingShader->setUniform("lightCount", (int) level->getLights()->size());
-
-        // TODO look into doing this less often, offload to another thread?
-        // TODO figure out how to deal with bigger numbers of lights. load the nearest on demand?
-        // Build light position array
-        glm::vec3 lightSources[level->getLights()->size()];
-        for(unsigned int i = 0; i<level->getLights()->size(); i++) {
-            lightSources[i] = level->getLights()->at(i).getPosition();
-        }
-        glUniform3fv(lightingShader->getUniformLocation("lightSources"),
-            sizeof(lightSources),  (GLfloat*) lightSources);
-        // Build light colour array
-        glm::vec3 lightColours[level->getLights()->size()];
-        for(unsigned int i = 0; i<level->getLights()->size(); i++) {
-            lightColours[i] = level->getLights()->at(i).getColour();
-        }
-        glUniform3fv(lightingShader->getUniformLocation("lightColors"),
-            sizeof(lightColours),  (GLfloat*) lightColours);
-        // Build light attenuation array
-        float lightIntensities[level->getLights()->size()];
-        for(unsigned int i = 0; i<level->getLights()->size(); i++) {
-            lightIntensities[i] = level->getLights()->at(i).getIntensity();
-        }
-        glUniform1fv(lightingShader->getUniformLocation("lightIntensities"),
-            sizeof(lightIntensities),  (GLfloat*) lightIntensities);
-
         lightingShader->setTexture("shadowMap_cube", depth_cubeMaps.at(0), 4);
     }
-    // set directional Light
-    if(level->getDirectionalLight()) {
-        lightingShader->setUniform("directionalLightVector",
-            level->getDirectionalLight()->getPosition());
-        lightingShader->setUniform("directionalColor",
-            level->getDirectionalLight()->getColour());
-        lightingShader->setUniform("directionalIntensity",
-            level->getDirectionalLight()->getIntensity());
+
+    //set lighting parameters
+
+    // TODO look into doing this less often, offload to another thread?
+    // TODO figure out how to deal with bigger numbers of lights. load the nearest on demand?
+    double nextUpdate = lastUpdate + 0.5f;
+    if (time >= nextUpdate)
+    {
+        updateLights();
+        lastUpdate = time;
     }
 
     // convert texture to homogenouse coordinates
@@ -188,6 +164,43 @@ void Graphics::render()
 
     // render the level
     level->render(lightingShader, true, &lightingViewProjectionMatrix, &shadowVPs);
+}
+
+void Graphics::updateLights() {
+    if (level->getLights()->size() > 0) {
+        lightingShader->setUniform("lightCount", (int) level->getLights()->size());
+
+        // Build light position array
+        glm::vec3 lightSources[level->getLights()->size()];
+        for(unsigned int i = 0; i<level->getLights()->size(); i++) {
+            lightSources[i] = level->getLights()->at(i).getPosition();
+        }
+        glUniform3fv(lightingShader->getUniformLocation("lightSources"),
+            sizeof(lightSources),  (GLfloat*) lightSources);
+        // Build light colour array
+        glm::vec3 lightColours[level->getLights()->size()];
+        for(unsigned int i = 0; i<level->getLights()->size(); i++) {
+            lightColours[i] = level->getLights()->at(i).getColour();
+        }
+        glUniform3fv(lightingShader->getUniformLocation("lightColors"),
+            sizeof(lightColours),  (GLfloat*) lightColours);
+        // Build light attenuation array
+        float lightIntensities[level->getLights()->size()];
+        for(unsigned int i = 0; i<level->getLights()->size(); i++) {
+            lightIntensities[i] = level->getLights()->at(i).getIntensity();
+        }
+        glUniform1fv(lightingShader->getUniformLocation("lightIntensities"),
+            sizeof(lightIntensities),  (GLfloat*) lightIntensities);
+    }
+    // set directional Light
+    if(level->getDirectionalLight()) {
+        lightingShader->setUniform("directionalLightVector",
+            level->getDirectionalLight()->getPosition());
+        lightingShader->setUniform("directionalColor",
+            level->getDirectionalLight()->getColour());
+        lightingShader->setUniform("directionalIntensity",
+            level->getDirectionalLight()->getIntensity());
+    }
 }
 
 void Graphics::resize(glm::uvec2 windowSize) {

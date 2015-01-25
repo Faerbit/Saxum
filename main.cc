@@ -177,8 +177,8 @@ int main( int argc, char *argv[] )
             }
         }
 
+        app.getGraphics()->render(now);
         lastUpdate = now;
-        app.getGraphics()->render();
         
         openGLCriticalError();
 
