@@ -16,15 +16,15 @@ static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
         if (app.isFocused() && !app.isLocked()) {
             glfwSetWindowShouldClose( _window, GL_TRUE );
         }
-        glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         app.setCameraLock(false);
     }
 }
 
 static void mouseCallback(GLFWwindow* window, int button, int action, int) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-        glfwSetCursorPos(app.getGraphics()->getWindow(), app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        glfwSetCursorPos(window, app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
         app.setCameraLock(true);
     }
 }
@@ -36,15 +36,69 @@ static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
 static void focusCallback(GLFWwindow* window, int focused) {
     if (focused) {
         // Hide mouse cursor
-        glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
         app.setFocused(focused);
     }
     else {
         // Show mouse cursor
-        glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         app.setFocused(focused);
         app.setCameraLock(focused);
     }
+}
+
+void setGLFWHintsForOpenGLVersion( unsigned int _version )
+{
+#ifdef __APPLE__
+#if (ACGL_OPENGL_VERSION >= 30)
+    // request OpenGL 3.2, will return a 4.1 context on Mavericks
+    glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
+    glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 2 );
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+#else
+// non-apple
+    glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, _version / 10 );
+    glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, _version % 10 );
+    #ifdef ACGL_OPENGL_PROFILE_CORE
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    #endif
+#endif
+}
+
+bool createWindow()
+{
+    // Initialise GLFW
+    if ( !glfwInit() )
+    {
+        ACGL::Utils::error() << "Failed to initialize GLFW" << std::endl;
+        exit( -1 );
+    }
+
+    // Configure OpenGL context
+    setGLFWHintsForOpenGLVersion( ACGL_OPENGL_VERSION );
+
+    // activate multisampling (second parameter is the number of samples):
+    //glfwWindowHint( GLFW_SAMPLES, 8 );
+
+    // request an OpenGL debug context:
+    glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, true );
+
+    // define whether the window can get resized:
+    glfwWindowHint(GLFW_RESIZABLE, true);
+
+    // try to create an OpenGL context in a window and check the supported OpenGL version:
+    //                                                  R,G,B,A, Depth,Stencil
+    window = glfwCreateWindow(app.getGraphics()->getWindowSize().x, app.getGraphics()->getWindowSize().y, "SWP MarbleGame Group C", NULL, NULL);
+    if (!window) {
+        ACGL::Utils::error() << "Failed to open a GLFW window - requested OpenGL: " <<  ACGL_OPENGL_VERSION << std::endl;
+        return false;
+    }
+    glfwMakeContextCurrent(window);
+    ACGL::init();
+    return true;
 }
 
 int main( int argc, char *argv[] )
@@ -52,22 +106,22 @@ int main( int argc, char *argv[] )
     // app gets created as global variable, to work properly with GLFW
 
     // Create OpenGL capable window:
-    if ( !app.getGraphics()->createWindow() ) {
+    if ( !createWindow() ) {
         glfwTerminate();
         exit( -1 );
     }
 
     // Set window title to binary name (without the path):
     std::vector<std::string> tmp = ACGL::Utils::StringHelpers::split( std::string( argv[0] ), '/' );
-    glfwSetWindowTitle(app.getGraphics()->getWindow(), tmp[tmp.size()-1].c_str() );
+    glfwSetWindowTitle(window, tmp[tmp.size()-1].c_str() );
     // Ensure we can capture the escape key being pressed below
-    glfwSetInputMode(app.getGraphics()->getWindow(), GLFW_STICKY_KEYS, 1);
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
     // set Callbacks
-    glfwSetWindowSizeCallback(app.getGraphics()->getWindow(), resizeCallback);
-    glfwSetKeyCallback(app.getGraphics()->getWindow(), keyCallback );
-    glfwSetScrollCallback(app.getGraphics()->getWindow(), scrollCallback );
-    glfwSetWindowFocusCallback(app.getGraphics()->getWindow(), focusCallback);
-    glfwSetMouseButtonCallback(app.getGraphics()->getWindow(), mouseCallback);
+    glfwSetWindowSizeCallback(window, resizeCallback);
+    glfwSetKeyCallback(window, keyCallback );
+    glfwSetScrollCallback(window, scrollCallback );
+    glfwSetWindowFocusCallback(window, focusCallback);
+    glfwSetMouseButtonCallback(window, mouseCallback);
 
     // Enable vertical sync (on cards that support it) with parameter 1 - 0 means off
     glfwSwapInterval( 0 );
@@ -97,20 +151,20 @@ int main( int argc, char *argv[] )
             std::stringstream sstream (std::stringstream::in | std::stringstream::out);
             sstream << std::setprecision(1) << std::fixed
                     << tmp[tmp.size()-1] << " - FPS: " << frameCount / (now-showNextFPS + FPSdelay) << " " << 1000 * (now-showNextFPS + FPSdelay)/frameCount << " msec";
-            glfwSetWindowTitle(app.getGraphics()->getWindow(), sstream.str().c_str() );
+            glfwSetWindowTitle(window, sstream.str().c_str() );
             showNextFPS = now + FPSdelay;
             frameCount = 0;
         }
 
 
         if (app.isLocked() && app.getIgnoredMouseUpdates() == 0) {
-            int stateW = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_W);
-            int stateA = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_A);
-            int stateS = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_S);
-            int stateD = glfwGetKey(app.getGraphics()->getWindow(), GLFW_KEY_D);
+            int stateW = glfwGetKey(window, GLFW_KEY_W);
+            int stateA = glfwGetKey(window, GLFW_KEY_A);
+            int stateS = glfwGetKey(window, GLFW_KEY_S);
+            int stateD = glfwGetKey(window, GLFW_KEY_D);
             double xpos, ypos;
-            glfwGetCursorPos(app.getGraphics()->getWindow(), &xpos, &ypos);
-            glfwSetCursorPos(app.getGraphics()->getWindow(), app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
+            glfwGetCursorPos(window, &xpos, &ypos);
+            glfwSetCursorPos(window, app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
             app.getLevel()->update(now - lastUpdate,
                     glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
                             (float)xpos-app.getGraphics()->getWindowSize().x/2),
@@ -130,12 +184,12 @@ int main( int argc, char *argv[] )
 
         // MacOS X will not swap correctly is another FBO is bound:
         glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-        glfwSwapBuffers(app.getGraphics()->getWindow());
+        glfwSwapBuffers(window);
         glfwPollEvents();
         frameCount++;
         
     } // Check if the window was closed
-    while( !glfwWindowShouldClose(app.getGraphics()->getWindow()) );
+    while( !glfwWindowShouldClose(window) );
 
     glfwTerminate();
     exit(0);

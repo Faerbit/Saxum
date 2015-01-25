@@ -4,4 +4,5 @@
 #include "application.hh"
 
 Application app;
+GLFWwindow* window;
 #endif
