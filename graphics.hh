@@ -13,13 +13,14 @@ class Graphics {
         Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane);
         Graphics();
         void init(Level* level);
-        void render();
+        void render(double time);
         glm::mat4 buildViewMatrix(Level* level);
         glm::uvec2 getWindowSize();
         void resize(glm::uvec2 windowSize);
         float getFarPlane();
     private:
-        void setGLFWHintsForOpenGLVersion( unsigned int _version );
+        void updateLights();
+        double lastUpdate;
         glm::uvec2 windowSize;
         float nearPlane;
         float farPlane;
