@@ -16,8 +16,6 @@ class Graphics {
         void render();
         glm::mat4 buildViewMatrix(Level* level);
         glm::uvec2 getWindowSize();
-        bool createWindow();
-        GLFWwindow* getWindow();
         void resize(glm::uvec2 windowSize);
         float getFarPlane();
     private:
@@ -25,7 +23,6 @@ class Graphics {
         glm::uvec2 windowSize;
         float nearPlane;
         float farPlane;
-        GLFWwindow* window;
         ACGL::OpenGL::SharedShaderProgram lightingShader;
         ACGL::OpenGL::SharedShaderProgram depthShader;
         ACGL::OpenGL::SharedTexture2D depthTexture;

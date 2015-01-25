@@ -70,10 +70,6 @@ void Graphics::init(Level* level) {
     depthTexture_cube->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
 }
 
-GLFWwindow* Graphics::getWindow() {
-    return window;
-}
-
 glm::uvec2 Graphics::getWindowSize() {
     return windowSize;
 }
@@ -210,58 +206,4 @@ glm::mat4 Graphics::buildViewMatrix(Level* level) {
 
 float Graphics::getFarPlane() {
     return farPlane;
-}
-
-void Graphics::setGLFWHintsForOpenGLVersion( unsigned int _version )
-{
-#ifdef __APPLE__
-#if (ACGL_OPENGL_VERSION >= 30)
-    // request OpenGL 3.2, will return a 4.1 context on Mavericks
-    glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
-    glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 2 );
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-#else
-// non-apple
-    glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, _version / 10 );
-    glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, _version % 10 );
-    #ifdef ACGL_OPENGL_PROFILE_CORE
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    #endif
-#endif
-}
-
-bool Graphics::createWindow()
-{
-    // Initialise GLFW
-    if ( !glfwInit() )
-    {
-        ACGL::Utils::error() << "Failed to initialize GLFW" << std::endl;
-        exit( -1 );
-    }
-
-    // Configure OpenGL context
-    setGLFWHintsForOpenGLVersion( ACGL_OPENGL_VERSION );
-
-    // activate multisampling (second parameter is the number of samples):
-    //glfwWindowHint( GLFW_SAMPLES, 8 );
-
-    // request an OpenGL debug context:
-    glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, true );
-
-    // define whether the window can get resized:
-    glfwWindowHint(GLFW_RESIZABLE, true);
-
-    // try to create an OpenGL context in a window and check the supported OpenGL version:
-    //                                                  R,G,B,A, Depth,Stencil
-    window = glfwCreateWindow(windowSize.x, windowSize.y, "SWP MarbleGame Group C", NULL, NULL);
-    if (!getWindow()) {
-        ACGL::Utils::error() << "Failed to open a GLFW window - requested OpenGL: " <<  ACGL_OPENGL_VERSION << std::endl;
-        return false;
-    }
-    glfwMakeContextCurrent(window);
-    ACGL::init();
-    return true;
 }
