@@ -117,7 +117,7 @@ void Graphics::render(double time)
             if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
-            if (saveDepthBufferBool && i_face == 2) {
+            if (saveDepthBufferBool && i_face == 3) {
                 printf("Doing stuff...\n"); 
                 saveDepthBufferToDisk(framebuffer_cube, "face2.png");
                 saveDepthBufferBool = false;
@@ -250,17 +250,17 @@ float Graphics::getFarPlane() {
 
 void Graphics::saveDepthBufferToDisk(SharedFrameBufferObject fbo, std::string filename) {
     printf("Starting saving of depth buffer...\n");
-    float *depthbuffer = new float[windowSize.x *  windowSize.y];
-    std::vector<unsigned char> image (windowSize.x *  windowSize.y * 4);
+    float *depthbuffer = new float[1024*1024];
+    std::vector<unsigned char> image (1024 * 1024 * 4);
 
-    glGetTexImage(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, depthbuffer);
-    for (unsigned int i = 0; i<windowSize.x *  windowSize.y; i++) {
-        image[windowSize.x *  windowSize.y * 4 + 0] = depthbuffer[i] * 255;
-        image[windowSize.x *  windowSize.y * 4 + 1] = depthbuffer[i] * 255;
-        image[windowSize.x *  windowSize.y * 4 + 2] = depthbuffer[i] * 255;
-        image[windowSize.x *  windowSize.y * 4 + 3] = 255;
+    glGetTexImage(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, depthbuffer);
+    for (unsigned int i = 0; i<1024*1024; i++) {
+        image[i * 4 + 0] = depthbuffer[i] * 255;
+        image[i * 4 + 1] = depthbuffer[i] * 255;
+        image[i * 4 + 2] = depthbuffer[i] * 255;
+        image[i * 4 + 3] = 255;
     }
-    unsigned error = lodepng::encode(filename.c_str(), image, windowSize.x, windowSize.y);
+    unsigned error = lodepng::encode(filename.c_str(), image, 1024, 1024);
     if (error) {
         std::cout << "Encoder error " << error << ": " << lodepng_error_text(error) << std::endl;
     }
