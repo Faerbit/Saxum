@@ -1,4 +1,5 @@
 #include "graphics.hh"
+#include "lodepng.h"
 
 #include <iomanip>
 #include <sstream>
@@ -72,10 +73,16 @@ void Graphics::init(Level* level) {
     depthTexture_cube->setWrapS(GL_CLAMP_TO_EDGE);
     depthTexture_cube->setWrapT(GL_CLAMP_TO_EDGE);
     depthTexture_cube->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
+
+    saveDepthBufferBool = false;
 }
 
 glm::uvec2 Graphics::getWindowSize() {
     return windowSize;
+}
+
+void Graphics::saveDepthBuffer() {
+    saveDepthBufferBool = true;
 }
 
 void Graphics::render(double time)
@@ -85,10 +92,11 @@ void Graphics::render(double time)
     // render depth textures for point lights
     glViewport(0, 0, cube_size, cube_size);
     glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  farPlane);
-    glm::vec3 looking_directions[6] = {glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
-        glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
+    glm::vec3 looking_directions[6] = {glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0001f, 1.0f, 0.0f),
+        glm::vec3(0.0001f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
 
     framebuffer_cube->bind();
+    static bool printed = false;
     //for (unsigned int i_pointlight = 0; i_pointlight<level->getLights()->size(); i_pointlight++) {
     for (unsigned int i_pointlight = 0; i_pointlight<1 && i_pointlight<level->getLights()->size(); i_pointlight++) {
         // render each side of the cube
@@ -97,10 +105,26 @@ void Graphics::render(double time)
             glClear(GL_DEPTH_BUFFER_BIT);
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
                 level->getLights()->at(i_pointlight).getPosition() + looking_directions[i_face], glm::vec3(0.0f, 1.0f, 0.0f));
+            if (!printed) {
+                printf("\n\nView matrix:\n %2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n\n\n", 
+                    depthViewProjectionMatrix_face[0][0], depthViewProjectionMatrix_face[0][1], depthViewProjectionMatrix_face[0][2], depthViewProjectionMatrix_face[0][3],
+                    depthViewProjectionMatrix_face[1][0], depthViewProjectionMatrix_face[1][1], depthViewProjectionMatrix_face[1][2], depthViewProjectionMatrix_face[1][3],
+                    depthViewProjectionMatrix_face[2][0], depthViewProjectionMatrix_face[2][1], depthViewProjectionMatrix_face[2][2], depthViewProjectionMatrix_face[2][3],
+                    depthViewProjectionMatrix_face[3][0], depthViewProjectionMatrix_face[3][1], depthViewProjectionMatrix_face[3][2], depthViewProjectionMatrix_face[3][3]
+                    );
+            }
             level->render(depthShader, false, &depthViewProjectionMatrix_face);
             if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
+            if (saveDepthBufferBool && i_face == 2) {
+                printf("Doing stuff...\n"); 
+                saveDepthBufferToDisk(framebuffer_cube, "face2.png");
+                saveDepthBufferBool = false;
+            }
+        }
+        if (!printed) {
+                printed = true;
         }
     }
     // render depth texture for sun
@@ -222,4 +246,26 @@ glm::mat4 Graphics::buildViewMatrix(Level* level) {
 
 float Graphics::getFarPlane() {
     return farPlane;
+}
+
+void Graphics::saveDepthBufferToDisk(SharedFrameBufferObject fbo, std::string filename) {
+    printf("Starting saving of depth buffer...\n");
+    float *depthbuffer = new float[windowSize.x *  windowSize.y];
+    std::vector<unsigned char> image (windowSize.x *  windowSize.y * 4);
+
+    glGetTexImage(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, depthbuffer);
+    for (unsigned int i = 0; i<windowSize.x *  windowSize.y; i++) {
+        image[windowSize.x *  windowSize.y * 4 + 0] = depthbuffer[i] * 255;
+        image[windowSize.x *  windowSize.y * 4 + 1] = depthbuffer[i] * 255;
+        image[windowSize.x *  windowSize.y * 4 + 2] = depthbuffer[i] * 255;
+        image[windowSize.x *  windowSize.y * 4 + 3] = 255;
+    }
+    unsigned error = lodepng::encode(filename.c_str(), image, windowSize.x, windowSize.y);
+    if (error) {
+        std::cout << "Encoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+    }
+    else {
+        printf("Saving complete!\n");
+    }
+    delete [] depthbuffer;
 }

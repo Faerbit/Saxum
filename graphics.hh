@@ -18,8 +18,11 @@ class Graphics {
         glm::uvec2 getWindowSize();
         void resize(glm::uvec2 windowSize);
         float getFarPlane();
+        void saveDepthBuffer();
     private:
+        bool saveDepthBufferBool;
         void updateLights();
+        void saveDepthBufferToDisk(ACGL::OpenGL::SharedFrameBufferObject fbo, std::string);
         double lastUpdate;
         glm::uvec2 windowSize;
         float nearPlane;
