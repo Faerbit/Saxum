@@ -177,6 +177,11 @@ int main( int argc, char *argv[] )
             }
         }
 
+        int stateP = glfwGetKey(window, GLFW_KEY_P);
+        if (stateP == GLFW_PRESS) {
+            app.getGraphics()->saveDepthBuffer();
+        }
+
         app.getGraphics()->render(now);
         lastUpdate = now;
         
