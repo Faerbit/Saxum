@@ -15,7 +15,6 @@ class Converter {
         std::vector<int> newComposition(int type, float posX, float posZ);//creates a new composition and returns its ID
 	    void deleteComposition(int idG, int idB);
 	    void save();                    //writes the xml to file
-	    std::vector<int> getNextID();   //returns the next unused ID
 
     private:
         void errorCheck(XMLError error);
