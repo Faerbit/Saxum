@@ -22,7 +22,7 @@ class Graphics {
     private:
         bool saveDepthBufferBool;
         void updateLights();
-        void saveDepthBufferToDisk(ACGL::OpenGL::SharedFrameBufferObject fbo, std::string);
+        void saveDepthBufferToDisk(int face, std::string);
         double lastUpdate;
         glm::uvec2 windowSize;
         float nearPlane;

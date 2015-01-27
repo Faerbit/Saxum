@@ -118,8 +118,7 @@ void Graphics::render(double time)
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
             if (saveDepthBufferBool && i_face == 3) {
-                printf("Doing stuff...\n"); 
-                saveDepthBufferToDisk(framebuffer_cube, "face2.png");
+                saveDepthBufferToDisk(3, "face.png");
                 saveDepthBufferBool = false;
             }
         }
@@ -248,12 +247,12 @@ float Graphics::getFarPlane() {
     return farPlane;
 }
 
-void Graphics::saveDepthBufferToDisk(SharedFrameBufferObject fbo, std::string filename) {
+void Graphics::saveDepthBufferToDisk(int face, std::string filename) {
     printf("Starting saving of depth buffer...\n");
     float *depthbuffer = new float[1024*1024];
     std::vector<unsigned char> image (1024 * 1024 * 4);
 
-    glGetTexImage(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, depthbuffer);
+    glGetTexImage(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_DEPTH_COMPONENT, GL_FLOAT, depthbuffer);
     for (unsigned int i = 0; i<1024*1024; i++) {
         image[i * 4 + 0] = depthbuffer[i] * 255;
         image[i * 4 + 1] = depthbuffer[i] * 255;
