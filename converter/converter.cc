@@ -14,6 +14,7 @@ Converter::Converter(std::string level){
     compositions->LoadFile(charCompositions);
     if (compositions->ErrorID()!=0){
         printf("Could not open Compositions!\n");
+        exit(-1);
     }
     
     //Create a backup of the current Level png file, if no backup exists
@@ -43,7 +44,7 @@ Converter::Converter(std::string level){
         printf("Could not open xml, do you want to create a new xml? (y/n)\n");
         std::cin >> answer;
         while(answer.compare("y") != 0 && answer.compare("n") != 0){
-            printf("Answer with y or n");
+            printf("Answer with y or n\n");
             std::cin >> answer;
         }
         if(answer.compare("n") == 0){
@@ -159,14 +160,19 @@ Converter::~Converter(){
 }
 
 std::vector<int> Converter::newComposition(int type, float posX, float posZ){
+    bool full = false;
     while(idUsed[nextID[0]][nextID[1]]){
         nextID[1] += 1;
         if (nextID[1] == 256){
             nextID[1] = 0;
             nextID[0] +=1;
             if (nextID[0] == 256){
-                std::cout << "Can not have more than 65535 compositions." << std::endl;
-                exit(-1);
+                if(full){
+                    printf("Can not have more than 65535 compositions.\n");
+                    exit(-1);
+                }
+                nextID[0] = 0;
+                full = true;
             }
         }
     }
@@ -266,7 +272,7 @@ void Converter::updateComposition(int idG, int idB, float posX, float posZ){
         errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
         if(idGreen == idG && idBlue == idB){
             if (compositionExists){
-                std::cout << "An ID is used for multiple compositions in the xml." << std::endl;
+                std::cout << "The ID " << idGreen << "," << idBlue << " is used for multiple compositions in the xml." << std::endl;
                 exit(-1);
             }
             bool manualPos;
@@ -279,7 +285,7 @@ void Converter::updateComposition(int idG, int idB, float posX, float posZ){
         }
     }
     if(!compositionExists){
-        std::cout << "A composition has an ID in the png, but does'nt exist in the xml." << std::endl;
+        std::cout << "A composition has the ID " << idG << "," << idB << " in the png, but does not exist in the xml." << std::endl;
         exit(-1);
     }
 }
