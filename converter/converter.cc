@@ -26,12 +26,6 @@ Converter::Converter(std::string level){
         dst << src.rdbuf();
     }
     
-    //Create a backup of the current Level xml file
-    std::string backupXML = "../Levels/ObjectSetups/BackupLevel" + level + ".xml";
-    std::ifstream  src(xmlFile, std::ios::binary);
-    std::ofstream  dst(backupXML,  std::ios::binary);
-    
-    
     //Load the Level xml file
     nextID.push_back(0);
     nextID.push_back(1);
@@ -43,8 +37,19 @@ Converter::Converter(std::string level){
     idUsed[0][0] = true;
     const char* charXmlFile = xmlFile.c_str();
     doc->LoadFile(charXmlFile);
+    //check if the xml file did not already exist
     if (doc->ErrorID()!=0){
-        printf("Could not open xml, creating new xml.\n");
+        std::string answer;
+        printf("Could not open xml, do you want to create a new xml? (y/n)\n");
+        std::cin >> answer;
+        while(answer.compare("y") != 0 && answer.compare("n") != 0){
+            printf("Answer with y or n");
+            std::cin >> answer;
+        }
+        if(answer.compare("n") == 0){
+            exit(-1);
+        }
+        printf("Creating new xml.\n");
         //Create all global Lightingparameters with Dummy-Values
         std::vector<XMLElement*> lightAttributes;
         lightAttributes.push_back(doc->NewElement("xOffset"));
@@ -112,7 +117,7 @@ Converter::Converter(std::string level){
         physics->InsertEndChild(playerStrength);
         doc->InsertEndChild(physics);
         
-        //create positionConstraint Dummy
+        //Create positionConstraint Dummy
         XMLElement* positionConstraint = doc->NewElement("positionConstraint");
         XMLElement* positionConstraintObjectNum = doc->NewElement("objectNum");
         XMLElement* positionConstraintXPos = doc->NewElement("xPosition");
@@ -131,7 +136,12 @@ Converter::Converter(std::string level){
         positionConstraint->InsertEndChild(positionConstraintStrength);
         doc->InsertEndChild(positionConstraint);
     }else{
+        //Create a backup of the current Level xml file
+        std::string backupXML = "../Levels/ObjectSetups/BackupLevel" + level + ".xml";
+        std::ifstream  src(xmlFile, std::ios::binary);
+        std::ofstream  dst(backupXML,  std::ios::binary);
         dst << src.rdbuf();
+        //Check what IDs are already in use
         XMLElement* thisComposition = doc->FirstChildElement("composition");
         for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
             int idGreen = 0, idBlue = 0;
@@ -149,8 +159,6 @@ Converter::~Converter(){
 }
 
 std::vector<int> Converter::newComposition(int type, float posX, float posZ){
-    XMLElement* newComposition = doc->NewElement("composition");
-    doc->InsertFirstChild(newComposition);
     while(idUsed[nextID[0]][nextID[1]]){
         nextID[1] += 1;
         if (nextID[1] == 256){
@@ -162,7 +170,7 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
             }
         }
     }
-    
+    XMLElement* newComposition = doc->NewElement("composition");
     XMLElement* typeID = doc->NewElement("typeID");
     XMLElement* idBlue = doc->NewElement("idBlue");
     XMLElement* idGreen = doc->NewElement("idGreen");
@@ -245,14 +253,15 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     trigger->InsertEndChild(toChangeObjNum);
     
     idUsed[nextID[0]][nextID[1]] = true;
+    doc->InsertFirstChild(newComposition);
     return nextID;
 }
 
 void Converter::updateComposition(int idG, int idB, float posX, float posZ){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
-    int idGreen = 0, idBlue = 0;
     bool compositionExists = false;
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
+        int idGreen = 0, idBlue = 0;
         errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
         errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
         if(idGreen == idG && idBlue == idB){
@@ -278,7 +287,7 @@ void Converter::updateComposition(int idG, int idB, float posX, float posZ){
 void Converter::deleteComposition(int idG, int idB){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-    int idGreen = 0, idBlue = 0;
+        int idGreen = 0, idBlue = 0;
         errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
         errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
         if(idGreen == idG && idBlue == idB){
@@ -290,10 +299,6 @@ void Converter::deleteComposition(int idG, int idB){
 void Converter::save(){
     const char* charXmlFile = xmlFile.c_str();
     doc->SaveFile(charXmlFile);
-}
-
-std::vector<int> Converter::getNextID(){
-    return nextID;
 }
 
 void Converter::errorCheck(XMLError error){
