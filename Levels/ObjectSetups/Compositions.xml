@@ -261,6 +261,41 @@
     </object>
 </composition>
 
+<!-- Gate -->
+<composition>
+    <typeID>220</typeID>
+    <ignoreHeightmap>true</ignoreHeightmap>
+    <object>
+        <modelPath>gate.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>25.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+</composition>
+
+<!-- Block for Switch -->
+<composition>
+    <typeID>240</typeID>
+    <ignoreHeightmap>false</ignoreHeightmap>
+    <object>
+        <modelPath>movableBlock.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>0.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.5</scale>
+        <mass>1.0</mass>
+    </object>
+</composition>
+
+
 
 
 <objectData>
@@ -346,6 +381,30 @@
     <modelPath>simpleWall.obj</modelPath>
     <texturePath>simpleWallTexture.png</texturePath>
     <ambientFactor>0.1</ambientFactor>
+    <diffuseFactor>0.6</diffuseFactor>
+    <specularFactor>0.4</specularFactor>
+    <shininess>2.0</shininess>
+    <physicType>TriangleMesh</physicType>
+    <dampningL>0.555</dampningL>
+    <dampningA>0.5</dampningA>
+</objectData>
+
+<objectData>
+	<modelPath>gate.obj</modelPath>
+	<texturePath>gateTexture.png</texturePath>
+	<ambientFactor>0.1</ambientFactor>
+    <diffuseFactor>0.6</diffuseFactor>
+    <specularFactor>0.4</specularFactor>
+    <shininess>2.0</shininess>
+    <physicType>TriangleMesh</physicType>
+    <dampningL>0.555</dampningL>
+    <dampningA>0.5</dampningA>
+</objectData>
+
+<objectData>
+	<modelPath>movableBlock.obj</modelPath>
+	<texturePath>movableBlockTexture.png</texturePath>
+	<ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
