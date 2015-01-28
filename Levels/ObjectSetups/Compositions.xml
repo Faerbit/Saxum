@@ -139,7 +139,7 @@
     <object>
         <modelPath>switch_inner.obj</modelPath>
         <xOffset>0.0</xOffset>
-        <yOffset>3</yOffset>
+        <yOffset>0</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
         <yRot>0.0</yRot>
@@ -150,7 +150,7 @@
     <object>
         <modelPath>switch_outer.obj</modelPath>
         <xOffset>0.0</xOffset>
-        <yOffset>2</yOffset>
+        <yOffset>-1</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
         <yRot>0.0</yRot>
@@ -285,7 +285,7 @@
     <object>
         <modelPath>movableBlock.obj</modelPath>
         <xOffset>0.0</xOffset>
-        <yOffset>0.0</yOffset>
+        <yOffset>100</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
         <yRot>0.0</yRot>
