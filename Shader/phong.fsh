@@ -71,8 +71,7 @@ float samplePointShadow(samplerCubeShadow shadowMap, vec3 lightDirection) {
     float B = -2*(farPlane*nearPlane)/(farPlane - nearPlane);
     float compValue = 0.5*(-A*length(lightDirection) + B)/length(lightDirection) + 0.5;
     float bias = 0.005;
-    vec3 vector = vec3(-lightDirection.x, -lightDirection.y, lightDirection.z);
-    return texture(shadowMap, vec4(vector , compValue - bias));
+    return texture(shadowMap, vec4(lightDirection , compValue - bias));
 }
 
 float distanceToBorder(vec2 vector) {
@@ -114,6 +113,8 @@ void main()
             *specularFactor*intensity*lightColors[i];
             visibility = samplePointShadow(shadowMap_cube, lightDirection);
         }
+        /*float value = texture(shadowMap_cube, lightDirection);
+        oColor = vec4(value, value, value, 255);*/
     }
 
     // shadows 
