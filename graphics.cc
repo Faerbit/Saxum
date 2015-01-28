@@ -74,6 +74,9 @@ void Graphics::init(Level* level) {
     depthTexture_cube->setWrapT(GL_CLAMP_TO_EDGE);
     depthTexture_cube->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
 
+    framebuffer_cube_mirror = SharedFrameBufferObject(new FrameBufferObject());
+    framebuffer_cube_mirror->setDepthTexture(depthTexture_cube);
+
     saveDepthBufferBool = false;
 }
 
@@ -92,7 +95,7 @@ void Graphics::render(double time)
     // render depth textures for point lights
     glViewport(0, 0, cube_size, cube_size);
     glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  farPlane);
-    glm::vec3 looking_directions[6] = {glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0001f, 1.0f, 0.0f),
+    glm::vec3 looking_directions[6] = {glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0001f, 1.0f, 0.0f),
         glm::vec3(0.0001f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
 
     framebuffer_cube->bind();
@@ -101,19 +104,29 @@ void Graphics::render(double time)
     for (unsigned int i_pointlight = 0; i_pointlight<1 && i_pointlight<level->getLights()->size(); i_pointlight++) {
         // render each side of the cube
         for (int i_face = 0; i_face<6; i_face++) {
+            framebuffer_cube_mirror->bind();
+            glClear(GL_DEPTH_BUFFER_BIT);
+            framebuffer_cube->bind();
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
             glClear(GL_DEPTH_BUFFER_BIT);
-            glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
+            glm::mat4 viewMatrix = glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
                 level->getLights()->at(i_pointlight).getPosition() + looking_directions[i_face], glm::vec3(0.0f, 1.0f, 0.0f));
+            glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * viewMatrix;
             if (!printed) {
                 printf("\n\nView matrix:\n %2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n\n\n", 
-                    depthViewProjectionMatrix_face[0][0], depthViewProjectionMatrix_face[0][1], depthViewProjectionMatrix_face[0][2], depthViewProjectionMatrix_face[0][3],
-                    depthViewProjectionMatrix_face[1][0], depthViewProjectionMatrix_face[1][1], depthViewProjectionMatrix_face[1][2], depthViewProjectionMatrix_face[1][3],
-                    depthViewProjectionMatrix_face[2][0], depthViewProjectionMatrix_face[2][1], depthViewProjectionMatrix_face[2][2], depthViewProjectionMatrix_face[2][3],
-                    depthViewProjectionMatrix_face[3][0], depthViewProjectionMatrix_face[3][1], depthViewProjectionMatrix_face[3][2], depthViewProjectionMatrix_face[3][3]
+                    viewMatrix[0][0], viewMatrix[0][1], viewMatrix[0][2], viewMatrix[0][3],
+                    viewMatrix[1][0], viewMatrix[1][1], viewMatrix[1][2], viewMatrix[1][3],
+                    viewMatrix[2][0], viewMatrix[2][1], viewMatrix[2][2], viewMatrix[2][3],
+                    viewMatrix[3][0], viewMatrix[3][1], viewMatrix[3][2], viewMatrix[3][3]
                     );
             }
             level->render(depthShader, false, &depthViewProjectionMatrix_face);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer_cube->getObjectName());
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer_cube_mirror->getObjectName());
+            glBlitFramebuffer(0, 0, cube_size, cube_size, cube_size, cube_size, 0, 0, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer_cube_mirror->getObjectName());
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer_cube->getObjectName());
+            glBlitFramebuffer(0, 0, cube_size, cube_size, 0, 0, cube_size, cube_size, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
             if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
@@ -238,8 +251,19 @@ glm::mat4 Graphics::buildViewMatrix(Level* level) {
     //construct lookAt (cameraPosition = cameraCenter + cameraVector)
     //return glm::lookAt(level->getCamera()->getPosition(), level->getCamera()->getPosition() + level->getCamera()->getDirection(), glm::vec3(0.0f, 1.0f, 0.0f));
     
-    return glm::lookAt((level->getCameraCenter()->getPosition() + level->getCamera()->getVector()),
+    glm::mat4 depthViewProjectionMatrix_face =  glm::lookAt((level->getCameraCenter()->getPosition() + level->getCamera()->getVector()),
             level->getCameraCenter()->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
+    static int i = 5;
+    if (i == 0) {
+                printf("\n\nView matrix Camera:\n %2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n\n\n", 
+                    depthViewProjectionMatrix_face[0][0], depthViewProjectionMatrix_face[0][1], depthViewProjectionMatrix_face[0][2], depthViewProjectionMatrix_face[0][3],
+                    depthViewProjectionMatrix_face[1][0], depthViewProjectionMatrix_face[1][1], depthViewProjectionMatrix_face[1][2], depthViewProjectionMatrix_face[1][3],
+                    depthViewProjectionMatrix_face[2][0], depthViewProjectionMatrix_face[2][1], depthViewProjectionMatrix_face[2][2], depthViewProjectionMatrix_face[2][3],
+                    depthViewProjectionMatrix_face[3][0], depthViewProjectionMatrix_face[3][1], depthViewProjectionMatrix_face[3][2], depthViewProjectionMatrix_face[3][3]
+                    );
+    }
+    i--;
+    return depthViewProjectionMatrix_face;
             
 }
 
