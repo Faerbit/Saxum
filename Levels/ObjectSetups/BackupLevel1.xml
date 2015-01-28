@@ -7,8 +7,8 @@
     <xPos>216.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-220.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>213</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>227</idBlue>
     <typeID>80</typeID>
     <trigger>
         <name>-</name>
@@ -36,8 +36,8 @@
     <xPos>210.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-220.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>212</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>226</idBlue>
     <typeID>20</typeID>
     <trigger>
         <name>-</name>
@@ -65,8 +65,8 @@
     <xPos>205.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-220.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>211</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>225</idBlue>
     <typeID>80</typeID>
     <trigger>
         <name>-</name>
@@ -94,8 +94,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-123.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>210</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>111</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -123,8 +123,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-126.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>209</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>110</idBlue>
     <typeID>160</typeID>
     <trigger>
         <name>-</name>
@@ -152,8 +152,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-129.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>208</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>109</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -181,8 +181,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-132.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>207</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>108</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -210,8 +210,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-135.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>206</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>107</idBlue>
     <typeID>160</typeID>
     <trigger>
         <name>-</name>
@@ -239,8 +239,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-138.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>205</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>106</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -268,8 +268,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-141.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>204</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>105</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -297,8 +297,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-144.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>203</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>104</idBlue>
     <typeID>160</typeID>
     <trigger>
         <name>-</name>
@@ -326,8 +326,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-147.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>202</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>103</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -355,8 +355,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-150.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>201</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>102</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -384,8 +384,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-153.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>200</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>101</idBlue>
     <typeID>160</typeID>
     <trigger>
         <name>-</name>
@@ -413,8 +413,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-156.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>199</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>100</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -442,8 +442,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-159.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>198</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>99</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -471,8 +471,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-162.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>197</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>98</idBlue>
     <typeID>160</typeID>
     <trigger>
         <name>-</name>
@@ -500,8 +500,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-165.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>196</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>97</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -529,8 +529,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-168.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>195</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>96</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -558,8 +558,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-171.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>194</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>95</idBlue>
     <typeID>160</typeID>
     <trigger>
         <name>-</name>
@@ -587,8 +587,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-174.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>193</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>94</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -616,8 +616,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-177.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>192</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>93</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -645,8 +645,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-180.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>191</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>92</idBlue>
     <typeID>160</typeID>
     <trigger>
         <name>-</name>
@@ -674,8 +674,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-183.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>190</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>91</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -703,8 +703,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-186.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>189</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>90</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -732,8 +732,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-189.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>188</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>89</idBlue>
     <typeID>160</typeID>
     <trigger>
         <name>-</name>
@@ -761,8 +761,8 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-192.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>187</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>88</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -790,8 +790,878 @@
     <xPos>187.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-195.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>186</idBlue>
+    <idGreen>0</idGreen>
+    <idBlue>87</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>187.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-198.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>86</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>166.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>138.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>85</idBlue>
+    <typeID>240</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>159.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>17.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>84</idBlue>
+    <typeID>120</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-117.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>83</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-120.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>82</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-123.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>81</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-126.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>80</idBlue>
+    <typeID>160</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-129.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>79</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-132.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>78</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-135.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>77</idBlue>
+    <typeID>160</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-138.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>76</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-141.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>75</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-144.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>74</idBlue>
+    <typeID>160</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-147.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>73</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-150.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>72</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-153.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>71</idBlue>
+    <typeID>160</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-156.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>70</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-159.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>69</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-162.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>68</idBlue>
+    <typeID>160</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-165.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>67</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-168.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>66</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-171.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>65</idBlue>
+    <typeID>160</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-174.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>64</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-177.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>63</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-180.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>62</idBlue>
+    <typeID>160</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-183.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>61</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-186.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>60</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-189.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>59</idBlue>
+    <typeID>160</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-192.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>58</idBlue>
+    <typeID>140</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>148.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-195.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>57</idBlue>
     <typeID>140</typeID>
     <trigger>
         <name>-</name>
@@ -818,9 +1688,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>253.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>185</idBlue>
+    <zPos>251.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>56</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -847,9 +1717,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>244.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>184</idBlue>
+    <zPos>242.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>55</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -876,9 +1746,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>235.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>183</idBlue>
+    <zPos>233.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>54</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -905,9 +1775,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>226.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>182</idBlue>
+    <zPos>224.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>53</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -934,9 +1804,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>217.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>181</idBlue>
+    <zPos>215.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>52</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -963,9 +1833,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>208.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>180</idBlue>
+    <zPos>206.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>51</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -992,9 +1862,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>199.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>179</idBlue>
+    <zPos>197.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>50</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1021,9 +1891,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>190.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>178</idBlue>
+    <zPos>188.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>49</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1050,9 +1920,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>181.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>177</idBlue>
+    <zPos>179.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>48</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1079,9 +1949,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>172.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>176</idBlue>
+    <zPos>170.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>47</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1108,9 +1978,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>163.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>175</idBlue>
+    <zPos>161.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>46</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1137,9 +2007,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>154.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>174</idBlue>
+    <zPos>152.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>45</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1166,9 +2036,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>145.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>173</idBlue>
+    <zPos>143.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>44</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1195,9 +2065,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>136.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>172</idBlue>
+    <zPos>134.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>43</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1224,9 +2094,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>127.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>171</idBlue>
+    <zPos>125.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>42</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1253,9 +2123,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>118.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>170</idBlue>
+    <zPos>116.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>41</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1282,9 +2152,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>109.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>169</idBlue>
+    <zPos>107.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>40</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1311,9 +2181,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>100.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>168</idBlue>
+    <zPos>98.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>39</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1340,9 +2210,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>91.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>167</idBlue>
+    <zPos>89.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>38</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1369,9 +2239,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>82.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>166</idBlue>
+    <zPos>80.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>37</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1398,9 +2268,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>73.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>165</idBlue>
+    <zPos>71.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>36</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1427,9 +2297,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>64.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>164</idBlue>
+    <zPos>62.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>35</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1456,9 +2326,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>55.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>163</idBlue>
+    <zPos>53.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>34</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1485,9 +2355,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>46.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>162</idBlue>
+    <zPos>44.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>33</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1514,9 +2384,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>37.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>161</idBlue>
+    <zPos>35.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>32</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1543,9 +2413,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-1.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>160</idBlue>
+    <zPos>26.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>31</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1572,9 +2442,38 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-10.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>159</idBlue>
+    <zPos>17.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>30</idBlue>
+    <typeID>220</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>81.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>8.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>29</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1601,9 +2500,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-19.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>158</idBlue>
+    <zPos>-0.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>28</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1630,9 +2529,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-28.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>157</idBlue>
+    <zPos>-9.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>27</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1659,9 +2558,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-37.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>156</idBlue>
+    <zPos>-18.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>26</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1688,9 +2587,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-46.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>155</idBlue>
+    <zPos>-27.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>25</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1717,9 +2616,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-55.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>154</idBlue>
+    <zPos>-36.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>24</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1746,9 +2645,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-64.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>153</idBlue>
+    <zPos>-45.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>23</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1775,9 +2674,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-73.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>152</idBlue>
+    <zPos>-54.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>22</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1804,9 +2703,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-82.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>151</idBlue>
+    <zPos>-63.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>21</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1833,9 +2732,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-91.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>150</idBlue>
+    <zPos>-72.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>20</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1862,9 +2761,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-100.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>149</idBlue>
+    <zPos>-81.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>19</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1891,9 +2790,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-109.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>148</idBlue>
+    <zPos>-90.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>18</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1920,9 +2819,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-118.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>147</idBlue>
+    <zPos>-99.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>17</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1949,9 +2848,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-127.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>146</idBlue>
+    <zPos>-108.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>16</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -1978,9 +2877,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-136.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>145</idBlue>
+    <zPos>-117.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>15</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -2007,9 +2906,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-145.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>144</idBlue>
+    <zPos>-126.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>14</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -2036,9 +2935,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-154.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>143</idBlue>
+    <zPos>-135.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>13</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -2065,9 +2964,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-163.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>142</idBlue>
+    <zPos>-144.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>12</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -2094,9 +2993,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-172.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>141</idBlue>
+    <zPos>-153.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>11</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -2123,9 +3022,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-181.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>140</idBlue>
+    <zPos>-162.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>10</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -2152,9 +3051,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-190.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>139</idBlue>
+    <zPos>-171.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>9</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -2181,9 +3080,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-199.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>138</idBlue>
+    <zPos>-180.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>8</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -2210,9 +3109,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-208.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>137</idBlue>
+    <zPos>-189.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>7</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -2239,9 +3138,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-217.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>136</idBlue>
+    <zPos>-198.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>6</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -2268,9 +3167,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-226.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>135</idBlue>
+    <zPos>-207.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>5</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -2297,9 +3196,9 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-235.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>134</idBlue>
+    <zPos>-216.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>4</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
@@ -2326,9 +3225,67 @@
     <manualPos>false</manualPos>
     <xPos>81.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>-244.500000</zPos>
-    <idGreen>1</idGreen>
-    <idBlue>133</idBlue>
+    <zPos>-225.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>3</idBlue>
+    <typeID>180</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>81.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-234.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>2</idBlue>
+    <typeID>180</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>81.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>-243.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>1</idBlue>
     <typeID>180</typeID>
     <trigger>
         <name>-</name>
