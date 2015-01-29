@@ -37,7 +37,7 @@ void Physics::takeUpdateStep(float timeDiff)
 	 
 	 
 	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
-	cameraBody->applyCentralForce(dir*cameraBody->getInvMass());//scale the force by camera mass
+	cameraBody->applyCentralForce(-dir*cameraBody->getInvMass()*10);//scale the force by camera mass
 	cameraBody->applyCentralForce(btVector3(0,1,0)); //applies a force to the camera keeping it in a correct position
 	
 }
@@ -80,7 +80,7 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia); //next we process all data for the rigid body into info
 
     info.m_friction = friction*2; //here we modify the friction and restitution (bounciness) of the object
-    info.m_restitution = 0.2f;
+    info.m_restitution = 0.8f;
 
 	playerBall = new btRigidBody(info); //finally we create the rigid body using the info
     
@@ -289,11 +289,11 @@ void Physics::addCamera()
 	btVector3 inertia(0,0,0);
 	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),playerBall->getCenterOfMassPosition()+btVector3(5,5,5)));
 	
-	btRigidBody::btRigidBodyConstructionInfo info(1/(playerBall->getInvMass()/100),motion,sphere,inertia);
+	btRigidBody::btRigidBodyConstructionInfo info(1,motion,sphere,inertia);
 	
 	cameraBody = new btRigidBody(info);
 	
-    cameraBody->setDamping(1,0.5);
+    cameraBody->setDamping(0.8,0.5);
 
 	world->addRigidBody(cameraBody,COL_OBJECTS, objectsPhysicsCollision);
 		
@@ -343,13 +343,13 @@ glm::mat4 Physics::getRotation(int i)
 
 void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength)
 {
-    btVector3 change =  playerBall->getCenterOfMassPosition()-cameraBody->getCenterOfMassPosition();;
+    btVector3 change =  playerBall->getCenterOfMassPosition()-cameraBody->getCenterOfMassPosition();
     change.setY(0);
     change.normalize();
-    change *= mouseMovement.x;
+    change *= mouseMovement.y;
     change = btCross(btVector3(0,1,0),change);
-    change.setY(mouseMovement.y);
-    change*=strength;
+    change.setY(mouseMovement.x);
+    change*= strength;
     
     cameraBody->applyCentralForce(change);
         
@@ -357,7 +357,8 @@ void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength)
 
 void Physics::rollForward(glm::vec3 camPos,float strength)
 {
-    btVector3 pos(camPos.x,0,camPos.z);
+    btVector3 pos = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition();
+    pos.setY(0);
     pos.normalize();
     pos = btCross(pos,btVector3(0,1,0));
     pos *= strength;
@@ -366,7 +367,8 @@ void Physics::rollForward(glm::vec3 camPos,float strength)
 
 void Physics::rollBack(glm::vec3 camPos,float strength)
 {
-    btVector3 pos(camPos.x,0,camPos.z);
+    btVector3 pos = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition();
+    pos.setY(0);
     pos.normalize();
     pos = btCross(btVector3(0,1,0),pos);
     pos *= strength;
@@ -375,7 +377,8 @@ void Physics::rollBack(glm::vec3 camPos,float strength)
 
 void Physics::rollLeft(glm::vec3 camPos,float strength)
 {
-    btVector3 pos(camPos.x,0,camPos.z);
+    btVector3 pos = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition();
+    pos.setY(0);
     pos.normalize();
     pos *= strength;
     playerBall->applyTorque(pos);
@@ -383,7 +386,8 @@ void Physics::rollLeft(glm::vec3 camPos,float strength)
 
 void Physics::rollRight(glm::vec3 camPos,float strength)
 {
-    btVector3 pos(camPos.x,0,camPos.z);
+    btVector3 pos = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition();
+    pos.setY(0);
     pos.normalize();
     pos *= strength;
     playerBall->applyTorque(-pos);
