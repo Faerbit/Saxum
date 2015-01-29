@@ -457,12 +457,12 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     else {
         mouseDelta.x = -mouseDelta.x;
         camera.updateRotation(mouseDelta/100.0f);
-        physics.updateCameraPos(mouseDelta, 0.01f);
+        physics.updateCameraPos(mouseDelta, 100);
         
         camera.setPosition(physics.getCameraPosition());
         camera.setDirection(physics.getCameraToPlayer());
     }    
-    
+    strength = 50;
     if(wPressed){
         physics.rollForward(camera.getVector(),strength);
     }
