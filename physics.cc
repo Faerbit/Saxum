@@ -8,7 +8,7 @@ Physics::Physics() {
 Physics::~Physics() {
 }
 
-void Physics::init()
+void Physics::init() //prepares bullet by creating all initial classes
 {
 	colConfig = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(colConfig);
@@ -20,39 +20,29 @@ void Physics::init()
 
 void Physics::takeUpdateStep(float timeDiff)
 {            
-	world->stepSimulation(timeDiff);
-	for(unsigned i = 0; i < allPositionConstraints.size();i++)
+	world->stepSimulation(timeDiff); //allows the world to be simmulated correctly indipendant of the timedifferences between frames
+	for(unsigned i = 0; i < allPositionConstraints.size();i++) //this handles the spring constraints
 	{
-	    if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition())
+	    if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition()) //if constraint != position of the body because otherwise dir = 0
 	    {
 	        btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
-	        allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength);
+	        allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength); //apply a foce upon the object pushing it towards the constraint position
 	    }	
 	}
 	
-	btVector3 position = playerBall->getCenterOfMassPosition() ;
+	btVector3 position = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition(); //gets a vector from the player to the camera
 	position.normalize();
 	position *=5;
 	position += playerBall->getCenterOfMassPosition(); //is the position 5 units away from the player in the direction of the camera
 	 
 	 
 	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
-	cameraBody->applyCentralForce(dir);
-	cameraBody->applyCentralForce(btVector3(0,10,0));
-	 
-	/*- cameraBody->getCenterOfMassPosition(); // gives vector from player to camera
-	position.normalize();
-	position *=5;
-	position += playerBall->getCenterOfMassPosition(); //is the position 5 units away from the player in the direction of the camera
-	 
-	
-	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
-	cameraBody->applyCentralForce(dir);
-	*/
+	cameraBody->applyCentralForce(dir*cameraBody->getInvMass());//scale the force by camera mass
+	cameraBody->applyCentralForce(btVector3(0,1,0)); //applies a force to the camera keeping it in a correct position
 	
 }
 
-void Physics::removePositionConstraint(int bodyIndice)
+void Physics::removePositionConstraint(int bodyIndice) //remover function for deleting all pos constraints on one body
 {
 	for(unsigned i = 0; i < allPositionConstraints.size(); i++)
 	{
@@ -63,7 +53,7 @@ void Physics::removePositionConstraint(int bodyIndice)
 	}
 }
 
-void Physics::addPositionConstraint(int bodyIndice, float strength, glm::vec3 position)
+void Physics::addPositionConstraint(int bodyIndice, float strength, glm::vec3 position) //function for adding position constraints
 {
     positionConstraint cons;
     cons.body = bodies[bodyIndice];
@@ -72,162 +62,119 @@ void Physics::addPositionConstraint(int bodyIndice, float strength, glm::vec3 po
     allPositionConstraints.push_back(cons);
 }   
 
-//TERRAIN SUBSET
-void Physics::addTerrainTriangles(int width, int length, float** heightData)
-{//not working correctly something with offset wrong?
-    btTriangleMesh* trimesh = new btTriangleMesh();
-    for(int i = 0; i < width-1;i++)
-    {
-        for(int j = 0; j < length-1; j++)
-        {
-            btVector3 v0(i,heightData[j][i],j);
-            btVector3 v1(i+1,heightData[j][i+1],j);
-            btVector3 v2(i,heightData[j+1][i],j+1);   
-            
-            trimesh->addTriangle(v0,v1,v2);     
-                                    
-        }    
-    }
-    for(int i = 1; i < width;i++)
-    {
-        for(int j = 1; j < length; j++)
-        {
-            btVector3 v0(i,heightData[j][i],j);
-            btVector3 v1(i-1,heightData[j][i-1],j);
-            btVector3 v2(i,heightData[j-1][i],j-1);   
-            
-            trimesh->addTriangle(v0,v1,v2);                             
-        }    
-    }
+//players and objects
+void Physics::addPlayer(float friction, float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
+{
+	if(bodies.size() == indice)
+		throw std::invalid_argument( "Bodies out of Sync" ); //these error are to ensure that level can always communicate with physics without having to worry about synching errors
+
+	btSphereShape* sphere = new btSphereShape(rad); //the first thing we need for a rigid body is the shape
+	btVector3 inertia(0,0,0);
+	if(mass != 0.0)
+	{
+		sphere->calculateLocalInertia((btScalar)mass,inertia); //from this shape we can then calculate the innertia, as long as the mass != 0 (otherwise inertia = 0)
+	}
+
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z))); //next we define the motionstate, wich describes the innital position and rotation
+
+	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia); //next we process all data for the rigid body into info
+
+    info.m_friction = friction*2; //here we modify the friction and restitution (bounciness) of the object
+    info.m_restitution = 0.2f;
+
+	playerBall = new btRigidBody(info); //finally we create the rigid body using the info
     
-    btBvhTriangleMeshShape* shape = new btBvhTriangleMeshShape(trimesh, true);
-    btRigidBody* tBody = new btRigidBody(0, new btDefaultMotionState(),shape);
+    playerBall->setDamping(dampningL, dampningA); //here we can set the dampning (how much of the motion is lost)
     
-	tBody->getWorldTransform().setOrigin(btVector3(-length/2,0,-width/2));
-	
-	terrainBody = tBody;
-	
-	world->addRigidBody(tBody,COL_TERRAIN,COL_OBJECTS);
+	world->addRigidBody(playerBall,COL_OBJECTS,COL_OBJECTS|COL_OBJECTS_NO_TERRAIN|COL_TERRAIN); //then we add the rigid body to the wiorld, allowing it to be simulated
+
+	bodies.push_back(playerBall); //next we add the rigid body to our own list (for cleanup and for synchronitaation with level)
     
+    playerBall->setSleepingThresholds(0,0); //in a final step we make sure that the body never is removed from the active rigid bodies
+    
+	if(bodies.size() != indice)
+		throw std::invalid_argument( "Bodies out of Sync" );  //one last check to make sure level and physics are in synch
+    
+    addCamera(); //now that the player exists add a camera for the player
 }
 
-void Physics::addTerrain(int width, int length, float** heightData)
+void Physics::addTerrain(int width, int length, float** heightData) //The terrian adding function
 {
 
-	float* heightfield = new float[width * length];
+	float* heightfield = new float[width * length];//bullet only accepts data in a one dimensional array, so parse data into appropriate format
 	      int highest = -999999, j = 0, i = 0;
 	      for (i = 0; i < width; i++)
 	      {
-		 for (j = 0; j < length; j++) {
-		  heightfield[i*length+j] =  heightData[j][i];
+	    	 for (j = 0; j < length; j++) {
+                heightfield[i*length+j] =  heightData[j][i]; //reverse order because they are loaded backwards
 		  
-		    if (heightData[j][i] > highest)
-		       highest = heightData[j][i];
+                if (heightData[j][i] > highest)
+                    highest = heightData[j][i]; //bullet needs to know the highest point of the heightmap
 		 }
 		 }
 		 
 		 highest++;
 
-	btHeightfieldTerrainShape* terrianShape = new btHeightfieldTerrainShape(length,width,heightfield,highest,1,true,false);
+	btHeightfieldTerrainShape* terrianShape = new btHeightfieldTerrainShape(length,width,heightfield,highest,1,true,false); 
 
 	btRigidBody* tBody = new btRigidBody(0,new btDefaultMotionState(),terrianShape);
 
-	tBody->getWorldTransform().setOrigin(btVector3(0,((float)highest)/2,0));
-
-	//tBody->getWoorldTransform().setRotation(btQuaternion(0,0,0,1));
+	tBody->getWorldTransform().setOrigin(btVector3(0,((float)highest)/2,0)); //we have to move the origin of our rigid body down, because bullet sets the origin (0,0,0) at (width/2, height/2, length/2) in the map the x and z are correct in our level, but y needs to be addapted
 
 	terrainBody = tBody;
     
-	world->addRigidBody(terrainBody, COL_TERRAIN, COL_TERRAIN | COL_OBJECTS);
+	world->addRigidBody(terrainBody, COL_TERRAIN, COL_TERRAIN | COL_OBJECTS); //COL_XXXX are collision masks, allowing us to ignore collisions between certain object groups (required for buttons)
 }
 
-//players and objects
-void Physics::addPlayer(float friction, float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
+void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA,unsigned indice,float scaling, bool rotate)
 {
-	if(bodies.size() == indice)
-		throw std::invalid_argument( "Bodies out of Sync" ); 
-
-	btSphereShape* sphere = new btSphereShape(rad/1.5f);
-	btVector3 inertia(0,0,0);
-	if(mass != 0.0)
-	{
-		sphere->calculateLocalInertia((btScalar)mass,inertia);
-	}
-
-	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
-
-	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia);
-
-    info.m_friction = friction*2;
-    info.m_restitution = 0.0f;
-
-	playerBall = new btRigidBody(info);
-    
-    playerBall->setDamping(dampningL, dampningA);
-    
-	world->addRigidBody(playerBall,COL_OBJECTS,COL_OBJECTS|COL_OBJECTS_NO_TERRAIN|COL_TERRAIN);
-
-	bodies.push_back(playerBall);
-    
-    playerBall->setSleepingThresholds(0,0);
-	if(bodies.size() != indice)
-		throw std::invalid_argument( "Bodies out of Sync" ); 
-    
-    addCamera();
-}
-
-void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA,unsigned indice,bool rotate)
-{//TODO look at convexHullShapes
     
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" );  
 		
-    std::vector< unsigned int > vertexIndices;
+    std::vector< unsigned int > vertexIndices; //temp lists for data sets
     std::vector< btVector3 > temp_vertices;
     
     path = "../Levels/Geometry/" + path;
     FILE * file = fopen(path.c_str(), "r");
     if( file == NULL ){
-        printf("Impossible to open the file !\n");
+        throw std::invalid_argument( "Impossible to open the file" ); //create correct filepath and report error if cannot open
     }
 
     while( 1 ){
- 
         char lineHeader[128];
         // read the first word of the line
         int res = fscanf(file, "%s", lineHeader);
         if (res == EOF)
-            break; // EOF = End Of File. Quit the loop. 
-    // else : parse lineHeader
-        if ( strcmp( lineHeader, "v" ) == 0 ){
+            break; // while not at end do loop
+        if ( strcmp( lineHeader, "v" ) == 0 ){ //if a vertex
             glm::vec3 vertex;
             fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
-            temp_vertices.push_back(btVector3(vertex.x,vertex.y,vertex.z));
+            temp_vertices.push_back(btVector3(vertex.x,vertex.y,vertex.z)); //save vertex in array
         }
-        else if ( strcmp( lineHeader, "f" ) == 0 ){
+        else if ( strcmp( lineHeader, "f" ) == 0 ){ //if face (index for 3 vertexes for a triangle)
             std::string vertex1, vertex2, vertex3;
             unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
             int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
             vertexIndices.push_back(vertexIndex[0]);
             vertexIndices.push_back(vertexIndex[1]);
-            vertexIndices.push_back(vertexIndex[2]);
+            vertexIndices.push_back(vertexIndex[2]); //save 3 indexes in array
         }
     }
-    printf("olla");
     //finally start making body        
     btTriangleMesh* triMesh = new btTriangleMesh();
     
     for(unsigned i = 2; i < vertexIndices.size();i+=3)
     {
-        triMesh->addTriangle(temp_vertices[vertexIndices[i]],temp_vertices[vertexIndices[i-1]],temp_vertices[vertexIndices[i-2]]);           
+        triMesh->addTriangle(temp_vertices[vertexIndices[i]],temp_vertices[vertexIndices[i-1]],temp_vertices[vertexIndices[i-2]]); // for every face (3 elements in vertexIndices) create triangle          
     }
     
     btBvhTriangleMeshShape* shape = new btBvhTriangleMeshShape(triMesh,true);
-    shape->setLocalScaling(btVector3(1.5,1.5,1.5));
+    shape->setLocalScaling(btVector3(scaling,scaling,scaling)); //we need to add a scaling here because the objects seem to have diffrent sizes when loaded (no clue why, see composition.xml for exact scaling factors)
 	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
 	
     btVector3 inertia(0,0,0);	
-	if(mass != 0.0)
+	if(mass != 0.0 && rotate) //&& rotate lets certain objects get inertia (0,0,0) (not rotateable) 
 	{
 		shape->calculateLocalInertia((btScalar)mass,inertia);
 	}
@@ -257,11 +204,7 @@ void Physics::addButton(float width, float height, float length, Entity entity, 
 		
 	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z))); 
 	
-	btVector3 inertia(0,0,0);	
-	if(mass != 0.0)
-	{
-		box->calculateLocalInertia((btScalar)mass,inertia);
-	}
+	btVector3 inertia(0,0,0);
 		
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,box,inertia);
 	
@@ -338,33 +281,6 @@ void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, f
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 
 }
-/*
-void Physics::addTriangleMeshBody(Entity entity, float mass, float dampningL, float dampningA,unsigned indice)
-{
-    btTriangleMesh* trimesh = new btTriangleMesh();
-     
-     
-    btVector3 v0(  0, 0, 0 );
-    btVector3 v1(  1, 1, 1 );
-    btVector3 v2(  2, 2, 2);
-     
-    trimesh->addTriangle( v0, v1, v2 );    
-    	
-    btTriangleMeshShape* shape = new btBvhTriangleMeshShape(trimesh,true);  
-    btVector3 inertia(0,0,0);
-    if(mass != 0.0)
-    {
- 		shape->calculateLocalInertia((btScalar)mass,inertia);
-	}
-	
-     btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
-     	
-	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,shape,inertia);
-	btRigidBody* body = new btRigidBody(info);
-	
-	body->setDamping(dampningL,dampningA);
-	
-}*/
 
 void Physics::addCamera()
 {
@@ -382,7 +298,8 @@ void Physics::addCamera()
 	world->addRigidBody(cameraBody,COL_OBJECTS, objectsPhysicsCollision);
 		
     cameraBody->setSleepingThresholds(0,0);
-    
+	
+	cameraBody->setGravity(btVector3(0,0,0));
     
     /*btVector3 pivotInA(5,0,0);
     btVector3 pivotInB(-5, 0, 0);

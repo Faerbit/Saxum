@@ -58,9 +58,8 @@ class Physics {
 	void updateCameraPos(glm::vec2 mouseMovement, float strength);
 	glm::vec3 getCameraPosition();
 	void addRigidBodyFromFile(Entity entity, float mass, float dampningL, float dampningA, std::string modelLocation, unsigned indice);
-    void addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA, unsigned indice,bool rotate);
+    void addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA, unsigned indice, float scaling,bool rotate);
 	void addTerrain(int width, int length, float** heightData);
-    void addTerrainTriangles(int width, int length, float** heightData); //add the terrain as a trimesh instead of a heightmap
 	void addPlayer(float friction, float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice); //use these AFTER physicObjects.push_back(object)! if mass == 0 then the object is unmoveable
 	void addSphere(float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate); //The Indice should be set to physicObjects.size()
 	void addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate); //this is used to ensuer that the system is synchronized
