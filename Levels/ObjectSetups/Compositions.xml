@@ -139,7 +139,7 @@
     <object>
         <modelPath>switch_inner.obj</modelPath>
         <xOffset>0.0</xOffset>
-        <yOffset>0</yOffset>
+        <yOffset>2</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
         <yRot>0.0</yRot>
@@ -306,7 +306,7 @@
     <specularFactor>0.5</specularFactor>
     <shininess>3.0</shininess>
     <physicType>Player</physicType>
-    <radius>1.5</radius>
+    <radius>1</radius>
     <dampningL>0.15 </dampningL>
     <dampningA>0.7</dampningA>
 </objectData>
@@ -324,6 +324,7 @@
     <length>3</length>
     <dampningL>0.8</dampningL>
     <dampningA>0.9</dampningA>
+
 </objectData>
 
 <objectData>
@@ -358,9 +359,9 @@
     <specularFactor>0.4</specularFactor>        
     <shininess>2.0</shininess>
     <physicType>Button</physicType>
-    <width>2</width>
+    <width>1.8</width>
     <height>1</height>
-    <length>2</length>
+    <length>1.8</length>
     <dampningL>0.5</dampningL>
     <dampningA>1.0</dampningA>
 </objectData>
