@@ -275,7 +275,7 @@ void Level::load() {
                                 errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
                                 this->physics.addButton(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size(), rotate);
                             }else if (physicType.compare("TriangleMesh") == 0){
-                                this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size(), rotate);
+                                this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size(),objectScale, rotate);
                             } else{
                                 printf("XMLError: Not a valid physicType.\n");
                                 exit(-1);
