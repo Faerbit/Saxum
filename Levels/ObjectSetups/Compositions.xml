@@ -239,13 +239,30 @@
         <xRot>0.0</xRot>
         <yRot>0.0</yRot>
         <zRot>0.0</zRot>
-        <scale>1.5</scale>
+        <scale>1.49</scale>
+        <mass>0.0</mass>
+    </object>
+</composition>
+
+<!-- Rotated Wall (90 degrees)-->
+<composition>
+    <typeID>181</typeID>
+    <ignoreHeightmap>true</ignoreHeightmap>
+    <object>
+        <modelPath>simpleWall.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>25.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>90.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.49</scale>
         <mass>0.0</mass>
     </object>
 </composition>
  
 <!-- Light Block -->
-<composition>
+<composition>  	
     <typeID>200</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
     <object>
@@ -385,7 +402,10 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
-    <physicType>TriangleMesh</physicType>
+    <physicType>Box</physicType>
+    <width>6</width>
+    <height>10</height>
+    <length>3</length>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
 </objectData>
