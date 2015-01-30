@@ -111,7 +111,9 @@ void main()
             vec3 cameraVector = normalize(camera - vec3(fragPosition));
             specularColor += clamp(pow((dot((cameraVector+lightVector),normalize(vNormal))/(length(cameraVector+lightVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
             *specularFactor*intensity*lightColors[i];
-            visibility = samplePointShadow(shadowMap_cube, lightDirection);
+            if (i == 0) {
+                visibility = samplePointShadow(shadowMap_cube, lightDirection);
+            }
         }
         /*float value = texture(shadowMap_cube, lightDirection);
         oColor = vec4(value, value, value, 255);*/
