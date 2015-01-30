@@ -9,7 +9,7 @@ out vec4 oColor;
 
 uniform sampler2D uTexture;
 uniform sampler2DShadow shadowMap;
-uniform samplerCubeShadow shadowMap_cube;
+uniform samplerCube shadowMap_cube;
 uniform vec3 ambientColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
@@ -65,13 +65,15 @@ float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
     return visibility;
 }
 
-float samplePointShadow(samplerCubeShadow shadowMap, vec3 lightDirection) {
+float samplePointShadow(samplerCube shadowMap, vec3 lightDirection) {
     float nearPlane = 0.1;
     float A = -(farPlane+nearPlane)/(farPlane-nearPlane);
     float B = -2*(farPlane*nearPlane)/(farPlane - nearPlane);
     float compValue = 0.5*(-A*length(lightDirection) + B)/length(lightDirection) + 0.5;
     float bias = 0.005;
-    return texture(shadowMap, vec4(lightDirection , compValue - bias));
+    //return texture(shadowMap, vec4(lightDirection , compValue - bias));
+    float value1 = texture(shadowMap, vec3(lightDirection));
+    return value1 - compValue;
 }
 
 float distanceToBorder(vec2 vector) {
@@ -112,7 +114,14 @@ void main()
             specularColor += clamp(pow((dot((cameraVector+lightVector),normalize(vNormal))/(length(cameraVector+lightVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
             *specularFactor*intensity*lightColors[i];
             if (i == 0) {
-                visibility = samplePointShadow(shadowMap_cube, lightDirection);
+                //visibility = samplePointShadow(shadowMap_cube, lightDirection);
+                float value = samplePointShadow(shadowMap_cube, lightDirection);
+                if (abs(value) < 0.0001f) {
+                    oColor = vec4(0, 255, 0, 255);
+                }
+                else {
+                    oColor = vec4(255, 0, 0, 255);
+                }
             }
         }
         /*float value = texture(shadowMap_cube, lightDirection);
@@ -131,6 +140,6 @@ void main()
     fogFactor *= clamp((1.0-((fragPosition.y-40.0)/30.0)), 0.0, 1.0);
 
     vec4 texture = texture(uTexture, vTexCoord).rgba;
-    oColor = vec4(finalColor, 1.0f)*texture;
-    oColor = mix(oColor, fogColor, fogFactor);
+    //oColor = vec4(finalColor, 1.0f)*texture;
+    //oColor = mix(oColor, fogColor, fogFactor);
 }
