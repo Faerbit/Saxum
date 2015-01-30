@@ -54,7 +54,6 @@ class Physics {
 	glm::vec3 getPos(int i);
 	glm::mat4 getRotation(int i);
 	void addStaticGroundPlane();
-	void addCamera(); //Do NOT impliment before Player has been created;
 	void updateCameraPos(glm::vec2 mouseMovement, float strength);
 	glm::vec3 getCameraPosition();
 	void addRigidBodyFromFile(Entity entity, float mass, float dampningL, float dampningA, std::string modelLocation, unsigned indice);
@@ -68,6 +67,7 @@ class Physics {
 	void addButton(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate);
 	glm::vec3 getCameraToPlayer();
 	void kill();
+	void addButtonFrame(Entity entity);
 
     struct positionConstraint{btRigidBody* body; float strength; btVector3 position;};
 
@@ -78,6 +78,7 @@ class Physics {
 	std::vector<btRigidBody*> bodies; //list of all bodies. bodies are also in world, but save again to ease cleaning up process.
     btRigidBody* staticGroundBody;
     std::vector<positionConstraint> allPositionConstraints;
+	void addCamera(); //Do NOT impliment before Player has been created;
     
 	btDynamicsWorld* world; //contains physical attributes of the world.
 	btDispatcher* dispatcher; //
@@ -87,6 +88,7 @@ class Physics {
     int objectsPhysicsCollision = 1 | 2 | 4;
     int specialPhysicsCollision = 2 | 4;
     int terrainPhysicsCollision = 2;
+    int counter = 0;
     
 };
 
