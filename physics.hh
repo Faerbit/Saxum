@@ -67,6 +67,7 @@ class Physics {
 	void removePositionConstraint(int bodyIndice);
 	void addButton(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate);
 	glm::vec3 getCameraToPlayer();
+	void kill();
 
     struct positionConstraint{btRigidBody* body; float strength; btVector3 position;};
 
@@ -75,7 +76,7 @@ class Physics {
 	btRigidBody* terrainBody;   //duh
 	btRigidBody* cameraBody;
 	std::vector<btRigidBody*> bodies; //list of all bodies. bodies are also in world, but save again to ease cleaning up process.
-        btRigidBody* staticGroundBody;
+    btRigidBody* staticGroundBody;
     std::vector<positionConstraint> allPositionConstraints;
     
 	btDynamicsWorld* world; //contains physical attributes of the world.
