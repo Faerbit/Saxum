@@ -37,8 +37,10 @@ void Physics::takeUpdateStep(float timeDiff)
 	 
 	 
 	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
-	cameraBody->applyCentralForce(-dir*cameraBody->getInvMass()*10);//scale the force by camera mass
-	cameraBody->applyCentralForce(btVector3(0,1,0)); //applies a force to the camera keeping it in a correct position
+	float str = cameraBody->getInvMass()*10 * dir.length();
+	cameraBody->applyCentralForce(-dir*str);//scale the force by camera mass
+	cameraBody->applyCentralForce(btVector3(0,12,0)); //we leave gravity in because by contrasting gravity to this force we force the camera slightly higher than the ball when still, but it follows more closer to the level of the ball (though still slightly higher) when it is moving.
+    
 	
 }
 
@@ -89,6 +91,7 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
 	world->addRigidBody(playerBall,COL_OBJECTS,COL_OBJECTS|COL_OBJECTS_NO_TERRAIN|COL_TERRAIN); //then we add the rigid body to the wiorld, allowing it to be simulated
 
 	bodies.push_back(playerBall); //next we add the rigid body to our own list (for cleanup and for synchronitaation with level)
+    //note, while we can always access playerBall through its global name, we add it to this array for synchronization purposes
     
     playerBall->setSleepingThresholds(0,0); //in a final step we make sure that the body never is removed from the active rigid bodies
     
@@ -166,7 +169,7 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
     
     for(unsigned i = 2; i < vertexIndices.size();i+=3)
     {
-        triMesh->addTriangle(temp_vertices[vertexIndices[i]],temp_vertices[vertexIndices[i-1]],temp_vertices[vertexIndices[i-2]]); // for every face (3 elements in vertexIndices) create triangle          
+        triMesh->addTriangle(temp_vertices[vertexIndices[i]],temp_vertices[vertexIndices[i-1]],temp_vertices[vertexIndices[i-2]]); // for every face (3 elements in vertexIndices) create triangle use the indices to find correct vertexes to make the triangle        
     }
     
     btBvhTriangleMeshShape* shape = new btBvhTriangleMeshShape(triMesh,true);
@@ -204,15 +207,18 @@ void Physics::addButton(float width, float height, float length, Entity entity, 
 		
 	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z))); 
 	
-	btVector3 inertia(0,0,0);
-		
+    btVector3 inertia(0,0,0);	
+	if(mass != 0.0 && rotate) //&& rotate lets certain objects get inertia (0,0,0) (not rotateable) 
+	{
+		box->calculateLocalInertia((btScalar)mass,inertia);
+	}
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,box,inertia);
 	
 	btRigidBody* body = new btRigidBody(info);	
 	
     body->setDamping(dampningL, dampningA);
     
-	world->addRigidBody(body,COL_OBJECTS_NO_TERRAIN, specialPhysicsCollision);
+	world->addRigidBody(body,COL_OBJECTS_NO_TERRAIN, specialPhysicsCollision); //the specialPhysicsCollision allows these objects to not collide with the terrain
 	
 	bodies.push_back(body);
 			
@@ -222,7 +228,7 @@ void Physics::addButton(float width, float height, float length, Entity entity, 
 
 void Physics::addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate)
 {
-	
+    //similar to other constructors	
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" );  
 		
@@ -282,29 +288,27 @@ void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, f
 
 }
 
-void Physics::addCamera()
+void Physics::addCamera() //Camera Creator automatically called when player is created
 {
-    btSphereShape* sphere = new btSphereShape(0.5f);
+    btSphereShape* sphere = new btSphereShape(0.5f);//we use this to make a more interesting camera, that does not interpenetrate with the terrain/objects
 
-	btVector3 inertia(0,0,0);
-	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),playerBall->getCenterOfMassPosition()+btVector3(5,5,5)));
+	btVector3 inertia(0,0,0); //rotation handled elsewhere (as it always has to look at the player)
+	
+	btVector3 direction(1,1,1);
+	direction.normalize();
+	direction*=5; //create a offset of lenth 5 so we have a stable camera at the beginning
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),playerBall->getCenterOfMassPosition()+direction));
 	
 	btRigidBody::btRigidBodyConstructionInfo info(1,motion,sphere,inertia);
 	
 	cameraBody = new btRigidBody(info);
 	
-    cameraBody->setDamping(0.8,0.5);
+    cameraBody->setDamping(0.9,0.5); //this damping factor leaves a relativly smoothe system
 
 	world->addRigidBody(cameraBody,COL_OBJECTS, objectsPhysicsCollision);
 		
-    cameraBody->setSleepingThresholds(0,0);
-	
-	cameraBody->setGravity(btVector3(0,0,0));
+    cameraBody->setSleepingThresholds(0,0); //very important, otherwise camera may go to sleep, aka not move until next collision
     
-    /*btVector3 pivotInA(5,0,0);
-    btVector3 pivotInB(-5, 0, 0);
-    btDistanceConstraint* pdc = new btDistanceConstraint(*cameraBody,*playerBall,pivotInA,pivotInB, distance);
-    world->addConstraint(pdc);*/
 }
 
 
@@ -316,14 +320,14 @@ glm::vec3 Physics::getCameraPosition()
 	return save;
 }
 
-glm::vec3 Physics::getCameraToPlayer()
+glm::vec3 Physics::getCameraToPlayer()//returns a glm::vec3 the goes from the player to the camera
 {
 	btVector3 origin = playerBall->getCenterOfMassPosition() - cameraBody->getCenterOfMassPosition();
 	glm::vec3 save(origin.getX(),origin.getY(),origin.getZ());
 	return save;
 }
 
-glm::vec3 Physics::getPos(int i)
+glm::vec3 Physics::getPos(int i) //this and the next function are used to synchronize the graphics data and the physics data
 {
 	btVector3 origin = bodies[i]->getCenterOfMassPosition();
 	glm::vec3 save(origin.getX(),origin.getY(),origin.getZ());
@@ -337,24 +341,27 @@ glm::mat4 Physics::getRotation(int i)
 	glm::mat4 matrix = glm::rotate(
 	    quat.getAngle(),
 	    glm::vec3(quat.getAxis().getX(), quat.getAxis().getY(), quat.getAxis().getZ())
-	);
+	); //somewhat clunky, but basicly creates a rotation matrix out of the angle of the body, and its axis (from the quaterion in bullet)
 	return matrix;
 }
 
+//these are used to apply a force to the camera body according to the movement of the mouse
 void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength)
 {
+    //note: in mouseMovement x and y are flipped in contrast to bullet
     btVector3 change =  playerBall->getCenterOfMassPosition()-cameraBody->getCenterOfMassPosition();
     change.setY(0);
-    change.normalize();
-    change *= mouseMovement.y;
+    change.normalize(); //normalize so that the distance between camera and body does not matter
+    change *= (mouseMovement.y);//we start with left/right movement because this needs to be calculated via a crossproduct, and the up down value would alter that
     change = btCross(btVector3(0,1,0),change);
-    change.setY(mouseMovement.x);
+    change.setY(mouseMovement.x/5);//scaleing because otherwise oup/down much stronger then left right
     change*= strength;
     
     cameraBody->applyCentralForce(change);
         
 }
 
+//use the crossproduct to correctly apply a torque to the palyer if function called
 void Physics::rollForward(glm::vec3 camPos,float strength)
 {
     btVector3 pos = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition();
@@ -404,28 +411,40 @@ void Physics::addStaticGroundPlane()
         staticGroundBody = new btRigidBody(groundRigidBodyCI);
 
         world->addRigidBody(staticGroundBody);
-}
+}//not needed anymoer, but still good for debugging
 
-/*
-void kill()
+
+void Physics::kill()//delete dynamically allocated memory
 {
 	//btDynamimcWorld*
-	for(int i = 0; i < bodies.size();i++)
+	for(unsigned i = 0; i < bodies.size();i++)
 	{
-		world->removeCollisionObject(bodies[i]); //clarification: go through the list of bodies in wordl for each body b, then remove exactly this body b from world
+		world->removeCollisionObject(bodies[i]); //go through the list of bodies in world for each body b, then remove exactly this body b from world
 		btMotionState* motionState = bodies[i]->getMotionState();
 		btCollisionShape* shape = bodies[i]->getCollisionShape();
 		delete shape;
 		delete motionState;
 		delete bodies[i];
 	}
+	btMotionState* motionState = terrainBody->getMotionState();//delete the rest that are not in the array bodies
+	btCollisionShape* shape = terrainBody->getCollisionShape();
+	delete shape;
+	delete motionState;
+	delete terrainBody;
+	
+	motionState = cameraBody->getMotionState();
+	shape = cameraBody->getCollisionShape();
+	delete shape;
+	delete motionState;
+	delete cameraBody; //note: palyerBall is also in the array bodies so we do not need to clean it up	
 
-	delete dispatcher;
+	delete dispatcher; //clean up rest
 	delete colConfig;
 	delete solver;
-}
 	delete broadphase;
 	delete world;
+	
+	//feel like a good little programmer because everything is clean
 }
-*/
+
 
