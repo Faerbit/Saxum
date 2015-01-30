@@ -19,29 +19,36 @@ void Physics::init() //prepares bullet by creating all initial classes
 }
 
 void Physics::takeUpdateStep(float timeDiff)
-{            
+{       
+
 	world->stepSimulation(timeDiff); //allows the world to be simmulated correctly indipendant of the timedifferences between frames
+
+	counter++;
+	if(counter<10)
+	    return;
+	        
 	for(unsigned i = 0; i < allPositionConstraints.size();i++) //this handles the spring constraints
 	{
 	    if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition()) //if constraint != position of the body because otherwise dir = 0
 	    {
 	        btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
+	        dir = dir*allPositionConstraints[i].strength;
 	        allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength); //apply a foce upon the object pushing it towards the constraint position
 	    }	
 	}
 	
+	
 	btVector3 position = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition(); //gets a vector from the player to the camera
 	position.normalize();
-	position *=5;
+	position *= 5;
 	position += playerBall->getCenterOfMassPosition(); //is the position 5 units away from the player in the direction of the camera
 	 
 	 
 	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
-	float str = cameraBody->getInvMass()*10 * dir.length();
+	float str = cameraBody->getInvMass()*30 * dir.length();
 	cameraBody->applyCentralForce(-dir*str);//scale the force by camera mass
-	cameraBody->applyCentralForce(btVector3(0,12,0)); //we leave gravity in because by contrasting gravity to this force we force the camera slightly higher than the ball when still, but it follows more closer to the level of the ball (though still slightly higher) when it is moving.
-    
-	
+	cameraBody->applyCentralForce(btVector3(0,96,0)); //we leave gravity in because by contrasting gravity to this force we force the camera slightly higher than the ball when still, but it follows more closer to the level of the ball (though still slightly higher) when it is moving.
+	counter=0;
 }
 
 void Physics::removePositionConstraint(int bodyIndice) //remover function for deleting all pos constraints on one body
@@ -77,19 +84,21 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
 		sphere->calculateLocalInertia((btScalar)mass,inertia); //from this shape we can then calculate the innertia, as long as the mass != 0 (otherwise inertia = 0)
 	}
 
-	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z))); //next we define the motionstate, wich describes the innital position and rotation
+	glm::quat glmQuat = glm::quat_cast(entity.getRotation());
+	
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(glmQuat.x,glmQuat.y,glmQuat.z,glmQuat.w),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z))); //next we define the motionstate, wich describes the innital position and rotation
 
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia); //next we process all data for the rigid body into info
 
     info.m_friction = friction*2; //here we modify the friction and restitution (bounciness) of the object
-    info.m_restitution = 0.8f;
+    info.m_restitution = 0;
 
 	playerBall = new btRigidBody(info); //finally we create the rigid body using the info
     
     playerBall->setDamping(dampningL, dampningA); //here we can set the dampning (how much of the motion is lost)
     
 	world->addRigidBody(playerBall,COL_OBJECTS,COL_OBJECTS|COL_OBJECTS_NO_TERRAIN|COL_TERRAIN); //then we add the rigid body to the wiorld, allowing it to be simulated
-
+    
 	bodies.push_back(playerBall); //next we add the rigid body to our own list (for cleanup and for synchronitaation with level)
     //note, while we can always access playerBall through its global name, we add it to this array for synchronization purposes
     
@@ -119,8 +128,11 @@ void Physics::addTerrain(int width, int length, float** heightData) //The terria
 		 highest++;
 
 	btHeightfieldTerrainShape* terrianShape = new btHeightfieldTerrainShape(length,width,heightfield,highest,1,true,false); 
-
-	btRigidBody* tBody = new btRigidBody(0,new btDefaultMotionState(),terrianShape);
+    
+	btRigidBody::btRigidBodyConstructionInfo info(0,new btDefaultMotionState(),terrianShape,btVector3(0,0,0)); //next we process all data for the rigid body into info
+    info.m_restitution = 0;
+    
+	btRigidBody* tBody = new btRigidBody(info);
 
 	tBody->getWorldTransform().setOrigin(btVector3(0,((float)highest)/2,0)); //we have to move the origin of our rigid body down, because bullet sets the origin (0,0,0) at (width/2, height/2, length/2) in the map the x and z are correct in our level, but y needs to be addapted
 
@@ -174,7 +186,11 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
     
     btBvhTriangleMeshShape* shape = new btBvhTriangleMeshShape(triMesh,true);
     shape->setLocalScaling(btVector3(scaling,scaling,scaling)); //we need to add a scaling here because the objects seem to have diffrent sizes when loaded (no clue why, see composition.xml for exact scaling factors)
-	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
+    
+    
+	glm::quat glmQuat = glm::quat_cast(entity.getRotation());
+    
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(glmQuat.x,glmQuat.y,glmQuat.z,glmQuat.w),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
 	
     btVector3 inertia(0,0,0);	
 	if(mass != 0.0 && rotate) //&& rotate lets certain objects get inertia (0,0,0) (not rotateable) 
@@ -204,8 +220,10 @@ void Physics::addButton(float width, float height, float length, Entity entity, 
 		throw std::invalid_argument( "Bodies out of Sync" );  
 		
 		btBoxShape* box = new btBoxShape(btVector3(width/2,height/2,length/2));	
-		
-	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z))); 
+			
+	glm::quat glmQuat = glm::quat_cast(entity.getRotation());
+	
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(glmQuat.x,glmQuat.y,glmQuat.z,glmQuat.w),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z))); 	
 	
     btVector3 inertia(0,0,0);	
 	if(mass != 0.0 && rotate) //&& rotate lets certain objects get inertia (0,0,0) (not rotateable) 
@@ -232,8 +250,9 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
 	if(bodies.size() == indice)
 		throw std::invalid_argument( "Bodies out of Sync" );  
 		
+	glm::quat glmQuat = glm::quat_cast(entity.getRotation());
 	btBoxShape* box = new btBoxShape(btVector3(width/2,height/2,length/2));	
-	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(glmQuat.x,glmQuat.y,glmQuat.z,glmQuat.w),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
 	
 	btVector3 inertia(0,0,0);	
 	if(mass != 0.0)
@@ -267,8 +286,10 @@ void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, f
 	{
 		sphere->calculateLocalInertia((btScalar)mass,inertia);
 	}
+	
+	glm::quat glmQuat = glm::quat_cast(entity.getRotation());
 
-	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
+	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(glmQuat.x,glmQuat.y,glmQuat.z,glmQuat.w),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
 	
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia);
 	

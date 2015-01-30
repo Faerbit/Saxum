@@ -144,7 +144,7 @@ void Level::load() {
     directionalLight = Light(glm::vec3(xOffset,yOffset,zOffset), glm::vec3(rColour,gColour,bColour), intensity);
 
     //load Objects
-    std::vector<std::vector<int>> objectIdentifiers = std::vector<std::vector<int>>();  //The first entry is the index in objects, the others are idGreen, idBlue and objectNum.  
+    std::vector<std::vector<int>> objectIdentifiers = std::vector<std::vector<int>>();  //The first entry is the index in objects, the second one the index in physicObjects, the others are idGreen, idBlue and objectNum.  
     XMLDocument* compositions = new XMLDocument();
     const char* compositionsFile = "../Levels/ObjectSetups/Compositions.xml";
     compositions->LoadFile(compositionsFile);
@@ -232,23 +232,27 @@ void Level::load() {
                             errorCheck(xmlObject->FirstChildElement("zRot")->QueryFloatText(&objectRot[2]));
                             Object* object = new Object(model, material, objectPosition, compRot+objectRot);
                             objects.push_back(object);
-                            //create an identifier for this object
-                            std::vector<int> objectIdentifier = std::vector<int>(4);
-                            objectIdentifier[0] = objects.size()-1;
-                            int idGreen, idBlue;
-                            errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
-                            errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
-                            objectIdentifier[1] = idGreen;
-                            objectIdentifier[2] = idBlue;
-                            objectIdentifier[3] = objectNum;
-                            objectIdentifiers.push_back(objectIdentifier);
-
+                            
                             physicObjects.push_back(object);
                             const char* charPhysicType = objectData->FirstChildElement("physicType")->GetText();
                             if(charPhysicType == NULL){
                                 printf("XMLError: No physicType found.\n");
                                 exit(-1);
                             }
+                            
+                            //create an identifier for this object
+                            std::vector<int> objectIdentifier = std::vector<int>(5);
+                            objectIdentifier[0] = objects.size()-1;
+                            objectIdentifier[1] = physicObjects.size()-1;
+                            int idGreen, idBlue;
+                            errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
+                            errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
+                            objectIdentifier[2] = idGreen;
+                            objectIdentifier[3] = idBlue;
+                            objectIdentifier[4] = objectNum;
+                            objectIdentifiers.push_back(objectIdentifier);
+                            
+                            
                             std::string physicType = charPhysicType;
                             //add object to physics
                             float mass;
@@ -276,6 +280,9 @@ void Level::load() {
                                 this->physics.addButton(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size(), rotate);
                             }else if (physicType.compare("TriangleMesh") == 0){
                                 this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size(),objectScale, rotate);
+                            }else if (physicType.compare("OuterSwitch") == 0){
+                                
+                            //physicObjects.push_back(object);
                             } else{
                                 printf("XMLError: Not a valid physicType.\n");
                                 exit(-1);
@@ -380,7 +387,7 @@ void Level::load() {
                 errorCheck(xmlTrigger->FirstChildElement("objectNum")->QueryIntText(&objectNum));
                 Object* object=0;
                 for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
-                    if (objectIdentifiers[i][1]==idGreen && objectIdentifiers[i][2]==idBlue && objectIdentifiers[i][3]==objectNum){
+                    if (objectIdentifiers[i][2]==idGreen && objectIdentifiers[i][3]==idBlue && objectIdentifiers[i][4]==objectNum){
                         object = objects[objectIdentifiers[i][0]];
                     }
                 }
@@ -396,7 +403,7 @@ void Level::load() {
                 errorCheck(xmlTrigger->FirstChildElement("toChangeIdBlue")->QueryIntText(&toChangeIdBlue));
                 errorCheck(xmlTrigger->FirstChildElement("toChangeObjNum")->QueryIntText(&toChangeObjNum));
                 for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
-                    if (objectIdentifiers[i][1]==toChangeIdGreen && objectIdentifiers[i][2]==toChangeIdBlue && objectIdentifiers[i][3]==toChangeObjNum){
+                    if (objectIdentifiers[i][2]==toChangeIdGreen && objectIdentifiers[i][3]==toChangeIdBlue && objectIdentifiers[i][4]==toChangeObjNum){
                         objectToChange = objectIdentifiers[i][0];
                     }
                 }
@@ -426,10 +433,20 @@ void Level::load() {
             errorCheck(positionConstraint->FirstChildElement("objectNum")->QueryIntText(&objectNum));
             errorCheck(composition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
             errorCheck(composition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
+            bool ok = false;
             for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
-                if (objectIdentifiers[i][1]==idGreen && objectIdentifiers[i][2]==idBlue && objectIdentifiers[i][3]==objectNum){
-                    objectIndex = objectIdentifiers[i][0];
+                if (objectIdentifiers[i][2]==idGreen && objectIdentifiers[i][3]==idBlue && objectIdentifiers[i][4]==objectNum){
+                    objectIndex = objectIdentifiers[i][1];
+                    if(ok){
+                        printf("2 objects have the same ID while loading constraints.");
+                        exit(-1);
+                    }
+                    ok = true;
                 }
+            }
+            if(!ok){
+                printf("No index found for a trigger object.");
+                exit(-1);
             }
             glm::vec3 position = glm::vec3(xPos, yPos, zPos);
             physics.addPositionConstraint(objectIndex, strength, position);
@@ -461,8 +478,7 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
         
         camera.setPosition(physics.getCameraPosition());
         camera.setDirection(physics.getCameraToPlayer());
-    }    
-    strength = 50;
+    } 
     if(wPressed){
         physics.rollForward(camera.getVector(),strength);
     }
