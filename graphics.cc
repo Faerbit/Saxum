@@ -62,7 +62,7 @@ void Graphics::init(Level* level) {
         depth_cubeMaps.at(i)->setMagFilter(GL_NEAREST);
         depth_cubeMaps.at(i)->setWrapS(GL_CLAMP_TO_EDGE);
         depth_cubeMaps.at(i)->setWrapT(GL_CLAMP_TO_EDGE);
-        depth_cubeMaps.at(i)->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
+        //depth_cubeMaps.at(i)->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
     }
 
     framebuffer_cube = SharedFrameBufferObject(new FrameBufferObject());
@@ -72,7 +72,7 @@ void Graphics::init(Level* level) {
     depthTexture_cube->setMagFilter(GL_NEAREST);
     depthTexture_cube->setWrapS(GL_CLAMP_TO_EDGE);
     depthTexture_cube->setWrapT(GL_CLAMP_TO_EDGE);
-    depthTexture_cube->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
+    //depthTexture_cube->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
 
     framebuffer_cube_mirror = SharedFrameBufferObject(new FrameBufferObject());
     framebuffer_cube_mirror->setDepthTexture(depthTexture_cube);
@@ -100,6 +100,7 @@ void Graphics::render(double time)
 
     framebuffer_cube->bind();
     static bool printed = false;
+    glm::mat4 reproduceMatrix;
     //for (unsigned int i_pointlight = 0; i_pointlight<level->getLights()->size(); i_pointlight++) {
     for (unsigned int i_pointlight = 0; i_pointlight<1 && i_pointlight<level->getLights()->size(); i_pointlight++) {
         // render each side of the cube
@@ -112,6 +113,9 @@ void Graphics::render(double time)
             glm::mat4 viewMatrix = glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
                 level->getLights()->at(i_pointlight).getPosition() + looking_directions[i_face], glm::vec3(0.0f, 1.0f, 0.0f));
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * viewMatrix;
+            if (i_face == 0) {
+                reproduceMatrix = depthViewProjectionMatrix_face;
+            }
             if (!printed) {
                 printf("\n\nView matrix:\n %2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n\n\n", 
                     viewMatrix[0][0], viewMatrix[0][1], viewMatrix[0][2], viewMatrix[0][3],
@@ -142,7 +146,7 @@ void Graphics::render(double time)
         }
     }
     // render depth texture for sun
-    glViewport(0, 0, windowSize.x, windowSize.y);
+    //glViewport(0, 0, windowSize.x, windowSize.y);
     
     // far pass
     framebuffer->bind(); 
@@ -204,7 +208,8 @@ void Graphics::render(double time)
     shadowVPs.push_back(depthBiasVP);
 
     // render the level
-    level->render(lightingShader, true, &lightingViewProjectionMatrix, &shadowVPs);
+    //level->render(lightingShader, true, &lightingViewProjectionMatrix, &shadowVPs);
+    level->render(lightingShader, true, &reproduceMatrix, &shadowVPs);
 }
 
 void Graphics::updateLights() {
