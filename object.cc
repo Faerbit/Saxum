@@ -23,7 +23,7 @@ void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         shader->setUniform("shininess", material.getShininess());
         shader->setTexture("uTexture", material.getReference(), 0);
         // set model matrix
-        shader->setUniform( "modelMatrix", modelMatrix);
+        shader->setUniform("modelMatrix", modelMatrix);
         // set shadowMVPs
         glm::mat4 shadowMVPs[5];
         for(unsigned int i = 0; (i<shadowVPs->size() && i<5); i++) {
@@ -31,6 +31,9 @@ void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         }
         glUniformMatrix4fv(shader->getUniformLocation("shadowMVPs"),
                 sizeof(shadowMVPs), false, (GLfloat*) shadowMVPs);
+    }
+    else {
+        //shader->setUniform("modelViewMatrix", shadowVPs->at(0) * modelMatrix);
     }
     glm::mat4 mvp = (*viewProjectionMatrix) * modelMatrix;
     shader->setUniform("modelViewProjectionMatrix", mvp);

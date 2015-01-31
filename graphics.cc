@@ -120,7 +120,9 @@ void Graphics::render(double time)
                     viewMatrix[3][0], viewMatrix[3][1], viewMatrix[3][2], viewMatrix[3][3]
                     );
             }
-            level->render(depthShader, false, &depthViewProjectionMatrix_face);
+            std::vector<glm::mat4> vector = std::vector<glm::mat4>();
+            vector.push_back(viewMatrix);
+            level->render(depthShader, false, &depthViewProjectionMatrix_face, &vector);
             glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer_cube->getObjectName());
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer_cube_mirror->getObjectName());
             glBlitFramebuffer(0, 0, cube_size, cube_size, cube_size, cube_size, 0, 0, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
