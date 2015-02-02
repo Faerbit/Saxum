@@ -873,10 +873,10 @@
     <xRot>0.0</xRot>
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
-    <manualPos>false</manualPos>
-    <xPos>159.500000</xPos>
+    <manualPos>true</manualPos>
+    <xPos>205.500000</xPos>
     <yOffset>0.0</yOffset>
-    <zPos>17.500000</zPos>
+    <zPos>-205.500000</zPos>
     <idGreen>0</idGreen>
     <idBlue>235</idBlue>
     <typeID>120</typeID>
