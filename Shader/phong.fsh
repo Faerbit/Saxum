@@ -73,7 +73,7 @@ float samplePointShadow(samplerCube shadowMap, vec3 lightDirection) {
     float bias = 0.005;
     //return texture(shadowMap, vec4(lightDirection , compValue - bias));
     float value1 = texture(shadowMap, vec3(lightDirection));
-    return value1 - compValue;
+    return value1 - length(lightDirection);
 }
 
 float distanceToBorder(vec2 vector) {
@@ -116,7 +116,7 @@ void main()
             if (i == 0) {
                 //visibility = samplePointShadow(shadowMap_cube, lightDirection);
                 float value = samplePointShadow(shadowMap_cube, lightDirection);
-                if (abs(value) < 0.0001f) {
+                if (abs(value) < 0.1f) {
                     oColor = vec4(0, 255, 0, 255);
                 }
                 else {

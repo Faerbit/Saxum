@@ -2,8 +2,9 @@
 
 in vec4 fragPosition;
 
-out float fragmentDepth;
+out float gl_FragDepth;
 
 void main() {
-    fragmentDepth = fragPosition.z;
+    gl_FragDepth = fragPosition.z;
+    //gl_FragDepth = 0.0f;
 }
