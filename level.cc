@@ -213,6 +213,7 @@ void Level::load() {
                             errorCheck(thisComposition->FirstChildElement("xRot")->QueryFloatText(&compRot[0]));
                             errorCheck(thisComposition->FirstChildElement("yRot")->QueryFloatText(&compRot[1]));
                             errorCheck(thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]));
+                            compRot *= 0.0174532925;    //transform degrees to radians
                             bool ignoreHeightmap;
                             errorCheck(composition->FirstChildElement("ignoreHeightmap")->QueryBoolText(&ignoreHeightmap));
                             if (!ignoreHeightmap){
@@ -230,6 +231,7 @@ void Level::load() {
                             errorCheck(xmlObject->FirstChildElement("xRot")->QueryFloatText(&objectRot[0]));
                             errorCheck(xmlObject->FirstChildElement("yRot")->QueryFloatText(&objectRot[1]));
                             errorCheck(xmlObject->FirstChildElement("zRot")->QueryFloatText(&objectRot[2]));
+                            objectRot *= 0.0174532925;    //transform degrees to radians
                             Object* object = new Object(model, material, objectPosition, compRot+objectRot);
                             objects.push_back(object);
                             
@@ -279,10 +281,7 @@ void Level::load() {
                                 errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
                                 this->physics.addButton(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size(), rotate);
                             }else if (physicType.compare("TriangleMesh") == 0){
-                                this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size(),objectScale, rotate);
-                            }else if (physicType.compare("OuterSwitch") == 0){
-                                
-                            //physicObjects.push_back(object);
+                                this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size(), objectScale, rotate);
                             } else{
                                 printf("XMLError: Not a valid physicType.\n");
                                 exit(-1);
@@ -386,10 +385,20 @@ void Level::load() {
                 errorCheck(composition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
                 errorCheck(xmlTrigger->FirstChildElement("objectNum")->QueryIntText(&objectNum));
                 Object* object=0;
+                bool ok = false;
                 for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
                     if (objectIdentifiers[i][2]==idGreen && objectIdentifiers[i][3]==idBlue && objectIdentifiers[i][4]==objectNum){
-                        object = objects[objectIdentifiers[i][0]];
+                        object = objects[objectIdentifiers[i][1]];  //Index in physic objects
+                        if(ok){
+                            printf("2 objects have the same ID while loading triggers.");
+                            exit(-1);
+                        }
+                        ok = true;
                     }
+                }
+                if(!ok){
+                    printf("No index found for a trigger object while loading triggers.");
+                    exit(-1);
                 }
                 const char* charLuaScript = xmlTrigger->FirstChildElement("luaScript")->GetText();
                 if(charLuaScript == NULL){
@@ -404,7 +413,7 @@ void Level::load() {
                 errorCheck(xmlTrigger->FirstChildElement("toChangeObjNum")->QueryIntText(&toChangeObjNum));
                 for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
                     if (objectIdentifiers[i][2]==toChangeIdGreen && objectIdentifiers[i][3]==toChangeIdBlue && objectIdentifiers[i][4]==toChangeObjNum){
-                        objectToChange = objectIdentifiers[i][0];
+                        objectToChange = objectIdentifiers[i][1];     //Index in physic objects
                     }
                 }
                 if (object != 0) {
@@ -436,7 +445,7 @@ void Level::load() {
             bool ok = false;
             for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
                 if (objectIdentifiers[i][2]==idGreen && objectIdentifiers[i][3]==idBlue && objectIdentifiers[i][4]==objectNum){
-                    objectIndex = objectIdentifiers[i][1];
+                    objectIndex = objectIdentifiers[i][1];    //Index in physic objects
                     if(ok){
                         printf("2 objects have the same ID while loading constraints.");
                         exit(-1);
@@ -445,7 +454,7 @@ void Level::load() {
                 }
             }
             if(!ok){
-                printf("No index found for a trigger object.");
+                printf("No index found for a trigger object while loading constraints.");
                 exit(-1);
             }
             glm::vec3 position = glm::vec3(xPos, yPos, zPos);
@@ -548,25 +557,26 @@ std::vector<Object*>* Level::getObjects() {
     return &objects;
 }
 
-void Level::deleteObject(int objectIndex){
-    objects.erase(objects.begin() + objectIndex);
-    for(unsigned int i = 0; i<triggers.size(); i++) {
-        if(triggers.at(i).deleteNotification(objectIndex)){
-            triggers.erase(triggers.begin() + i);
-        }
-    }
-}
-
-int Level::getObjectCount(){
-    return objects.size();
-}
-
 void Level::moveObject(int objectIndex, float strength, float xPos, float yPos, float zPos){
     glm::vec3 position = glm::vec3(xPos, yPos, zPos);
     physics.removePositionConstraint(objectIndex);
     physics.addPositionConstraint(objectIndex, strength, position);
 }   
 
+//should not be used since objects does not get synchronized and deletion is not implemented in pyhsics
+void Level::deleteObject(int objectIndex){
+    physicObjects.erase(physicObjects.begin() + objectIndex);
+    for(unsigned int i = 0; i<triggers.size(); i++) {
+        if(triggers.at(i).deleteNotification(objectIndex)){
+            triggers.erase(triggers.begin() + i);
+            i--;
+        }
+    }
+}
+
+int Level::getObjectCount(){
+    return physicObjects.size();
+}
 
 
 
