@@ -148,8 +148,52 @@
         <modelPath>switch_outer.obj</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>-1</yOffset>
+        <zOffset>1.105</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.0</scale>
+        <mass>0.0</mass>
+    </object>
+    <object>
+        <modelPath>switch_outer.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>-1</yOffset>
+        <zOffset>-1.105</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.0</scale>
+        <mass>0.0</mass>
+    </object>
+    <object>
+        <modelPath>switch_outer.obj</modelPath>
+        <xOffset>1.105</xOffset>
+        <yOffset>-1</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
+        <yRot>90.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.0</scale>
+        <mass>0.0</mass>
+    </object>
+    <object>
+        <modelPath>switch_outer.obj</modelPath>
+        <xOffset>-1.105</xOffset>
+        <yOffset>-1</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>90.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.0</scale>
+        <mass>0.0</mass>
+    </object>
+    <object>
+        <modelPath>switch_outer.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>-2.105</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>90.0</xRot>
         <yRot>0.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.0</scale>
@@ -387,7 +431,10 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
-    <physicType>TriangleMesh</physicType>
+    <physicType>Box</physicType>
+    <width>2.54</width>
+    <height>2.54</height>
+    <length>0.33</length>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
 </objectData>
