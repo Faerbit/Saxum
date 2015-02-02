@@ -9,8 +9,10 @@ int main( int argc, char *argv[] ){
         std::cout << "Converter needs the level (1,2,...) as input." << std::endl;
         exit(-1);
     }
+    printf("Initializing.\n");
     std::string levelString = argv[1];
     Converter conv = Converter(levelString);
+    
     bool idFound[256][256];
     for (int i=0; i<256; i++){
         for (int j=0; j<256; j++){
@@ -18,7 +20,8 @@ int main( int argc, char *argv[] ){
         }
     }
     
-    //read the setup png    
+    //read the setup png
+    printf("Loading the png.\n");
     std::string filePath = "../Levels/ObjectSetups/Level" + levelString + ".png";
     std::vector<unsigned char> image; //the raw pixels
     unsigned int width, height;
@@ -27,7 +30,7 @@ int main( int argc, char *argv[] ){
         std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
         exit(-1);
     }
-    
+    printf("Iterating over the png.\n");
     //iterate over all pixels of the image
     for(unsigned int rowNum = 0; rowNum < height; rowNum++){
         for(unsigned int columnNum = 0; columnNum < width; columnNum++){
@@ -47,14 +50,14 @@ int main( int argc, char *argv[] ){
             }
         }
     }
-    
+    printf("Writing IDs back to the png.\n");
     //write ids back to the setup png
     error = lodepng::encode(filePath, image, width, height);
     if(error) {
         std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
         exit(-1);
     }
-    
+    printf("Deleting obsolete Compositions.\n");
     //delete compositions that were not in the png anymore
     for (int i=0; i<256; i++){
         for (int j=0; j<256; j++){
