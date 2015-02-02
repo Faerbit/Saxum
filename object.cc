@@ -33,7 +33,9 @@ void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
                 sizeof(shadowMVPs), false, (GLfloat*) shadowMVPs);
     }
     else {
-        //shader->setUniform("modelViewMatrix", shadowVPs->at(0) * modelMatrix);
+        if (shadowVPs) {
+            shader->setUniform("modelViewMatrix", shadowVPs->at(0) * modelMatrix);
+        }
     }
     glm::mat4 mvp = (*viewProjectionMatrix) * modelMatrix;
     shader->setUniform("modelViewProjectionMatrix", mvp);
