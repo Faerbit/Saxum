@@ -1,4 +1,4 @@
- 	<!-- Marble -->
+<!-- Marble -->
 <composition>
     <typeID>20</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
@@ -83,9 +83,6 @@
         <xOffset>0.0</xOffset>
         <yOffset>1.0</yOffset>
         <zOffset>0.0</zOffset>
-        <xRot>0.0</xRot>
-        <yRot>0.0</yRot>
-        <zRot>0.0</zRot>
         <rColour>1.0</rColour>
         <gColour>1.0</gColour>
         <bColour>1.0</bColour>
