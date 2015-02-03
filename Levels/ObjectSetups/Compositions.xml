@@ -369,6 +369,7 @@
     <dampningA>0.7</dampningA>
 </objectData>
 
+<!-- Do not change width height or length, they have to match the .obj -->
 <objectData>
     <modelPath>block.obj</modelPath>
     <texturePath>blockTexture_small.png</texturePath>
@@ -377,9 +378,9 @@
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
     <physicType>Box</physicType>
-    <width>6</width>
-    <height>3</height>
-    <length>3</length>
+    <width>4</width>
+    <height>1.88</height>
+    <length>1.99</length>
     <dampningL>0.8</dampningL>
     <dampningA>0.9</dampningA>
 
@@ -409,6 +410,7 @@
     <dampningA>1.0</dampningA>
 </objectData>
 
+<!-- Do not change width height or length, they have to match the .obj -->
 <objectData>
     <modelPath>switch_inner.obj</modelPath>
     <texturePath>switchTextureInner.png</texturePath>
@@ -424,6 +426,7 @@
     <dampningA>1.0</dampningA>
 </objectData>
 
+<!-- Do not change width height or length, they have to match the .obj -->
 <objectData>
     <modelPath>switch_outer.obj</modelPath>
     <texturePath>switchTextureOuter.png</texturePath>
@@ -439,6 +442,7 @@
     <dampningA>0.5</dampningA>
 </objectData>
 
+<!-- Width height and length are not exact, Wall should be a TriangleMesh but that does not work... -->
 <objectData>
     <modelPath>simpleWall.obj</modelPath>
     <texturePath>simpleWallTexture.png</texturePath>
@@ -446,10 +450,10 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
-    <physicType>Box</physicType>
-    <width>6</width>
+    <physicType>TriangleMesh</physicType>
+    <width>1.5</width>
     <height>10</height>
-    <length>3</length>
+    <length>6</length>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
 </objectData>
