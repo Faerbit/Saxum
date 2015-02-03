@@ -267,6 +267,7 @@ void Level::load() {
                             if (physicType.compare("Player") == 0){
                                 float radius;
                                 errorCheck(objectData->FirstChildElement("radius")->QueryFloatText(&radius));
+                                radius *= objectScale*compScale;
                                 this->physics.addPlayer(friction, radius, *object, mass, dampningL, dampningA, physicObjects.size());
                             }else if (physicType.compare("Box") == 0){
                                 float width, height, length;
