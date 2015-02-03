@@ -358,6 +358,10 @@
 
 
 
+
+<!-- Available physicTypes are Player, Box, Button and TriangleMesh.
+    dampningL should be below 1, objects that can not move are enabled by setting their mass to 0. -->
+
 <!-- Do not change the radius, it has to match the .obj -->
 <objectData>
     <modelPath>marbleSmooth.obj</modelPath>
@@ -397,8 +401,8 @@
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
     <physicType>TriangleMesh</physicType>
-    <dampningL>1.0</dampningL>
-    <dampningA>1.0</dampningA>
+    <dampningL>0.8</dampningL>
+    <dampningA>0.9</dampningA>
 </objectData>
 
 <objectData>
@@ -409,8 +413,8 @@
     <specularFactor>0.7</specularFactor>
     <shininess>10.0</shininess>
     <physicType>TriangleMesh</physicType>
-    <dampningL>1</dampningL>
-    <dampningA>1.0</dampningA>
+    <dampningL>0.8</dampningL>
+    <dampningA>0.9</dampningA>
 </objectData>
 
 <!-- Do not change width height or length, they have to match the .obj -->
