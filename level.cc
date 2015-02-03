@@ -273,15 +273,21 @@ void Level::load() {
                                 errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
                                 errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
                                 errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
+                                width  *= objectScale*compScale;
+                                height *= objectScale*compScale;
+                                length *= objectScale*compScale;
                                 this->physics.addBox(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size(), rotate);
                             }else if (physicType.compare("Button") == 0){
                                 float width, height, length;
                                 errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
                                 errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
                                 errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
+                                width  *= objectScale*compScale;
+                                height *= objectScale*compScale;
+                                length *= objectScale*compScale;
                                 this->physics.addButton(width, height, length, *object, mass, dampningL, dampningA, physicObjects.size(), rotate);
                             }else if (physicType.compare("TriangleMesh") == 0){
-                                this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size(), objectScale, rotate);
+                                this->physics.addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, physicObjects.size(), objectScale*compScale, rotate);
                             } else{
                                 printf("XMLError: Not a valid physicType.\n");
                                 exit(-1);
