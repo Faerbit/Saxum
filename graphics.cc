@@ -96,14 +96,12 @@ void Graphics::render(double time)
     // render depth textures for point lights
     glViewport(0, 0, cube_size, cube_size);
     glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  farPlane);
-    glm::vec3 looking_directions[6] = {glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)),
-        glm::normalize(glm::vec3(0.0f, -1.0f, 0.0f)), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
+    glm::vec3 looking_directions[6] = {glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
+        glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
     glm::vec3 upvectors[6] = {glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, 0.0f, -1.0f),
         glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f)};
 
     framebuffer_cube->bind();
-    static bool printed = false;
-    glm::mat4 reproduceMatrix;
     //for (unsigned int i_pointlight = 0; i_pointlight<level->getLights()->size(); i_pointlight++) {
     for (unsigned int i_pointlight = 0; i_pointlight<1 && i_pointlight<level->getLights()->size(); i_pointlight++) {
         // render each side of the cube
@@ -116,32 +114,13 @@ void Graphics::render(double time)
             glm::mat4 viewMatrix = glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
                 level->getLights()->at(i_pointlight).getPosition() + looking_directions[i_face], upvectors[i_face]);
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * viewMatrix;
-            if (i_face == 0) {
-                reproduceMatrix = depthViewProjectionMatrix_face;
-            }
-            if (!printed) {
-                printf("\n\nView matrix:\n %2.10f, %2.10f, %2.10f, %2.10f\n%2.10f, %2.10f, %2.10f, %2.10f\n%2.10f, %2.10f, %2.10f, %2.10f\n%2.10f, %2.10f, %2.10f, %2.10f\n\n\n", 
-                    viewMatrix[0][0], viewMatrix[1][0], viewMatrix[2][0], viewMatrix[3][0],
-                    viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1], viewMatrix[3][1],
-                    viewMatrix[0][2], viewMatrix[1][2], viewMatrix[2][2], viewMatrix[3][2],
-                    viewMatrix[0][3], viewMatrix[1][3], viewMatrix[2][3], viewMatrix[3][3]
-                    );
-
-                //std::cout<<"View matrix:" <<std::endl << glm::to_string(viewMatrix) << std::endl;
-            }
-            std::vector<glm::mat4> foovector = std::vector<glm::mat4>();
-            foovector.push_back(viewMatrix);
-            level->render(depthShader, false, &depthViewProjectionMatrix_face, &foovector);
+            std::vector<glm::mat4> viewMatrixVector = std::vector<glm::mat4>();
+            viewMatrixVector.push_back(viewMatrix);
+            level->render(depthShader, false, &depthViewProjectionMatrix_face, &viewMatrixVector);
+            level->render(depthShader, false, &viewMatrix);
             if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
-            if (saveDepthBufferBool && i_face == 3) {
-                saveDepthBufferToDisk(3, "face.png");
-                saveDepthBufferBool = false;
-            }
-        }
-        if (!printed) {
-                printed = true;
         }
     }
     // render depth texture for sun
@@ -208,7 +187,6 @@ void Graphics::render(double time)
 
     // render the level
     level->render(lightingShader, true, &lightingViewProjectionMatrix, &shadowVPs);
-    //level->render(lightingShader, true, &reproduceMatrix, &shadowVPs);
 }
 
 void Graphics::updateLights() {
@@ -257,20 +235,8 @@ glm::mat4 Graphics::buildViewMatrix(Level* level) {
     //construct lookAt (cameraPosition = cameraCenter + cameraVector)
     //return glm::lookAt(level->getCamera()->getPosition(), level->getCamera()->getPosition() + level->getCamera()->getDirection(), glm::vec3(0.0f, 1.0f, 0.0f));
     
-    glm::mat4 depthViewProjectionMatrix_face =  glm::lookAt((level->getCameraCenter()->getPosition() + level->getCamera()->getVector()),
+    return glm::lookAt((level->getCameraCenter()->getPosition() + level->getCamera()->getVector()),
             level->getCameraCenter()->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
-    static int i = 5;
-    if (i == 0) {
-                printf("\n\nView matrix Camera:\n %2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n%2.2f, %2.2f, %2.2f, %2.2f\n\n\n", 
-                    depthViewProjectionMatrix_face[0][0], depthViewProjectionMatrix_face[0][1], depthViewProjectionMatrix_face[0][2], depthViewProjectionMatrix_face[0][3],
-                    depthViewProjectionMatrix_face[1][0], depthViewProjectionMatrix_face[1][1], depthViewProjectionMatrix_face[1][2], depthViewProjectionMatrix_face[1][3],
-                    depthViewProjectionMatrix_face[2][0], depthViewProjectionMatrix_face[2][1], depthViewProjectionMatrix_face[2][2], depthViewProjectionMatrix_face[2][3],
-                    depthViewProjectionMatrix_face[3][0], depthViewProjectionMatrix_face[3][1], depthViewProjectionMatrix_face[3][2], depthViewProjectionMatrix_face[3][3]
-                    );
-    }
-    i--;
-    return depthViewProjectionMatrix_face;
-            
 }
 
 float Graphics::getFarPlane() {
