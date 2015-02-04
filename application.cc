@@ -1,4 +1,5 @@
 #include "application.hh"
+#include "loader.hh"
 
 
 Application::Application() {
@@ -25,6 +26,8 @@ void Application::init()
 
     // load Level
     level.load();
+    Loader loader = Loader();
+    loader.load("Level1.xml", &level);
 
     graphics.init(&level);
 
