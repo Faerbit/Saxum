@@ -18,9 +18,7 @@ class Graphics {
         glm::uvec2 getWindowSize();
         void resize(glm::uvec2 windowSize);
         float getFarPlane();
-        void saveDepthBuffer();
     private:
-        bool saveDepthBufferBool;
         void updateLights();
         void saveDepthBufferToDisk(int face, std::string);
         double lastUpdate;
@@ -33,8 +31,6 @@ class Graphics {
         ACGL::OpenGL::SharedFrameBufferObject framebuffer;
         std::vector<ACGL::OpenGL::SharedTextureCubeMap> depth_cubeMaps;
         ACGL::OpenGL::SharedFrameBufferObject framebuffer_cube;
-        ACGL::OpenGL::SharedFrameBufferObject framebuffer_cube_mirror;
-        ACGL::OpenGL::SharedTexture2D depthTexture_cube;
         static const int cube_size;
         Level* level;
 };
