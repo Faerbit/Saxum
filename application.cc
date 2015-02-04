@@ -2,7 +2,7 @@
 
 
 Application::Application() {
-    graphics = Graphics(glm::uvec2(1024, 1024), 0.1f, 150.0f);
+    graphics = Graphics(glm::uvec2(1024, 786), 0.1f, 150.0f);
 }
 
 void Application::init()

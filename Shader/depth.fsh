@@ -2,9 +2,11 @@
 
 in vec4 fragPosition;
 
+uniform float farPlane;
+
 out float gl_FragDepth;
 
 void main() {
-    gl_FragDepth = fragPosition.z;
-    //gl_FragDepth = 0.0f;
+    gl_FragDepth = length(fragPosition)/farPlane;
+    //gl_FragDepth = 1.5f;
 }
