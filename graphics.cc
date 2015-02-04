@@ -42,7 +42,7 @@ void Graphics::init(Level* level) {
     depthShader = ShaderProgramCreator("depth")
         .attributeLocations(vao->getAttributeLocations()).create();
 
-    depthTexture = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT16));
+    depthTexture = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT24));
     depthTexture->setMinFilter(GL_NEAREST);
     depthTexture->setMagFilter(GL_NEAREST);
     depthTexture->setWrapS(GL_CLAMP_TO_EDGE);
@@ -57,7 +57,7 @@ void Graphics::init(Level* level) {
     for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {*/
     depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(std::min(int(level->getLights()->size()), 1));
     for (unsigned int i = 0; i<1 && i<depth_cubeMaps.size(); i++) {
-        depth_cubeMaps.at(i) = SharedTextureCubeMap(new TextureCubeMap(glm::vec2(cube_size, cube_size), GL_DEPTH_COMPONENT16));
+        depth_cubeMaps.at(i) = SharedTextureCubeMap(new TextureCubeMap(glm::vec2(cube_size, cube_size), GL_DEPTH_COMPONENT24));
         depth_cubeMaps.at(i)->setMinFilter(GL_NEAREST);
         depth_cubeMaps.at(i)->setMagFilter(GL_NEAREST);
         depth_cubeMaps.at(i)->setWrapS(GL_CLAMP_TO_EDGE);
