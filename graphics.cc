@@ -66,26 +66,10 @@ void Graphics::init(Level* level) {
     }
 
     framebuffer_cube = SharedFrameBufferObject(new FrameBufferObject());
-
-    depthTexture_cube = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT16));
-    depthTexture_cube->setMinFilter(GL_NEAREST);
-    depthTexture_cube->setMagFilter(GL_NEAREST);
-    depthTexture_cube->setWrapS(GL_CLAMP_TO_EDGE);
-    depthTexture_cube->setWrapT(GL_CLAMP_TO_EDGE);
-    depthTexture_cube->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
-
-    framebuffer_cube_mirror = SharedFrameBufferObject(new FrameBufferObject());
-    framebuffer_cube_mirror->setDepthTexture(depthTexture_cube);
-
-    saveDepthBufferBool = false;
 }
 
 glm::uvec2 Graphics::getWindowSize() {
     return windowSize;
-}
-
-void Graphics::saveDepthBuffer() {
-    saveDepthBufferBool = true;
 }
 
 void Graphics::render(double time)
@@ -106,9 +90,6 @@ void Graphics::render(double time)
     for (unsigned int i_pointlight = 0; i_pointlight<1 && i_pointlight<level->getLights()->size(); i_pointlight++) {
         // render each side of the cube
         for (int i_face = 0; i_face<6; i_face++) {
-            framebuffer_cube_mirror->bind();
-            glClear(GL_DEPTH_BUFFER_BIT);
-            framebuffer_cube->bind();
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
             glClear(GL_DEPTH_BUFFER_BIT);
             glm::mat4 viewMatrix = glm::lookAt(level->getLights()->at(i_pointlight).getPosition(),
