@@ -8,5 +8,4 @@ out float gl_FragDepth;
 
 void main() {
     gl_FragDepth = length(fragPosition)/farPlane;
-    //gl_FragDepth = 1.5f;
 }
