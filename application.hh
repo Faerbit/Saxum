@@ -4,6 +4,7 @@
 #include "physics.hh"
 #include "graphics.hh"
 #include "level.hh"
+#include "tinyxml2.hh"
 
 class Application {
     public:
@@ -19,11 +20,23 @@ class Application {
         int getIgnoredMouseUpdates();
         void ignoredOneMouseUpdate();
     private:
+        void loadConfig();
+        void errorCheck(tinyxml2::XMLError error);
         int ignoredMouseUpdates;
         bool focused;
         bool cameraLock;
         Graphics graphics;
         Level level;
+        int windowWidth;
+        int windowHeight;
+        float farPlane;
+        std::string compositionsPath;
+        std::string shaderPath;
+        std::string geometryPath;
+        std::string texturePath;
+        std::string scriptPath;
+        std::string heightmapPath;
+        std::string levelXmlPath;
 };
 
 #endif
