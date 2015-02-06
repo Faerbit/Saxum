@@ -45,22 +45,7 @@ void Level::load() {
     this->physics = Physics();
     this->physics.init();
     
-    // currently hard coded should later read this stuff out of a file
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
-    
-    // load terrain
-    this->terrain.load();
-    Model terrainModel = Model(this->terrain.getModel());
-    // load a texture:
-    Material terrainMaterial = Material("seamlessTerrain.png", 0.1f, 0.8f, 0.2f, 3.0f);
-    //Create object
-    Object* terrainObject = new Object(terrainModel, terrainMaterial,
-	glm::vec3(-0.5*(float)this->terrain.getHeightmapHeight(), 0.0f, -0.5f*(float)this->terrain.getHeightmapWidth()),
-        glm::vec3(0.0f, 0.0f, 0.0f));
-    objects.push_back(terrainObject);
-    
-    //addTerrainPhysic
-	physics.addTerrain(terrain.getHeightmapWidth(), terrain.getHeightmapHeight(), terrain.getHeightmap());
 }
 
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
