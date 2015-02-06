@@ -25,12 +25,13 @@ void Physics::init(std::string geometryPath) //prepares bullet by creating all i
 void Physics::takeUpdateStep(float timeDiff)
 {       
 
-	world->stepSimulation(timeDiff); //allows the world to be simmulated correctly indipendant of the timedifferences between frames
-
 	counter++;
-	if(counter<10)
+	if(counter<1)
+	{
+	    world->stepSimulation(timeDiff);//allows the world to be simmulated correctly indipendant of the timedifferences between frames
 	    return;
-	        
+	}
+	            
 	for(unsigned i = 0; i < allPositionConstraints.size();i++) //this handles the spring constraints
 	{
 	    if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition()) //if constraint != position of the body because otherwise dir = 0
@@ -46,15 +47,25 @@ void Physics::takeUpdateStep(float timeDiff)
 	position.normalize();
 	position *= 5;
 	position += playerBall->getCenterOfMassPosition(); //is the position 5 units away from the player in the direction of the camera
+	
+	position.setY(playerBall->getCenterOfMassPosition().getY() + 1);
 	 
 	 
 	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
-	float str = cameraBody->getInvMass()*30 * dir.length();
+	float str = cameraBody->getInvMass()*50 * dir.length();
 	cameraBody->applyCentralForce(-dir*str);//scale the force by camera mass
-	cameraBody->applyCentralForce(btVector3(0,96,0)); //we leave gravity in because by contrasting gravity to this force we force the camera slightly higher than the ball when still, but it follows more closer to the level of the ball (though still slightly higher) when it is moving.
 	counter=0;
+	float speed = cameraBody->getLinearVelocity().length();
+	if(speed>20.0f)
+	{
+	    printf("%f , %f \n", speed, position.length());
+	    position = cameraBody->getLinearVelocity();
+	    position.normalize();
+	    cameraBody->setLinearVelocity(position*20);
+	}
+	world->stepSimulation(timeDiff);
 }
-
+//
 void Physics::removePositionConstraint(int bodyIndice) //remover function for deleting all pos constraints on one body
 {
 	for(unsigned i = 0; i < allPositionConstraints.size(); i++)
@@ -95,7 +106,7 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
 	btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia); //next we process all data for the rigid body into info
 
     info.m_friction = friction*2; //here we modify the friction and restitution (bounciness) of the object
-    info.m_restitution = 0;
+    info.m_restitution = 0.1f;
 
 	playerBall = new btRigidBody(info); //finally we create the rigid body using the info
     
@@ -130,8 +141,8 @@ void Physics::addTerrain(int width, int length, float** heightData) //The terrai
     highest++;
 
     btHeightfieldTerrainShape* terrainShape = new btHeightfieldTerrainShape(length,width,heightfield,highest,1,true,false); 
-    
 	btRigidBody::btRigidBodyConstructionInfo info(0,new btDefaultMotionState(),terrainShape,btVector3(0,0,0)); //next we process all data for the rigid body into info
+	info.m_friction = 1;
     info.m_restitution = 0;
 	btRigidBody* tBody = new btRigidBody(info);
 
@@ -278,7 +289,7 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
 
 void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate)
 {
-	if(bodies.size() == indice)
+	if(bodies.size() == indice) //(user's initial) height, not the actual height. More...
 		throw std::invalid_argument( "Bodies out of Sync" ); 
 
 	btSphereShape* sphere = new btSphereShape(rad);
@@ -328,6 +339,8 @@ void Physics::addCamera() //Camera Creator automatically called when player is c
     cameraBody->setDamping(0.9,0.5); //this damping factor leaves a relativly smoothe system
 
 	world->addRigidBody(cameraBody,COL_OBJECTS, objectsPhysicsCollision);
+	
+	cameraBody->setGravity(btVector3(0,0,0));	
 		
     cameraBody->setSleepingThresholds(0,0); //very important, otherwise camera may go to sleep, aka not move until next collision
     
