@@ -51,6 +51,14 @@ void Physics::takeUpdateStep(float timeDiff)
 	float str = cameraBody->getInvMass()*50 * dir.length();
 	cameraBody->applyCentralForce(-dir*str);//scale the force by camera mass
 	counter=0;
+	float speed = cameraBody->getLinearVelocity().length();
+	if(speed>20.0f)
+	{
+	    printf("%f , %f \n", speed, position.length());
+	    position = cameraBody->getLinearVelocity();
+	    position.normalize();
+	    cameraBody->setLinearVelocity(position*20);
+	}
 	world->stepSimulation(timeDiff);
 }
 //
@@ -315,7 +323,7 @@ void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, f
 
 void Physics::addCamera() //Camera Creator automatically called when player is created
 {
-    btSphereShape* sphere = new btSphereShape(0.2f);//we use this to make a more interesting camera, that does not interpenetrate with the terrain/objects
+    btSphereShape* sphere = new btSphereShape(0.5f);//we use this to make a more interesting camera, that does not interpenetrate with the terrain/objects
 
 	btVector3 inertia(0,0,0); //rotation handled elsewhere (as it always has to look at the player)
 	
