@@ -101,6 +101,25 @@ Converter::Converter(std::string level){
         doc->InsertEndChild(fogColour);
         doc->InsertEndChild(directionalLight);
         
+        //Create global terrain Element
+        XMLElement* terrain = doc->NewElement("terrain");
+        XMLElement* terrainTexture = doc->NewElement("texture");
+        XMLElement* terrainAmbientFactor = doc->NewElement("ambientFactor");
+        XMLElement* terrainDiffuseFactor = doc->NewElement("diffuseFactor");
+        XMLElement* terrainSpecularFactor = doc->NewElement("specularFactor");
+        XMLElement* terrainShininess = doc->NewElement("shininess");
+        terrainTexture->SetText("seamlessTerrain.png");
+        terrainAmbientFactor->SetText("0.1");
+        terrainDiffuseFactor->SetText("0.8");
+        terrainSpecularFactor->SetText("0.2");
+        terrainShininess->SetText("3.0");
+        terrain->InsertEndChild(terrainTexture);
+        terrain->InsertEndChild(terrainAmbientFactor);
+        terrain->InsertEndChild(terrainDiffuseFactor);
+        terrain->InsertEndChild(terrainSpecularFactor);
+        terrain->InsertEndChild(terrainShininess);
+        doc->InsertEndChild(terrain);
+        
         //Create global skydome Element
         XMLElement* skydome = doc->NewElement("skydome");
         XMLElement* skydomeTexture = doc->NewElement("texture");
