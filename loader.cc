@@ -21,6 +21,28 @@ void Loader::load(std::string filePath, Level* level) {
     errorCheck(physicsElement->FirstChildElement("friction")->QueryFloatText(&friction));
     level->setStrength(strength);
     
+    // load the terrain
+    level->getTerrain()->load();
+    Model terrainModel = Model(level->getTerrain()->getModel());
+    XMLElement* terrainElement = doc->FirstChildElement("terrain");
+    const char* charTerrainTexture = terrainElement->FirstChildElement("texture")->GetText();
+    if(charTerrainTexture == NULL){
+        printf("XMLError: No terrainTexture found.\n");
+        exit(-1);
+    }
+    std::string terrainTexture = charTerrainTexture;
+    float terrainAmbientFactor, terrainDiffuseFactor, terrainSpecularFactor, terrainShininess;
+    errorCheck(terrainElement->FirstChildElement("ambientFactor")->QueryFloatText(&terrainAmbientFactor));
+    errorCheck(terrainElement->FirstChildElement("diffuseFactor")->QueryFloatText(&terrainDiffuseFactor));
+    errorCheck(terrainElement->FirstChildElement("specularFactor")->QueryFloatText(&terrainSpecularFactor));
+    errorCheck(terrainElement->FirstChildElement("shininess")->QueryFloatText(&terrainShininess));
+    Material terrainMaterial = Material(terrainTexture, terrainAmbientFactor, terrainDiffuseFactor, terrainSpecularFactor, terrainShininess);
+    Object* terrainObject = new Object(terrainModel, terrainMaterial,
+	glm::vec3(-0.5*(float)level->getTerrain()->getHeightmapHeight(), 0.0f, -0.5f*(float)level->getTerrain()->getHeightmapWidth()),
+        glm::vec3(0.0f, 0.0f, 0.0f));
+    level->addObject(terrainObject);
+	level->getPhysics()->addTerrain(level->getTerrain()->getHeightmapWidth(), level->getTerrain()->getHeightmapHeight(), level->getTerrain()->getHeightmap());
+	
     //load the skydome
     XMLElement* skydomeElement = doc->FirstChildElement("skydome");
     const char* charSkydomeTexture = skydomeElement->FirstChildElement("texture")->GetText();
