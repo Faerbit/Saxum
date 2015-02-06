@@ -12,21 +12,20 @@ class Terrain {
         ~Terrain();
         void load();
         void render();
-	Model getModel();
-	float** getHeightmap();
-	unsigned int getHeightmapHeight();
-	unsigned int getHeightmapWidth();
+        Model getModel();
+        float** getHeightmap();
+        unsigned int getHeightmapHeight();
+        unsigned int getHeightmapWidth();
 
     private:
         Material material;
-        std::string levelNum;
-	unsigned int heightmapHeight, heightmapWidth;
-	float** heightmap;				//can be accessed like 'float[][]'
-	bool heightmapChanged;
-	ACGL::OpenGL::SharedVertexArrayObject triangleMesh;
-
-	void makeTriangleMesh();
-	void set_abData(float* abData, unsigned int dataCount, unsigned int rowNum, unsigned int columnNum);
+        std::string heightmapFilePath;
+        unsigned int heightmapHeight, heightmapWidth;
+        float** heightmap;				//can be accessed like 'float[][]'
+        bool heightmapChanged;
+        ACGL::OpenGL::SharedVertexArrayObject triangleMesh;
+        void makeTriangleMesh();
+        void set_abData(float* abData, unsigned int dataCount, unsigned int rowNum, unsigned int columnNum);
 };
 
 #endif

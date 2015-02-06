@@ -6,7 +6,7 @@
 class Loader {
     public:
         Loader();
-        void load(std::string filePath, Level* level);
+        void load(std::string filePath, Level* level, std::string compositionsPath, std::string scriptPath);
     private:
         void errorCheck(tinyxml2::XMLError error);
 };

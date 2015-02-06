@@ -1,8 +1,8 @@
 #include "terrain.hh"
 #include "lodepng.h"
 
-Terrain::Terrain(std::string levelNum){
-    this->levelNum = levelNum;
+Terrain::Terrain(std::string heightmapFilePath){
+    this->heightmapFilePath = heightmapFilePath;
 }
 
 Terrain::Terrain(){
@@ -14,9 +14,9 @@ Terrain::~Terrain() {
 
 void Terrain::load() {
     std::vector<unsigned char> image; //the raw pixels
-    unsigned error = lodepng::decode(image, heightmapWidth, heightmapHeight, "../Levels/heightmapLvl" + levelNum + ".png");
+    unsigned error = lodepng::decode(image, heightmapWidth, heightmapHeight, heightmapFilePath);
     if (error) {
-        std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+        std::cout << "Decoder error " << error << " from Terrain::load: " << lodepng_error_text(error) << std::endl;
     }
     this->heightmap = new float*[this->heightmapHeight];					//initialize the heightmap
     for(unsigned int rowNum = 0; rowNum < this->heightmapHeight; rowNum++){				//read in the heightmap
@@ -25,10 +25,9 @@ void Terrain::load() {
 	        this->heightmap[rowNum][columnNum] = (float)(image[(rowNum*heightmapWidth+columnNum)*4]) / 6;  //<--heightmap is scaled here
         }
     }
-    
     this->makeTriangleMesh();
     heightmapChanged = false;		//no need to make a TriangleMesh again before rendering
-
+    
 }
 
 void Terrain::makeTriangleMesh(){

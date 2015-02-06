@@ -20,7 +20,7 @@ extern "C" {
 
 class Level {
     public:
-        Level(std::string levelNum);
+        Level(std::string heightmapFilePath);
         Level();
         ~Level();
         void load();
@@ -57,7 +57,6 @@ class Level {
         Terrain* getTerrain();
     private:
         lua_State* luaState=nullptr;
-        std::string levelNum;
         std::vector<Object*> objects;
         std::vector<Object*> physicsObjects;
         std::vector<Light> lights;
