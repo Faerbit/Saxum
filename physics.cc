@@ -8,7 +8,7 @@ Physics::Physics() {
 Physics::~Physics() {
 }
 
-void Physics::init() //prepares bullet by creating all initial classes
+void Physics::init(std::string geometryPath) //prepares bullet by creating all initial classes
 {
 	colConfig = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(colConfig);
@@ -16,6 +16,10 @@ void Physics::init() //prepares bullet by creating all initial classes
 	solver = new btSequentialImpulseConstraintSolver();
 	world = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,colConfig);
     world->setGravity(btVector3(0,-10,-0));
+    if (world == NULL) {
+        printf("No World after init\n");
+    }
+    this->geometryPath = geometryPath;
 }
 
 void Physics::takeUpdateStep(float timeDiff)
@@ -110,34 +114,33 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
     addCamera(); //now that the player exists add a camera for the player
 }
 
-void Physics::addTerrain(int width, int length, float** heightData) //The terrian adding function
+void Physics::addTerrain(int width, int length, float** heightData) //The terrain adding function
 {
-
 	float* heightfield = new float[width * length];//bullet only accepts data in a one dimensional array, so parse data into appropriate format
-	      int highest = -999999, j = 0, i = 0;
-	      for (i = 0; i < width; i++)
-	      {
-	    	 for (j = 0; j < length; j++) {
-                heightfield[i*length+j] =  heightData[j][i]; //reverse order because they are loaded backwards
+    int highest = -999999, j = 0, i = 0;
+    for (i = 0; i < width; i++)
+    {
+        for (j = 0; j < length; j++) {
+            heightfield[i*length+j] =  heightData[j][i]; //reverse order because they are loaded backwards
 		  
-                if (heightData[j][i] > highest)
+            if (heightData[j][i] > highest)
                     highest = heightData[j][i]; //bullet needs to know the highest point of the heightmap
-		 }
-		 }
-		 
-		 highest++;
+        }
+    }
+    highest++;
 
-	btHeightfieldTerrainShape* terrianShape = new btHeightfieldTerrainShape(length,width,heightfield,highest,1,true,false); 
+    btHeightfieldTerrainShape* terrainShape = new btHeightfieldTerrainShape(length,width,heightfield,highest,1,true,false); 
     
-	btRigidBody::btRigidBodyConstructionInfo info(0,new btDefaultMotionState(),terrianShape,btVector3(0,0,0)); //next we process all data for the rigid body into info
+	btRigidBody::btRigidBodyConstructionInfo info(0,new btDefaultMotionState(),terrainShape,btVector3(0,0,0)); //next we process all data for the rigid body into info
     info.m_restitution = 0;
-    
 	btRigidBody* tBody = new btRigidBody(info);
 
 	tBody->getWorldTransform().setOrigin(btVector3(0,((float)highest)/2,0)); //we have to move the origin of our rigid body down, because bullet sets the origin (0,0,0) at (width/2, height/2, length/2) in the map the x and z are correct in our level, but y needs to be addapted
 
 	terrainBody = tBody;
-    
+    if (world == NULL) {
+        printf("No World while adding terrain.\n");
+    }
 	world->addRigidBody(terrainBody, COL_TERRAIN, COL_TERRAIN | COL_OBJECTS); //COL_XXXX are collision masks, allowing us to ignore collisions between certain object groups (required for buttons)
 }
 
@@ -149,13 +152,11 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
 		
     std::vector< unsigned int > vertexIndices; //temp lists for data sets
     std::vector< btVector3 > temp_vertices;
-    
-    path = "../Levels/Geometry/" + path;
+    path = "../" + geometryPath + path;
     FILE * file = fopen(path.c_str(), "r");
     if( file == NULL ){
         throw std::invalid_argument( "Impossible to open the file" ); //create correct filepath and report error if cannot open
     }
-
     while( 1 ){
         char lineHeader[128];
         // read the first word of the line
@@ -437,6 +438,9 @@ void Physics::addStaticGroundPlane()
 
 void Physics::kill()//delete dynamically allocated memory
 {
+    if (world == NULL) {
+        return;
+    }
 	//btDynamimcWorld*
 	for(unsigned i = 0; i < bodies.size();i++)
 	{
@@ -467,5 +471,3 @@ void Physics::kill()//delete dynamically allocated memory
 	
 	//feel like a good little programmer because everything is clean
 }
-
-

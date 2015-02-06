@@ -5,7 +5,7 @@ using namespace tinyxml2;
 Application::Application() {
     //load the config.xml
     loadConfig();
-    graphics = Graphics(glm::uvec2(1024, 786), 0.1f, 150.0f);
+    graphics = Graphics(glm::uvec2(windowWidth, windowHeight), 0.1f, farPlane);
 }
 
 void Application::init()
@@ -13,24 +13,26 @@ void Application::init()
     // init random generator
     std::srand(std::time(NULL));
     // choose Level             TODO: Choose this in a menu
-    this->level = Level("1");
+    std::string heightmapFilePath = heightmapPath + "heightmapLvl1.png";
+    this->level = Level(heightmapFilePath);
+    level.getPhysics()->init(geometryPath);
     // Don't change this!
     ignoredMouseUpdates = 0;
     cameraLock = true;
     // set Skybox size
     level.setSkydomeSize((graphics.getFarPlane())-31.0f);
-
+    
     // define where shaders and textures can be found:
     ACGL::Base::Settings::the()->setResourcePath("../");
-    ACGL::Base::Settings::the()->setShaderPath("Shader/");
-    ACGL::Base::Settings::the()->setTexturePath("Levels/Textures/");
-    ACGL::Base::Settings::the()->setGeometryPath("Levels/Geometry/");
+    ACGL::Base::Settings::the()->setShaderPath(shaderPath);
+    ACGL::Base::Settings::the()->setTexturePath(texturePath);
+    ACGL::Base::Settings::the()->setGeometryPath(geometryPath);
 
     // load Level
     level.load();
     Loader loader = Loader();
-    loader.load("Level1.xml", &level);
-
+    std::string levelXmlFilePath = levelXmlPath + "Level1.xml";
+    loader.load(levelXmlFilePath, &level, compositionsPath, scriptPath);
     graphics.init(&level);
 
     // just in case: check for errors

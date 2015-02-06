@@ -45,7 +45,7 @@ class Physics {
     public:
     Physics();
 	~Physics();
-	void init();
+	void init(std::string geometryPath);
 	void takeUpdateStep(float timeDiff); //must be used in level.update to proagate the physics
 	void rollForward(glm::vec3 camPos, float strength); //self explainitory
 	void rollLeft(glm::vec3 camPos, float strength);
@@ -80,7 +80,7 @@ class Physics {
     std::vector<positionConstraint> allPositionConstraints;
 	void addCamera(); //Do NOT impliment before Player has been created;
     
-	btDynamicsWorld* world; //contains physical attributes of the world.
+	btDynamicsWorld* world = NULL; //contains physical attributes of the world.
 	btDispatcher* dispatcher; //
 	btCollisionConfiguration* colConfig; //defines the type of collision detection.
 	btBroadphaseInterface* broadphase; //defines how objects are culled from collision detection.
@@ -89,7 +89,7 @@ class Physics {
     int specialPhysicsCollision = 2 | 4;
     int terrainPhysicsCollision = 2;
     int counter = 0;
-    
+    std::string geometryPath;
 };
 
 enum collisionTypes{

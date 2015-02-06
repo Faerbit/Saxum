@@ -1,11 +1,11 @@
 #include "level.hh"
 #include <string>
 
-Level::Level(std::string levelNum){
-    this->levelNum = levelNum;
-    this->terrain = Terrain(levelNum);
+Level::Level(std::string heightmapFilePath){
+    this->terrain = Terrain(heightmapFilePath);
     // default value
     skydomeSize = 50.0f;
+    physics = Physics();
 }
 
 Level::Level() {
@@ -40,11 +40,7 @@ void Level::load() {
     //Push the level to Lua as a global variable
     luabridge::push(luaState, this);
     lua_setglobal(luaState, "level");
-    
-    
-    this->physics = Physics();
-    this->physics.init();
-    
+
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
 }
 

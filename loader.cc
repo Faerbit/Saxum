@@ -4,16 +4,15 @@ using namespace tinyxml2;
 Loader::Loader() {
 }
 
-void Loader::load(std::string filePath, Level* level) {
+void Loader::load(std::string filePath, Level* level, std::string compositionsPath, std::string scriptPath) {
     //Loading from xml:
     XMLDocument* doc = new XMLDocument();
-    const char* xmlFile = ("../Levels/ObjectSetups/" + filePath).c_str();
+    const char* xmlFile = filePath.c_str();
     doc->LoadFile(xmlFile);
     if (doc->ErrorID()!=0){
         printf("Could not open ObjectSetupXml!\n");
         exit(-1);
     }
-    
     //load global physic parameter
     float friction, strength;
     XMLElement* physicsElement = doc->FirstChildElement("physics");
@@ -87,7 +86,7 @@ void Loader::load(std::string filePath, Level* level) {
     std::vector<std::vector<int>> objectIdentifiers = std::vector<std::vector<int>>();  //The first entry is the index in objects, the second one the index in physicObjects, the others are idGreen, idBlue and objectNum.  
     XMLDocument* compositions = new XMLDocument();
     //TODO move path to config.xml
-    const char* compositionsFile = "../Levels/ObjectSetups/Compositions.xml";
+    const char* compositionsFile = compositionsPath.c_str();
     compositions->LoadFile(compositionsFile);
     if (compositions->ErrorID()!=0){
         printf("Could not open Compositions!\n");
@@ -188,7 +187,7 @@ void Loader::load(std::string filePath, Level* level) {
                             objectIdentifier[3] = idBlue;
                             objectIdentifier[4] = objectNum;
                             objectIdentifiers.push_back(objectIdentifier);
-
+                            
                             //add object to physics
                             const char* charPhysicType = objectData->FirstChildElement("physicType")->GetText();
                             if(charPhysicType == NULL){
@@ -232,7 +231,6 @@ void Loader::load(std::string filePath, Level* level) {
                                 printf("XMLError: Not a valid physicType.\n");
                                 exit(-1);
                             }
-                            
 
                             if(compositionType == 20){
                                 level->setCameraCenter(object);
@@ -363,7 +361,7 @@ void Loader::load(std::string filePath, Level* level) {
                     }
                 }
                 if (object != 0) {
-                    Trigger trigger = Trigger(position, distance, isBigger, object, luaScript, level->getLuaState(), objectToChange);
+                    Trigger trigger = Trigger(position, distance, isBigger, object, luaScript, level->getLuaState(), objectToChange, scriptPath);
                     level->addTrigger(trigger);
                 }
                 else {

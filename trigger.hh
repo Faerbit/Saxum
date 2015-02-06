@@ -14,7 +14,7 @@ class Level;
 
 class Trigger {
     public:
-        Trigger(glm::vec3 position, float distance, bool isBigger, Object* object, std::string luaScript, lua_State* L, int objectToChange);
+        Trigger(glm::vec3 position, float distance, bool isBigger, Object* object, std::string luaScript, lua_State* L, int objectToChange, std::string scriptPath);
 	    Trigger();
         ~Trigger();
         void triggerUpdate();

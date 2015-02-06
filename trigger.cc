@@ -1,11 +1,11 @@
 #include "trigger.hh"
 
-Trigger::Trigger(glm::vec3 position, float distance, bool isBigger, Object* object, std::string luaScript, lua_State* L, int objectToChange) {
+Trigger::Trigger(glm::vec3 position, float distance, bool isBigger, Object* object, std::string luaScript, lua_State* L, int objectToChange, std::string scriptPath) {
     this->position=position;
     this->distance=distance;
     this->isBigger=isBigger;
     this->object=object;
-    this->luaScript="../Levels/scripts/" + luaScript + ".lua";
+    this->luaScript= scriptPath + luaScript + ".lua";
     this->L = L;
     if(L == nullptr){
         printf("L is NULL in trigger!\n");
