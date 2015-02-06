@@ -4400,6 +4400,14 @@
     <intensity>0.2</intensity>
 </directionalLight>
 
+<terrain>
+    <texture>seamlessTerrain.png</texture>
+    <ambientFactor>0.1</ambientFactor>
+    <diffuseFactor>0.8</diffuseFactor>
+    <specularFactor>0.2</specularFactor>
+    <shininess>3.0</shininess>
+</terrain>
+
 <skydome>
     <texture>skydome.png</texture>
 </skydome>
