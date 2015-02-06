@@ -221,6 +221,25 @@
     </object>
 </composition>
 
+<!-- Rotated Bridge Block -->
+<composition>
+    <typeID>141</typeID>
+    <ignoreHeightmap>true</ignoreHeightmap>
+    <object>
+        <modelPath>block.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>20.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>90.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+</composition>
+
+
+
 <!-- Bridge Block on Pillar-->
 <composition>
     <typeID>160</typeID>
@@ -271,6 +290,56 @@
     </object>
 </composition>
 
+<!-- Rotated Bridge Block on Pillar-->
+<composition>
+    <typeID>161</typeID>
+    <ignoreHeightmap>true</ignoreHeightmap>
+    <object>
+        <modelPath>block.obj</modelPath>
+        <xOffset>0.0</xOffset>  
+        <yOffset>20.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>90.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+    <object>
+        <modelPath>column.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>18.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>90.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+    <object>
+        <modelPath>column.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>15.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>90.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+    <object>
+        <modelPath>column.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>12.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>90.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+</composition>
+
 <!-- Wall -->
 <composition>
     <typeID>180</typeID>
@@ -283,7 +352,7 @@
         <xRot>0.0</xRot>
         <yRot>0.0</yRot>
         <zRot>0.0</zRot>
-        <scale>1.49</scale>
+        <scale>1.48</scale>
         <mass>0.0</mass>
     </object>
 </composition>
@@ -300,7 +369,7 @@
         <xRot>0.0</xRot>
         <yRot>90.0</yRot>
         <zRot>0.0</zRot>
-        <scale>1.49</scale>
+        <scale>1.48</scale>
         <mass>0.0</mass>
     </object>
 </composition>
@@ -333,6 +402,23 @@
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
         <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+</composition>
+
+<!-- Rotated Gate -->
+<composition>
+    <typeID>221</typeID>
+    <ignoreHeightmap>true</ignoreHeightmap>
+    <object>
+        <modelPath>gate.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>25.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>90.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.5</scale>
         <mass>0.0</mass>
@@ -449,7 +535,7 @@
     <dampningA>0.5</dampningA>
 </objectData>
 
-<!-- Width height and length are not exact, Wall should be a TriangleMesh but that does not work... -->
+<!-- lengh may not be exact -->
 <objectData>
     <modelPath>simpleWall.obj</modelPath>
     <texturePath>simpleWallTexture.png</texturePath>
@@ -457,9 +543,9 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
-    <physicType>TriangleMesh</physicType>
-    <width>1.5</width>
-    <height>10</height>
+    <physicType>Box</physicType>
+    <width>1.2</width>
+    <height>6</height>
     <length>6</length>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
@@ -472,7 +558,10 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
-    <physicType>TriangleMesh</physicType>
+    <physicType>Box</physicType>
+    <width>1.2</width>
+    <height>6</height>
+    <length>6</length>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
 </objectData>
@@ -484,7 +573,10 @@
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
-    <physicType>TriangleMesh</physicType>
+    <physicType>Box</physicType>
+    <width>2</width>
+    <height>1.88</height>
+    <length>1.99</length>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
 </objectData>
