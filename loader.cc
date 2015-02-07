@@ -4,6 +4,82 @@ using namespace tinyxml2;
 Loader::Loader() {
 }
 
+void Loader::loadConfig(Application* application) {
+    int windowWidth, windowHeight;
+    float farPlane;
+    std::string compositionsPath, shaderPath, geometryPath, texturePath, scriptPath, heightmapPath, levelXmlPath;
+    XMLDocument* config = new XMLDocument();
+    const char* xmlFile = "../data/config.xml";
+    config->LoadFile(xmlFile);
+    if (config->ErrorID()!=0){
+        printf("Could not open config.xml!\n");
+        exit(-1);
+    }
+    XMLElement* resolution = config->FirstChildElement("resolution");
+    errorCheck(resolution->FirstChildElement("width")->QueryIntText(&windowWidth));
+    errorCheck(resolution->FirstChildElement("height")->QueryIntText(&windowHeight));
+    errorCheck(config->FirstChildElement("farPlane")->QueryFloatText(&farPlane));
+    const char* charCompositionsPath = config->FirstChildElement("compositionsPath")->GetText();
+    if(charCompositionsPath == NULL){
+        printf("XMLError: No compositionsPath found.\n");
+        exit(-1);
+    }
+    compositionsPath = charCompositionsPath;
+
+    const char* charShaderPath = config->FirstChildElement("shaderPath")->GetText();
+    if(charShaderPath == NULL){
+        printf("XMLError: No shaderPath found.\n");
+        exit(-1);
+    }
+    shaderPath = charShaderPath;
+
+    const char* charGeometryPath = config->FirstChildElement("geometryPath")->GetText();
+    if(charGeometryPath == NULL){
+        printf("XMLError: No geometryPath found.\n");
+        exit(-1);
+    }
+    geometryPath = charGeometryPath;
+
+    const char* charTexturePath = config->FirstChildElement("texturePath")->GetText();
+    if(charTexturePath == NULL){
+        printf("XMLError: No texturePath found.\n");
+        exit(-1);
+    }
+    texturePath = charTexturePath;
+
+    const char* charScriptPath = config->FirstChildElement("scriptPath")->GetText();
+    if(charScriptPath == NULL){
+        printf("XMLError: No scriptPath found.\n");
+        exit(-1);
+    }
+    scriptPath = charScriptPath;
+
+    const char* charHeightmapPath = config->FirstChildElement("heightmapPath")->GetText();
+    if(charHeightmapPath == NULL){
+        printf("XMLError: No heightmapPath found.\n");
+        exit(-1);
+    }
+    heightmapPath = charHeightmapPath;
+
+    const char* charLevelXmlPath = config->FirstChildElement("levelXmlPath")->GetText();
+    if(charLevelXmlPath == NULL){
+        printf("XMLError: No levelXmlPath found.\n");
+        exit(-1);
+    }
+    levelXmlPath = charLevelXmlPath;
+    
+    application->setWindowWidth(windowWidth);
+    application->setWindowHeight(windowHeight);
+    application->setFarPlane(farPlane);
+    application->setCompositionsPath(compositionsPath);
+    application->setShaderPath(shaderPath);
+    application->setGeometryPath(geometryPath);
+    application->setTexturePath(texturePath);
+    application->setScriptPath(scriptPath);
+    application->setHeightmapPath(heightmapPath);
+    application->setLevelXmlPath(levelXmlPath);
+}
+
 void Loader::load(std::string filePath, Level* level, std::string compositionsPath, std::string scriptPath) {
     //Loading from xml:
     XMLDocument* doc = new XMLDocument();
