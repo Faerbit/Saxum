@@ -180,20 +180,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                             objectRot *= 0.0174532925;    //transform degrees to radians
                             Object* object = new Object(model, material, objectPosition, compRot+objectRot, renderable);
                             level->addObject(object);
-                            level->addPhysicsObject(object);
-                            
-                            //create an identifier for this object
-                            std::vector<int> objectIdentifier = std::vector<int>(5);
-                            objectIdentifier[0] = level->getObjectsVectorSize()-1;
-                            objectIdentifier[1] = level->getPhysicsObjectsVectorSize()-1;
-                            int idGreen, idBlue;
-                            errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
-                            errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
-                            objectIdentifier[2] = idGreen;
-                            objectIdentifier[3] = idBlue;
-                            objectIdentifier[4] = objectNum;
-                            objectIdentifiers.push_back(objectIdentifier);
-                            
+
                             //add object to physics
                             const char* charPhysicType = objectData->FirstChildElement("physicType")->GetText();
                             if(charPhysicType == NULL){
@@ -212,6 +199,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                                 float radius;
                                 errorCheck(objectData->FirstChildElement("radius")->QueryFloatText(&radius));
                                 radius *= objectScale*compScale;
+                                level->addPhysicsObject(object);
                                 level->getPhysics()->addPlayer(friction, radius, *object, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize());
                             }else if (physicType.compare("Box") == 0){
                                 float width, height, length;
@@ -221,6 +209,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                                 width  *= objectScale*compScale;
                                 height *= objectScale*compScale;
                                 length *= objectScale*compScale;
+                                level->addPhysicsObject(object);
                                 level->getPhysics()->addBox(width, height, length, *object, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize(), rotate);
                             }else if (physicType.compare("Button") == 0){
                                 float width, height, length;
@@ -230,14 +219,34 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                                 width  *= objectScale*compScale;
                                 height *= objectScale*compScale;
                                 length *= objectScale*compScale;
+                                level->addPhysicsObject(object);
                                 level->getPhysics()->addButton(width, height, length, *object, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize(), rotate);
                             }else if (physicType.compare("TriangleMesh") == 0){
+                                level->addPhysicsObject(object);
                                 level->getPhysics()->addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize(), objectScale*compScale, rotate);
+                            }else if (physicType.compare("None") == 0){
+                            
                             } else{
                                 printf("XMLError: Not a valid physicType.\n");
                                 exit(-1);
                             }
 
+                            //create an identifier for this object
+                            std::vector<int> objectIdentifier = std::vector<int>(5);
+                            objectIdentifier[0] = level->getObjectsVectorSize()-1;
+                            if (physicType.compare("None") == 0){
+                                objectIdentifier[1] = 0;
+                            }else{
+                                objectIdentifier[1] = level->getPhysicsObjectsVectorSize()-1;
+                            }
+                            int idGreen, idBlue;
+                            errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
+                            errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
+                            objectIdentifier[2] = idGreen;
+                            objectIdentifier[3] = idBlue;
+                            objectIdentifier[4] = objectNum;
+                            objectIdentifiers.push_back(objectIdentifier);
+                            
                             if(compositionType == 20){
                                 level->setCameraCenter(object);
                             }

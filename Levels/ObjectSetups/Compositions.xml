@@ -445,7 +445,7 @@
 
 
 
-<!-- Available physicTypes are Player, Box, Button and TriangleMesh.
+<!-- Available physicTypes are Player, Box, Button, TriangleMesh and None(no physics).
     dampningL should be below 1, objects that can not move are enabled by setting their mass to 0. -->
 
 <!-- Do not change the radius, it has to match the .obj -->
