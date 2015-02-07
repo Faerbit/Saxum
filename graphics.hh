@@ -10,7 +10,7 @@
 
 class Graphics {
     public:
-        Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane);
+        Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane, int cube_size);
         Graphics();
         void init(Level* level);
         void render(double time);
@@ -31,7 +31,7 @@ class Graphics {
         std::vector<ACGL::OpenGL::SharedTextureCubeMap> depth_cubeMaps;
         ACGL::OpenGL::SharedFrameBufferObject framebuffer_cube;
         ACGL::OpenGL::SharedTexture2D depthTexture_cube;
-        static const int cube_size;
+        int cube_size;
         Level* level;
 };
 

@@ -20,6 +20,7 @@ class Application {
         void ignoredOneMouseUpdate();
         void setWindowWidth(int windowWidth);
         void setWindowHeight(int windowHeight);
+        void setShadowCubeSize(int shadowCubeSize);
         void setFarPlane(float farPlane);
         void setCompositionsPath(std::string compositionsPath);
         void setShaderPath(std::string shaderPath);
@@ -36,6 +37,7 @@ class Application {
         Level level;
         int windowWidth;
         int windowHeight;
+        int shadowCubeSize;
         float farPlane;
         std::string compositionsPath;
         std::string shaderPath;

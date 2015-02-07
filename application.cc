@@ -5,7 +5,7 @@ Application::Application() {
     Loader loader = Loader();
     //load the config.xml
     loader.loadConfig(this);
-    graphics = Graphics(glm::uvec2(windowWidth, windowHeight), 0.1f, farPlane);
+    graphics = Graphics(glm::uvec2(windowWidth, windowHeight), 0.1f, farPlane, shadowCubeSize);
 }
 
 void Application::init()
@@ -85,6 +85,10 @@ void Application::setWindowWidth(int windowWidth) {
 
 void Application::setWindowHeight(int windowHeight) {
     this->windowHeight = windowHeight;
+}
+
+void Application::setShadowCubeSize(int shadowCubeSize) {
+    this->shadowCubeSize = shadowCubeSize;
 }
 
 void Application::setFarPlane(float farPlane) {

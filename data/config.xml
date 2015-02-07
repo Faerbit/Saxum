@@ -3,6 +3,8 @@
     <height>786</height>
 </resolution>
 
+<shadowCubeSize>1024</shadowCubeSize>
+
 <farPlane>150.0</farPlane>
 
 <compositionsPath>../Levels/ObjectSetups/Compositions.xml</compositionsPath>
