@@ -460,6 +460,7 @@
     <radius>1.0</radius>
     <dampningL>0.15 </dampningL>
     <dampningA>0.7</dampningA>
+    <renderable>true</renderable>
 </objectData>
 
 <!-- Do not change width height or length, they have to match the .obj -->
@@ -476,7 +477,7 @@
     <length>1.99</length>
     <dampningL>0.8</dampningL>
     <dampningA>0.9</dampningA>
-
+    <renderable>true</renderable>
 </objectData>
 
 <objectData>
@@ -489,6 +490,7 @@
     <physicType>TriangleMesh</physicType>
     <dampningL>0.8</dampningL>
     <dampningA>0.9</dampningA>
+    <renderable>true</renderable>
 </objectData>
 
 <objectData>
@@ -501,6 +503,7 @@
     <physicType>TriangleMesh</physicType>
     <dampningL>0.8</dampningL>
     <dampningA>0.9</dampningA>
+    <renderable>true</renderable>
 </objectData>
 
 <!-- Do not change width height or length, they have to match the .obj -->
@@ -517,6 +520,7 @@
     <length>1.8</length>
     <dampningL>0.5</dampningL>
     <dampningA>1.0</dampningA>
+    <renderable>true</renderable>
 </objectData>
 
 <!-- Do not change width height or length, they have to match the .obj -->
@@ -533,6 +537,7 @@
     <length>0.33</length>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
+    <renderable>true</renderable>
 </objectData>
 
 <!-- lengh may not be exact -->
@@ -549,6 +554,7 @@
     <length>6</length>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
+    <renderable>true</renderable>
 </objectData>
 
 <objectData>
@@ -564,6 +570,7 @@
     <length>6</length>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
+    <renderable>true</renderable>
 </objectData>
 
 <objectData>
@@ -579,4 +586,5 @@
     <length>1.99</length>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
+    <renderable>true</renderable>
 </objectData>

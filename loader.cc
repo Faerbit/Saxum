@@ -38,7 +38,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     Material terrainMaterial = Material(terrainTexture, terrainAmbientFactor, terrainDiffuseFactor, terrainSpecularFactor, terrainShininess);
     Object* terrainObject = new Object(terrainModel, terrainMaterial,
 	glm::vec3(-0.5*(float)level->getTerrain()->getHeightmapHeight(), 0.0f, -0.5f*(float)level->getTerrain()->getHeightmapWidth()),
-        glm::vec3(0.0f, 0.0f, 0.0f));
+        glm::vec3(0.0f, 0.0f, 0.0f), true);
     level->addObject(terrainObject);
 	level->getPhysics()->addTerrain(level->getTerrain()->getHeightmapWidth(), level->getTerrain()->getHeightmapHeight(), level->getTerrain()->getHeightmap());
 	
@@ -53,7 +53,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     Model skydomeModel = Model("skydome.obj", level->getSkydomeSize());
     Material skydomeMaterial = Material(skydomeTexture, 0.7f, 0.0f, 0.0f, 0.0f);
     Object* skydomeObject = new Object(skydomeModel, skydomeMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f));
+        glm::vec3(0.0f, 0.0f, 0.0f), true);
     level->addObject(skydomeObject);
     level->setSkydomeObject(skydomeObject);
 
@@ -117,7 +117,6 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                     float objectScale, compScale;
                     errorCheck(xmlObject->FirstChildElement("scale")->QueryFloatText(&objectScale));
                     errorCheck(thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale));
-                    Model model = Model(modelPath, objectScale * compScale);
                     //find the objectData for the current object
                     XMLElement* objectData = compositions->FirstChildElement("objectData");
                     for(; objectData; objectData=objectData->NextSiblingElement("objectData")){
@@ -129,19 +128,26 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                         std::string dataModelPath = charDataModelPath;
                         //objectData found
                         if(dataModelPath.compare(modelPath) == 0){
+                            bool renderable;
+                            errorCheck(objectData->FirstChildElement("renderable")->QueryBoolText(&renderable));
                             //create the object
-                            float ambientFactor, diffuseFactor, specularFactor, shininess;
-                            errorCheck(objectData->FirstChildElement("ambientFactor")->QueryFloatText(&ambientFactor));
-                            errorCheck(objectData->FirstChildElement("diffuseFactor")->QueryFloatText(&diffuseFactor));
-                            errorCheck(objectData->FirstChildElement("specularFactor")->QueryFloatText(&specularFactor));
-                            errorCheck(objectData->FirstChildElement("shininess")->QueryFloatText(&shininess));
-                            const char* charTexturePath = objectData->FirstChildElement("texturePath")->GetText();
-                            if(charTexturePath == NULL){
-                                printf("XMLError: No texturePath found in objectData.\n");
-                                exit(-1);
+                            Material material;
+                            Model model;
+                            if (renderable) {
+                                float ambientFactor, diffuseFactor, specularFactor, shininess;
+                                errorCheck(objectData->FirstChildElement("ambientFactor")->QueryFloatText(&ambientFactor));
+                                errorCheck(objectData->FirstChildElement("diffuseFactor")->QueryFloatText(&diffuseFactor));
+                                errorCheck(objectData->FirstChildElement("specularFactor")->QueryFloatText(&specularFactor));
+                                errorCheck(objectData->FirstChildElement("shininess")->QueryFloatText(&shininess));
+                                const char* charTexturePath = objectData->FirstChildElement("texturePath")->GetText();
+                                if(charTexturePath == NULL){
+                                    printf("XMLError: No texturePath found in objectData.\n");
+                                    exit(-1);
+                                }
+                                std::string texturePath = charTexturePath;
+                                material = Material(texturePath, ambientFactor, diffuseFactor, specularFactor, shininess);
+                                model = Model(modelPath, objectScale * compScale);
                             }
-                            std::string texturePath = charTexturePath;
-                            Material material = Material(texturePath, ambientFactor, diffuseFactor, specularFactor, shininess);
                             float compXPos, compYOffset, compZPos;
                             glm::vec3 objectOffset, compRot;
                             errorCheck(xmlObject->FirstChildElement("xOffset")->QueryFloatText(&objectOffset[0]));
@@ -172,7 +178,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                             errorCheck(xmlObject->FirstChildElement("yRot")->QueryFloatText(&objectRot[1]));
                             errorCheck(xmlObject->FirstChildElement("zRot")->QueryFloatText(&objectRot[2]));
                             objectRot *= 0.0174532925;    //transform degrees to radians
-                            Object* object = new Object(model, material, objectPosition, compRot+objectRot);
+                            Object* object = new Object(model, material, objectPosition, compRot+objectRot, renderable);
                             level->addObject(object);
                             level->addPhysicsObject(object);
                             
@@ -197,9 +203,9 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                             std::string physicType = charPhysicType;
                             float mass;
                             errorCheck(xmlObject->FirstChildElement("mass")->QueryFloatText(&mass));
-                            float dampningL, dampningA;
                             XMLElement* constraint = thisComposition->FirstChildElement("positionConstraint");
                             bool rotate = (constraint == NULL);
+                            float dampningL, dampningA;
                             errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
                             errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                             if (physicType.compare("Player") == 0){
