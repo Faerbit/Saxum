@@ -7,13 +7,13 @@
 
 using namespace ACGL::OpenGL;
 
-const int Graphics::cube_size = 1024;
 const double lightUpdateDelay = 0.5f;
 
-Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane) {
+Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane, int cube_size) {
     this->windowSize = windowSize;
     this->nearPlane = nearPlane;
     this->farPlane = farPlane;
+    this->cube_size = cube_size;
 }
 
 Graphics::Graphics() {
