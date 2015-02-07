@@ -151,6 +151,17 @@
         <modelPath>switch_outer.obj</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>-1</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.0</scale>
+        <mass>1.0</mass>
+    </object>
+    <object>
+        <modelPath>switch_outerBox</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>-1</yOffset>
         <zOffset>1.105</zOffset>
         <xRot>0.0</xRot>
         <yRot>0.0</yRot>
@@ -159,7 +170,7 @@
         <mass>0.0</mass>
     </object>
     <object>
-        <modelPath>switch_outer.obj</modelPath>
+        <modelPath>switch_outerBox</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>-1</yOffset>
         <zOffset>-1.105</zOffset>
@@ -170,7 +181,7 @@
         <mass>0.0</mass>
     </object>
     <object>
-        <modelPath>switch_outer.obj</modelPath>
+        <modelPath>switch_outerBox</modelPath>
         <xOffset>1.105</xOffset>
         <yOffset>-1</yOffset>
         <zOffset>0.0</zOffset>
@@ -181,7 +192,7 @@
         <mass>0.0</mass>
     </object>
     <object>
-        <modelPath>switch_outer.obj</modelPath>
+        <modelPath>switch_outerBox</modelPath>
         <xOffset>-1.105</xOffset>
         <yOffset>-1</yOffset>
         <zOffset>0.0</zOffset>
@@ -192,7 +203,7 @@
         <mass>0.0</mass>
     </object>
     <object>
-        <modelPath>switch_outer.obj</modelPath>
+        <modelPath>switch_outerBox</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>-2.105</yOffset>
         <zOffset>0.0</zOffset>
@@ -525,18 +536,24 @@
 
 <!-- Do not change width height or length, they have to match the .obj -->
 <objectData>
-    <modelPath>switch_outer.obj</modelPath>
-    <texturePath>switchTextureOuter.png</texturePath>
-    <ambientFactor>0.1</ambientFactor>
-    <diffuseFactor>0.6</diffuseFactor>
-    <specularFactor>0.4</specularFactor>
-    <shininess>2.0</shininess>
+    <modelPath>switch_outerBox</modelPath>
     <physicType>Box</physicType>
     <width>2.54</width>
     <height>2.54</height>
     <length>0.33</length>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
+    <renderable>false</renderable>
+</objectData>
+
+<objectData>
+    <modelPath>switch_outer.obj</modelPath>
+    <texturePath>switchTextureOuter.png</texturePath>
+    <ambientFactor>0.1</ambientFactor>
+    <diffuseFactor>0.6</diffuseFactor>
+    <specularFactor>0.4</specularFactor>
+    <shininess>2.0</shininess>
+    <physicType>None</physicType>
     <renderable>true</renderable>
 </objectData>
 
