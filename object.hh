@@ -12,7 +12,7 @@
 class Object : public Entity {
     public:
         Object(Model model, Material material, 
-                glm::vec3 position, glm::vec3 rotation);
+                glm::vec3 position, glm::vec3 rotation, bool renderable);
         Object();
         ~Object();
         void render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
@@ -20,6 +20,7 @@ class Object : public Entity {
     private:
         Model model;
         Material material;
+        bool renderable;
 };
 
 #endif

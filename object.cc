@@ -1,9 +1,10 @@
 #include "object.hh"
 
-Object::Object(Model model, Material material, glm::vec3 position, glm::vec3 rotation) :
+Object::Object(Model model, Material material, glm::vec3 position, glm::vec3 rotation, bool renderable) :
         Entity(position, rotation) {
     this->model = model;
     this->material = material;
+    this->renderable = renderable;
 }
 
 Object::Object() {
@@ -14,6 +15,9 @@ Object::~Object() {
 
 void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
     glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs) {
+    if (!renderable) {
+        return;
+    }
     glm::mat4 modelMatrix = glm::translate(getPosition()) * getRotation() * glm::scale<float>(glm::vec3(model.getScale()));
     if (lightingPass) {
     // set lightning parameters for this object
