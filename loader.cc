@@ -192,17 +192,18 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                             errorCheck(xmlObject->FirstChildElement("mass")->QueryFloatText(&mass));
                             XMLElement* constraint = thisComposition->FirstChildElement("positionConstraint");
                             bool rotate = (constraint == NULL);
-                            float dampningL, dampningA;
-                            errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
-                            errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                             if (physicType.compare("Player") == 0){
-                                float radius;
+                                float radius, dampningL, dampningA;
+                                errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
+                                errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                                 errorCheck(objectData->FirstChildElement("radius")->QueryFloatText(&radius));
                                 radius *= objectScale*compScale;
                                 level->addPhysicsObject(object);
                                 level->getPhysics()->addPlayer(friction, radius, *object, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize());
                             }else if (physicType.compare("Box") == 0){
-                                float width, height, length;
+                                float width, height, length, dampningL, dampningA;
+                                errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
+                                errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                                 errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
                                 errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
                                 errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
@@ -212,7 +213,9 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                                 level->addPhysicsObject(object);
                                 level->getPhysics()->addBox(width, height, length, *object, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize(), rotate);
                             }else if (physicType.compare("Button") == 0){
-                                float width, height, length;
+                                float width, height, length, dampningL, dampningA;
+                                errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
+                                errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                                 errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
                                 errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
                                 errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
@@ -222,6 +225,9 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                                 level->addPhysicsObject(object);
                                 level->getPhysics()->addButton(width, height, length, *object, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize(), rotate);
                             }else if (physicType.compare("TriangleMesh") == 0){
+                                float dampningL, dampningA;
+                                errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
+                                errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                                 level->addPhysicsObject(object);
                                 level->getPhysics()->addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize(), objectScale*compScale, rotate);
                             }else if (physicType.compare("None") == 0){
