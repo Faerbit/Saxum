@@ -53,10 +53,9 @@ void Graphics::init(Level* level) {
     framebuffer->setDepthTexture(depthTexture);
     framebuffer->validate();
 
-    /*depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(level->getLights()->size());
-    for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {*/
-    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(std::min(int(level->getLights()->size()), 1));
-    for (unsigned int i = 0; i<1 && i<depth_cubeMaps.size(); i++) {
+    // always generate and bind 32 cube maps, because otherwise the shader won't work
+    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(32);
+    for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {
         depth_cubeMaps.at(i) = SharedTextureCubeMap(new TextureCubeMap(glm::vec2(cube_size, cube_size), GL_DEPTH_COMPONENT24));
         depth_cubeMaps.at(i)->setMinFilter(GL_NEAREST);
         depth_cubeMaps.at(i)->setMagFilter(GL_NEAREST);
@@ -69,6 +68,17 @@ void Graphics::init(Level* level) {
 
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
+
+    lightingShader->use();
+
+    lightingShader->setTexture("shadowMap", depthTexture, 1);
+
+    if (level->getLights()->size() > 0) {
+        for(unsigned int i = 0; i<32; i++){
+            // start with texture unit 2 because the first two are used by the texture and the directional shadow map
+            lightingShader->setTexture("shadowMap_cube" + std::to_string(i), depth_cubeMaps.at(i), i+2);
+        }
+    }
 }
 
 glm::uvec2 Graphics::getWindowSize() {
@@ -89,8 +99,7 @@ void Graphics::render(double time)
         glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f)};
 
     framebuffer_cube->bind();
-    //for (unsigned int i_pointlight = 0; i_pointlight<level->getLights()->size(); i_pointlight++) {
-    for (unsigned int i_pointlight = 0; i_pointlight<1 && i_pointlight<level->getLights()->size(); i_pointlight++) {
+    for (unsigned int i_pointlight = 0; i_pointlight<level->getLights()->size(); i_pointlight++) {
         // render each side of the cube
         for (int i_face = 0; i_face<6; i_face++) {
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
@@ -126,13 +135,6 @@ void Graphics::render(double time)
 
     lightingShader->use();
 
-    if (level->getLights()->size() > 0) {
-        glActiveTexture(GL_TEXTURE0+2);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, depth_cubeMaps.at(0)->getObjectName());
-        GLint textureUnits[1] = {2};
-        glUniform1iv(lightingShader->getUniformLocation("shadowMap_cube"), 1, textureUnits);
-    }
-
     //set lighting parameters
 
     // TODO look into doing this less often, offload to another thread?
@@ -152,8 +154,6 @@ void Graphics::render(double time)
     0.5, 0.5, 0.5, 1.0
     );
     glm::mat4 depthBiasVP = biasMatrix*depthViewProjectionMatrix;
-
-    lightingShader->setTexture("shadowMap", depthTexture, 1);
 
     lightingShader->setUniform("farPlane", farPlane);
 
