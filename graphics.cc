@@ -42,6 +42,9 @@ void Graphics::init(Level* level) {
     depthShader = ShaderProgramCreator("depth")
         .attributeLocations(vao->getAttributeLocations()).create();
 
+    depthCubeShader = ShaderProgramCreator("depth_cube")
+        .attributeLocations(vao->getAttributeLocations()).create();
+
     depthTexture = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT24));
     depthTexture->setMinFilter(GL_NEAREST);
     depthTexture->setMagFilter(GL_NEAREST);
@@ -88,8 +91,8 @@ glm::uvec2 Graphics::getWindowSize() {
 void Graphics::render(double time)
 {
     // At first render shadows
-    depthShader->use();
-    depthShader->setUniform("farPlane", farPlane);
+    depthCubeShader->use();
+    depthCubeShader->setUniform("farPlane", farPlane);
     // render depth textures for point lights
     glViewport(0, 0, cube_size, cube_size);
     glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  farPlane);
@@ -109,13 +112,14 @@ void Graphics::render(double time)
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * viewMatrix;
             std::vector<glm::mat4> viewMatrixVector = std::vector<glm::mat4>();
             viewMatrixVector.push_back(viewMatrix);
-            level->render(depthShader, false, &depthViewProjectionMatrix_face, &viewMatrixVector);
+            level->render(depthCubeShader, false, &depthViewProjectionMatrix_face, &viewMatrixVector);
             if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
         }
     }
     // render depth texture for sun
+    depthShader->use();
     glViewport(0, 0, windowSize.x, windowSize.y);
     
     // far pass
