@@ -9,7 +9,38 @@ out vec4 oColor;
 
 uniform sampler2D uTexture;
 uniform sampler2DShadow shadowMap;
-uniform samplerCubeShadow shadowMap_cube[1];
+uniform samplerCubeShadow shadowMap_cube0;
+uniform samplerCubeShadow shadowMap_cube1;
+uniform samplerCubeShadow shadowMap_cube2;
+uniform samplerCubeShadow shadowMap_cube3;
+uniform samplerCubeShadow shadowMap_cube4;
+uniform samplerCubeShadow shadowMap_cube5;
+uniform samplerCubeShadow shadowMap_cube6;
+uniform samplerCubeShadow shadowMap_cube7;
+uniform samplerCubeShadow shadowMap_cube8;
+uniform samplerCubeShadow shadowMap_cube9;
+uniform samplerCubeShadow shadowMap_cube10;
+uniform samplerCubeShadow shadowMap_cube11;
+uniform samplerCubeShadow shadowMap_cube12;
+uniform samplerCubeShadow shadowMap_cube13;
+uniform samplerCubeShadow shadowMap_cube14;
+uniform samplerCubeShadow shadowMap_cube15;
+uniform samplerCubeShadow shadowMap_cube16;
+uniform samplerCubeShadow shadowMap_cube17;
+uniform samplerCubeShadow shadowMap_cube18;
+uniform samplerCubeShadow shadowMap_cube19;
+uniform samplerCubeShadow shadowMap_cube20;
+uniform samplerCubeShadow shadowMap_cube21;
+uniform samplerCubeShadow shadowMap_cube22;
+uniform samplerCubeShadow shadowMap_cube23;
+uniform samplerCubeShadow shadowMap_cube24;
+uniform samplerCubeShadow shadowMap_cube25;
+uniform samplerCubeShadow shadowMap_cube26;
+uniform samplerCubeShadow shadowMap_cube27;
+uniform samplerCubeShadow shadowMap_cube28;
+uniform samplerCubeShadow shadowMap_cube29;
+uniform samplerCubeShadow shadowMap_cube30;
+uniform samplerCubeShadow shadowMap_cube31;
 uniform vec3 ambientColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
@@ -113,11 +144,15 @@ void main()
             specularColor += clamp(pow((dot((cameraVector+lightVector),normalize(vNormal))/(length(cameraVector+lightVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
             *specularFactor*intensity*lightColors[i];
             if (i == 0) {
-                visibility = samplePointShadow(shadowMap_cube[0], lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+            }
+            if (i == 1) {
+                visibility *= samplePointShadow(shadowMap_cube1, lightDirection);
+            }
+            if (i == 2) {
+                visibility *= samplePointShadow(shadowMap_cube2, lightDirection);
             }
         }
-        /*float value = texture(shadowMap_cube, lightDirection);
-        oColor = vec4(value, value, value, 255);*/
     }
 
     // shadows 
