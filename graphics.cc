@@ -66,6 +66,9 @@ void Graphics::init(Level* level) {
     }
 
     framebuffer_cube = SharedFrameBufferObject(new FrameBufferObject());
+
+    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
+    printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
 }
 
 glm::uvec2 Graphics::getWindowSize() {
@@ -98,7 +101,6 @@ void Graphics::render(double time)
             std::vector<glm::mat4> viewMatrixVector = std::vector<glm::mat4>();
             viewMatrixVector.push_back(viewMatrix);
             level->render(depthShader, false, &depthViewProjectionMatrix_face, &viewMatrixVector);
-            level->render(depthShader, false, &viewMatrix);
             if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
@@ -125,7 +127,10 @@ void Graphics::render(double time)
     lightingShader->use();
 
     if (level->getLights()->size() > 0) {
-        lightingShader->setTexture("shadowMap_cube", depth_cubeMaps.at(0), 4);
+        glActiveTexture(GL_TEXTURE0+2);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, depth_cubeMaps.at(0)->getObjectName());
+        GLint textureUnits[1] = {2};
+        glUniform1iv(lightingShader->getUniformLocation("shadowMap_cube"), 1, textureUnits);
     }
 
     //set lighting parameters

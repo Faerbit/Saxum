@@ -9,7 +9,7 @@ out vec4 oColor;
 
 uniform sampler2D uTexture;
 uniform sampler2DShadow shadowMap;
-uniform samplerCubeShadow shadowMap_cube;
+uniform samplerCubeShadow shadowMap_cube[1];
 uniform vec3 ambientColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
@@ -113,7 +113,7 @@ void main()
             specularColor += clamp(pow((dot((cameraVector+lightVector),normalize(vNormal))/(length(cameraVector+lightVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
             *specularFactor*intensity*lightColors[i];
             if (i == 0) {
-                visibility = samplePointShadow(shadowMap_cube, lightDirection);
+                visibility = samplePointShadow(shadowMap_cube[0], lightDirection);
             }
         }
         /*float value = texture(shadowMap_cube, lightDirection);
