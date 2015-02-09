@@ -26,6 +26,7 @@ class Graphics {
         float nearPlane;
         float farPlane;
         ACGL::OpenGL::SharedShaderProgram lightingShader;
+        ACGL::OpenGL::SharedShaderProgram depthCubeShader;
         ACGL::OpenGL::SharedShaderProgram depthShader;
         ACGL::OpenGL::SharedTexture2D depthTexture;
         ACGL::OpenGL::SharedFrameBufferObject framebuffer;
