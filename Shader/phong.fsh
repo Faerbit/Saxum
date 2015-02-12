@@ -193,52 +193,67 @@ void main()
                 visibility *= samplePointShadow(shadowMap_cube15, lightDirection);
             }
             if (i == 16) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube16, lightDirection);
             }
+
             if (i == 17) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube17, lightDirection);
             }
+
             if (i == 18) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube18, lightDirection);
             }
+
             if (i == 19) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube19, lightDirection);
             }
+
             if (i == 20) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube20, lightDirection);
             }
+
             if (i == 21) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube21, lightDirection);
             }
+
             if (i == 22) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube22, lightDirection);
             }
+
             if (i == 23) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube23, lightDirection);
             }
+
             if (i == 24) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube24, lightDirection);
             }
+
             if (i == 25) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube25, lightDirection);
             }
+
             if (i == 26) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube26, lightDirection);
             }
+
             if (i == 27) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube27, lightDirection);
             }
+
             if (i == 28) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube28, lightDirection);
             }
+
             if (i == 29) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube29, lightDirection);
             }
+
             if (i == 30) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube30, lightDirection);
             }
+
             if (i == 31) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
+                visibility *= samplePointShadow(shadowMap_cube31, lightDirection);
             }
         }
     }
