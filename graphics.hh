@@ -19,12 +19,17 @@ class Graphics {
         void resize(glm::uvec2 windowSize);
         float getFarPlane();
     private:
-        void updateLights();
+        void updateShaderLights();
+        void updateClosestLights();
+        bool compareLightDistances(Light a, Light b);
         void saveDepthBufferToDisk(int face, std::string);
         double lastUpdate;
         glm::uvec2 windowSize;
         float nearPlane;
         float farPlane;
+        // pointer to either use the vector from the level or from here
+        std::vector<Light>* closestLights;
+        std::vector<Light> closestLightsVector; // contains the 32 closest lights
         ACGL::OpenGL::SharedShaderProgram lightingShader;
         ACGL::OpenGL::SharedShaderProgram depthCubeShader;
         ACGL::OpenGL::SharedShaderProgram depthShader;
