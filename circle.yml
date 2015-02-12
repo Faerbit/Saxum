@@ -21,11 +21,12 @@ test:
     override:
         - docker run -v ~/swp:/swp/swp -w=/swp/swp -u=$(id -u) faerbit/swp ./package.sh linux
         - docker run -v ~/swp:/swp/swp -w=/swp/swp -u=$(id -u) faerbit/swp ./package.sh windows
-        - cp MarbleGame_Windows.zip MarbleGame_Linux.zip $CIRCLE_ARTIFACTS
+        - if [ -f MarbleGame_Windows.zip ]; then; cp MarbleGame_Windows.zip $CIRCLE_ARTIFACTS
+        - if [ -f MarbleGame_Linux.zip ]; then; cp MarbleGame_Linux.zip $CIRCLE_ARTIFACTS
 
 deployment:
     master:
         branch: master
         commands:
-            - ./dropbox_uploader.sh -p upload MarbleGame_Windows.zip /
-            - ./dropbox_uploader.sh -p upload MarbleGame_Linux.zip /
+            - if [ -f MarbleGame_Windows.zip ]; then; ./dropbox_uploader.sh -p upload MarbleGame_Windows.zip /
+            - if [ -f MarbleGame_Linux.zip ]; then; ./dropbox_uploader.sh -p upload MarbleGame_Linux.zip /
