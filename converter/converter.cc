@@ -304,7 +304,7 @@ void Converter::updateComposition(int idG, int idB, float posX, float posZ){
         }
     }
     if(!compositionExists){
-        std::cout << "A composition has the ID " << idG << "," << idB << " in the png, but does not exist in the xml." << std::endl;
+        std::cout << "A composition has the ID " << idG << "," << idB << " and the position " << posX << "," << posZ << " in the png, but does not exist in the xml." << std::endl;
         exit(-1);
     }
 }
