@@ -53,7 +53,7 @@ void Physics::takeUpdateStep(float timeDiff)
 	    position.setY(playerBall->getCenterOfMassPosition().getY() + 1);
     
 	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
-	float str = cameraBody->getInvMass()*50 * dir.length();
+	float str = 50 * dir.length() / cameraBody->getInvMass();
 	cameraBody->applyCentralForce(-dir*str);//scale the force by camera mass
 	counter=0;
 	float speed = cameraBody->getLinearVelocity().length();
@@ -333,7 +333,7 @@ void Physics::addCamera() //Camera Creator automatically called when player is c
 	direction*=5; //create a offset of lenth 5 so we have a stable camera at the beginning
 	btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),playerBall->getCenterOfMassPosition()+direction));
 	
-	btRigidBody::btRigidBodyConstructionInfo info(1,motion,sphere,inertia);
+	btRigidBody::btRigidBodyConstructionInfo info(0.001,motion,sphere,inertia);
 	
 	cameraBody = new btRigidBody(info);
 	
@@ -391,7 +391,7 @@ void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength)
     change *= (mouseMovement.y);//we start with left/right movement because this needs to be calculated via a crossproduct, and the up down value would alter that
     change = btCross(btVector3(0,1,0),change);
     change.setY(mouseMovement.x/5);//scaleing because otherwise oup/down much stronger then left right
-    change*= strength;
+    change *= strength / cameraBody->getInvMass();
     
     cameraBody->applyCentralForce(change);
         
