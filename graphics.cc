@@ -11,11 +11,14 @@ using namespace ACGL::OpenGL;
 
 const double lightUpdateDelay = 0.5f;
 
-Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane, int cube_size) {
+Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, 
+    float farPlane, int cube_size,
+    unsigned int maxShadowRenderCount) {
     this->windowSize = windowSize;
     this->nearPlane = nearPlane;
     this->farPlane = farPlane;
     this->cube_size = cube_size;
+    this->maxShadowRenderCount = maxShadowRenderCount;
 }
 
 Graphics::Graphics() {
@@ -109,7 +112,7 @@ void Graphics::render(double time)
         glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f)};
 
     framebuffer_cube->bind();
-    for (unsigned int i_pointlight = 0; i_pointlight<closestLights->size(); i_pointlight++) {
+    for (unsigned int i_pointlight = 0; i_pointlight<closestLights->size() && i_pointlight < maxShadowRenderCount; i_pointlight++) {
         // render each side of the cube
         for (int i_face = 0; i_face<6; i_face++) {
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
