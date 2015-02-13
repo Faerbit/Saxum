@@ -1,7 +1,7 @@
 #version 150
 
-out float fragmentDepth;
+out float gl_FragDepth;
 
 void main() {
-    fragmentDepth = gl_FragCoord.z;
+    gl_FragDepth = gl_FragCoord.z;
 }
