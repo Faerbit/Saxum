@@ -41,16 +41,17 @@ void Physics::takeUpdateStep(float timeDiff)
 	        allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength); //apply a foce upon the object pushing it towards the constraint position
 	    }	
 	}
-	
-	
-	btVector3 position = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition(); //gets a vector from the player to the camera
-	position.normalize();
-	position *= 5;
-	position += playerBall->getCenterOfMassPosition(); //is the position 5 units away from the player in the direction of the camera
-	
-	position.setY(playerBall->getCenterOfMassPosition().getY() + 1);
-	 
-	 
+    
+    
+    btVector3 position = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition(); //gets a vector from the player to the camera
+    position.normalize();
+    position *= 5;
+    position += playerBall->getCenterOfMassPosition(); //is the position 5 units away from the player in the direction of the camera
+    
+    //prevent the camera from being dragged along on the ground
+    if (position.getY() < playerBall->getCenterOfMassPosition().getY() + 1)
+	    position.setY(playerBall->getCenterOfMassPosition().getY() + 1);
+    
 	btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
 	float str = cameraBody->getInvMass()*50 * dir.length();
 	cameraBody->applyCentralForce(-dir*str);//scale the force by camera mass
@@ -355,7 +356,7 @@ glm::vec3 Physics::getCameraPosition()
 	return save;
 }
 
-glm::vec3 Physics::getCameraToPlayer()//returns a glm::vec3 the goes from the player to the camera
+glm::vec3 Physics::getCameraToPlayer()//returns a glm::vec3 the goes from the camera to the player
 {
 	btVector3 origin = playerBall->getCenterOfMassPosition() - cameraBody->getCenterOfMassPosition();
 	glm::vec3 save(origin.getX(),origin.getY(),origin.getZ());
