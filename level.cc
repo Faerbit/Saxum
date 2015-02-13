@@ -64,7 +64,7 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     else {
         mouseDelta.x = -mouseDelta.x;
         camera.updateRotation(mouseDelta/100.0f);
-        physics.updateCameraPos(mouseDelta, 50);
+        physics.updateCameraPos(mouseDelta, 50, camera.getDistance());
         
         camera.setPosition(physics.getCameraPosition());
         camera.setDirection(physics.getCameraToPlayer());
