@@ -112,13 +112,13 @@ void Graphics::render(double time)
         glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f)};
 
     framebuffer_cube->bind();
-    for (unsigned int i_pointlight = 0; i_pointlight<closestLights->size() && i_pointlight < maxShadowRenderCount; i_pointlight++) {
+    for (unsigned int i_pointlight = 0; i_pointlight<closestLights.size() && i_pointlight < maxShadowRenderCount; i_pointlight++) {
         // render each side of the cube
         for (int i_face = 0; i_face<6; i_face++) {
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
             glClear(GL_DEPTH_BUFFER_BIT);
-            glm::mat4 viewMatrix = glm::lookAt(closestLights->at(i_pointlight).getPosition(),
-                closestLights->at(i_pointlight).getPosition() + looking_directions[i_face], upvectors[i_face]);
+            glm::mat4 viewMatrix = glm::lookAt(closestLights.at(i_pointlight).getPosition(),
+                closestLights.at(i_pointlight).getPosition() + looking_directions[i_face], upvectors[i_face]);
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * viewMatrix;
             std::vector<glm::mat4> viewMatrixVector = std::vector<glm::mat4>();
             viewMatrixVector.push_back(viewMatrix);
@@ -200,43 +200,38 @@ bool Graphics::compareLightDistances(Light a, Light b) {
 }
 
 void Graphics::updateClosestLights() {
-    if (level->getLights()->size() <= 32) {
-        this->closestLights = level->getLights();
-    }
-    else {
-        closestLightsVector = std::vector<Light>(*level->getLights());
-        std::sort(closestLightsVector.begin(),
-            closestLightsVector.end(),
-            [this](Light a, Light b) {return compareLightDistances(a, b); });
-        closestLightsVector = std::vector<Light>(&closestLightsVector[0],
-                &closestLightsVector[31]);
-        closestLights = &closestLightsVector;
-    }
+    closestLights = std::vector<Light>(*level->getLights());
+    std::sort(closestLights.begin(),
+        closestLights.end(),
+        [this](Light a, Light b) {return compareLightDistances(a, b); });
+    closestLights = std::vector<Light>(&closestLights[0],
+            &closestLights[31]);
 }
 
 void Graphics::updateShaderLights() {
     updateClosestLights();
-    if (closestLights->size() > 0) {
-        lightingShader->setUniform("lightCount", (int) closestLights->size());
+    if (closestLights.size() > 0) {
+        lightingShader->setUniform("lightCount", (int) closestLights.size());
+        lightingShader->setUniform("maxShadowRenderCount", std::min((int) closestLights.size(), (int)maxShadowRenderCount));
 
         // Build light position array
-        glm::vec3 lightSources[closestLights->size()];
-        for(unsigned int i = 0; i<closestLights->size(); i++) {
-            lightSources[i] = closestLights->at(i).getPosition();
+        glm::vec3 lightSources[closestLights.size()];
+        for(unsigned int i = 0; i<closestLights.size(); i++) {
+            lightSources[i] = closestLights.at(i).getPosition();
         }
         glUniform3fv(lightingShader->getUniformLocation("lightSources"),
             sizeof(lightSources),  (GLfloat*) lightSources);
         // Build light colour array
-        glm::vec3 lightColours[closestLights->size()];
-        for(unsigned int i = 0; i<closestLights->size(); i++) {
-            lightColours[i] = closestLights->at(i).getColour();
+        glm::vec3 lightColours[closestLights.size()];
+        for(unsigned int i = 0; i<closestLights.size(); i++) {
+            lightColours[i] = closestLights.at(i).getColour();
         }
         glUniform3fv(lightingShader->getUniformLocation("lightColors"),
             sizeof(lightColours),  (GLfloat*) lightColours);
         // Build light attenuation array
-        float lightIntensities[closestLights->size()];
-        for(unsigned int i = 0; i<closestLights->size(); i++) {
-            lightIntensities[i] = closestLights->at(i).getIntensity();
+        float lightIntensities[closestLights.size()];
+        for(unsigned int i = 0; i<closestLights.size(); i++) {
+            lightIntensities[i] = closestLights.at(i).getIntensity();
         }
         glUniform1fv(lightingShader->getUniformLocation("lightIntensities"),
             sizeof(lightIntensities),  (GLfloat*) lightIntensities);
