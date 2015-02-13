@@ -177,7 +177,7 @@ void Graphics::render(double time)
     
     // set Material Parameters
     lightingShader->setUniform("ambientColor", level->getAmbientLight());
-    lightingShader->setUniform("camera", level->getCameraPosition());
+    lightingShader->setUniform("camera", level->getPhysics()->getCameraPosition());
     
     //set view and projection matrix
     glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
