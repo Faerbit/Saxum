@@ -5,7 +5,7 @@ Loader::Loader() {
 }
 
 void Loader::loadConfig(Application* application) {
-    int windowWidth, windowHeight, shadowCubeSize;
+    int windowWidth, windowHeight, shadowCubeSize, maxShadowRenderCount;
     float farPlane;
     std::string compositionsPath, shaderPath, geometryPath, texturePath, scriptPath, heightmapPath, levelXmlPath;
     XMLDocument* config = new XMLDocument();
@@ -20,6 +20,7 @@ void Loader::loadConfig(Application* application) {
     errorCheck(resolution->FirstChildElement("height")->QueryIntText(&windowHeight));
     errorCheck(config->FirstChildElement("shadowCubeSize")->QueryIntText(&shadowCubeSize));
     errorCheck(config->FirstChildElement("farPlane")->QueryFloatText(&farPlane));
+    errorCheck(config->FirstChildElement("maxShadowRenderCount")->QueryIntText(&maxShadowRenderCount));
     
     const char* charCompositionsPath = config->FirstChildElement("compositionsPath")->GetText();
     if(charCompositionsPath == NULL){
@@ -74,6 +75,7 @@ void Loader::loadConfig(Application* application) {
     application->setWindowHeight(windowHeight);
     application->setShadowCubeSize(shadowCubeSize);
     application->setFarPlane(farPlane);
+    application->setMaxShadowRenderCount(maxShadowRenderCount);
     application->setCompositionsPath(compositionsPath);
     application->setShaderPath(shaderPath);
     application->setGeometryPath(geometryPath);
@@ -506,6 +508,38 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
         }
     }//positionConstraints
 }
+
+
+
+glm::vec3 Loader::reloadPlayerPosition(std::string filePath, Level* level){
+    XMLDocument* doc = new XMLDocument();
+    const char* xmlFile = filePath.c_str();
+    doc->LoadFile(xmlFile);
+    if (doc->ErrorID()!=0){
+        printf("Could not open ObjectSetupXml!\n");
+        exit(-1);
+    }
+    //iterate over all compositions in Level.xml
+    XMLElement* thisComposition = doc->FirstChildElement("composition");
+    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
+        int thisType = 0;
+        errorCheck(thisComposition->FirstChildElement("typeID")->QueryIntText(&thisType));
+        if (thisType == 20){
+            float compXPos, compYOffset, compZPos;
+            errorCheck(thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos));
+            errorCheck(thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset));
+            errorCheck(thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos));
+            compYOffset += level->getTerrain()->getHeightmap()[int(compXPos-0.5+0.5*level->getTerrain()->getHeightmapHeight())]
+                                                                        [int(compZPos-0.5+0.5*level->getTerrain()->getHeightmapWidth())];
+            glm::vec3 position = glm::vec3(compXPos, compYOffset, compZPos);
+            return position;
+        }
+    }
+    printf("Level.xml contains no player.");
+    exit(-1);
+}
+
+
 
 void Loader::errorCheck(XMLError error){
     if (error) {

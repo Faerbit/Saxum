@@ -19,7 +19,8 @@ class Camera {
         glm::vec3 getPosition();
         void setDirection(glm::vec3 dir);
         glm::vec3 getDirection();
-        
+        bool getIsPhysicsCamera();
+        void setIsPhysicsCamera(bool val);
     private:
         void updatePosition();
         float distance;
@@ -27,6 +28,7 @@ class Camera {
         glm::vec3 vector;
         glm::vec3 position;
         glm::vec3 direction;
+        bool usePhysicsCamera;
 };
 
 #endif

@@ -7,6 +7,8 @@
 
 <farPlane>150.0</farPlane>
 
+<maxShadowRenderCount>10</maxShadowRenderCount>
+
 <compositionsPath>../Levels/ObjectSetups/Compositions.xml</compositionsPath>
 
 <shaderPath>Shader/</shaderPath>

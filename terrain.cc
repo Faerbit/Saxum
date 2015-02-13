@@ -82,6 +82,7 @@ void Terrain::makeTriangleMesh(){
     }
     
     ab->setDataElements(numVertices, abData);
+    delete abData;
     this->triangleMesh = std::make_shared<ACGL::OpenGL::VertexArrayObject>();
     this->triangleMesh->bind();
     this->triangleMesh->setMode(GL_TRIANGLE_STRIP);
