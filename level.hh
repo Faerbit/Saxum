@@ -20,11 +20,11 @@ extern "C" {
 
 class Level {
     public:
-        Level(std::string heightmapFilePath);
+        Level(std::string heightmapFilePath, std::string xmlFilePath);
         Level();
         ~Level();
         void load();
-        void update(float runTime, glm::vec2 mouseDelta,bool wPressed, bool aPressed,bool sPressed, bool dPressed);
+        void update(float runTime, glm::vec2 mouseDelta,bool wPressed, bool aPressed,bool sPressed, bool dPressed, bool kPressed, bool lPressed);
         void render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
             glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs=0);
         glm::vec3 getAmbientLight();
@@ -55,6 +55,7 @@ class Level {
         void addTrigger(Trigger trigger);
         lua_State* getLuaState();
         Terrain* getTerrain();
+        void resetPlayer();
     private:
         lua_State* luaState=nullptr;
         std::vector<Object*> objects;
@@ -71,6 +72,7 @@ class Level {
         Terrain terrain;
         float skydomeSize;
         float strength;
+        std::string xmlFilePath;
 };
 
 #endif

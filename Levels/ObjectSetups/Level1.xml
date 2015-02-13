@@ -1315,6 +1315,13 @@
     <idGreen>1</idGreen>
     <idBlue>205</idBlue>
     <typeID>120</typeID>
+    <positionConstraint>
+        <objectNum>0</objectNum>
+        <xPosition>159.5</xPosition>
+        <yPosition>30</yPosition>
+        <zPosition>17.5</zPosition>
+        <strength>10.0</strength>
+    </positionConstraint>
     <trigger>
         <name>-</name>
         <xPosition>0</xPosition>
@@ -2881,6 +2888,13 @@
     <idGreen>1</idGreen>
     <idBlue>133</idBlue>
     <typeID>220</typeID>
+    <positionConstraint>
+        <objectNum>0</objectNum>
+        <xPosition>81.5</xPosition>
+        <yPosition>25.0</yPosition>
+        <zPosition>17.5.0</zPosition>
+        <strength>1000.0</strength>
+    </positionConstraint>
     <trigger>
         <name>-</name>
         <xPosition>0</xPosition>

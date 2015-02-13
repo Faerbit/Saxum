@@ -42,23 +42,32 @@ void Physics::takeUpdateStep(float timeDiff)
     }
     
     
-    btVector3 position = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition(); //gets a vector from the player to the camera
+    btVector3 position = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition(); //gets a vector from the player to the camera    
     position.normalize();
-    position *= 5;
-    position += playerBall->getCenterOfMassPosition(); //is the position 5 units away from the player in the direction of the camera
-    
+    position *= cameraDistance;
+    position += playerBall->getCenterOfMassPosition(); //is the position cameraDistance away from the player in the direction of the camera
+  
     //prevent the camera from being dragged along on the ground
-    if (position.getY() < playerBall->getCenterOfMassPosition().getY() + 1)
-        position.setY(playerBall->getCenterOfMassPosition().getY() + 1);
+    if (position.getY() < playerBall->getCenterOfMassPosition().getY() + cameraDistance/2)
+        position.setY(playerBall->getCenterOfMassPosition().getY() + cameraDistance/2);
     
     btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
     float str = 50 * dir.length() / cameraBody->getInvMass(); //getInvMass() returns the inverted mass
-    cameraBody->applyCentralForce(-dir*str); //scale the force by camera mass
+    
+          
+    /*if(dir.length() > -0.1f && dir.length() < 0.1f)
+    {
+        cameraBody->setLinearVelocity(btVector3(0,0,0));
+        world->stepSimulation(timeDiff);
+        return;
+    }*/
+    
+    cameraBody->setLinearVelocity(btVector3(0,0,0));
+    cameraBody->applyCentralForce(-dir*str*10) ; //scale the force by camera mass
     counter=0;
     float speed = cameraBody->getLinearVelocity().length();
     if(speed>20.0f)
     {
-        printf("%f , %f \n", speed, position.length());
         position = cameraBody->getLinearVelocity();
         position.normalize();
         cameraBody->setLinearVelocity(position*20);
@@ -205,7 +214,7 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
     btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(glmQuat.x,glmQuat.y,glmQuat.z,glmQuat.w),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
 	
     btVector3 inertia(0,0,0);
-    if(mass != 0.0 && rotate) //&& rotate lets certain objects get inertia (0,0,0) (not rotateable)
+    if(mass != 0.0)
     {
         shape->calculateLocalInertia((btScalar)mass,inertia);
     }
@@ -220,6 +229,10 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
     
     world->addRigidBody(body,COL_OBJECTS, objectsPhysicsCollision);
     
+    if(!rotate)//rotate lets certain objects get inertia (0,0,0) (not rotateable)
+    {
+        body->setAngularFactor(btVector3(0,0,0));
+    }
     
     if(bodies.size() != indice)
         throw std::invalid_argument( "Bodies out of Sync" );
@@ -238,7 +251,7 @@ void Physics::addButton(float width, float height, float length, Entity entity, 
     btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(glmQuat.x,glmQuat.y,glmQuat.z,glmQuat.w),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
     
     btVector3 inertia(0,0,0);
-    if(mass != 0.0 && rotate) //&& rotate lets certain objects get inertia (0,0,0) (not rotateable)
+    if(mass != 0.0) //&& rotate lets certain objects get inertia (0,0,0) (not rotateable)
     {
         box->calculateLocalInertia((btScalar)mass,inertia);
     }
@@ -251,6 +264,11 @@ void Physics::addButton(float width, float height, float length, Entity entity, 
     world->addRigidBody(body,COL_OBJECTS_NO_TERRAIN, specialPhysicsCollision); //the specialPhysicsCollision allows these objects to not collide with the terrain
     
     bodies.push_back(body);
+    
+     if(!rotate)
+    {
+        body->setAngularFactor(btVector3(0,0,0));
+    }
     
     if(bodies.size() != indice)
         throw std::invalid_argument( "Bodies out of Sync" );
@@ -267,10 +285,11 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
     btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(glmQuat.x,glmQuat.y,glmQuat.z,glmQuat.w),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
     
     btVector3 inertia(0,0,0);
-    if(mass != 0.0)
+    if(mass != 0.0) //&& rotate lets certain objects get inertia (0,0,0) (not rotateable)
     {
         box->calculateLocalInertia((btScalar)mass,inertia);
     }
+    
     
     btRigidBody::btRigidBodyConstructionInfo info(mass,motion,box,inertia);
     
@@ -281,6 +300,11 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
     world->addRigidBody(body,COL_OBJECTS, objectsPhysicsCollision);
     
     bodies.push_back(body);
+    
+    if(!rotate)
+    {
+        body->setAngularFactor(btVector3(0,0,0));
+    }
     
     if(bodies.size() != indice)
         throw std::invalid_argument( "Bodies out of Sync" );
@@ -312,6 +336,11 @@ void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, f
     
     bodies.push_back(body);
     
+    if(!rotate)//rotate lets certain objects get inertia (0,0,0) (not rotateable)
+    {
+        body->setAngularFactor(btVector3(0,0,0));
+    }
+    
     body->setSleepingThresholds(0,0);
     
     if(bodies.size() != indice)
@@ -326,7 +355,7 @@ void Physics::addCamera() //Camera Creator automatically called when player is c
     
     btVector3 direction(1,1,1);
     direction.normalize();
-    direction*=5; //create a offset of lenth 5 so we have a stable camera at the beginning
+    direction*=cameraDistance; //create a offset of length 5 so we have a stable camera at the beginning
     btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),playerBall->getCenterOfMassPosition()+direction));
     
     btRigidBody::btRigidBodyConstructionInfo info(0.001,motion,sphere,inertia);
@@ -334,6 +363,9 @@ void Physics::addCamera() //Camera Creator automatically called when player is c
     cameraBody = new btRigidBody(info);
     
     cameraBody->setDamping(0.9,0.5); //this damping factor leaves a relativly smoothe system
+    
+    info.m_friction = 0; 
+    info.m_restitution = 0;
     
     world->addRigidBody(cameraBody,COL_OBJECTS, objectsPhysicsCollision);
     
@@ -377,15 +409,16 @@ glm::mat4 Physics::getRotation(int i)
 }
 
 //these are used to apply a force to the camera body according to the movement of the mouse
-void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength)
+void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength, float distance)
 {
+    this->cameraDistance = distance;
     //note: in mouseMovement x and y are flipped in contrast to bullet
     btVector3 change =  playerBall->getCenterOfMassPosition()-cameraBody->getCenterOfMassPosition();
     change.setY(0);
     change.normalize(); //normalize so that the distance between camera and body does not matter
     change *= (mouseMovement.y); //we start with left/right movement because this needs to be calculated via a crossproduct, and the up down value would alter that
     change = btCross(btVector3(0,1,0),change);
-    change.setY(mouseMovement.x/5); //scaleing because otherwise oup/down much stronger then left right
+    change.setY(mouseMovement.x); //scaleing because otherwise oup/down much stronger then left right
     change *= strength / cameraBody->getInvMass();
     
     cameraBody->applyCentralForce(change);
@@ -443,6 +476,17 @@ void Physics::addStaticGroundPlane()
     world->addRigidBody(staticGroundBody);
 } //not needed anymoer, but still good for debugging
 
+
+
+void Physics::forceMove(glm::vec3 newPosition, unsigned indice)//ugly, but needed for reset
+{
+    bodies[indice]->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),btVector3(newPosition.x,newPosition.y,newPosition.z)));
+}
+
+void Physics::forceMoveCamera(glm::vec3 newPosition)
+{
+    cameraBody->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),btVector3(newPosition.x,newPosition.y,newPosition.z)));
+}
 
 void Physics::kill() //delete dynamically allocated memory
 {

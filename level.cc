@@ -1,11 +1,13 @@
 #include "level.hh"
+#include "loader.hh"
 #include <string>
 
-Level::Level(std::string heightmapFilePath){
+Level::Level(std::string heightmapFilePath, std::string xmlFilePath){
     this->terrain = Terrain(heightmapFilePath);
     // default value
     skydomeSize = 50.0f;
     physics = Physics();
+    this->xmlFilePath = xmlFilePath;
 }
 
 Level::Level() {
@@ -54,7 +56,7 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
     }
 }
 
-void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPressed, bool sPressed, bool dPressed) {
+void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPressed, bool sPressed, bool dPressed,bool kPressed, bool lPressed) {
     // Ignore first two mouse updates, because they are incorrect
     // DON'T try to move this functionallity elsewhere
     static int i = 0;
@@ -64,7 +66,7 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     else {
         mouseDelta.x = -mouseDelta.x;
         camera.updateRotation(mouseDelta/100.0f);
-        physics.updateCameraPos(mouseDelta, 50);
+        physics.updateCameraPos(mouseDelta, 50, camera.getDistance());
         
         camera.setPosition(physics.getCameraPosition());
         camera.setDirection(physics.getCameraToPlayer());
@@ -81,6 +83,11 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     if(dPressed){
         physics.rollRight(camera.getVector(),strength);
     }
+    
+    if(kPressed)
+        camera.setIsPhysicsCamera(true);
+    if(lPressed)
+        camera.setIsPhysicsCamera(false);
     
     physics.takeUpdateStep(runTime);
     
@@ -160,6 +167,12 @@ void Level::deleteObject(int objectIndex){
             i--;
         }
     }
+}
+
+void Level::resetPlayer(){
+    Loader loader = Loader();
+    glm::vec3 newPosition = loader.reloadPlayerPosition(xmlFilePath, this);
+    //TODO cameraCenter.setPosition(newPosition);
 }
 
 void Level::setStrength(float strength) {

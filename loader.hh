@@ -7,8 +7,9 @@
 class Loader {
     public:
         Loader();
-        void load(std::string filePath, Level* level, std::string compositionsPath, std::string scriptPath);
         void loadConfig(Application* application);
+        void load(std::string filePath, Level* level, std::string compositionsPath, std::string scriptPath);
+        glm::vec3 reloadPlayerPosition(std::string filePath, Level* level);
     private:
         void errorCheck(tinyxml2::XMLError error);
 };
