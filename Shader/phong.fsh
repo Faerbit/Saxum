@@ -19,28 +19,6 @@ uniform samplerCubeShadow shadowMap_cube6;
 uniform samplerCubeShadow shadowMap_cube7;
 uniform samplerCubeShadow shadowMap_cube8;
 uniform samplerCubeShadow shadowMap_cube9;
-uniform samplerCubeShadow shadowMap_cube10;
-uniform samplerCubeShadow shadowMap_cube11;
-uniform samplerCubeShadow shadowMap_cube12;
-uniform samplerCubeShadow shadowMap_cube13;
-uniform samplerCubeShadow shadowMap_cube14;
-uniform samplerCubeShadow shadowMap_cube15;
-uniform samplerCubeShadow shadowMap_cube16;
-uniform samplerCubeShadow shadowMap_cube17;
-uniform samplerCubeShadow shadowMap_cube18;
-uniform samplerCubeShadow shadowMap_cube19;
-uniform samplerCubeShadow shadowMap_cube20;
-uniform samplerCubeShadow shadowMap_cube21;
-uniform samplerCubeShadow shadowMap_cube22;
-uniform samplerCubeShadow shadowMap_cube23;
-uniform samplerCubeShadow shadowMap_cube24;
-uniform samplerCubeShadow shadowMap_cube25;
-uniform samplerCubeShadow shadowMap_cube26;
-uniform samplerCubeShadow shadowMap_cube27;
-uniform samplerCubeShadow shadowMap_cube28;
-uniform samplerCubeShadow shadowMap_cube29;
-uniform samplerCubeShadow shadowMap_cube30;
-uniform samplerCubeShadow shadowMap_cube31;
 uniform vec3 ambientColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
@@ -123,11 +101,13 @@ void main()
     // direction lighting
     if(length(directionalLightVector)>0.0f) {
         vec3 directionalVector = normalize(directionalLightVector);
+        float directionalVisibility = sampleDirectionalShadow(shadowMap, shadowCoord);
         diffuseColor += clamp(dot(normalize(vNormal), directionalVector)
-        *diffuseFactor*directionalIntensity*directionalColor, 0.0, 1.0);
+        *diffuseFactor*directionalIntensity*directionalColor, 0.0, 1.0)*directionalVisibility;
         vec3 cameraVector = normalize(camera - vec3(fragPosition));
-        specularColor += clamp(pow((dot((cameraVector+directionalVector),normalize(vNormal))/(length(cameraVector+directionalVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
-        *specularFactor*directionalIntensity*directionalColor;
+        specularColor += clamp(pow((dot((cameraVector+directionalVector),normalize(vNormal))/
+        (length(cameraVector+directionalVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
+        *specularFactor*directionalIntensity*directionalColor*directionalVisibility;
     }
 
     // point lights
@@ -135,134 +115,58 @@ void main()
     for(int i = 0; i<lightCount; i++) {
         vec3 lightDirection = vec3(fragPosition) - lightSources[i];
         float distance = length(lightDirection);
+        float pointVisibility = 0.0f;
         // only take lights into account with meaningful contribution
-        if (distance > 0.001f) {
+        if (distance < farPlane) {
+            if (i == 0) {
+                pointVisibility = samplePointShadow(shadowMap_cube0, lightDirection);
+            }
+            if (i == 1) {
+                pointVisibility = samplePointShadow(shadowMap_cube1, lightDirection);
+            }
+
+            if (i == 2) {
+                pointVisibility = samplePointShadow(shadowMap_cube2, lightDirection);
+            }
+
+            if (i == 3) {
+                pointVisibility = samplePointShadow(shadowMap_cube3, lightDirection);
+            }
+
+            if (i == 4) {
+                pointVisibility = samplePointShadow(shadowMap_cube4, lightDirection);
+            }
+
+            if (i == 5) {
+                pointVisibility = samplePointShadow(shadowMap_cube5, lightDirection);
+            }
+
+            if (i == 6) {
+                pointVisibility = samplePointShadow(shadowMap_cube6, lightDirection);
+            }
+
+            if (i == 7) {
+                pointVisibility = samplePointShadow(shadowMap_cube7, lightDirection);
+            }
+
+            if (i == 8) {
+                pointVisibility = samplePointShadow(shadowMap_cube8, lightDirection);
+            }
+
+            if (i == 9) {
+                pointVisibility = samplePointShadow(shadowMap_cube9, lightDirection);
+            }
             vec3 lightVector = normalize(lightSources[i]-vec3(fragPosition));
             float intensity = clamp(exp(-(1/lightIntensities[i])*distance), 0.0, 1.0);
             diffuseColor += clamp(dot(normalize(vNormal), lightVector)
-            *diffuseFactor*intensity*lightColors[i], 0.0, 1.0);
+            *diffuseFactor*intensity*lightColors[i], 0.0, 1.0)*pointVisibility;
             vec3 cameraVector = normalize(camera - vec3(fragPosition));
-            specularColor += clamp(pow((dot((cameraVector+lightVector),normalize(vNormal))/(length(cameraVector+lightVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
-            *specularFactor*intensity*lightColors[i];
-            if (i == 0) {
-                visibility *= samplePointShadow(shadowMap_cube0, lightDirection);
-            }
-            if (i == 1) {
-                visibility *= samplePointShadow(shadowMap_cube1, lightDirection);
-            }
-            if (i == 2) {
-                visibility *= samplePointShadow(shadowMap_cube2, lightDirection);
-            }
-            if (i == 3) {
-                visibility *= samplePointShadow(shadowMap_cube3, lightDirection);
-            }
-            if (i == 4) {
-                visibility *= samplePointShadow(shadowMap_cube4, lightDirection);
-            }
-            if (i == 5) {
-                visibility *= samplePointShadow(shadowMap_cube5, lightDirection);
-            }
-            if (i == 6) {
-                visibility *= samplePointShadow(shadowMap_cube6, lightDirection);
-            }
-            if (i == 7) {
-                visibility *= samplePointShadow(shadowMap_cube7, lightDirection);
-            }
-            if (i == 8) {
-                visibility *= samplePointShadow(shadowMap_cube8, lightDirection);
-            }
-            if (i == 9) {
-                visibility *= samplePointShadow(shadowMap_cube9, lightDirection);
-            }
-            if (i == 10) {
-                visibility *= samplePointShadow(shadowMap_cube10, lightDirection);
-            }
-            if (i == 11) {
-                visibility *= samplePointShadow(shadowMap_cube11, lightDirection);
-            }
-            if (i == 12) {
-                visibility *= samplePointShadow(shadowMap_cube12, lightDirection);
-            }
-            if (i == 13) {
-                visibility *= samplePointShadow(shadowMap_cube13, lightDirection);
-            }
-            if (i == 14) {
-                visibility *= samplePointShadow(shadowMap_cube14, lightDirection);
-            }
-            if (i == 15) {
-                visibility *= samplePointShadow(shadowMap_cube15, lightDirection);
-            }
-            if (i == 16) {
-                visibility *= samplePointShadow(shadowMap_cube16, lightDirection);
-            }
-
-            if (i == 17) {
-                visibility *= samplePointShadow(shadowMap_cube17, lightDirection);
-            }
-
-            if (i == 18) {
-                visibility *= samplePointShadow(shadowMap_cube18, lightDirection);
-            }
-
-            if (i == 19) {
-                visibility *= samplePointShadow(shadowMap_cube19, lightDirection);
-            }
-
-            if (i == 20) {
-                visibility *= samplePointShadow(shadowMap_cube20, lightDirection);
-            }
-
-            if (i == 21) {
-                visibility *= samplePointShadow(shadowMap_cube21, lightDirection);
-            }
-
-            if (i == 22) {
-                visibility *= samplePointShadow(shadowMap_cube22, lightDirection);
-            }
-
-            if (i == 23) {
-                visibility *= samplePointShadow(shadowMap_cube23, lightDirection);
-            }
-
-            if (i == 24) {
-                visibility *= samplePointShadow(shadowMap_cube24, lightDirection);
-            }
-
-            if (i == 25) {
-                visibility *= samplePointShadow(shadowMap_cube25, lightDirection);
-            }
-
-            if (i == 26) {
-                visibility *= samplePointShadow(shadowMap_cube26, lightDirection);
-            }
-
-            if (i == 27) {
-                visibility *= samplePointShadow(shadowMap_cube27, lightDirection);
-            }
-
-            if (i == 28) {
-                visibility *= samplePointShadow(shadowMap_cube28, lightDirection);
-            }
-
-            if (i == 29) {
-                visibility *= samplePointShadow(shadowMap_cube29, lightDirection);
-            }
-
-            if (i == 30) {
-                visibility *= samplePointShadow(shadowMap_cube30, lightDirection);
-            }
-
-            if (i == 31) {
-                visibility *= samplePointShadow(shadowMap_cube31, lightDirection);
-            }
+            specularColor += clamp(pow((dot((cameraVector+lightVector),normalize(vNormal))/
+            (length(cameraVector+lightVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
+            *specularFactor*intensity*lightColors[i]*pointVisibility;
         }
     }
 
-    // shadows 
-    visibility *= sampleDirectionalShadow(shadowMap, shadowCoord);
-
-    specularColor *= visibility;
-    diffuseColor  *= visibility;
 
     vec3 finalColor = specularColor + diffuseColor + ambientColor;
     float distanceCameraCenter = distance(cameraCenter, vec3(fragPosition));

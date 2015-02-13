@@ -60,13 +60,13 @@ void Graphics::init(Level* level) {
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
     // Exit if we need more texture units
-    if (number_of_texture_units < 34) {
-        printf("You need at least 34 texture units to run this application. Exiting\n");
+    if (number_of_texture_units < 12) {
+        printf("You need at least 12 texture units to run this application. Exiting\n");
         exit(-1);
     }
 
     // always generate and bind 32 cube maps, because otherwise the shader won't work
-    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(32);
+    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(10);
     for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {
         depth_cubeMaps.at(i) = SharedTextureCubeMap(new TextureCubeMap(glm::vec2(cube_size, cube_size), GL_DEPTH_COMPONENT24));
         depth_cubeMaps.at(i)->setMinFilter(GL_NEAREST);
