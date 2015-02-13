@@ -14,7 +14,8 @@ void Application::init()
     std::srand(std::time(NULL));
     // choose Level             TODO: Choose this in a menu
     std::string heightmapFilePath = heightmapPath + "heightmapLvl1.png";
-    this->level = Level(heightmapFilePath);
+    std::string levelXmlFilePath = levelXmlPath + "Level1.xml";
+    this->level = Level(heightmapFilePath, levelXmlFilePath);
     level.getPhysics()->init(geometryPath);
     // Don't change this!
     ignoredMouseUpdates = 0;
@@ -31,7 +32,7 @@ void Application::init()
     // load Level
     level.load();
     Loader loader = Loader();
-    std::string levelXmlFilePath = levelXmlPath + "Level1.xml";
+    
     loader.load(levelXmlFilePath, &level, compositionsPath, scriptPath);
     graphics.init(&level);
     

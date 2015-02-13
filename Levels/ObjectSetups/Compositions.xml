@@ -1,7 +1,7 @@
 <!-- Rotations around the three axes are given in degrees.
     The objects are first rotated around the z-, then y- and then x-axis. -->
 
-<!-- Marble -->
+<!-- Marble: Do not change!(except for mass)-->
 <composition>
     <typeID>20</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
@@ -415,7 +415,7 @@
         <yRot>0.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.5</scale>
-        <mass>0.0</mass>
+        <mass>100.0</mass>
     </object>
 </composition>
 

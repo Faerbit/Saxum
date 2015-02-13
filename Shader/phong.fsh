@@ -26,6 +26,7 @@ uniform float specularFactor;
 uniform vec3 camera;
 uniform float shininess;
 uniform int lightCount;
+uniform int maxShadowRenderCount;
 uniform vec3 directionalLightVector;
 uniform vec3 directionalColor;
 uniform float directionalIntensity;
@@ -115,45 +116,37 @@ void main()
     for(int i = 0; i<lightCount; i++) {
         vec3 lightDirection = vec3(fragPosition) - lightSources[i];
         float distance = length(lightDirection);
-        float pointVisibility = 0.0f;
+        float pointVisibility = 1.0f;
         // only take lights into account with meaningful contribution
         if (distance < farPlane) {
-            if (i == 0) {
+            if (i == 0 && i<maxShadowRenderCount) {
                 pointVisibility = samplePointShadow(shadowMap_cube0, lightDirection);
             }
-            if (i == 1) {
+            if (i == 1 && i<maxShadowRenderCount) {
                 pointVisibility = samplePointShadow(shadowMap_cube1, lightDirection);
             }
-
-            if (i == 2) {
+            if (i == 2 && i<maxShadowRenderCount) {
                 pointVisibility = samplePointShadow(shadowMap_cube2, lightDirection);
             }
-
-            if (i == 3) {
+            if (i == 3 && i<maxShadowRenderCount) {
                 pointVisibility = samplePointShadow(shadowMap_cube3, lightDirection);
             }
-
-            if (i == 4) {
+            if (i == 4 && i<maxShadowRenderCount) {
                 pointVisibility = samplePointShadow(shadowMap_cube4, lightDirection);
             }
-
-            if (i == 5) {
+            if (i == 5 && i<maxShadowRenderCount) {
                 pointVisibility = samplePointShadow(shadowMap_cube5, lightDirection);
             }
-
-            if (i == 6) {
+            if (i == 6 && i<maxShadowRenderCount) {
                 pointVisibility = samplePointShadow(shadowMap_cube6, lightDirection);
             }
-
-            if (i == 7) {
+            if (i == 7 && i<maxShadowRenderCount) {
                 pointVisibility = samplePointShadow(shadowMap_cube7, lightDirection);
             }
-
-            if (i == 8) {
+            if (i == 8 && i<maxShadowRenderCount) {
                 pointVisibility = samplePointShadow(shadowMap_cube8, lightDirection);
             }
-
-            if (i == 9) {
+            if (i == 9 && i<maxShadowRenderCount) {
                 pointVisibility = samplePointShadow(shadowMap_cube9, lightDirection);
             }
             vec3 lightVector = normalize(lightSources[i]-vec3(fragPosition));
