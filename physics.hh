@@ -68,6 +68,7 @@ class Physics {
 	glm::vec3 getCameraToPlayer();
 	void kill();
 	void addButtonFrame(Entity entity);
+	void forceMove(glm::vec3 newPosition, unsigned indice);
 
     struct positionConstraint{btRigidBody* body; float strength; btVector3 position;};
 

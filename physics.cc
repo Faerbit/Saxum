@@ -42,18 +42,28 @@ void Physics::takeUpdateStep(float timeDiff)
     }
     
     
-    btVector3 position = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition(); //gets a vector from the player to the camera
+    btVector3 position = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition(); //gets a vector from the player to the camera    
     position.normalize();
     position *= cameraDistance;
     position += playerBall->getCenterOfMassPosition(); //is the position cameraDistance away from the player in the direction of the camera
-    
+  
     //prevent the camera from being dragged along on the ground
     if (position.getY() < playerBall->getCenterOfMassPosition().getY() + 1)
         position.setY(playerBall->getCenterOfMassPosition().getY() + 1);
     
     btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
     float str = 50 * dir.length() / cameraBody->getInvMass(); //getInvMass() returns the inverted mass
-    cameraBody->applyCentralForce(-dir*str); //scale the force by camera mass
+    
+          
+    /*if(dir.length() > -0.1f && dir.length() < 0.1f)
+    {
+        cameraBody->setLinearVelocity(btVector3(0,0,0));
+        world->stepSimulation(timeDiff);
+        return;
+    }*/
+    
+    cameraBody->setLinearVelocity(btVector3(0,0,0));
+    cameraBody->applyCentralForce(-dir*str*10) ; //scale the force by camera mass
     counter=0;
     float speed = cameraBody->getLinearVelocity().length();
     if(speed>20.0f)
@@ -408,7 +418,7 @@ void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength, float dis
     change.normalize(); //normalize so that the distance between camera and body does not matter
     change *= (mouseMovement.y); //we start with left/right movement because this needs to be calculated via a crossproduct, and the up down value would alter that
     change = btCross(btVector3(0,1,0),change);
-    change.setY(mouseMovement.x/5); //scaleing because otherwise oup/down much stronger then left right
+    change.setY(mouseMovement.x); //scaleing because otherwise oup/down much stronger then left right
     change *= strength / cameraBody->getInvMass();
     
     cameraBody->applyCentralForce(change);
@@ -466,6 +476,12 @@ void Physics::addStaticGroundPlane()
     world->addRigidBody(staticGroundBody);
 } //not needed anymoer, but still good for debugging
 
+
+
+void Physics::forceMove(glm::vec3 newPosition, unsigned indice)
+{
+    bodies[indice]->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),btVector3(newPosition.x,newPosition.y,newPosition.z)));
+}
 
 void Physics::kill() //delete dynamically allocated memory
 {
