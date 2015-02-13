@@ -38,6 +38,7 @@ void Physics::takeUpdateStep(float timeDiff)
             btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
             dir = dir*allPositionConstraints[i].strength - allPositionConstraints[i].body->getLinearVelocity();
             allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength); //apply a foce upon the object pushing it towards the constraint position
+            allPositionConstraints[i].body->setSleepingThresholds(0,0);
         }
     }
     

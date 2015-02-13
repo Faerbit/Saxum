@@ -1333,8 +1333,8 @@
         <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openFirstDoor</luaScript>
-        <toChangeIdGreen>0</toChangeIdGreen>
-        <toChangeIdBlue>104</toChangeIdBlue>
+        <toChangeIdGreen>1</toChangeIdGreen>
+        <toChangeIdBlue>133</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>
     </trigger>
 </composition>
@@ -2892,7 +2892,7 @@
         <objectNum>0</objectNum>
         <xPosition>81.5</xPosition>
         <yPosition>25.0</yPosition>
-        <zPosition>17.5.0</zPosition>
+        <zPosition>17.50</zPosition>
         <strength>100.0</strength>
     </positionConstraint>
     <trigger>
