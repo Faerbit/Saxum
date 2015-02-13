@@ -9,7 +9,16 @@ out vec4 oColor;
 
 uniform sampler2D uTexture;
 uniform sampler2DShadow shadowMap;
-uniform samplerCubeShadow shadowMap_cube;
+uniform samplerCubeShadow shadowMap_cube0;
+uniform samplerCubeShadow shadowMap_cube1;
+uniform samplerCubeShadow shadowMap_cube2;
+uniform samplerCubeShadow shadowMap_cube3;
+uniform samplerCubeShadow shadowMap_cube4;
+uniform samplerCubeShadow shadowMap_cube5;
+uniform samplerCubeShadow shadowMap_cube6;
+uniform samplerCubeShadow shadowMap_cube7;
+uniform samplerCubeShadow shadowMap_cube8;
+uniform samplerCubeShadow shadowMap_cube9;
 uniform vec3 ambientColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
@@ -70,9 +79,10 @@ float samplePointShadow(samplerCubeShadow shadowMap, vec3 lightDirection) {
     float A = -(farPlane+nearPlane)/(farPlane-nearPlane);
     float B = -2*(farPlane*nearPlane)/(farPlane - nearPlane);
     float compValue = 0.5*(-A*length(lightDirection) + B)/length(lightDirection) + 0.5;
-    float bias = 0.005;
-    vec3 vector = vec3(-lightDirection.x, -lightDirection.y, lightDirection.z);
-    return texture(shadowMap, vec4(vector , compValue - bias));
+    float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
+    bias = clamp(bias, 0.0, 0.01);
+    //return texture(shadowMap, vec4(lightDirection , length(lightDirection)/farPlane - bias));
+    return texture(shadowMap, vec4(lightDirection , compValue - bias));
 }
 
 float distanceToBorder(vec2 vector) {
@@ -91,11 +101,13 @@ void main()
     // direction lighting
     if(length(directionalLightVector)>0.0f) {
         vec3 directionalVector = normalize(directionalLightVector);
+        float directionalVisibility = sampleDirectionalShadow(shadowMap, shadowCoord);
         diffuseColor += clamp(dot(normalize(vNormal), directionalVector)
-        *diffuseFactor*directionalIntensity*directionalColor, 0.0, 1.0);
+        *diffuseFactor*directionalIntensity*directionalColor, 0.0, 1.0)*directionalVisibility;
         vec3 cameraVector = normalize(camera - vec3(fragPosition));
-        specularColor += clamp(pow((dot((cameraVector+directionalVector),normalize(vNormal))/(length(cameraVector+directionalVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
-        *specularFactor*directionalIntensity*directionalColor;
+        specularColor += clamp(pow((dot((cameraVector+directionalVector),normalize(vNormal))/
+        (length(cameraVector+directionalVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
+        *specularFactor*directionalIntensity*directionalColor*directionalVisibility;
     }
 
     // point lights
@@ -103,24 +115,58 @@ void main()
     for(int i = 0; i<lightCount; i++) {
         vec3 lightDirection = vec3(fragPosition) - lightSources[i];
         float distance = length(lightDirection);
+        float pointVisibility = 0.0f;
         // only take lights into account with meaningful contribution
-        if (distance > 0.001f) {
+        if (distance < farPlane) {
+            if (i == 0) {
+                pointVisibility = samplePointShadow(shadowMap_cube0, lightDirection);
+            }
+            if (i == 1) {
+                pointVisibility = samplePointShadow(shadowMap_cube1, lightDirection);
+            }
+
+            if (i == 2) {
+                pointVisibility = samplePointShadow(shadowMap_cube2, lightDirection);
+            }
+
+            if (i == 3) {
+                pointVisibility = samplePointShadow(shadowMap_cube3, lightDirection);
+            }
+
+            if (i == 4) {
+                pointVisibility = samplePointShadow(shadowMap_cube4, lightDirection);
+            }
+
+            if (i == 5) {
+                pointVisibility = samplePointShadow(shadowMap_cube5, lightDirection);
+            }
+
+            if (i == 6) {
+                pointVisibility = samplePointShadow(shadowMap_cube6, lightDirection);
+            }
+
+            if (i == 7) {
+                pointVisibility = samplePointShadow(shadowMap_cube7, lightDirection);
+            }
+
+            if (i == 8) {
+                pointVisibility = samplePointShadow(shadowMap_cube8, lightDirection);
+            }
+
+            if (i == 9) {
+                pointVisibility = samplePointShadow(shadowMap_cube9, lightDirection);
+            }
             vec3 lightVector = normalize(lightSources[i]-vec3(fragPosition));
             float intensity = clamp(exp(-(1/lightIntensities[i])*distance), 0.0, 1.0);
             diffuseColor += clamp(dot(normalize(vNormal), lightVector)
-            *diffuseFactor*intensity*lightColors[i], 0.0, 1.0);
+            *diffuseFactor*intensity*lightColors[i], 0.0, 1.0)*pointVisibility;
             vec3 cameraVector = normalize(camera - vec3(fragPosition));
-            specularColor += clamp(pow((dot((cameraVector+lightVector),normalize(vNormal))/(length(cameraVector+lightVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
-            *specularFactor*intensity*lightColors[i];
-            visibility = samplePointShadow(shadowMap_cube, lightDirection);
+            specularColor += clamp(pow((dot((cameraVector+lightVector),normalize(vNormal))/
+            (length(cameraVector+lightVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
+            *specularFactor*intensity*lightColors[i]*pointVisibility;
         }
     }
 
-    // shadows 
-    visibility *= sampleDirectionalShadow(shadowMap, shadowCoord);
-
-    specularColor *= visibility;
-    diffuseColor  *= visibility;
 
     vec3 finalColor = specularColor + diffuseColor + ambientColor;
     float distanceCameraCenter = distance(cameraCenter, vec3(fragPosition));
