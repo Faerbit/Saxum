@@ -25,11 +25,11 @@ void Physics::init(std::string geometryPath) //prepares bullet by creating all i
 void Physics::takeUpdateStep(float timeDiff)
 {
     counter++;
-    /*if(counter<1)
+    if(counter<1)
     {
         world->stepSimulation(timeDiff); //allows the world to be simmulated correctly indipendant of the timedifferences between frames
         return;
-    }*/
+    }
     
     for(unsigned i = 0; i < allPositionConstraints.size();i++) //this handles the spring constraints
     {
