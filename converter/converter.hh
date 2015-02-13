@@ -13,9 +13,8 @@ class Converter {
         ~Converter();
         void updateComposition(int idG, int idB, float posX, float posZ); //updates the position of a composition
         std::vector<int> newComposition(int type, float posX, float posZ);//creates a new composition and returns its ID
-	    void deleteComposition(int idG, int idB);
-	    void save();                    //writes the xml to file
-
+        void deleteComposition(int idG, int idB);
+        void save();                    //writes the xml to file
     private:
         void errorCheck(XMLError error);
         std::vector<int> nextID;

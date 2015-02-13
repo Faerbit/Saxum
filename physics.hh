@@ -81,7 +81,7 @@ class Physics {
 	void addCamera(); //Do NOT impliment before Player has been created;
     
 	btDynamicsWorld* world = NULL; //contains physical attributes of the world.
-	btDispatcher* dispatcher; //
+	btDispatcher* dispatcher;
 	btCollisionConfiguration* colConfig; //defines the type of collision detection.
 	btBroadphaseInterface* broadphase; //defines how objects are culled from collision detection.
 	btConstraintSolver* solver; //solver for forces and impulses.
@@ -103,7 +103,7 @@ enum collisionTypes{
 class btDistanceConstraint : public btPoint2PointConstraint
 {
 protected:
-   btScalar   m_distance;
+   btScalar m_distance;
 public:
    btDistanceConstraint(btRigidBody& rbA,btRigidBody& rbB, const btVector3& pivotInA,const btVector3& pivotInB, btScalar dist)
       : btPoint2PointConstraint(rbA, rbB, pivotInA, pivotInB)

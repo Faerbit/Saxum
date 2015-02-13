@@ -40,7 +40,7 @@ void Level::load() {
     //Push the level to Lua as a global variable
     luabridge::push(luaState, this);
     lua_setglobal(luaState, "level");
-
+    
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
 }
 
@@ -68,7 +68,7 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
         
         camera.setPosition(physics.getCameraPosition());
         camera.setDirection(physics.getCameraToPlayer());
-    } 
+    }
     if(wPressed){
         physics.rollForward(camera.getVector(),strength);
     }
@@ -149,7 +149,7 @@ void Level::moveObject(int objectIndex, float strength, float xPos, float yPos, 
     glm::vec3 position = glm::vec3(xPos, yPos, zPos);
     physics.removePositionConstraint(objectIndex);
     physics.addPositionConstraint(objectIndex, strength, position);
-}   
+}
 
 //should not be used since objects does not get synchronized and deletion is not implemented in pyhsics
 void Level::deleteObject(int objectIndex){

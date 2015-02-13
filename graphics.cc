@@ -22,10 +22,10 @@ Graphics::Graphics() {
 void Graphics::init(Level* level) {
     // save Level
     this->level = level;
-
+    
     // update lights on creation
     lastUpdate = -lightUpdateDelay;
-
+    
     // construct VAO to give shader correct Attribute locations
     SharedArrayBuffer ab = SharedArrayBuffer(new ArrayBuffer());
     ab->defineAttribute("aPosition", GL_FLOAT, 3);
@@ -33,25 +33,25 @@ void Graphics::init(Level* level) {
     ab->defineAttribute("aNormal", GL_FLOAT, 3);
     SharedVertexArrayObject vao = SharedVertexArrayObject(new VertexArrayObject());
     vao->attachAllAttributes(ab);
-
+    
     // look up all shader files starting with 'phong' and build a ShaderProgram from it:
     lightingShader = ShaderProgramCreator("phong").attributeLocations(
             vao->getAttributeLocations()).create();
-
+    
     depthShader = ShaderProgramCreator("depth")
         .attributeLocations(vao->getAttributeLocations()).create();
-
+    
     depthTexture = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT16));
     depthTexture->setMinFilter(GL_NEAREST);
     depthTexture->setMagFilter(GL_NEAREST);
     depthTexture->setWrapS(GL_CLAMP_TO_EDGE);
     depthTexture->setWrapT(GL_CLAMP_TO_EDGE);
     depthTexture->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
-
+    
     framebuffer = SharedFrameBufferObject(new FrameBufferObject());
     framebuffer->setDepthTexture(depthTexture);
     framebuffer->validate();
-
+    
     /*depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(level->getLights()->size());
     for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {*/
     depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(std::min(int(level->getLights()->size()), 1));
@@ -63,9 +63,9 @@ void Graphics::init(Level* level) {
         depth_cubeMaps.at(i)->setWrapT(GL_CLAMP_TO_EDGE);
         depth_cubeMaps.at(i)->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
     }
-
+    
     framebuffer_cube = SharedFrameBufferObject(new FrameBufferObject());
-
+    
     depthTexture_cube = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT16));
     depthTexture_cube->setMinFilter(GL_NEAREST);
     depthTexture_cube->setMagFilter(GL_NEAREST);
@@ -87,7 +87,7 @@ void Graphics::render(double time)
     glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  farPlane);
     glm::vec3 looking_directions[6] = {glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
         glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
-
+    
     framebuffer_cube->bind();
     //for (unsigned int i_pointlight = 0; i_pointlight<level->getLights()->size(); i_pointlight++) {
     for (unsigned int i_pointlight = 0; i_pointlight<1 && i_pointlight<level->getLights()->size(); i_pointlight++) {
@@ -116,19 +116,19 @@ void Graphics::render(double time)
     if (!framebuffer->isFrameBufferObjectComplete()) {
         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
     }
-
+    
     // final render pass
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    
     lightingShader->use();
-
+    
     if (level->getLights()->size() > 0) {
         lightingShader->setTexture("shadowMap_cube", depth_cubeMaps.at(0), 4);
     }
-
+    
     //set lighting parameters
-
+    
     // TODO look into doing this less often, offload to another thread?
     // TODO figure out how to deal with bigger numbers of lights. load the nearest on demand?
     double nextUpdate = lastUpdate + lightUpdateDelay;
@@ -137,7 +137,7 @@ void Graphics::render(double time)
         updateLights();
         lastUpdate = time;
     }
-
+    
     // convert texture to homogenouse coordinates
     glm::mat4 biasMatrix(
     0.5, 0.0, 0.0, 0.0,
@@ -146,25 +146,25 @@ void Graphics::render(double time)
     0.5, 0.5, 0.5, 1.0
     );
     glm::mat4 depthBiasVP = biasMatrix*depthViewProjectionMatrix;
-
+    
     lightingShader->setTexture("shadowMap", depthTexture, 1);
-
+    
     lightingShader->setUniform("farPlane", farPlane);
-
+    
     // set fog Parameters
     lightingShader->setUniform("fogColor", level->getFogColour());
     lightingShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
-
+    
     // set Material Parameters
     lightingShader->setUniform("ambientColor", level->getAmbientLight());
     lightingShader->setUniform("camera", level->getCameraPosition());
-
+    
     //set view and projection matrix
     glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
-
+    
     std::vector<glm::mat4> shadowVPs = std::vector<glm::mat4>();
     shadowVPs.push_back(depthBiasVP);
-
+    
     // render the level
     level->render(lightingShader, true, &lightingViewProjectionMatrix, &shadowVPs);
 }
@@ -172,7 +172,7 @@ void Graphics::render(double time)
 void Graphics::updateLights() {
     if (level->getLights()->size() > 0) {
         lightingShader->setUniform("lightCount", (int) level->getLights()->size());
-
+        
         // Build light position array
         glm::vec3 lightSources[level->getLights()->size()];
         for(unsigned int i = 0; i<level->getLights()->size(); i++) {
@@ -217,7 +217,6 @@ glm::mat4 Graphics::buildViewMatrix(Level* level) {
     
     return glm::lookAt((level->getCameraCenter()->getPosition() + level->getCamera()->getVector()),
             level->getCameraCenter()->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
-            
 }
 
 float Graphics::getFarPlane() {

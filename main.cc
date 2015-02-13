@@ -76,19 +76,19 @@ bool createWindow()
         ACGL::Utils::error() << "Failed to initialize GLFW" << std::endl;
         exit( -1 );
     }
-
+    
     // Configure OpenGL context
     setGLFWHintsForOpenGLVersion( ACGL_OPENGL_VERSION );
-
+    
     // activate multisampling (second parameter is the number of samples):
     //glfwWindowHint( GLFW_SAMPLES, 8 );
-
+    
     // request an OpenGL debug context:
     glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, true );
-
+    
     // define whether the window can get resized:
     glfwWindowHint(GLFW_RESIZABLE, true);
-
+    
     // try to create an OpenGL context in a window and check the supported OpenGL version:
     //                                                  R,G,B,A, Depth,Stencil
     window = glfwCreateWindow(app.getGraphics()->getWindowSize().x, app.getGraphics()->getWindowSize().y, "SWP MarbleGame Group C", NULL, NULL);
@@ -104,13 +104,13 @@ bool createWindow()
 int main( int argc, char *argv[] )
 {
     // app gets created as global variable, to work properly with GLFW
-
+    
     // Create OpenGL capable window:
     if ( !createWindow() ) {
         glfwTerminate();
         exit( -1 );
     }
-
+    
     // Set window title to binary name (without the path):
     std::vector<std::string> tmp = ACGL::Utils::StringHelpers::split( std::string( argv[0] ), '/' );
     glfwSetWindowTitle(window, tmp[tmp.size()-1].c_str() );
@@ -122,10 +122,10 @@ int main( int argc, char *argv[] )
     glfwSetScrollCallback(window, scrollCallback );
     glfwSetWindowFocusCallback(window, focusCallback);
     glfwSetMouseButtonCallback(window, mouseCallback);
-
+    
     // Enable vertical sync (on cards that support it) with parameter 1 - 0 means off
     glfwSwapInterval( 0 );
-
+    
     // OpenGL state:
     glClearColor( 0.0, 0.0, 0.0, 1.0 );
     glEnable( GL_DEPTH_TEST );
@@ -133,20 +133,19 @@ int main( int argc, char *argv[] )
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     app.init();
-
+    
     int frameCount = 0;
-
+    
     const double FPSdelay = 2.0;
     double startTimeInSeconds = glfwGetTime();
     double showNextFPS = startTimeInSeconds + FPSdelay;
     
     double lastUpdate=0.0f;
-      
-
-    do {
-
-        double now = glfwGetTime()- startTimeInSeconds;
     
+    do {
+        
+        double now = glfwGetTime()- startTimeInSeconds;
+        
         if (showNextFPS <= now) {
             std::stringstream sstream (std::stringstream::in | std::stringstream::out);
             sstream << std::setprecision(1) << std::fixed
@@ -155,8 +154,8 @@ int main( int argc, char *argv[] )
             showNextFPS = now + FPSdelay;
             frameCount = 0;
         }
-
-
+        
+        
         if (app.isLocked() && app.getIgnoredMouseUpdates() == 0) {
             int stateW = glfwGetKey(window, GLFW_KEY_W);
             int stateA = glfwGetKey(window, GLFW_KEY_A);
@@ -176,12 +175,12 @@ int main( int argc, char *argv[] )
                 app.ignoredOneMouseUpdate();
             }
         }
-
+        
         app.getGraphics()->render(now);
         lastUpdate = now;
         
         openGLCriticalError();
-
+        
         // MacOS X will not swap correctly is another FBO is bound:
         glBindFramebuffer( GL_FRAMEBUFFER, 0 );
         glfwSwapBuffers(window);
@@ -190,7 +189,7 @@ int main( int argc, char *argv[] )
         
     } // Check if the window was closed
     while( !glfwWindowShouldClose(window) );
-
+    
     glfwTerminate();
     exit(0);
 }
