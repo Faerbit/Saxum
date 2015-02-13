@@ -48,8 +48,8 @@ void Physics::takeUpdateStep(float timeDiff)
     position += playerBall->getCenterOfMassPosition(); //is the position cameraDistance away from the player in the direction of the camera
   
     //prevent the camera from being dragged along on the ground
-    if (position.getY() < playerBall->getCenterOfMassPosition().getY() + 1)
-        position.setY(playerBall->getCenterOfMassPosition().getY() + 1);
+    if (position.getY() < playerBall->getCenterOfMassPosition().getY() + cameraDistance/2)
+        position.setY(playerBall->getCenterOfMassPosition().getY() + cameraDistance/2);
     
     btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
     float str = 50 * dir.length() / cameraBody->getInvMass(); //getInvMass() returns the inverted mass
@@ -478,9 +478,14 @@ void Physics::addStaticGroundPlane()
 
 
 
-void Physics::forceMove(glm::vec3 newPosition, unsigned indice)
+void Physics::forceMove(glm::vec3 newPosition, unsigned indice)//ugly, but needed for reset
 {
     bodies[indice]->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),btVector3(newPosition.x,newPosition.y,newPosition.z)));
+}
+
+void Physics::forceMoveCamera(glm::vec3 newPosition)
+{
+    cameraBody->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),btVector3(newPosition.x,newPosition.y,newPosition.z)));
 }
 
 void Physics::kill() //delete dynamically allocated memory
