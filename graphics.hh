@@ -28,8 +28,7 @@ class Graphics {
         float nearPlane;
         float farPlane;
         // pointer to either use the vector from the level or from here
-        std::vector<Light>* closestLights;
-        std::vector<Light> closestLightsVector; // contains the 32 closest lights
+        std::vector<Light> closestLights;
         ACGL::OpenGL::SharedShaderProgram lightingShader;
         ACGL::OpenGL::SharedShaderProgram depthCubeShader;
         ACGL::OpenGL::SharedShaderProgram depthShader;
