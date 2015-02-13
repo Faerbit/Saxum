@@ -213,7 +213,8 @@ void Graphics::resize(glm::uvec2 windowSize) {
 
 glm::mat4 Graphics::buildViewMatrix(Level* level) {
     //construct lookAt (cameraPosition = cameraCenter + cameraVector)
-    return glm::lookAt(level->getCamera()->getPosition(), level->getCamera()->getPosition() + level->getCamera()->getDirection(), glm::vec3(0.0f, 1.0f, 0.0f));
+    if(level->getCamera()->getIsPhysicsCamera())
+        return glm::lookAt(level->getCamera()->getPosition(), level->getCamera()->getPosition() + level->getCamera()->getDirection(), glm::vec3(0.0f, 1.0f, 0.0f));
     
     return glm::lookAt((level->getCameraCenter()->getPosition() + level->getCamera()->getVector()),
             level->getCameraCenter()->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
