@@ -10,7 +10,7 @@ function trigger(objectToChange)
         
         local strength = 100
         local xPos = 81.5
-        local yPos = 30
+        local yPos = 35
         local zPos = 17.5
         level:moveObject(objectToChange, strength, xPos, yPos, zPos)
         
