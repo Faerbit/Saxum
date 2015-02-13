@@ -18,16 +18,15 @@ void Terrain::load() {
     if (error) {
         std::cout << "Decoder error " << error << " from Terrain::load: " << lodepng_error_text(error) << std::endl;
     }
-    this->heightmap = new float*[this->heightmapHeight];					//initialize the heightmap
-    for(unsigned int rowNum = 0; rowNum < this->heightmapHeight; rowNum++){				//read in the heightmap
-	    this->heightmap[rowNum] = new float[this->heightmapWidth];
+    this->heightmap = new float*[this->heightmapHeight]; //initialize the heightmap
+    for(unsigned int rowNum = 0; rowNum < this->heightmapHeight; rowNum++){ //read in the heightmap
+        this->heightmap[rowNum] = new float[this->heightmapWidth];
         for(unsigned int columnNum = 0; columnNum < this->heightmapWidth; columnNum++){
-	        this->heightmap[rowNum][columnNum] = (float)(image[(rowNum*heightmapWidth+columnNum)*4]) / 6;  //<--heightmap is scaled here
+            this->heightmap[rowNum][columnNum] = (float)(image[(rowNum*heightmapWidth+columnNum)*4]) / 6; //<--heightmap is scaled here
         }
     }
     this->makeTriangleMesh();
-    heightmapChanged = false;		//no need to make a TriangleMesh again before rendering
-    
+    heightmapChanged = false; //no need to make a TriangleMesh again before rendering
 }
 
 void Terrain::makeTriangleMesh(){
@@ -37,19 +36,19 @@ void Terrain::makeTriangleMesh(){
     ab->defineAttribute("aPosition", GL_FLOAT, 3);
     ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
     ab->defineAttribute("aNormal", GL_FLOAT, 3);
-
-    unsigned int rowNum=0, columnNum=0, dataCount=0, floatsPerVertex=8;				//initializing:
+    
+    unsigned int rowNum=0, columnNum=0, dataCount=0, floatsPerVertex=8; //initializing:
     bool movingRight = true, isUp = true;
     int numVertices = (this->heightmapHeight - 1) * (this->heightmapWidth * 2 + 1) + 1;
     float* abData = new float[numVertices * floatsPerVertex];
-
-    while(rowNum < this->heightmapHeight){							//traversing the Triangle Strip!
-	    set_abData(abData, dataCount, rowNum, columnNum);
-	    dataCount += floatsPerVertex;
-	    if (isUp){
-	        rowNum = rowNum + 1;
-	        isUp = false;
-	    }
+    
+    while(rowNum < this->heightmapHeight){ //traversing the Triangle Strip!
+        set_abData(abData, dataCount, rowNum, columnNum);
+        dataCount += floatsPerVertex;
+        if (isUp){
+            rowNum = rowNum + 1;
+            isUp = false;
+        }
         else if (movingRight) {
             if (columnNum == this->heightmapWidth - 1) {
                 set_abData(abData, dataCount, rowNum, columnNum);
@@ -58,7 +57,7 @@ void Terrain::makeTriangleMesh(){
                 dataCount += floatsPerVertex;
                 movingRight = false;
                 rowNum = rowNum + 1;
-            } 
+            }
             else {
                 rowNum = rowNum - 1;
                 columnNum = columnNum + 1;
@@ -81,7 +80,7 @@ void Terrain::makeTriangleMesh(){
             }
         }
     }
-
+    
     ab->setDataElements(numVertices, abData);
     this->triangleMesh = std::make_shared<ACGL::OpenGL::VertexArrayObject>();
     this->triangleMesh->bind();
@@ -96,16 +95,16 @@ void Terrain::set_abData(float* abData, unsigned int dataCount, unsigned int row
     abData[dataCount] = (float)rowNum;
     abData[dataCount+1] = heightmap[rowNum][columnNum];
     abData[dataCount+2] = (float)columnNum;
-
+    
     //set Texture Coordinate
     abData[dataCount+3] = (float)(rowNum % 2);
     abData[dataCount+4] = (float)(columnNum % 2);
-
+    
     //setNormal
     if (rowNum==0 || rowNum==(this->heightmapHeight-1) || columnNum==0 || columnNum==(this->heightmapWidth-1)){
-    	abData[dataCount+5] = 0.0;
-    	abData[dataCount+6] = 1.0;
-    	abData[dataCount+7] = 0.0;
+        abData[dataCount+5] = 0.0;
+        abData[dataCount+6] = 1.0;
+        abData[dataCount+7] = 0.0;
     }
     else {
         glm::vec3 sumNormals = glm::vec3(0.0f, 0.0f, 0.0f);

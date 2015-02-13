@@ -10,7 +10,7 @@ class Material{
     public:
         Material(std::string filePath, float ambientFactor,
             float diffuseFactor, float specularFactor, float shininess);
-	    Material();
+        Material();
         ACGL::OpenGL::SharedTexture2D getReference();
         ~Material();
         float getAmbientFactor();

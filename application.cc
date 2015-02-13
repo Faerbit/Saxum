@@ -27,14 +27,14 @@ void Application::init()
     ACGL::Base::Settings::the()->setShaderPath(shaderPath);
     ACGL::Base::Settings::the()->setTexturePath(texturePath);
     ACGL::Base::Settings::the()->setGeometryPath(geometryPath);
-
+    
     // load Level
     level.load();
     Loader loader = Loader();
     std::string levelXmlFilePath = levelXmlPath + "Level1.xml";
     loader.load(levelXmlFilePath, &level, compositionsPath, scriptPath);
     graphics.init(&level);
-
+    
     // just in case: check for errors
     openGLCriticalError();
 }

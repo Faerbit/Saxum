@@ -7,8 +7,8 @@
 class Model {
     public:
         Model(std::string filePath, float scale=1.0f);
-	Model(ACGL::OpenGL::SharedVertexArrayObject vao, float scale=1.0f);
-	    Model();
+        Model(ACGL::OpenGL::SharedVertexArrayObject vao, float scale=1.0f);
+        Model();
         ~Model();
         ACGL::OpenGL::SharedVertexArrayObject getReference();
         void setScale(float scale);

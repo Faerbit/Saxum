@@ -20,35 +20,35 @@ void Loader::loadConfig(Application* application) {
     errorCheck(resolution->FirstChildElement("height")->QueryIntText(&windowHeight));
     errorCheck(config->FirstChildElement("shadowCubeSize")->QueryIntText(&shadowCubeSize));
     errorCheck(config->FirstChildElement("farPlane")->QueryFloatText(&farPlane));
-
+    
     const char* charCompositionsPath = config->FirstChildElement("compositionsPath")->GetText();
     if(charCompositionsPath == NULL){
         printf("XMLError: No compositionsPath found.\n");
         exit(-1);
     }
     compositionsPath = charCompositionsPath;
-
+    
     const char* charShaderPath = config->FirstChildElement("shaderPath")->GetText();
     if(charShaderPath == NULL){
         printf("XMLError: No shaderPath found.\n");
         exit(-1);
     }
     shaderPath = charShaderPath;
-
+    
     const char* charGeometryPath = config->FirstChildElement("geometryPath")->GetText();
     if(charGeometryPath == NULL){
         printf("XMLError: No geometryPath found.\n");
         exit(-1);
     }
     geometryPath = charGeometryPath;
-
+    
     const char* charTexturePath = config->FirstChildElement("texturePath")->GetText();
     if(charTexturePath == NULL){
         printf("XMLError: No texturePath found.\n");
         exit(-1);
     }
     texturePath = charTexturePath;
-
+    
     const char* charScriptPath = config->FirstChildElement("scriptPath")->GetText();
     if(charScriptPath == NULL){
         printf("XMLError: No scriptPath found.\n");
@@ -62,7 +62,7 @@ void Loader::loadConfig(Application* application) {
         exit(-1);
     }
     heightmapPath = charHeightmapPath;
-
+    
     const char* charLevelXmlPath = config->FirstChildElement("levelXmlPath")->GetText();
     if(charLevelXmlPath == NULL){
         printf("XMLError: No levelXmlPath found.\n");
@@ -116,11 +116,11 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     errorCheck(terrainElement->FirstChildElement("shininess")->QueryFloatText(&terrainShininess));
     Material terrainMaterial = Material(terrainTexture, terrainAmbientFactor, terrainDiffuseFactor, terrainSpecularFactor, terrainShininess);
     Object* terrainObject = new Object(terrainModel, terrainMaterial,
-	glm::vec3(-0.5*(float)level->getTerrain()->getHeightmapHeight(), 0.0f, -0.5f*(float)level->getTerrain()->getHeightmapWidth()),
+    glm::vec3(-0.5*(float)level->getTerrain()->getHeightmapHeight(), 0.0f, -0.5f*(float)level->getTerrain()->getHeightmapWidth()),
         glm::vec3(0.0f, 0.0f, 0.0f), true);
     level->addObject(terrainObject);
-	level->getPhysics()->addTerrain(level->getTerrain()->getHeightmapWidth(), level->getTerrain()->getHeightmapHeight(), level->getTerrain()->getHeightmap());
-	
+    level->getPhysics()->addTerrain(level->getTerrain()->getHeightmapWidth(), level->getTerrain()->getHeightmapHeight(), level->getTerrain()->getHeightmap());
+    
     //load the skydome
     XMLElement* skydomeElement = doc->FirstChildElement("skydome");
     const char* charSkydomeTexture = skydomeElement->FirstChildElement("texture")->GetText();
@@ -135,7 +135,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
         glm::vec3(0.0f, 0.0f, 0.0f), true);
     level->addObject(skydomeObject);
     level->setSkydomeObject(skydomeObject);
-
+    
     //load lighting parameters
     float rColour, gColour, bColour, alpha, xOffset, yOffset, zOffset, intensity;
     XMLElement* ambientElement = doc->FirstChildElement("ambientLight");
@@ -143,14 +143,14 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     errorCheck(ambientElement->FirstChildElement("gColour")->QueryFloatText(&gColour));
     errorCheck(ambientElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
     level->setAmbientLight(glm::vec3(rColour,gColour,bColour));
-
+    
     XMLElement* fogElement = doc->FirstChildElement("fogColour");
     errorCheck(fogElement->FirstChildElement("rColour")->QueryFloatText(&rColour));
     errorCheck(fogElement->FirstChildElement("gColour")->QueryFloatText(&gColour));
     errorCheck(fogElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
     errorCheck(fogElement->FirstChildElement("alpha")->QueryFloatText(&alpha));
     level->setFogColour(glm::vec4(rColour,gColour,bColour, alpha));
-
+    
     XMLElement* directionalElement = doc->FirstChildElement("directionalLight");
     errorCheck(directionalElement->FirstChildElement("xOffset")->QueryFloatText(&xOffset));
     errorCheck(directionalElement->FirstChildElement("yOffset")->QueryFloatText(&yOffset));
@@ -160,7 +160,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     errorCheck(directionalElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
     errorCheck(directionalElement->FirstChildElement("intensity")->QueryFloatText(&intensity));
     level->setDirectionalLight(Light(glm::vec3(xOffset,yOffset,zOffset), glm::vec3(rColour,gColour,bColour), intensity));
-
+    
     //load Objects
     std::vector<std::vector<int>> objectIdentifiers = std::vector<std::vector<int>>();  //The first entry is the index in objects, the second one the index in physicObjects, the others are idGreen, idBlue and objectNum.  
     XMLDocument* compositions = new XMLDocument();
@@ -259,7 +259,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                             objectRot *= 0.0174532925;    //transform degrees to radians
                             Object* object = new Object(model, material, objectPosition, compRot+objectRot, renderable);
                             level->addObject(object);
-
+                            
                             //add object to physics
                             const char* charPhysicType = objectData->FirstChildElement("physicType")->GetText();
                             if(charPhysicType == NULL){
@@ -315,7 +315,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                                 printf("XMLError: Not a valid physicType.\n");
                                 exit(-1);
                             }
-
+                            
                             //create an identifier for this object
                             std::vector<int> objectIdentifier = std::vector<int>(5);
                             objectIdentifier[0] = level->getObjectsVectorSize()-1;
@@ -340,7 +340,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                     
                     objectNum = objectNum + 1;
                 }//iterating over all objects of the composition
-
+                
                 //iterate over all lights of the composition
                 XMLElement* xmlLight = composition->FirstChildElement("light");
                 for(; xmlLight; xmlLight=xmlLight->NextSiblingElement("light")){
