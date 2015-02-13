@@ -5,7 +5,7 @@ Application::Application() {
     Loader loader = Loader();
     //load the config.xml
     loader.loadConfig(this);
-    graphics = Graphics(glm::uvec2(windowWidth, windowHeight), 0.1f, farPlane, shadowCubeSize);
+    graphics = Graphics(glm::uvec2(windowWidth, windowHeight), 0.1f, farPlane, shadowCubeSize, maxShadowRenderCount);
 }
 
 void Application::init()
@@ -121,4 +121,8 @@ void Application::setHeightmapPath(std::string heightmapPath) {
 
 void Application::setLevelXmlPath(std::string levelXmlPath) {
     this->levelXmlPath = levelXmlPath;
+}
+
+void Application::setMaxShadowRenderCount(int count) {
+    this->maxShadowRenderCount = count;
 }

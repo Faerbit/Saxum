@@ -22,6 +22,7 @@ class Application {
         void setWindowHeight(int windowHeight);
         void setShadowCubeSize(int shadowCubeSize);
         void setFarPlane(float farPlane);
+        void setMaxShadowRenderCount(int count);
         void setCompositionsPath(std::string compositionsPath);
         void setShaderPath(std::string shaderPath);
         void setGeometryPath(std::string geometryPath);
@@ -38,6 +39,7 @@ class Application {
         int windowWidth;
         int windowHeight;
         int shadowCubeSize;
+        int maxShadowRenderCount;
         float farPlane;
         std::string compositionsPath;
         std::string shaderPath;
