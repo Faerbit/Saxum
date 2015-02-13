@@ -3,6 +3,7 @@
 Camera::Camera(glm::vec2 rotation, float distance) {
     this->rotation = rotation;
     this->distance = distance;
+    this->setIsPhysicsCamera(true);
 }
 
 Camera::Camera() {
@@ -31,6 +32,15 @@ void Camera::setRotation(glm::vec2 rotation) {
     updatePosition();
 }
 
+
+bool Camera::getIsPhysicsCamera()
+{
+    return usePhysicsCamera;
+}
+void Camera::setIsPhysicsCamera(bool val)
+{
+    usePhysicsCamera = val;
+}
 void Camera::updateRotation(glm::vec2 rotation) {
     this->rotation += rotation;
     if((this->rotation.x + rotation.x) >= 1.57f) {
