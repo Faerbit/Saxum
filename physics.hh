@@ -54,7 +54,7 @@ class Physics {
 	glm::vec3 getPos(int i);
 	glm::mat4 getRotation(int i);
 	void addStaticGroundPlane();
-	void updateCameraPos(glm::vec2 mouseMovement, float strength);
+	void updateCameraPos(glm::vec2 mouseMovement, float strength, float distance);
 	glm::vec3 getCameraPosition();
 	void addRigidBodyFromFile(Entity entity, float mass, float dampningL, float dampningA, std::string modelLocation, unsigned indice);
     void addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA, unsigned indice, float scaling,bool rotate);
@@ -90,6 +90,7 @@ class Physics {
     int terrainPhysicsCollision = 2;
     int counter = 0;
     std::string geometryPath;
+    float cameraDistance = 5; //distance of the camera to the player.
 };
 
 enum collisionTypes{
