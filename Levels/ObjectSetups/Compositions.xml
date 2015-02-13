@@ -139,7 +139,7 @@
     <object>
         <modelPath>switch_inner.obj</modelPath>
         <xOffset>0.0</xOffset>
-        <yOffset>2</yOffset>
+        <yOffset>0.5</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
         <yRot>0.0</yRot>
