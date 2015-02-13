@@ -5,7 +5,7 @@ Loader::Loader() {
 }
 
 void Loader::loadConfig(Application* application) {
-    int windowWidth, windowHeight, shadowCubeSize;
+    int windowWidth, windowHeight, shadowCubeSize, maxShadowRenderCount;
     float farPlane;
     std::string compositionsPath, shaderPath, geometryPath, texturePath, scriptPath, heightmapPath, levelXmlPath;
     XMLDocument* config = new XMLDocument();
@@ -20,6 +20,7 @@ void Loader::loadConfig(Application* application) {
     errorCheck(resolution->FirstChildElement("height")->QueryIntText(&windowHeight));
     errorCheck(config->FirstChildElement("shadowCubeSize")->QueryIntText(&shadowCubeSize));
     errorCheck(config->FirstChildElement("farPlane")->QueryFloatText(&farPlane));
+    errorCheck(config->FirstChildElement("maxShadowRenderCount")->QueryIntText(&maxShadowRenderCount));
     
     const char* charCompositionsPath = config->FirstChildElement("compositionsPath")->GetText();
     if(charCompositionsPath == NULL){
@@ -74,6 +75,7 @@ void Loader::loadConfig(Application* application) {
     application->setWindowHeight(windowHeight);
     application->setShadowCubeSize(shadowCubeSize);
     application->setFarPlane(farPlane);
+    application->setMaxShadowRenderCount(maxShadowRenderCount);
     application->setCompositionsPath(compositionsPath);
     application->setShaderPath(shaderPath);
     application->setGeometryPath(geometryPath);
