@@ -354,6 +354,9 @@ void Physics::addCamera() //Camera Creator automatically called when player is c
     
     cameraBody->setDamping(0.9,0.5); //this damping factor leaves a relativly smoothe system
     
+    info.m_friction = 0; 
+    info.m_restitution = 0;
+    
     world->addRigidBody(cameraBody,COL_OBJECTS, objectsPhysicsCollision);
     
     cameraBody->setGravity(btVector3(0,0,0));
