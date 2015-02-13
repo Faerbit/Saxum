@@ -20,7 +20,7 @@ extern "C" {
 
 class Level {
     public:
-        Level(std::string heightmapFilePath);
+        Level(std::string heightmapFilePath, std::string xmlFilePath);
         Level();
         ~Level();
         void load();
@@ -55,6 +55,7 @@ class Level {
         void addTrigger(Trigger trigger);
         lua_State* getLuaState();
         Terrain* getTerrain();
+        void resetPlayer();
     private:
         lua_State* luaState=nullptr;
         std::vector<Object*> objects;
@@ -71,6 +72,7 @@ class Level {
         Terrain terrain;
         float skydomeSize;
         float strength;
+        std::string xmlFilePath;
 };
 
 #endif

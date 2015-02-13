@@ -1,11 +1,13 @@
 #include "level.hh"
+#include "loader.hh"
 #include <string>
 
-Level::Level(std::string heightmapFilePath){
+Level::Level(std::string heightmapFilePath, std::string xmlFilePath){
     this->terrain = Terrain(heightmapFilePath);
     // default value
     skydomeSize = 50.0f;
     physics = Physics();
+    this->xmlFilePath = xmlFilePath;
 }
 
 Level::Level() {
@@ -160,6 +162,12 @@ void Level::deleteObject(int objectIndex){
             i--;
         }
     }
+}
+
+void Level::resetPlayer(){
+    Loader loader = Loader();
+    glm::vec3 newPosition = loader.reloadPlayerPosition(xmlFilePath, this);
+    //TODO cameraCenter.setPosition(newPosition);
 }
 
 void Level::setStrength(float strength) {
