@@ -25,11 +25,11 @@ void Physics::init(std::string geometryPath) //prepares bullet by creating all i
 void Physics::takeUpdateStep(float timeDiff)
 {
     counter++;
-    if(counter<1)
+    /*if(counter<1)
     {
         world->stepSimulation(timeDiff); //allows the world to be simmulated correctly indipendant of the timedifferences between frames
         return;
-    }
+    }*/
     
     for(unsigned i = 0; i < allPositionConstraints.size();i++) //this handles the spring constraints
     {
@@ -44,8 +44,8 @@ void Physics::takeUpdateStep(float timeDiff)
     
     btVector3 position = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition(); //gets a vector from the player to the camera
     position.normalize();
-    position *= 5;
-    position += playerBall->getCenterOfMassPosition(); //is the position 5 units away from the player in the direction of the camera
+    position *= cameraDistance;
+    position += playerBall->getCenterOfMassPosition(); //is the position cameraDistance away from the player in the direction of the camera
     
     //prevent the camera from being dragged along on the ground
     if (position.getY() < playerBall->getCenterOfMassPosition().getY() + 1)
@@ -58,7 +58,6 @@ void Physics::takeUpdateStep(float timeDiff)
     float speed = cameraBody->getLinearVelocity().length();
     if(speed>20.0f)
     {
-        printf("%f , %f \n", speed, position.length());
         position = cameraBody->getLinearVelocity();
         position.normalize();
         cameraBody->setLinearVelocity(position*20);
@@ -267,7 +266,7 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
     btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(glmQuat.x,glmQuat.y,glmQuat.z,glmQuat.w),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
     
     btVector3 inertia(0,0,0);
-    if(mass != 0.0)
+    if(mass != 0.0 && rotate) //&& rotate lets certain objects get inertia (0,0,0) (not rotateable)
     {
         box->calculateLocalInertia((btScalar)mass,inertia);
     }
@@ -326,7 +325,7 @@ void Physics::addCamera() //Camera Creator automatically called when player is c
     
     btVector3 direction(1,1,1);
     direction.normalize();
-    direction*=5; //create a offset of lenth 5 so we have a stable camera at the beginning
+    direction*=cameraDistance; //create a offset of length 5 so we have a stable camera at the beginning
     btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),playerBall->getCenterOfMassPosition()+direction));
     
     btRigidBody::btRigidBodyConstructionInfo info(0.001,motion,sphere,inertia);
@@ -377,8 +376,9 @@ glm::mat4 Physics::getRotation(int i)
 }
 
 //these are used to apply a force to the camera body according to the movement of the mouse
-void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength)
+void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength, float distance)
 {
+    this->cameraDistance = distance;
     //note: in mouseMovement x and y are flipped in contrast to bullet
     btVector3 change =  playerBall->getCenterOfMassPosition()-cameraBody->getCenterOfMassPosition();
     change.setY(0);
