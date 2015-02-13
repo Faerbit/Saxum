@@ -56,7 +56,7 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
     }
 }
 
-void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPressed, bool sPressed, bool dPressed) {
+void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPressed, bool sPressed, bool dPressed,bool kPressed, bool lPressed) {
     // Ignore first two mouse updates, because they are incorrect
     // DON'T try to move this functionallity elsewhere
     static int i = 0;
@@ -83,6 +83,11 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     if(dPressed){
         physics.rollRight(camera.getVector(),strength);
     }
+    
+    if(kPressed)
+        camera.setIsPhysicsCamera(true);
+    if(lPressed)
+        camera.setIsPhysicsCamera(false);
     
     physics.takeUpdateStep(runTime);
     
