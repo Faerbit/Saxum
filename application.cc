@@ -97,7 +97,7 @@ void Application::setFarPlane(float farPlane) {
 }
 
 void Application::setCompositionsPath(std::string compositionsPath) {
-    this->compositionsPath = compositionsPath;
+    this->compositionsPath = "../" + compositionsPath;
 }
 
 void Application::setShaderPath(std::string shaderPath) {
@@ -113,15 +113,15 @@ void Application::setTexturePath(std::string texturePath) {
 }
 
 void Application::setScriptPath(std::string scriptPath) {
-    this->scriptPath = scriptPath;
+    this->scriptPath = "../" + scriptPath;
 }
 
 void Application::setHeightmapPath(std::string heightmapPath) {
-    this->heightmapPath = heightmapPath;
+    this->heightmapPath = "../" + heightmapPath;
 }
 
 void Application::setLevelXmlPath(std::string levelXmlPath) {
-    this->levelXmlPath = levelXmlPath;
+    this->levelXmlPath = "../" + levelXmlPath;
 }
 
 void Application::setMaxShadowRenderCount(int count) {
