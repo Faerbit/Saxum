@@ -9,7 +9,7 @@
 
 <maxShadowRenderCount>10</maxShadowRenderCount>
 
-<compositionsPath>../data/levels/Compositions.xml</compositionsPath>
+<compositionsPath>data/levels/Compositions.xml</compositionsPath>
 
 <shaderPath>data/shader/</shaderPath>
 
@@ -17,8 +17,8 @@
 
 <texturePath>data/textures/</texturePath>
 
-<scriptPath>../data/levels/scripts/</scriptPath>
+<scriptPath>data/levels/scripts/</scriptPath>
 
-<heightmapPath>../data/levels/</heightmapPath>
+<heightmapPath>data/levels/</heightmapPath>
 
-<levelXmlPath>../data/levels/</levelXmlPath>
+<levelXmlPath>data/levels/</levelXmlPath>
