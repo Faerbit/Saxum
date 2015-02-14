@@ -38,7 +38,6 @@ void Physics::takeUpdateStep(float timeDiff)
             btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
             dir = dir*allPositionConstraints[i].strength - allPositionConstraints[i].body->getLinearVelocity();
             allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength); //apply a foce upon the object pushing it towards the constraint position
-            allPositionConstraints[i].body->setSleepingThresholds(0,0);
         }
     }
     
@@ -91,6 +90,7 @@ void Physics::addPositionConstraint(int bodyIndice, float strength, glm::vec3 po
 {
     positionConstraint cons;
     cons.body = bodies[bodyIndice];
+    cons.body->setSleepingThresholds(0,0);
     cons.strength = strength;
     cons.position = btVector3(position.x,position.y,position.z);
     allPositionConstraints.push_back(cons);
