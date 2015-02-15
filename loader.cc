@@ -380,6 +380,10 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     }//iterating over all compositions in Level.xml
     
     //load triggers
+
+    // call init.lua to init the module load path in Lua
+    std::string initLuaPath = scriptPath + "init.lua";
+    luaL_dofile(level->getLuaState(), initLuaPath.c_str());
     XMLElement* composition = doc->FirstChildElement("composition");
     for(; composition; composition=composition->NextSiblingElement("composition")){
         XMLElement* xmlTrigger = composition->FirstChildElement("trigger");
