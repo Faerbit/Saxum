@@ -1,3 +1,3 @@
 --global variable space
-local M = {}
-return M
+local global = {}
+return global

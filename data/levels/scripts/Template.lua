@@ -1,5 +1,3 @@
---I have no idea why this hack from the internet works, but it does...
-package.path = debug.getinfo(1,"S").source:match[[^@?(.*[\/])[^\/]-$]] .."?.lua;".. package.path
 local global = require( "global" )
 if(global.triggeredSCRIPTNAME == nil) then
     global.triggeredSCRIPTNAME = false
