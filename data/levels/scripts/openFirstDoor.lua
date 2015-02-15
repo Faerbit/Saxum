@@ -1,8 +1,11 @@
-if(triggereOpenFirstDoor == nil) then
-    triggereOpenFirstDoor = false
+--I have no idea why this hack from the internet works, but it does...
+package.path = debug.getinfo(1,"S").source:match[[^@?(.*[\/])[^\/]-$]] .."?.lua;".. package.path
+local global = require( "global" )
+if(global.triggeredOpenFirstDoor == nil) then
+    global.triggeredOpenFirstDoor = false
 end
 function trigger(objectToChange)
-    if(triggereOpenFirstDoor == false) then
+    if(global.triggeredOpenFirstDoor == false) then
         if(not level) then
             print("No level found in Lua!")
             return
@@ -14,9 +17,9 @@ function trigger(objectToChange)
         local zPos = 17.5
         level:moveObject(objectToChange, strength, xPos, yPos, zPos)
         
-        triggeredOpenFirstDoorUndo = false
+        global.triggeredOpenFirstDoorUndo = false
         
-        triggereOpenFirstDoor = true
+        global.triggeredOpenFirstDoor = true
         print("openFirstDoor")
     end
 end
