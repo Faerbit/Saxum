@@ -1,8 +1,11 @@
-if(triggeredSCRIPTNAME == nil) then
-    triggeredSCRIPTNAME = false
+--I have no idea why this hack from the internet works, but it does...
+package.path = debug.getinfo(1,"S").source:match[[^@?(.*[\/])[^\/]-$]] .."?.lua;".. package.path
+local global = require( "global" )
+if(global.triggeredSCRIPTNAME == nil) then
+    global.triggeredSCRIPTNAME = false
 end
 function trigger(objectToChange)
-    if(triggeredSCRIPTNAME == false) then
+    if(global.triggeredSCRIPTNAME == false) then
         if(not level) then
             print("No level found in Lua!")
             return
@@ -10,7 +13,7 @@ function trigger(objectToChange)
         
         --enter the scripts code here and replace all occurences of SCRIPTNAME with the name of the script.
         
-        triggeredSCRIPTNAME = true
+        global.triggeredSCRIPTNAME = true
         print("SCRIPTNAME")
     end
 end
