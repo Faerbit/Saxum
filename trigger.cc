@@ -5,7 +5,7 @@ Trigger::Trigger(glm::vec3 position, float distance, bool isBigger, Object* obje
     this->distance=distance;
     this->isBigger=isBigger;
     this->object=object;
-    this->luaScript= scriptPath + luaScript + ".lua";
+    this->luaScript= scriptPath + luaScript;
     this->L = L;
     if(L == nullptr){
         printf("L is NULL in trigger!\n");
