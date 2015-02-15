@@ -36,7 +36,8 @@ void Physics::takeUpdateStep(float timeDiff)
         if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition()) //if constraint != position of the body because otherwise dir = 0
         {
             btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
-            dir = dir*allPositionConstraints[i].strength - allPositionConstraints[i].body->getLinearVelocity();
+            dir = dir*allPositionConstraints[i].strength - allPositionConstraints[i].body->getLinearVelocity()
+                                                           *allPositionConstraints[i].body->getLinearVelocity().length();
             allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength); //apply a foce upon the object pushing it towards the constraint position
         }
     }
