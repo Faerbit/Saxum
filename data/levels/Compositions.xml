@@ -598,9 +598,9 @@
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
     <physicType>Box</physicType>
-    <width>2</width>
-    <height>1.88</height>
-    <length>1.99</length>
+    <width>1.56</width>
+    <height>1.56</height>
+    <length>1.56</length>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
     <renderable>true</renderable>
