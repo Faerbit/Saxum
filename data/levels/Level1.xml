@@ -1320,7 +1320,7 @@
         <xPosition>159.5</xPosition>
         <yPosition>22.0</yPosition>
         <zPosition>17.5</zPosition>
-        <strength>10.0</strength>
+        <strength>7.0</strength>
     </positionConstraint>
     <trigger>
         <name>openFirstDoor</name>
