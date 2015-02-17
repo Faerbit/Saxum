@@ -227,6 +227,10 @@ void Level::addTrigger(Trigger trigger) {
     this->triggers.push_back(trigger);
 }
 
+void Level::addFlame(Flame flame){
+    this->flames.push_back(flame);
+}
+
 lua_State* Level::getLuaState() {
     return luaState;
 }
