@@ -145,7 +145,7 @@
         <yRot>0.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.0</scale>
-        <mass>1.0</mass>
+        <mass>0.5</mass>
     </object>
     <object>
         <modelPath>switch_outer.obj</modelPath>
