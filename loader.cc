@@ -41,27 +41,20 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
         exit(-1);
     }
     //load global physic parameter
-    float friction, strength;
     XMLElement* physicsElement = doc->FirstChildElement("physics");
-    errorCheck(physicsElement->FirstChildElement("strength")->QueryFloatText(&strength));
-    errorCheck(physicsElement->FirstChildElement("friction")->QueryFloatText(&friction));
+    float strength = queryFloat(physicsElement, "strength");
+    float friction = queryFloat(physicsElement, "friction");
     level->setStrength(strength);
     
     // load the terrain
     level->getTerrain()->load();
     Model terrainModel = Model(level->getTerrain()->getModel());
     XMLElement* terrainElement = doc->FirstChildElement("terrain");
-    const char* charTerrainTexture = terrainElement->FirstChildElement("texture")->GetText();
-    if(charTerrainTexture == NULL){
-        printf("XMLError: No terrainTexture found.\n");
-        exit(-1);
-    }
-    std::string terrainTexture = charTerrainTexture;
-    float terrainAmbientFactor, terrainDiffuseFactor, terrainSpecularFactor, terrainShininess;
-    errorCheck(terrainElement->FirstChildElement("ambientFactor")->QueryFloatText(&terrainAmbientFactor));
-    errorCheck(terrainElement->FirstChildElement("diffuseFactor")->QueryFloatText(&terrainDiffuseFactor));
-    errorCheck(terrainElement->FirstChildElement("specularFactor")->QueryFloatText(&terrainSpecularFactor));
-    errorCheck(terrainElement->FirstChildElement("shininess")->QueryFloatText(&terrainShininess));
+    std::string terrainTexture = queryString(terrainElement, "texture");
+    float terrainAmbientFactor = queryFloat(terrainElement, "ambientFactor");
+    float terrainDiffuseFactor = queryFloat(terrainElement, "diffuseFactor");
+    float terrainSpecularFactor = queryFloat(terrainElement, "specularFactor");
+    float terrainShininess = queryFloat(terrainElement, "shininess");
     Material terrainMaterial = Material(terrainTexture, terrainAmbientFactor, terrainDiffuseFactor, terrainSpecularFactor, terrainShininess);
     Object* terrainObject = new Object(terrainModel, terrainMaterial,
     glm::vec3(-0.5*(float)level->getTerrain()->getHeightmapHeight(), 0.0f, -0.5f*(float)level->getTerrain()->getHeightmapWidth()),
@@ -71,12 +64,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     
     //load the skydome
     XMLElement* skydomeElement = doc->FirstChildElement("skydome");
-    const char* charSkydomeTexture = skydomeElement->FirstChildElement("texture")->GetText();
-    if(charSkydomeTexture == NULL){
-        printf("XMLError: No skydomeTexture found.\n");
-        exit(-1);
-    }
-    std::string skydomeTexture = charSkydomeTexture;
+    std::string skydomeTexture = queryString(skydomeElement, "texture");;
     Model skydomeModel = Model("skydome.obj", level->getSkydomeSize());
     Material skydomeMaterial = Material(skydomeTexture, 0.7f, 0.0f, 0.0f, 0.0f);
     Object* skydomeObject = new Object(skydomeModel, skydomeMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
@@ -87,32 +75,31 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     //load lighting parameters
     float rColour, gColour, bColour, alpha, xOffset, yOffset, zOffset, intensity;
     XMLElement* ambientElement = doc->FirstChildElement("ambientLight");
-    errorCheck(ambientElement->FirstChildElement("rColour")->QueryFloatText(&rColour));
-    errorCheck(ambientElement->FirstChildElement("gColour")->QueryFloatText(&gColour));
-    errorCheck(ambientElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
+    rColour = queryFloat(ambientElement, "rColour");
+    gColour = queryFloat(ambientElement, "gColour");
+    bColour = queryFloat(ambientElement, "bColour");
     level->setAmbientLight(glm::vec3(rColour,gColour,bColour));
     
     XMLElement* fogElement = doc->FirstChildElement("fogColour");
-    errorCheck(fogElement->FirstChildElement("rColour")->QueryFloatText(&rColour));
-    errorCheck(fogElement->FirstChildElement("gColour")->QueryFloatText(&gColour));
-    errorCheck(fogElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
-    errorCheck(fogElement->FirstChildElement("alpha")->QueryFloatText(&alpha));
+    rColour = queryFloat(fogElement, "rColour");
+    gColour = queryFloat(fogElement, "gColour");
+    bColour = queryFloat(fogElement, "bColour");
+    alpha = queryFloat(fogElement, "alpha");
     level->setFogColour(glm::vec4(rColour,gColour,bColour, alpha));
     
     XMLElement* directionalElement = doc->FirstChildElement("directionalLight");
-    errorCheck(directionalElement->FirstChildElement("xOffset")->QueryFloatText(&xOffset));
-    errorCheck(directionalElement->FirstChildElement("yOffset")->QueryFloatText(&yOffset));
-    errorCheck(directionalElement->FirstChildElement("zOffset")->QueryFloatText(&zOffset));
-    errorCheck(directionalElement->FirstChildElement("rColour")->QueryFloatText(&rColour));
-    errorCheck(directionalElement->FirstChildElement("gColour")->QueryFloatText(&gColour));
-    errorCheck(directionalElement->FirstChildElement("bColour")->QueryFloatText(&bColour));
-    errorCheck(directionalElement->FirstChildElement("intensity")->QueryFloatText(&intensity));
+    xOffset = queryFloat(directionalElement, "xOffset");
+    yOffset = queryFloat(directionalElement, "yOffset");
+    zOffset = queryFloat(directionalElement, "zOffset");
+    rColour = queryFloat(directionalElement, "rColour");
+    gColour = queryFloat(directionalElement, "gColour");
+    bColour = queryFloat(directionalElement, "bColour");
+    intensity = queryFloat(directionalElement, "intensity");
     level->setDirectionalLight(Light(glm::vec3(xOffset,yOffset,zOffset), glm::vec3(rColour,gColour,bColour), intensity));
     
     //load Objects
     std::vector<std::vector<int>> objectIdentifiers = std::vector<std::vector<int>>();  //The first entry is the index in objects, the second one the index in physicObjects, the others are idGreen, idBlue and objectNum.  
     XMLDocument* compositions = new XMLDocument();
-    //TODO move path to config.xml
     const char* compositionsFile = compositionsPath.c_str();
     compositions->LoadFile(compositionsFile);
     if (compositions->ErrorID()!=0){
@@ -122,73 +109,51 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     //iterate over all compositions in Level.xml
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-        int thisType = 0;
-        errorCheck(thisComposition->FirstChildElement("typeID")->QueryIntText(&thisType));
+        int thisType = queryInt(thisComposition, "typeID");
         //iterate over all compositions in Compositions.xml to find the one corresponding to the current composition
         XMLElement* composition = compositions->FirstChildElement("composition");
         for(; composition; composition=composition->NextSiblingElement("composition")){
-            int compositionType = 0;
-            errorCheck(composition->FirstChildElement("typeID")->QueryIntText(&compositionType));
+            int compositionType = queryInt(composition, "typeID");
             //corect composition found
             if(thisType == compositionType){
                 //iterate over all objects of the composition
                 XMLElement* xmlObject = composition->FirstChildElement("object");
                 int objectNum = 0;
                 for(; xmlObject; xmlObject=xmlObject->NextSiblingElement("object")){
-                    const char* charModelPath = xmlObject->FirstChildElement("modelPath")->GetText();
-                    if(charModelPath == NULL){
-                        printf("XMLError: No modelPath found in object.\n");
-                        exit(-1);
-                    }
-                    std::string modelPath = charModelPath;
-                    float objectScale, compScale;
-                    errorCheck(xmlObject->FirstChildElement("scale")->QueryFloatText(&objectScale));
-                    errorCheck(thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale));
+                    std::string modelPath = queryString(xmlObject, "modelPath");
+                    float objectScale = queryFloat(xmlObject, "scale");
+                    float compScale = queryFloat(thisComposition, "scale");
                     //find the objectData for the current object
                     XMLElement* objectData = compositions->FirstChildElement("objectData");
                     for(; objectData; objectData=objectData->NextSiblingElement("objectData")){
-                        const char* charDataModelPath = objectData->FirstChildElement("modelPath")->GetText();
-                        if(charDataModelPath == NULL){
-                            printf("XMLError: No modelPath found in objectData.\n");
-                            exit(-1);
-                        }
-                        std::string dataModelPath = charDataModelPath;
+                        std::string dataModelPath = queryString(objectData, "modelPath");
                         //objectData found
                         if(dataModelPath.compare(modelPath) == 0){
-                            bool renderable;
-                            errorCheck(objectData->FirstChildElement("renderable")->QueryBoolText(&renderable));
+                            bool renderable = queryBool(objectData, "renderable");
                             //create the object
                             Material material;
                             Model model;
                             if (renderable) {
-                                float ambientFactor, diffuseFactor, specularFactor, shininess;
-                                errorCheck(objectData->FirstChildElement("ambientFactor")->QueryFloatText(&ambientFactor));
-                                errorCheck(objectData->FirstChildElement("diffuseFactor")->QueryFloatText(&diffuseFactor));
-                                errorCheck(objectData->FirstChildElement("specularFactor")->QueryFloatText(&specularFactor));
-                                errorCheck(objectData->FirstChildElement("shininess")->QueryFloatText(&shininess));
-                                const char* charTexturePath = objectData->FirstChildElement("texturePath")->GetText();
-                                if(charTexturePath == NULL){
-                                    printf("XMLError: No texturePath found in objectData.\n");
-                                    exit(-1);
-                                }
-                                std::string texturePath = charTexturePath;
+                                float ambientFactor = queryFloat(objectData, "ambientFactor");
+                                float diffuseFactor = queryFloat(objectData, "diffuseFactor");
+                                float specularFactor = queryFloat(objectData, "specularFactor");
+                                float shininess = queryFloat(objectData, "shininess");
+                                std::string texturePath = queryString(objectData, "texturePath");
                                 material = Material(texturePath, ambientFactor, diffuseFactor, specularFactor, shininess);
                                 model = Model(modelPath, objectScale * compScale);
                             }
-                            float compXPos, compYOffset, compZPos;
+                            float compXPos = queryFloat(thisComposition, "xPos");
+                            float compYOffset = queryFloat(thisComposition, "yOffset");
+                            float compZPos = queryFloat(thisComposition, "zPos");
                             glm::vec3 objectOffset, compRot;
-                            errorCheck(xmlObject->FirstChildElement("xOffset")->QueryFloatText(&objectOffset[0]));
-                            errorCheck(xmlObject->FirstChildElement("yOffset")->QueryFloatText(&objectOffset[1]));
-                            errorCheck(xmlObject->FirstChildElement("zOffset")->QueryFloatText(&objectOffset[2]));
-                            errorCheck(thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos));
-                            errorCheck(thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset));
-                            errorCheck(thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos));
-                            errorCheck(thisComposition->FirstChildElement("xRot")->QueryFloatText(&compRot[0]));
-                            errorCheck(thisComposition->FirstChildElement("yRot")->QueryFloatText(&compRot[1]));
-                            errorCheck(thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]));
+                            objectOffset[0] = queryFloat(xmlObject, "xOffset");
+                            objectOffset[1] = queryFloat(xmlObject, "yOffset");
+                            objectOffset[2] = queryFloat(xmlObject, "zOffset");
+                            compRot[0] = queryFloat(thisComposition, "xRot");
+                            compRot[1] = queryFloat(thisComposition, "yRot");
+                            compRot[2] = queryFloat(thisComposition, "zRot");
                             compRot *= 0.0174532925;    //transform degrees to radians
-                            bool ignoreHeightmap;
-                            errorCheck(composition->FirstChildElement("ignoreHeightmap")->QueryBoolText(&ignoreHeightmap));
+                            bool ignoreHeightmap = queryBool(composition, "ignoreHeightmap");
                             if (!ignoreHeightmap){
                                 compYOffset = compYOffset+level->getTerrain()->getHeightmap()[int(compXPos-0.5+0.5*level->getTerrain()->getHeightmapHeight())]
                                                                                 [int(compZPos-0.5+0.5*level->getTerrain()->getHeightmapWidth())];
@@ -201,60 +166,47 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                                                             * glm::vec4(objectOffset, 0);
                             glm::vec3 objectPosition = compPos + glm::vec3(rotatedObjectOffset.x,rotatedObjectOffset.y,rotatedObjectOffset.z);
                             glm::vec3 objectRot;
-                            errorCheck(xmlObject->FirstChildElement("xRot")->QueryFloatText(&objectRot[0]));
-                            errorCheck(xmlObject->FirstChildElement("yRot")->QueryFloatText(&objectRot[1]));
-                            errorCheck(xmlObject->FirstChildElement("zRot")->QueryFloatText(&objectRot[2]));
+                            objectRot[0] = queryFloat(xmlObject, "xRot");
+                            objectRot[1] = queryFloat(xmlObject, "yRot");
+                            objectRot[2] = queryFloat(xmlObject, "zRot");
                             objectRot *= 0.0174532925;    //transform degrees to radians
                             Object* object = new Object(model, material, objectPosition, compRot+objectRot, renderable);
                             level->addObject(object);
                             
                             //add object to physics
-                            const char* charPhysicType = objectData->FirstChildElement("physicType")->GetText();
-                            if(charPhysicType == NULL){
-                                printf("XMLError: No physicType found.\n");
-                                exit(-1);
-                            }
-                            std::string physicType = charPhysicType;
-                            float mass;
-                            errorCheck(xmlObject->FirstChildElement("mass")->QueryFloatText(&mass));
+                            std::string physicType = queryString(objectData, "physicType");
+                            float mass = queryFloat(xmlObject, "mass");
                             XMLElement* constraint = thisComposition->FirstChildElement("positionConstraint");
                             bool rotate = (constraint == NULL);
+                            float dampningL, dampningA;
+                            if (physicType.compare("None") != 0){
+                                dampningL = queryFloat(objectData, "dampningL");
+                                dampningA = queryFloat(objectData, "dampningA");
+                            }
                             if (physicType.compare("Player") == 0){
-                                float radius, dampningL, dampningA;
-                                errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
-                                errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
-                                errorCheck(objectData->FirstChildElement("radius")->QueryFloatText(&radius));
+                                float radius = queryFloat(objectData, "radius");
                                 radius *= objectScale*compScale;
                                 level->addPhysicsObject(object);
                                 level->getPhysics()->addPlayer(friction, radius, *object, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize());
                             }else if (physicType.compare("Box") == 0){
-                                float width, height, length, dampningL, dampningA;
-                                errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
-                                errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
-                                errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
-                                errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
-                                errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
+                                float width = queryFloat(objectData, "width");
+                                float height = queryFloat(objectData, "height");
+                                float length = queryFloat(objectData, "length");
                                 width  *= objectScale*compScale;
                                 height *= objectScale*compScale;
                                 length *= objectScale*compScale;
                                 level->addPhysicsObject(object);
                                 level->getPhysics()->addBox(width, height, length, *object, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize(), rotate);
                             }else if (physicType.compare("Button") == 0){
-                                float width, height, length, dampningL, dampningA;
-                                errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
-                                errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
-                                errorCheck(objectData->FirstChildElement("width")->QueryFloatText(&width));
-                                errorCheck(objectData->FirstChildElement("height")->QueryFloatText(&height));
-                                errorCheck(objectData->FirstChildElement("length")->QueryFloatText(&length));
+                                float width = queryFloat(objectData, "width");
+                                float height = queryFloat(objectData, "height");
+                                float length = queryFloat(objectData, "length");
                                 width  *= objectScale*compScale;
                                 height *= objectScale*compScale;
                                 length *= objectScale*compScale;
                                 level->addPhysicsObject(object);
                                 level->getPhysics()->addButton(width, height, length, *object, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize(), rotate);
                             }else if (physicType.compare("TriangleMesh") == 0){
-                                float dampningL, dampningA;
-                                errorCheck(objectData->FirstChildElement("dampningL")->QueryFloatText(&dampningL));
-                                errorCheck(objectData->FirstChildElement("dampningA")->QueryFloatText(&dampningA));
                                 level->addPhysicsObject(object);
                                 level->getPhysics()->addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize(), objectScale*compScale, rotate);
                             }else if (physicType.compare("None") == 0){
@@ -272,9 +224,8 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                             }else{
                                 objectIdentifier[1] = level->getPhysicsObjectsVectorSize()-1;
                             }
-                            int idGreen, idBlue;
-                            errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
-                            errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
+                            int idGreen = queryInt(thisComposition, "idGreen");
+                            int idBlue = queryInt(thisComposition, "idBlue");
                             objectIdentifier[2] = idGreen;
                             objectIdentifier[3] = idBlue;
                             objectIdentifier[4] = objectNum;
@@ -293,21 +244,20 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                 XMLElement* xmlLight = composition->FirstChildElement("light");
                 for(; xmlLight; xmlLight=xmlLight->NextSiblingElement("light")){
                     glm::vec3 compRot, lightOffset, lightColour;
-                    float compScale, compXPos, compYOffset, compZPos, lightIntensity;
-                    errorCheck(thisComposition->FirstChildElement("scale")->QueryFloatText(&compScale));
-                    errorCheck(xmlLight->FirstChildElement("xOffset")->QueryFloatText(&lightOffset[0]));
-                    errorCheck(xmlLight->FirstChildElement("yOffset")->QueryFloatText(&lightOffset[1]));
-                    errorCheck(xmlLight->FirstChildElement("zOffset")->QueryFloatText(&lightOffset[2]));
-                    errorCheck(thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos));
-                    errorCheck(thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset));
-                    errorCheck(thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos));
-                    errorCheck(thisComposition->FirstChildElement("xRot")->QueryFloatText(&compRot[0]));
-                    errorCheck(thisComposition->FirstChildElement("yRot")->QueryFloatText(&compRot[1]));
-                    errorCheck(thisComposition->FirstChildElement("zRot")->QueryFloatText(&compRot[2]));
-                    errorCheck(xmlLight->FirstChildElement("rColour")->QueryFloatText(&lightColour[0]));
-                    errorCheck(xmlLight->FirstChildElement("gColour")->QueryFloatText(&lightColour[1]));
-                    errorCheck(xmlLight->FirstChildElement("bColour")->QueryFloatText(&lightColour[2]));
-                    errorCheck(xmlLight->FirstChildElement("intensity")->QueryFloatText(&lightIntensity));
+                    compRot[0] = queryFloat(thisComposition, "xRot");
+                    compRot[1] = queryFloat(thisComposition, "yRot");
+                    compRot[2] = queryFloat(thisComposition, "zRot");
+                    lightOffset[0] = queryFloat(xmlLight, "xOffset");
+                    lightOffset[1] = queryFloat(xmlLight, "yOffset");
+                    lightOffset[2] = queryFloat(xmlLight, "zOffset");
+                    lightColour[0] = queryFloat(xmlLight, "rColour");
+                    lightColour[1] = queryFloat(xmlLight, "gColour");
+                    lightColour[2] = queryFloat(xmlLight, "bColour");
+                    float compScale = queryFloat(thisComposition, "scale");
+                    float compXPos = queryFloat(thisComposition, "xPos");
+                    float compYOffset = queryFloat(thisComposition, "yOffset");
+                    float compZPos = queryFloat(thisComposition, "zPos");
+                    float lightIntensity = queryFloat(xmlLight, "intensity");
                     glm::vec3 compPos = glm::vec3(compXPos,
                                         compYOffset+level->getTerrain()->getHeightmap()[int(compXPos-0.5+0.5*level->getTerrain()->getHeightmapHeight())]
                                                                           [int(compZPos-0.5+0.5*level->getTerrain()->getHeightmapWidth())],
@@ -335,59 +285,43 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     
     //load triggers
 
-    // call init.lua to init the module load path in Lua
+    // call init.lua to initialize the module load path in Lua
     std::string initLuaPath = scriptPath + "init.lua";
     luaL_dofile(level->getLuaState(), initLuaPath.c_str());
     XMLElement* composition = doc->FirstChildElement("composition");
     for(; composition; composition=composition->NextSiblingElement("composition")){
         XMLElement* xmlTrigger = composition->FirstChildElement("trigger");
         for(; xmlTrigger; xmlTrigger=xmlTrigger->NextSiblingElement("trigger")){
-            const char* charName = xmlTrigger->FirstChildElement("name")->GetText();
-            if(charName == NULL){
-                printf("XMLError: No name found for a trigger.\n");
-                exit(-1);
-            }
-            std::string name = charName;
+            std::string name = queryString(xmlTrigger, "name");
             if (name.compare("-") != 0){
-                float xPos, yPos, zPos, distance;
-                bool isBigger;
-                int idGreen, idBlue, objectNum;
-                
-                errorCheck(xmlTrigger->FirstChildElement("xPosition")->QueryFloatText(&xPos));
-                errorCheck(xmlTrigger->FirstChildElement("yPosition")->QueryFloatText(&yPos));
-                errorCheck(xmlTrigger->FirstChildElement("zPosition")->QueryFloatText(&zPos));
+                float xPos = queryFloat(xmlTrigger, "xPosition");
+                float yPos = queryFloat(xmlTrigger, "yPosition");
+                float zPos = queryFloat(xmlTrigger, "zPosition");
                 glm::vec3 position = glm::vec3(xPos, yPos, zPos);
-                const char* charTarget = xmlTrigger->FirstChildElement("targetIdGreen")->GetText();
-                if(charTarget == NULL){
-                    printf("XMLError: No targetIdGreen found for a trigger.\n");
-                    exit(-1);
-                }
-                std::string stringTarget = charTarget;
+                std::string stringTarget = queryString(xmlTrigger, "targetIdGreen");
                 if (stringTarget.compare("-") != 0){
-                    int targetIdGreen = 0, targetIdBlue = 0;
-                    errorCheck(xmlTrigger->FirstChildElement("targetIdGreen")->QueryIntText(&targetIdGreen));
-                    errorCheck(xmlTrigger->FirstChildElement("targetIdBlue")->QueryIntText(&targetIdBlue));
+                    int targetIdGreen = queryInt(xmlTrigger, "targetIdGreen");
+                    int targetIdBlue = queryInt(xmlTrigger, "targetIdBlue");
                     XMLElement* thisComposition = doc->FirstChildElement("composition");
                     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-                        int thisIdGreen, thisIdBlue;
-                        errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&thisIdGreen));
-                        errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&thisIdBlue));
+                        int thisIdGreen = queryInt(thisComposition, "idGreen");
+                        int thisIdBlue = queryInt(thisComposition, "idBlue");
                         if (targetIdGreen == thisIdGreen && targetIdBlue == thisIdBlue){
                             glm::vec3 targetPosition; 
-                            errorCheck(thisComposition->FirstChildElement("xPos")->QueryFloatText(&targetPosition[0]));
-                            errorCheck(thisComposition->FirstChildElement("yOffset")->QueryFloatText(&targetPosition[1]));
-                            errorCheck(thisComposition->FirstChildElement("zPos")->QueryFloatText(&targetPosition[2]));
+                            targetPosition[0] = queryFloat(thisComposition, "xPos");
+                            targetPosition[1] = queryFloat(thisComposition, "yOffset");
+                            targetPosition[2] = queryFloat(thisComposition, "zPos");
                             targetPosition[1] += level->getTerrain()->getHeightmap()[int(targetPosition[0]-0.5+0.5*level->getTerrain()->getHeightmapHeight())]
                                                                        [int(targetPosition[2]-0.5+0.5*level->getTerrain()->getHeightmapWidth())];
                             position += targetPosition;
                         }
                     }
                 }
-                errorCheck(xmlTrigger->FirstChildElement("distance")->QueryFloatText(&distance));
-                errorCheck(xmlTrigger->FirstChildElement("isBiggerThan")->QueryBoolText(&isBigger));
-                errorCheck(composition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
-                errorCheck(composition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
-                errorCheck(xmlTrigger->FirstChildElement("objectNum")->QueryIntText(&objectNum));
+                float distance = queryFloat(xmlTrigger, "distance");
+                bool isBigger = queryBool(xmlTrigger, "isBiggerThan");
+                int idGreen = queryInt(composition, "idGreen");
+                int idBlue = queryInt(composition, "idBlue");
+                int objectNum = queryInt(xmlTrigger, "objectNum");
                 Object* object=0;
                 bool ok = false;
                 for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
@@ -404,21 +338,19 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                     printf("No index found for a trigger object while loading triggers.");
                     exit(-1);
                 }
-                const char* charLuaScript = xmlTrigger->FirstChildElement("luaScript")->GetText();
-                if(charLuaScript == NULL){
-                    printf("XMLError: No Lua script found for a trigger.\n");
-                    exit(-1);
-                }
-                std::string luaScript = charLuaScript;
+                std::string luaScript = queryString(xmlTrigger, "luaScript");
                 
-                int toChangeIdGreen, toChangeIdBlue, toChangeObjNum, objectToChange=-1;
-                errorCheck(xmlTrigger->FirstChildElement("toChangeIdGreen")->QueryIntText(&toChangeIdGreen));
-                errorCheck(xmlTrigger->FirstChildElement("toChangeIdBlue")->QueryIntText(&toChangeIdBlue));
-                errorCheck(xmlTrigger->FirstChildElement("toChangeObjNum")->QueryIntText(&toChangeObjNum));
+                int toChangeIdGreen = queryInt(xmlTrigger, "toChangeIdGreen");
+                int toChangeIdBlue = queryInt(xmlTrigger, "toChangeIdBlue");
+                int toChangeObjNum = queryInt(xmlTrigger, "toChangeObjNum");
+                int objectToChange=-1;
                 for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
                     if (objectIdentifiers[i][2]==toChangeIdGreen && objectIdentifiers[i][3]==toChangeIdBlue && objectIdentifiers[i][4]==toChangeObjNum){
                         objectToChange = objectIdentifiers[i][1];     //Index in physic objects
                     }
+                }
+                if (objectToChange == -1){
+                    printf("No Identifier found for an object that was to be changed by a trigger.\n");
                 }
                 if (object != 0) {
                     Trigger trigger = Trigger(position, distance, isBigger, object, luaScript, level->getLuaState(), objectToChange, scriptPath);
@@ -437,23 +369,22 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     for(; composition; composition=composition->NextSiblingElement("composition")){
         XMLElement* positionConstraint = composition->FirstChildElement("positionConstraint");
         for(; positionConstraint; positionConstraint=positionConstraint->NextSiblingElement("positionConstraint")){
-            float xPos, yPos, zPos, strength;
-            int objectNum=0, idGreen=0, idBlue=0, objectIndex=0;
-            errorCheck(positionConstraint->FirstChildElement("xPosition")->QueryFloatText(&xPos));
-            errorCheck(positionConstraint->FirstChildElement("yPosition")->QueryFloatText(&yPos));
-            errorCheck(positionConstraint->FirstChildElement("zPosition")->QueryFloatText(&zPos));
-            errorCheck(positionConstraint->FirstChildElement("strength")->QueryFloatText(&strength));
-            errorCheck(positionConstraint->FirstChildElement("objectNum")->QueryIntText(&objectNum));
-            errorCheck(composition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
-            errorCheck(composition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
+            float xPos = queryFloat(positionConstraint, "xPosition");
+            float yPos = queryFloat(positionConstraint, "yPosition");
+            float zPos = queryFloat(positionConstraint, "zPosition");
+            float strength = queryFloat(positionConstraint, "strength");
+            int objectNum = queryInt(positionConstraint, "objectNum");
+            int idGreen = queryInt(composition, "idGreen");
+            int idBlue = queryInt(composition, "idBlue");
+            int objectIndex;
             bool ok = false;
             for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
                 if (objectIdentifiers[i][2]==idGreen && objectIdentifiers[i][3]==idBlue && objectIdentifiers[i][4]==objectNum){
-                    objectIndex = objectIdentifiers[i][1];    //Index in physic objects
                     if(ok){
                         printf("2 objects have the same ID while loading constraints.");
                         exit(-1);
                     }
+                    objectIndex = objectIdentifiers[i][1];    //Index in physic objects
                     ok = true;
                 }
             }
@@ -480,13 +411,11 @@ glm::vec3 Loader::reloadPlayerPosition(std::string filePath, Level* level){
     //iterate over all compositions in Level.xml
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-        int thisType = 0;
-        errorCheck(thisComposition->FirstChildElement("typeID")->QueryIntText(&thisType));
+        int thisType = queryInt(thisComposition, "typeID");
         if (thisType == 20){
-            float compXPos, compYOffset, compZPos;
-            errorCheck(thisComposition->FirstChildElement("xPos")->QueryFloatText(&compXPos));
-            errorCheck(thisComposition->FirstChildElement("yOffset")->QueryFloatText(&compYOffset));
-            errorCheck(thisComposition->FirstChildElement("zPos")->QueryFloatText(&compZPos));
+            float compXPos = queryFloat(thisComposition, "xPos");
+            float compYOffset = queryFloat(thisComposition, "yOffset");
+            float compZPos = queryFloat(thisComposition, "zPos");
             compYOffset += level->getTerrain()->getHeightmap()[int(compXPos-0.5+0.5*level->getTerrain()->getHeightmapHeight())]
                                                                         [int(compZPos-0.5+0.5*level->getTerrain()->getHeightmapWidth())];
             glm::vec3 position = glm::vec3(compXPos, compYOffset, compZPos);
