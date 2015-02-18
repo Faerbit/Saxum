@@ -27,7 +27,6 @@ class Graphics {
         glm::uvec2 windowSize;
         float nearPlane;
         float farPlane;
-        // pointer to either use the vector from the level or from here
         std::vector<Light> closestLights;
         ACGL::OpenGL::SharedShaderProgram lightingShader;
         ACGL::OpenGL::SharedShaderProgram depthCubeShader;
