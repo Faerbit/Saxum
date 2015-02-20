@@ -178,6 +178,34 @@ Converter::~Converter(){
 }
 
 std::vector<int> Converter::newComposition(int type, float posX, float posZ){
+    int oldIDGreen, oldIDBlue;
+    bool alreadyExists = false;
+    XMLElement* thisComposition = doc->FirstChildElement("composition");
+    for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
+        float xPos = queryFloat(thisComposition, "xPos");
+        float zPos = queryFloat(thisComposition, "zPos");
+        int typeID = queryInt(thisComposition, "typeID");
+        if(xPos == posX && zPos == posZ && typeID == type){
+            if(alreadyExists){
+                std::cout << "At the position " << xPos << "," << zPos << " multiple compositions with the ID " << typeID << " exist in the xml." << std::endl;
+                exit(-1);
+            }
+            oldIDGreen = queryInt(thisComposition, "idGreen");
+            oldIDBlue = queryInt(thisComposition, "idBlue");
+            alreadyExists = true;
+        }
+    }
+    if (alreadyExists){
+        if (! idUsed[oldIDGreen][oldIDBlue]){
+            std::cout << "The composition with ID " << oldIDGreen << "," << oldIDBlue << " exists in the xml but the converter thinks it does not." << std::endl;
+            exit(-1);
+        }
+        std::vector<int> oldID;
+        oldID.push_back(oldIDGreen);
+        oldID.push_back(oldIDBlue);
+        return oldID;
+    }
+    
     bool full = false;
     while(idUsed[nextID[0]][nextID[1]]){
         nextID[1] += 1;
@@ -194,6 +222,7 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
             }
         }
     }
+    
     XMLElement* newComposition = doc->NewElement("composition");
     XMLElement* typeID = doc->NewElement("typeID");
     XMLElement* idBlue = doc->NewElement("idBlue");
@@ -320,6 +349,28 @@ void Converter::deleteComposition(int idG, int idB){
 void Converter::save(){
     const char* charXmlFile = xmlFile.c_str();
     doc->SaveFile(charXmlFile);
+}
+
+float Converter::queryFloat(XMLElement* element, const char* attribute){
+    XMLElement* attributeElement = element->FirstChildElement(attribute);
+    if (attributeElement == NULL){
+        std::cout << "XMLError: Attribute " << attribute << " does not exist." << std::endl;
+        exit(-1);
+    }
+    float ret;
+    errorCheck(attributeElement->QueryFloatText(&ret));
+    return ret;
+}
+
+float Converter::queryFloat(XMLDocument*& element, const char* attribute){
+    XMLElement* attributeElement = element->FirstChildElement(attribute);
+    if (attributeElement == NULL){
+        std::cout << "XMLError: Attribute " << attribute << " does not exist." << std::endl;
+        exit(-1);
+    }
+    float ret;
+    errorCheck(attributeElement->QueryFloatText(&ret));
+    return ret;
 }
 
 int Converter::queryInt(XMLElement* element, const char* attribute){
