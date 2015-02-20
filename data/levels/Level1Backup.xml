@@ -4,35 +4,6 @@
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
-    <xPos>58.500000</xPos>
-    <yOffset>0.0</yOffset>
-    <zPos>-172.500000</zPos>
-    <idGreen>0</idGreen>
-    <idBlue>112</idBlue>
-    <typeID>221</typeID>
-    <trigger>
-        <name>-</name>
-        <xPosition>0</xPosition>
-        <yPosition>0</yPosition>
-        <zPosition>0</zPosition>
-        <targetIdGreen>-</targetIdGreen>
-        <targetIdBlue>-</targetIdBlue>
-        <distance>1.0</distance>
-        <isBiggerThan>false</isBiggerThan>
-        <objectNum>0</objectNum>
-        <luaScript>-</luaScript>
-        <toChangeIdGreen>0</toChangeIdGreen>
-        <toChangeIdBlue>0</toChangeIdBlue>
-        <toChangeObjNum>0</toChangeObjNum>
-    </trigger>
-</composition>
-
-<composition>
-    <scale>1.0</scale>
-    <xRot>0.0</xRot>
-    <yRot>0.0</yRot>
-    <zRot>0.0</zRot>
-    <manualPos>false</manualPos>
     <xPos>239.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>32.500000</zPos>

@@ -16,12 +16,13 @@ class Converter {
         void deleteComposition(int idG, int idB);
         void save(); //writes the xml to file
     private:
-        
         std::vector<int> nextID;
         bool idUsed[256][256];
         std::string xmlFile;
         XMLDocument* doc = new XMLDocument();
         XMLDocument* compositions = new XMLDocument();
+        float queryFloat(XMLElement* element, const char* attribute);
+        float queryFloat(XMLDocument*& element, const char* attribute);
         int queryInt(XMLElement* element, const char* attribute);
         int queryInt(XMLDocument*& element, const char* attribute);
         bool queryBool(XMLElement* element, const char* attribute);
