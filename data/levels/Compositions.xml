@@ -138,7 +138,7 @@
     <typeID>120</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
     <object>
-        <modelPath>switch_inner.obj</modelPath>
+        <modelPath>switchInner.obj</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>0.5</yOffset>
         <zOffset>0.0</zOffset>
@@ -149,7 +149,7 @@
         <mass>0.5</mass>
     </object>
     <object>
-        <modelPath>switch_outer.obj</modelPath>
+        <modelPath>switchOuter.obj</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>-1</yOffset>
         <zOffset>0.0</zOffset>
@@ -160,7 +160,7 @@
         <mass>1.0</mass>
     </object>
     <object>
-        <modelPath>switch_outerBox</modelPath>
+        <modelPath>switchOuterBox</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>-1</yOffset>
         <zOffset>1.105</zOffset>
@@ -171,7 +171,7 @@
         <mass>0.0</mass>
     </object>
     <object>
-        <modelPath>switch_outerBox</modelPath>
+        <modelPath>switchOuterBox</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>-1</yOffset>
         <zOffset>-1.105</zOffset>
@@ -182,7 +182,7 @@
         <mass>0.0</mass>
     </object>
     <object>
-        <modelPath>switch_outerBox</modelPath>
+        <modelPath>switchOuterBox</modelPath>
         <xOffset>1.105</xOffset>
         <yOffset>-1</yOffset>
         <zOffset>0.0</zOffset>
@@ -193,7 +193,7 @@
         <mass>0.0</mass>
     </object>
     <object>
-        <modelPath>switch_outerBox</modelPath>
+        <modelPath>switchOuterBox</modelPath>
         <xOffset>-1.105</xOffset>
         <yOffset>-1</yOffset>
         <zOffset>0.0</zOffset>
@@ -204,7 +204,7 @@
         <mass>0.0</mass>
     </object>
     <object>
-        <modelPath>switch_outerBox</modelPath>
+        <modelPath>switchOuterBox</modelPath>
         <xOffset>0.0</xOffset>
         <yOffset>-2.105</yOffset>
         <zOffset>0.0</zOffset>
@@ -463,7 +463,7 @@
 <!-- Do not change the radius, it has to match the .obj -->
 <objectData>
     <modelPath>marbleSmooth.obj</modelPath>
-    <texturePath>Marbletexture.png</texturePath>
+    <texturePath>marbleTexture.png</texturePath>
     <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.5</diffuseFactor>
     <specularFactor>0.5</specularFactor>
@@ -520,8 +520,8 @@
 
 <!-- Do not change width height or length, they have to match the .obj -->
 <objectData>
-    <modelPath>switch_inner.obj</modelPath>
-    <texturePath>switchTextureInner.png</texturePath>
+    <modelPath>switchInner.obj</modelPath>
+    <texturePath>switchInnerTexture.png</texturePath>
     <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>        
@@ -537,7 +537,7 @@
 
 <!-- Do not change width height or length, they have to match the .obj -->
 <objectData>
-    <modelPath>switch_outerBox</modelPath>
+    <modelPath>switchOuterBox</modelPath>
     <physicType>Box</physicType>
     <width>2.54</width>
     <height>2.54</height>
@@ -548,8 +548,8 @@
 </objectData>
 
 <objectData>
-    <modelPath>switch_outer.obj</modelPath>
-    <texturePath>switchTextureOuter.png</texturePath>
+    <modelPath>switchOuter.obj</modelPath>
+    <texturePath>switchOuterTexture.png</texturePath>
     <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
