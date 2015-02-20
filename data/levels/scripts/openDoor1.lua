@@ -1,18 +1,19 @@
-if(triggeredOpenDoor1 == nil) then
-    triggeredOpenDoor1 = false
+local global = require( "global" )
+if(global.triggeredOpenDoor1 == nil) then
+    global.triggeredOpenDoor1 = false
 end
 function trigger(objectToChange)
-    if(triggeredOpenDoor1 == false) then
+    if(global.triggeredOpenDoor1 == false) then
         if(not level) then
             print("No level found in Lua!")
             return
         end
         
-        if(not openDoorCounter) then
-            openDoorCounter = 0
+        if(not global.openDoorCounter) then
+            global.openDoorCounter = 0
         end
-        openDoorCounter = openDoorCounter + 1
-        if (openDoorCounter == 3) then
+        global.openDoorCounter = global.openDoorCounter + 1
+        if (global.openDoorCounter == 3) then
             local strength = 1
             local xPos = 0
             local yPos = 0
@@ -20,9 +21,9 @@ function trigger(objectToChange)
             level:moveObject(objectToChange, strength, xPos, yPos, zPos)
             print("Opening the door")
         end
-        triggeredOpenDoor1undo = false
+        global.triggeredOpenDoor1undo = false
         
-        triggeredOpenDoor1 = true
+        global.triggeredOpenDoor1 = true
         print("openDoor1")
     end
 end
