@@ -1,16 +1,16 @@
 #include "converter.hh"
 #include <fstream>
-#include <string>
 #include <sys/stat.h>
 #include <iostream>
 
 using namespace tinyxml2;
 
-Converter::Converter(std::string level){
-    xmlFile = "../Levels/ObjectSetups/Level" + level + ".xml";
+Converter::Converter(std::string levelPath, std::string compositionsPath){
+    xmlFile = levelPath + ".xml";
     
     //Load Compositions
-    const char* charCompositions = "../Levels/ObjectSetups/Compositions.xml";
+    std::string stringCompositions = compositionsPath;
+    const char* charCompositions = stringCompositions.c_str();
     compositions->LoadFile(charCompositions);
     if (compositions->ErrorID()!=0){
         printf("Could not open Compositions!\n");
@@ -18,8 +18,8 @@ Converter::Converter(std::string level){
     }
     
     //Create a backup of the current Level png file, if no backup exists
-    std::string pngFile = "../Levels/ObjectSetups/Level" + level + ".png";
-    std::string backupPNG = "../Levels/ObjectSetups/BackupLevel" + level + ".png";
+    std::string pngFile = levelPath + ".png";
+    std::string backupPNG = levelPath + "Backup.png";
     struct stat buf;
     if(stat(backupPNG.c_str(), &buf) != 0){
         std::ifstream  src(pngFile, std::ios::binary);
@@ -157,16 +157,15 @@ Converter::Converter(std::string level){
         doc->InsertEndChild(positionConstraint);
     }else{
         //Create a backup of the current Level xml file
-        std::string backupXML = "../Levels/ObjectSetups/BackupLevel" + level + ".xml";
+        std::string backupXML = levelPath + "Backup.xml";
         std::ifstream  src(xmlFile, std::ios::binary);
         std::ofstream  dst(backupXML,  std::ios::binary);
         dst << src.rdbuf();
         //Check what IDs are already in use
         XMLElement* thisComposition = doc->FirstChildElement("composition");
         for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-            int idGreen = 0, idBlue = 0;
-            errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
-            errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
+            int idGreen = queryInt(thisComposition, "idGreen");
+            int idBlue = queryInt(thisComposition, "idBlue");
             idUsed[idGreen][idBlue] = true;
         }
     }
@@ -286,16 +285,14 @@ void Converter::updateComposition(int idG, int idB, float posX, float posZ){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     bool compositionExists = false;
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-        int idGreen = 0, idBlue = 0;
-        errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
-        errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
+        int idGreen = queryInt(thisComposition, "idGreen");
+        int idBlue = queryInt(thisComposition, "idBlue");
         if(idGreen == idG && idBlue == idB){
             if (compositionExists){
                 std::cout << "The ID " << idGreen << "," << idBlue << " is used for multiple compositions in the xml." << std::endl;
                 exit(-1);
             }
-            bool manualPos;
-            errorCheck(thisComposition->FirstChildElement("manualPos")->QueryBoolText(&manualPos));
+            bool manualPos = queryBool(thisComposition, "manualPos");
             if(!manualPos){
                 thisComposition->FirstChildElement("xPos")->SetText(std::to_string(posX).c_str());
                 thisComposition->FirstChildElement("zPos")->SetText(std::to_string(posZ).c_str());
@@ -312,9 +309,8 @@ void Converter::updateComposition(int idG, int idB, float posX, float posZ){
 void Converter::deleteComposition(int idG, int idB){
     XMLElement* thisComposition = doc->FirstChildElement("composition");
     for(; thisComposition; thisComposition=thisComposition->NextSiblingElement("composition")){
-        int idGreen = 0, idBlue = 0;
-        errorCheck(thisComposition->FirstChildElement("idGreen")->QueryIntText(&idGreen));
-        errorCheck(thisComposition->FirstChildElement("idBlue")->QueryIntText(&idBlue));
+        int idGreen = queryInt(thisComposition, "idGreen");
+        int idBlue = queryInt(thisComposition, "idBlue");
         if(idGreen == idG && idBlue == idB){
             doc->DeleteChild(thisComposition);
         }
@@ -324,6 +320,50 @@ void Converter::deleteComposition(int idG, int idB){
 void Converter::save(){
     const char* charXmlFile = xmlFile.c_str();
     doc->SaveFile(charXmlFile);
+}
+
+int Converter::queryInt(XMLElement* element, const char* attribute){
+    XMLElement* attributeElement = element->FirstChildElement(attribute);
+    if (attributeElement == NULL){
+        std::cout << "XMLError: Attribute " << attribute << " does not exist." << std::endl;
+        exit(-1);
+    }
+    int ret;
+    errorCheck(attributeElement->QueryIntText(&ret));
+    return ret;
+}
+
+int Converter::queryInt(XMLDocument*& element, const char* attribute){
+    XMLElement* attributeElement = element->FirstChildElement(attribute);
+    if (attributeElement == NULL){
+        std::cout << "XMLError: Attribute " << attribute << " does not exist." << std::endl;
+        exit(-1);
+    }
+    int ret;
+    errorCheck(attributeElement->QueryIntText(&ret));
+    return ret;
+}
+
+bool Converter::queryBool(XMLElement* element, const char* attribute){
+    XMLElement* attributeElement = element->FirstChildElement(attribute);
+    if (attributeElement == NULL){
+        std::cout << "XMLError: Attribute " << attribute << " does not exist." << std::endl;
+        exit(-1);
+    }
+    bool ret;
+    errorCheck(attributeElement->QueryBoolText(&ret));
+    return ret;
+}
+
+bool Converter::queryBool(XMLDocument*& element, const char* attribute){
+    XMLElement* attributeElement = element->FirstChildElement(attribute);
+    if (attributeElement == NULL){
+        std::cout << "XMLError: Attribute " << attribute << " does not exist." << std::endl;
+        exit(-1);
+    }
+    bool ret;
+    errorCheck(attributeElement->QueryBoolText(&ret));
+    return ret;
 }
 
 void Converter::errorCheck(XMLError error){
