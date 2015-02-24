@@ -75,7 +75,7 @@
         <gColour>1.0</gColour>
         <bColour>1.0</bColour>
         <intensity>4.0</intensity>
-        <flameOffset>0.5</flameOffset>
+        <flameOffset>-1.2</flameOffset>
     </light>
 </composition>
 
