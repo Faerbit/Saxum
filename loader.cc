@@ -178,7 +178,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                             float mass = queryFloat(xmlObject, "mass");
                             XMLElement* constraint = thisComposition->FirstChildElement("positionConstraint");
                             bool rotate = (constraint == NULL);
-                            float dampningL, dampningA;
+                            float dampningL = 0.0f, dampningA = 0.0f;
                             if (physicType.compare("None") != 0){
                                 dampningL = queryFloat(objectData, "dampningL");
                                 dampningA = queryFloat(objectData, "dampningA");
@@ -376,7 +376,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
             int objectNum = queryInt(positionConstraint, "objectNum");
             int idGreen = queryInt(composition, "idGreen");
             int idBlue = queryInt(composition, "idBlue");
-            int objectIndex;
+            int objectIndex = 0;
             bool ok = false;
             for (unsigned int i = 0; i<objectIdentifiers.size(); i++){
                 if (objectIdentifiers[i][2]==idGreen && objectIdentifiers[i][3]==idBlue && objectIdentifiers[i][4]==objectNum){
