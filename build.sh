@@ -24,7 +24,7 @@ threads=$(($(nproc)+1))
 cd extern/lua/
 if [[ $1 == "windows" ]]
 then
-    make mingw
+    make CC=x86_64-w64-mingw32-gcc mingw
 else
     make linux
 fi
