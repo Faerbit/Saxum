@@ -271,7 +271,6 @@
     <idGreen>1</idGreen>
     <idBlue>242</idBlue>
     <typeID>80</typeID>
-    <flameOffset>-2.0</flameOffset>
     <trigger>
         <name>-</name>
         <xPosition>0</xPosition>
