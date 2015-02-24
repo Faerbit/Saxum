@@ -10,7 +10,6 @@
 #include "camera.hh"
 #include "physics.hh"
 #include "trigger.hh"
-#include "flame.hh"
 
 extern "C" {
 #include "extern/lua/src/lua.h"
@@ -45,7 +44,6 @@ class Level {
         void setSkydomeObject(Object* object);
         void addObject(Object* object);
         void addPhysicsObject(Object* object);
-        void addFlame(Flame flame);
         void setAmbientLight(glm::vec3 colour);
         void setFogColour(glm::vec4 colour);
         void setDirectionalLight(Light light);
@@ -64,7 +62,6 @@ class Level {
         std::vector<Object*> physicsObjects;
         std::vector<Light> lights;
         std::vector<Trigger> triggers;
-        std::vector<Flame> flames;
         glm::vec3 ambientLight;
         glm::vec4 fogColour;
         Light directionalLight;
