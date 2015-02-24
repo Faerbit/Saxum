@@ -5,6 +5,7 @@ then
     rm -rf build
     rm -rf binaries
     rm -rf extern/bullet/build
+    cd extern/lua; make clean; cd ../..
     exit
 fi
 
