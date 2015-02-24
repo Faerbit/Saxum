@@ -268,15 +268,17 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                                                     * glm::rotate(compRot.z, glm::vec3(0.0f, 0.0f, 1.0f))
                                                     * glm::vec4(lightOffset, 0);
                     glm::vec3 lightPosition = compPos + glm::vec3(rotatedLightOffset.x,rotatedLightOffset.y,rotatedLightOffset.z);
-                    Light light = Light(lightPosition, lightColour, lightIntensity);
-                    level->addLight(light);
                     XMLElement* flameOffset = NULL;
                     flameOffset = xmlLight->FirstChildElement("flameOffset");
                     if (flameOffset != NULL){
                         float offset = 0;
                         errorCheck(flameOffset->QueryFloatText(&offset));
-                        Flame flame = Flame(offset, lightPosition, glm::vec3(0,0,0));
-                        level->addFlame(flame);
+                        Light light = Light(lightPosition, lightColour, lightIntensity, offset);
+                        level->addLight(light);
+                    }
+                    else {
+                        Light light = Light(lightPosition, lightColour, lightIntensity);
+                        level->addLight(light);
                     }
                 }//iterating over all lights of the composition
             }//corect composition found
