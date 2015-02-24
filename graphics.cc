@@ -49,6 +49,15 @@ void Graphics::init(Level* level) {
     depthCubeShader = ShaderProgramCreator("depth_cube")
         .attributeLocations(vao->getAttributeLocations()).create();
 
+    flame_positions_ab = SharedArrayBuffer(new ArrayBuffer());
+    flame_positions_ab->defineAttribute("aPosition", GL_FLOAT, 3);
+    flame_positions = SharedVertexArrayObject(new VertexArrayObject());
+    flame_positions->setMode(GL_POINTS);
+    flame_positions->attachAllAttributes(flame_positions_ab);
+
+    flameShader = ShaderProgramCreator("flame")
+        .attributeLocations(flame_positions->getAttributeLocations()).create();
+
     depthTexture = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT24));
     depthTexture->setMinFilter(GL_NEAREST);
     depthTexture->setMagFilter(GL_NEAREST);
@@ -157,7 +166,7 @@ void Graphics::render(double time)
     double nextUpdate = lastUpdate + lightUpdateDelay;
     if (time >= nextUpdate)
     {
-        updateShaderLights();
+        updateLights();
         lastUpdate = time;
     }
     
@@ -187,6 +196,12 @@ void Graphics::render(double time)
     
     // render the level
     level->render(lightingShader, true, &lightingViewProjectionMatrix, &shadowVPs);
+
+    // draw flames on top
+    flameShader->use();
+    flameShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
+    flameShader->setUniform("time", (float) time);
+    flame_positions->render();
 }
 
 bool Graphics::compareLightDistances(Light a, Light b) {
@@ -210,7 +225,7 @@ void Graphics::updateClosestLights() {
     }
 }
 
-void Graphics::updateShaderLights() {
+void Graphics::updateLights() {
     updateClosestLights();
     if (closestLights.size() > 0) {
         lightingShader->setUniform("lightCount", (int) closestLights.size());
@@ -247,6 +262,17 @@ void Graphics::updateShaderLights() {
         lightingShader->setUniform("directionalIntensity",
             level->getDirectionalLight()->getIntensity());
     }
+    float flamePositionsData[closestLights.size() * 3] = {};
+    int flameIndex = 0;
+    for (unsigned int i = 0; i<closestLights.size(); i++) {
+        if (closestLights.at(i).getFlameYOffset() != 0.0f) {
+            flamePositionsData[flameIndex + 0] = closestLights.at(i).getPosition().x;
+            flamePositionsData[flameIndex + 1] = closestLights.at(i).getPosition().y + closestLights.at(i).getFlameYOffset();
+            flamePositionsData[flameIndex + 2] = closestLights.at(i).getPosition().z;
+            flameIndex+=3;
+        }
+    }
+    flame_positions_ab->setDataElements(flameIndex, flamePositionsData);
 }
 
 void Graphics::resize(glm::uvec2 windowSize) {

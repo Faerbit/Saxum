@@ -19,7 +19,7 @@ class Graphics {
         void resize(glm::uvec2 windowSize);
         float getFarPlane();
     private:
-        void updateShaderLights();
+        void updateLights();
         void updateClosestLights();
         bool compareLightDistances(Light a, Light b);
         void saveDepthBufferToDisk(int face, std::string);
@@ -31,10 +31,13 @@ class Graphics {
         ACGL::OpenGL::SharedShaderProgram lightingShader;
         ACGL::OpenGL::SharedShaderProgram depthCubeShader;
         ACGL::OpenGL::SharedShaderProgram depthShader;
+        ACGL::OpenGL::SharedShaderProgram flameShader;
         ACGL::OpenGL::SharedTexture2D depthTexture;
         ACGL::OpenGL::SharedFrameBufferObject framebuffer;
         std::vector<ACGL::OpenGL::SharedTextureCubeMap> depth_cubeMaps;
         ACGL::OpenGL::SharedFrameBufferObject framebuffer_cube;
+        ACGL::OpenGL::SharedVertexArrayObject flame_positions;
+        ACGL::OpenGL::SharedArrayBuffer flame_positions_ab;
         int cube_size;
         unsigned int maxShadowRenderCount;
         Level* level;
