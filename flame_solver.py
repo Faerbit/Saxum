@@ -2,40 +2,53 @@
 
 from math import pi, sin, cos, exp
 from numpy import arange
+from collections import namedtuple
 
-# f(x) = p1 * sin(p2 * x)
+Result = namedtuple("Result", ["p1", "p2", "error"])
 
-parameter_sin_1=3
-parameter_sin_2=0.3
+def main():
+    # f(x) = p1 * sin(p2 * x)
 
-transition_point = (1/parameter_sin_2) * pi * 0.75
+    parameter_sin_1=2
+    parameter_sin_2=0.5
 
-sin_value = parameter_sin_1 * sin(parameter_sin_2 * transition_point) 
+    transition_point = (1/parameter_sin_2) * pi * 0.75
 
-derived_sin_value = parameter_sin_1 * parameter_sin_2 * cos(parameter_sin_2 * transition_point)
+    sin_value = parameter_sin_1 * sin(parameter_sin_2 * transition_point)
 
-#g(x) = e^(p1 - p2 * x)
-parameter_ex_p1 = list(arange(0,10, 0.01))
-parameter_ex_p2 = list(arange(0, 1, 0.00001))
+    derived_sin_value = parameter_sin_1 * parameter_sin_2 * cos(parameter_sin_2 * transition_point)
 
-best_parameter_ex_p1 = -1
-best_parameter_ex_p2 = -1
-value = exp(parameter_ex_p1[0] - parameter_ex_p2[0] * transition_point)
-derived_value = - parameter_ex_p2[0] * exp(parameter_ex_p1[0] - parameter_ex_p2[0] * transition_point)
-value_error = abs(value - sin_value)
-derived_value_error = abs(derived_value - derived_sin_value)
+    #g(x) = e^(p1 - p2 * x)
+    result = Result(10, 10, 1)
+    step = 10
+    while (result.error > 0.0001):
+        parameter_ex_p1 = list(arange(result.p1 - step, result.p1 + step, step/10))
+        parameter_ex_p2 = list(arange(result.p2 - step, result.p2 + step, step/100))
+        step /= 10
 
-for p1 in parameter_ex_p1:
-    for p2 in parameter_ex_p2:
-            value = exp(p1 - p2 * transition_point)
-            derived_value = - p2 * exp(p1 - p2 * transition_point)
-            if abs(value - sin_value) < value_error and abs(derived_value - derived_sin_value) < derived_value_error:
-                value_error = abs(value -sin_value)
-                derived_value_error = abs(derived_value - derived_sin_value)
-                best_parameter_ex_p1 = p1
-                best_parameter_ex_p2 = p2
+        result = calculate(parameter_ex_p1, parameter_ex_p2, transition_point, sin_value, derived_sin_value)
 
-print("p1: " + str(best_parameter_ex_p1))
-print("p2: " + str(best_parameter_ex_p2))
-print("value error: " + str(value_error))
-print("derived value error: " + str(derived_value_error))
+    print("transition point: " + str(transition_point))
+    print("p1: " + str(result.p1))
+    print("p2: " + str(result.p2))
+    print("combined error: " + str(result.error))
+
+def calculate(parameter_ex_p1, parameter_ex_p2, transition_point, sin_value, derived_sin_value):
+    best_parameter_ex_p1 = -1
+    best_parameter_ex_p2 = -1
+    best_combined_error = 100
+    for p1 in parameter_ex_p1:
+        for p2 in parameter_ex_p2:
+                value = exp(p1 - p2 * transition_point)
+                derived_value = - p2 * exp(p1 - p2 * transition_point)
+                error = abs(value - sin_value)
+                derived_error = abs(derived_value - derived_sin_value)
+                combined_error = error + derived_error
+                if combined_error < best_combined_error:
+                    best_parameter_ex_p1 = p1
+                    best_parameter_ex_p2 = p2
+                    best_combined_error = combined_error
+    return Result(best_parameter_ex_p1, best_parameter_ex_p2, best_combined_error)
+
+if __name__ == "__main__":
+    main()
