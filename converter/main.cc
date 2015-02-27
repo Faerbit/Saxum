@@ -69,19 +69,19 @@ int main( int argc, char *argv[] ){
     }
     printf("Iterating over the png.\n");
     //iterate over all pixels of the image
-    for(unsigned int rowNum = 0; rowNum < height; rowNum++){
-        for(unsigned int columnNum = 0; columnNum < width; columnNum++){
+    for(unsigned int columnNum = 0; columnNum < width; columnNum++){
+        for(unsigned int rowNum = 0; rowNum < height; rowNum++){
             unsigned int pixel = (rowNum*width+columnNum)*4;
             //if there is a composition here, adjust the xml and image
             if(image[pixel]!=0 && image[pixel]!=255){
                 if(image[pixel+1]==0 && image[pixel+2]==0){//composition has no ID
                     std::vector<int> newID;
-                    newID = conv.newComposition(image[pixel], 0.5+rowNum-0.5*height, 0.5+columnNum-0.5*width);
+                    newID = conv.newComposition(image[pixel], 0.5+columnNum-0.5*width, 0.5+rowNum-0.5*height);
                     idFound[newID[0]][newID[1]] = true;
                     image[pixel+1] = newID[0];
                     image[pixel+2] = newID[1];
                 }else{//composition has an ID
-                    conv.updateComposition(image[pixel+1], image[pixel+2], 0.5+rowNum-0.5*height, 0.5+columnNum-0.5*width);
+                    conv.updateComposition(image[pixel+1], image[pixel+2], 0.5+columnNum-0.5*width, 0.5+rowNum-0.5*height);
                     idFound[image[pixel+1]][image[pixel+2]] = true;
                 }
             }

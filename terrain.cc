@@ -18,11 +18,11 @@ void Terrain::load() {
     if (error) {
         std::cout << "Decoder error " << error << " from Terrain::load: " << lodepng_error_text(error) << std::endl;
     }
-    this->heightmap = new float*[this->heightmapHeight]; //initialize the heightmap
-    for(unsigned int rowNum = 0; rowNum < this->heightmapHeight; rowNum++){ //read in the heightmap
-        this->heightmap[rowNum] = new float[this->heightmapWidth];
-        for(unsigned int columnNum = 0; columnNum < this->heightmapWidth; columnNum++){
-            this->heightmap[rowNum][columnNum] = (float)(image[(rowNum*heightmapWidth+columnNum)*4]) / 6; //<--heightmap is scaled here
+    this->heightmap = new float*[this->heightmapWidth]; //initialize the heightmap
+    for(unsigned int columnNum = 0; columnNum < this->heightmapWidth; columnNum++){ //read in the heightmap
+        this->heightmap[columnNum] = new float[this->heightmapHeight];
+        for(unsigned int rowNum = 0; rowNum < this->heightmapHeight; rowNum++){
+            this->heightmap[columnNum][rowNum] = (float)(image[(rowNum*heightmapWidth+columnNum)*4]) / 6; //<--heightmap is scaled here
         }
     }
     this->makeTriangleMesh();

@@ -226,7 +226,7 @@
         <yOffset>20.0</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
-        <yRot>0.0</yRot>
+        <yRot>90.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.5</scale>
         <mass>0.0</mass>
@@ -243,7 +243,7 @@
         <yOffset>20.0</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
-        <yRot>90.0</yRot>
+        <yRot>0.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.5</scale>
         <mass>0.0</mass>
@@ -264,7 +264,7 @@
         <yOffset>20.0</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
-        <yRot>0.0</yRot>
+        <yRot>90.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.5</scale>
         <mass>0.0</mass>
@@ -314,7 +314,7 @@
         <yOffset>20.0</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
-        <yRot>90.0</yRot>
+        <yRot>0.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.5</scale>
         <mass>0.0</mass>
@@ -364,7 +364,7 @@
         <yOffset>25.0</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
-        <yRot>0.0</yRot>
+        <yRot>90.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.48</scale>
         <mass>0.0</mass>
@@ -381,7 +381,7 @@
         <yOffset>25.0</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
-        <yRot>90.0</yRot>
+        <yRot>0.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.48</scale>
         <mass>0.0</mass>
@@ -415,7 +415,7 @@
         <yOffset>25.0</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
-        <yRot>0.0</yRot>
+        <yRot>90.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.5</scale>
         <mass>100.0</mass>
@@ -432,7 +432,7 @@
         <yOffset>25.0</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
-        <yRot>90.0</yRot>
+        <yRot>0.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.5</scale>
         <mass>0.0</mass>
