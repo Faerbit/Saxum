@@ -157,7 +157,7 @@ void Physics::addTerrain(int width, int length, float** heightData) //The terrai
     info.m_restitution = 0;
     btRigidBody* tBody = new btRigidBody(info);
     
-    tBody->getWorldTransform().setOrigin(btVector3(0,((float)highest)/2,0)); //we have to move the origin of our rigid body down, because bullet sets the origin (0,0,0) at (width/2, height/2, length/2) in the map the x and z are correct in our level, but y needs to be addapted
+    tBody->getWorldTransform().setOrigin(btVector3(-0.5,((float)highest)/2,-0.5)); //we have to move the origin of our rigid body down, because bullet sets the origin (0,0,0) at (width/2, height/2, length/2) in the map the x and z are correct in our level, but y needs to be addapted
     
     terrainBody = tBody;
     if (world == NULL) {
