@@ -7,7 +7,7 @@
 #include "model.hh"
 class Terrain {
     public:
-        Terrain(std::string levelNum);
+        Terrain(std::string heightmapFilePath);
         Terrain();
         ~Terrain();
         void load();
