@@ -166,6 +166,80 @@ void Physics::addTerrain(int width, int length, float** heightData) //The terrai
     world->addRigidBody(terrainBody, COL_TERRAIN, COL_TERRAIN | COL_OBJECTS); //COL_XXXX are collision masks, allowing us to ignore collisions between certain object groups (required for buttons)
 }
 
+void Physics::addConvexBody(Entity entity, std::string path, float mass, float dampningL, float dampningA, unsigned indice, float scaling, bool rotate)
+{    
+    
+    if(bodies.size() == indice)
+        throw std::invalid_argument( "Bodies out of Sync" );
+    
+    std::vector< unsigned int > vertexIndices; //temp lists for data sets
+    std::vector< btVector3 > temp_vertices;
+    path = "../" + geometryPath + path;
+    FILE * file = fopen(path.c_str(), "r");
+    if( file == NULL ){
+        throw std::invalid_argument( "Impossible to open the file" ); //create correct filepath and report error if cannot open
+    }
+    while( 1 ){
+        char lineHeader[128];
+        //read the first word of the line
+        int res = fscanf(file, "%s", lineHeader);
+        if (res == EOF)
+            break; //while not at end do loop
+        if ( strcmp( lineHeader, "v" ) == 0 ){ //if a vertex
+            glm::vec3 vertex;
+            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
+            temp_vertices.push_back(btVector3(vertex.x,vertex.y,vertex.z)); //save vertex in array
+        }
+        else if ( strcmp( lineHeader, "f" ) == 0 ){ //if face (index for 3 vertexes for a triangle)
+            std::string vertex1, vertex2, vertex3;
+            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+            vertexIndices.push_back(vertexIndex[0]);
+            vertexIndices.push_back(vertexIndex[1]);
+            vertexIndices.push_back(vertexIndex[2]); //save 3 indexes in array
+        }
+    }
+    //finally start making body
+    btTriangleMesh* triMesh = new btTriangleMesh();
+    
+    for(unsigned i = 2; i < vertexIndices.size();i+=3)
+    {
+        triMesh->addTriangle(temp_vertices[vertexIndices[i]],temp_vertices[vertexIndices[i-1]],temp_vertices[vertexIndices[i-2]]); //for every face (3 elements in vertexIndices) create triangle use the indices to find correct vertexes to make the triangle
+    }
+    
+    btConvexTriangleMeshShape* shape = new btConvexTriangleMeshShape(triMesh,true);
+    shape->setLocalScaling(btVector3(scaling,scaling,scaling)); //we need to add a scaling here because the objects seem to have diffrent sizes when loaded (no clue why, see composition.xml for exact scaling factors)
+    
+    
+    glm::quat glmQuat = glm::quat_cast(entity.getRotation());
+
+    btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(glmQuat.x,glmQuat.y,glmQuat.z,glmQuat.w),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
+	
+    btVector3 inertia(0,0,0);
+    if(mass != 0.0)
+    {
+        shape->calculateLocalInertia((btScalar)mass,inertia);
+    }
+    
+    btRigidBody::btRigidBodyConstructionInfo info(mass,motion,shape,inertia);
+    
+    btRigidBody* body = new btRigidBody(info);
+    
+    body->setDamping(dampningL,dampningA);
+    
+    bodies.push_back(body);
+    
+    world->addRigidBody(body,COL_OBJECTS, objectsPhysicsCollision);
+    
+    if(!rotate)//rotate lets certain objects get inertia (0,0,0) (not rotateable)
+    {
+        body->setAngularFactor(btVector3(0,0,0));
+    }
+    
+    if(bodies.size() != indice)
+        throw std::invalid_argument( "Bodies out of Sync" );
+}
+
 void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA,unsigned indice,float scaling, bool rotate)
 {
     
