@@ -4,35 +4,54 @@ uniform mat4 viewProjectionMatrix;
 uniform float time;
 
 layout(points) in;
-layout(triangle_strip, max_vertices = 64) out;
+layout(triangle_strip, max_vertices = 256) out;
 
 const float PI = 3.1415926;
+const float transition_point = 1.178097;
+const float sin_p1  = 0.4;
+const float sin_p2  = 2;
+const float ex_p1   = 1.093;
+const float ex_p2   = 1.9996;
+const float begin   = 0;
+const float end     = 2.3;
+
+float radiusFunction(float x) {
+    if (x < transition_point) {
+        return sin_p1 * sin(sin_p2 * x);
+    }
+    else {
+        return exp(ex_p1 - ex_p2 * x);
+    }
+}
 
 void main() {
-    float resolution = 5.0;
-    for (int i = 0; i<resolution; i++) {
-        float leftAngle     = PI * 2.0 / resolution * i;
-        float rightAngle     = PI * 2.0 / resolution * (i+1);
-        float downRadius    = 1.0;
-        float upRadius      = 2.0;
+    float resolution = 8.0;
+    float step = abs(end-begin)/resolution;
+    for (float i = begin; i<end; i+=step) {
+        float downRadius    = radiusFunction(i);
+        float upRadius      = radiusFunction(i+step);
+        for (int j = 0; j<resolution; j++) {
+            float leftAngle     = PI * 2.0 / resolution * j;
+            float rightAngle    = PI * 2.0 / resolution * (j+1);
 
-        vec4 offset = vec4(cos(leftAngle) * downRadius, 0.0, -sin(leftAngle) * downRadius, 0.0);
-        gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
-        EmitVertex();
+            vec4 offset = vec4(cos(leftAngle) * downRadius, i, -sin(leftAngle) * downRadius, 0.0);
+            gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
+            EmitVertex();
 
-        offset = vec4(cos(leftAngle) * upRadius, 1.0, -sin(leftAngle) * upRadius, 0.0);
-        gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
-        EmitVertex();
+            offset = vec4(cos(leftAngle) * upRadius, i + step, -sin(leftAngle) * upRadius, 0.0);
+            gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
+            EmitVertex();
 
-        offset = vec4(cos(rightAngle) * downRadius, 0.0, -sin(rightAngle) * downRadius, 0.0);
-        gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
-        EmitVertex();
+            offset = vec4(cos(rightAngle) * downRadius, i, -sin(rightAngle) * downRadius, 0.0);
+            gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
+            EmitVertex();
 
-        offset = vec4(cos(rightAngle) * upRadius, 1.0, -sin(rightAngle) * upRadius, 0.0);
-        gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
-        EmitVertex();
+            offset = vec4(cos(rightAngle) * upRadius, i + step, -sin(rightAngle) * upRadius, 0.0);
+            gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
+            EmitVertex();
 
-        EndPrimitive();
+            EndPrimitive();
+        }
     }
 
 }
