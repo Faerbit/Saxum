@@ -28,6 +28,8 @@ def main():
 
         result = calculate(parameter_ex_p1, parameter_ex_p2, transition_point, sin_value, derived_sin_value)
 
+    print("sin p1: " + str(parameter_sin_1))
+    print("sin p2: " + str(parameter_sin_2))
     print("transition point: " + str(transition_point))
     print("p1: " + str(result.p1))
     print("p2: " + str(result.p2))
