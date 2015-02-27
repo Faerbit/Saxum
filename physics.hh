@@ -22,6 +22,9 @@
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btCollisionShape.h"
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btConvexTriangleMeshShape.h"
 #include "extern/bullet/src/BulletCollision/CollisionShapes/btCylinderShape.h"
+#include "extern/bullet/src/BulletCollision/CollisionShapes/btConvexHullShape.h"
+#include "extern/bullet/src/BulletCollision/CollisionShapes/btConvexTriangleMeshShape.h"
+
 
 #include "extern/bullet/src/BulletDynamics/ConstraintSolver/btConstraintSolver.h"
 #include "extern/bullet/src/BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"//YAY!
@@ -69,11 +72,13 @@ class Physics {
 	void kill();
 	void addButtonFrame(Entity entity);
 	void forceMove(glm::vec3 newPosition, unsigned indice);
-	void forceMoveCamera(glm::vec3 newPosition);
+	void forceMoveCamera(glm::vec3 newPosition);    
+	void addConvexBody(Entity entity, std::string path, float mass, float dampningL, float dampningA, unsigned indice, float scaling, bool rotate);
 
     struct positionConstraint{btRigidBody* body; float strength; btVector3 position;};
 
     private:
+    btVector3 currentDirection = btVector3(1,1,1);
 	btRigidBody* playerBall;    //allows for easier access to the ball
 	btRigidBody* terrainBody;   //duh
 	btRigidBody* cameraBody;
