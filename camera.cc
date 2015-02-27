@@ -42,7 +42,6 @@ void Camera::setIsPhysicsCamera(bool val)
     usePhysicsCamera = val;
 }
 void Camera::updateRotation(glm::vec2 rotation) {
-    this->rotation += rotation;
     if((this->rotation.x + rotation.x) >= 1.57f) {
         this->rotation.x = 1.57;
         this->rotation.y += rotation.y;
