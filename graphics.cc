@@ -197,11 +197,18 @@ void Graphics::render(double time)
     // render the level
     level->render(lightingShader, true, &lightingViewProjectionMatrix, &shadowVPs);
 
+    // cull faces to get consistent color while using alpha
+    // cull front faces because normals are on the wrong side
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+
     // draw flames on top
     flameShader->use();
     flameShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
     flameShader->setUniform("time", (float) time);
     flame_positions->render();
+
+    glDisable(GL_CULL_FACE);
 }
 
 bool Graphics::compareLightDistances(Light a, Light b) {
