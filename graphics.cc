@@ -145,7 +145,7 @@ void Graphics::render(double time)
     framebuffer->bind(); 
     glClear(GL_DEPTH_BUFFER_BIT);
     glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
-    glm::mat4 depthViewProjectionMatrix =  glm::ortho<float>(-farPlane/2.0f, farPlane/2.0f, -farPlane/2.0f, farPlane/2.0f, -farPlane/2.0f, farPlane/2.0f) * 
+    glm::mat4 depthViewProjectionMatrix =  glm::ortho<float>(-farPlane/1.5f, farPlane/1.5f, -farPlane/1.5f, farPlane/1.5f, -farPlane/1.5f, farPlane/1.5f) *
         glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
     level->render(depthShader, false, &depthViewProjectionMatrix);
     if (!framebuffer->isFrameBufferObjectComplete()) {
