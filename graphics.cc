@@ -170,7 +170,7 @@ void Graphics::render(double time)
                 projection_size = farPlane/1.5f;
                 break;
         }
-        depthViewProjectionMatrices.at(i) =  glm::ortho<float>(-projection_size, projection_size, -projection_size, projection_size, -farPlane/1.5f, projection_size) *
+        depthViewProjectionMatrices.at(i) =  glm::ortho<float>(-projection_size, projection_size, -projection_size, projection_size, -farPlane/1.5f, farPlane/1.5f) *
             glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
         level->render(depthShader, false, &depthViewProjectionMatrices.at(i));
         if (!framebuffer_directional.at(i)->isFrameBufferObjectComplete()) {
