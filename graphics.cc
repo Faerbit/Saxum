@@ -58,26 +58,40 @@ void Graphics::init(Level* level) {
     flameShader = ShaderProgramCreator("flame")
         .attributeLocations(flame_positions->getAttributeLocations()).create();
 
-    depthTexture = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT24));
-    depthTexture->setMinFilter(GL_NEAREST);
-    depthTexture->setMagFilter(GL_NEAREST);
-    depthTexture->setWrapS(GL_CLAMP_TO_EDGE);
-    depthTexture->setWrapT(GL_CLAMP_TO_EDGE);
-    depthTexture->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
-    
-    framebuffer = SharedFrameBufferObject(new FrameBufferObject());
-    framebuffer->setDepthTexture(depthTexture);
-    framebuffer->validate();
-
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
     // Exit if we need more texture units
-    if (number_of_texture_units < 12) {
-        printf("You need at least 12 texture units to run this application. Exiting\n");
+    if (number_of_texture_units < 14) {
+        printf("You need at least 14 texture units to run this application. Exiting\n");
         exit(-1);
     }
 
-    // always generate and bind 32 cube maps, because otherwise the shader won't work
+    depth_directionalMaps = std::vector<SharedTexture2D>(3);
+    framebuffer_directional = std::vector<SharedFrameBufferObject>(3);
+    for (unsigned int i = 0; i<depth_directionalMaps.size(); i++) {
+        depth_directionalMaps.at(i) = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT24));
+        depth_directionalMaps.at(i)->setMinFilter(GL_NEAREST);
+        depth_directionalMaps.at(i)->setMagFilter(GL_NEAREST);
+        depth_directionalMaps.at(i)->setWrapS(GL_CLAMP_TO_EDGE);
+        depth_directionalMaps.at(i)->setWrapT(GL_CLAMP_TO_EDGE);
+        depth_directionalMaps.at(i)->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
+    }
+
+    for (unsigned int i = 0; i<framebuffer_directional.size(); i++) {
+        framebuffer_directional.at(i) = SharedFrameBufferObject(new FrameBufferObject());
+        framebuffer_directional.at(i)->setDepthTexture(depth_directionalMaps.at(i));
+        framebuffer_directional.at(i)->validate();
+    }
+
+    lightingShader->use();
+
+    for (unsigned int i = 0; i<depth_directionalMaps.size(); i++) {
+        // start with texture unit 1 because the first is reserved for the texture
+        lightingShader->setTexture("shadowMap_directional" + std::to_string(i), depth_directionalMaps.at(i), i+1);
+    }
+
+
+    // always generate and bind 10 cube maps, because otherwise the shader won't work
     depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(10);
     for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {
         depth_cubeMaps.at(i) = SharedTextureCubeMap(new TextureCubeMap(glm::vec2(cube_size, cube_size), GL_DEPTH_COMPONENT24));
@@ -90,14 +104,11 @@ void Graphics::init(Level* level) {
     
     framebuffer_cube = SharedFrameBufferObject(new FrameBufferObject());
 
-    lightingShader->use();
-
-    lightingShader->setTexture("shadowMap", depthTexture, 1);
 
     if (level->getLights()->size() > 0) {
         for(unsigned int i = 0; i<depth_cubeMaps.size(); i++){
-            // start with texture unit 2 because the first two are used by the texture and the directional shadow map
-            lightingShader->setTexture("shadowMap_cube" + std::to_string(i), depth_cubeMaps.at(i), i+2);
+            // start with texture unit 4 because the first four are used by the texture and the directional shadow map
+            lightingShader->setTexture("shadowMap_cube" + std::to_string(i), depth_cubeMaps.at(i), i+4);
         }
     }
     updateClosestLights();
@@ -137,19 +148,34 @@ void Graphics::render(double time)
             }
         }
     }
-    // render depth texture for sun
+    // render depth textures for sun
     depthShader->use();
     glViewport(0, 0, windowSize.x, windowSize.y);
-    
-    // far pass
-    framebuffer->bind(); 
-    glClear(GL_DEPTH_BUFFER_BIT);
+   
+    std::vector<glm::mat4> depthViewProjectionMatrices = std::vector<glm::mat4>(framebuffer_directional.size());
     glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
-    glm::mat4 depthViewProjectionMatrix =  glm::ortho<float>(-farPlane/1.5f, farPlane/1.5f, -farPlane/1.5f, farPlane/1.5f, -farPlane/1.5f, farPlane/1.5f) *
-        glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-    level->render(depthShader, false, &depthViewProjectionMatrix);
-    if (!framebuffer->isFrameBufferObjectComplete()) {
-        printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
+
+    for (unsigned int i = 0; i<framebuffer_directional.size(); i++) {
+        framebuffer_directional.at(i)->bind(); 
+        glClear(GL_DEPTH_BUFFER_BIT);
+        float projection_size = 0.0f;
+        switch(i) {
+            case 0:
+                projection_size = 10.0f;
+                break;
+            case 1:
+                projection_size = 30.0f;
+                break;
+            case 2:
+                projection_size = farPlane/1.5f;
+                break;
+        }
+        depthViewProjectionMatrices.at(i) =  glm::ortho<float>(-projection_size, projection_size, -projection_size, projection_size, -farPlane/1.5f, projection_size) *
+            glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
+        level->render(depthShader, false, &depthViewProjectionMatrices.at(i));
+        if (!framebuffer_directional.at(i)->isFrameBufferObjectComplete()) {
+            printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
+        }
     }
     
     // final render pass
@@ -172,12 +198,17 @@ void Graphics::render(double time)
     
     // convert texture to homogenouse coordinates
     glm::mat4 biasMatrix(
-    0.5, 0.0, 0.0, 0.0,
-    0.0, 0.5, 0.0, 0.0,
-    0.0, 0.0, 0.5, 0.0,
-    0.5, 0.5, 0.5, 1.0
+        0.5, 0.0, 0.0, 0.0,
+        0.0, 0.5, 0.0, 0.0,
+        0.0, 0.0, 0.5, 0.0,
+        0.5, 0.5, 0.5, 1.0
     );
-    glm::mat4 depthBiasVP = biasMatrix*depthViewProjectionMatrix;
+
+    std::vector<glm::mat4> depthBiasVPs = std::vector<glm::mat4>(depthViewProjectionMatrices.size());
+    for (unsigned int i = 0; i<depthBiasVPs.size(); i++) {
+        depthBiasVPs.at(i) = biasMatrix * depthViewProjectionMatrices.at(i);
+    }
+
     lightingShader->setUniform("farPlane", farPlane);
     
     // set fog Parameters
@@ -191,11 +222,8 @@ void Graphics::render(double time)
     //set view and projection matrix
     glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
     
-    std::vector<glm::mat4> shadowVPs = std::vector<glm::mat4>();
-    shadowVPs.push_back(depthBiasVP);
-    
     // render the level
-    level->render(lightingShader, true, &lightingViewProjectionMatrix, &shadowVPs);
+    level->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
 
     // cull faces to get consistent color while using alpha
     // cull front faces because normals are on the wrong side
@@ -284,7 +312,9 @@ void Graphics::updateLights() {
 
 void Graphics::resize(glm::uvec2 windowSize) {
     this->windowSize = windowSize;
-    depthTexture->resize(glm::vec2(windowSize.x, windowSize.y));
+    for (unsigned int i = 0; i<depth_directionalMaps.size(); i++) {
+        depth_directionalMaps.at(i)->resize(glm::vec2(windowSize.x, windowSize.y));
+    }
 }
 
 glm::mat4 Graphics::buildViewMatrix(Level* level) {

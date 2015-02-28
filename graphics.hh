@@ -32,8 +32,8 @@ class Graphics {
         ACGL::OpenGL::SharedShaderProgram depthCubeShader;
         ACGL::OpenGL::SharedShaderProgram depthShader;
         ACGL::OpenGL::SharedShaderProgram flameShader;
-        ACGL::OpenGL::SharedTexture2D depthTexture;
-        ACGL::OpenGL::SharedFrameBufferObject framebuffer;
+        std::vector<ACGL::OpenGL::SharedTexture2D> depth_directionalMaps;
+        std::vector<ACGL::OpenGL::SharedFrameBufferObject> framebuffer_directional;
         std::vector<ACGL::OpenGL::SharedTextureCubeMap> depth_cubeMaps;
         ACGL::OpenGL::SharedFrameBufferObject framebuffer_cube;
         ACGL::OpenGL::SharedVertexArrayObject flame_positions;
