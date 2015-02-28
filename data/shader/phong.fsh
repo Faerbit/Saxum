@@ -62,10 +62,11 @@ vec2 poissonDisk[16] = vec2[](
 
 float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
     float visibility = 1.0;
+    const float stretching = 650.0;
     float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
     bias = clamp(bias, 0.0, 0.01);
     for (int i=0; i<4; i++) {
-        visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/800.0, shadowCoord.z - bias)));
+        visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/stretching, shadowCoord.z - bias)));
     }
     if (visibility == 1.0-(directionalIntensity/16)*4)
     {
@@ -73,7 +74,7 @@ float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
     }
     else if (visibility != 1.0) {
         for (int i=0; i<12; i++) {
-            visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/800.0, shadowCoord.z - bias)));
+            visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/stretching, shadowCoord.z - bias)));
         }
     }
     return visibility;
@@ -106,13 +107,23 @@ void main()
     if(length(directionalLightVector)>0.0f) {
         vec3 directionalVector = normalize(directionalLightVector);
         float directionalVisibility = 1.0f;
-        if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.0) {
-            if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.0) {
+        if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.2) {
+            if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.2) {
                 directionalVisibility = sampleDirectionalShadow(shadowMap_directional0, shadowCoord0);
+            }
+            else if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.0) {
+                float directionalVisibility0 = sampleDirectionalShadow(shadowMap_directional0, shadowCoord0);
+                float directionalVisibility1 = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1);
+                directionalVisibility = mix(directionalVisibility0, directionalVisibility1, distanceToBorder(shadowCoord0.xy) * 5);
             }
             else {
                 directionalVisibility = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1);
             }
+        }
+        else if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.0) {
+            float directionalVisibility1 = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1);
+            float directionalVisibility2 = sampleDirectionalShadow(shadowMap_directional2, shadowCoord2);
+            directionalVisibility = mix(directionalVisibility1, directionalVisibility2, distanceToBorder(shadowCoord1.xy) * 5);
         }
         else {
             directionalVisibility = sampleDirectionalShadow(shadowMap_directional2, shadowCoord2);
