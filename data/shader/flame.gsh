@@ -6,7 +6,11 @@ uniform bool bottom;
 uniform bool left;
 
 layout(points) in;
-layout(triangle_strip, max_vertices = 146) out;
+layout(triangle_strip, max_vertices = 102) out;
+
+out GS_OUT {
+    vec3 normal;
+}gs_out;
 
 in vec3 Color[];
 out vec3 fColor;
@@ -32,7 +36,7 @@ float radiusFunction(float x) {
 void main() {
     fColor = Color[0];
 
-    float resolution = 8.0;
+    float resolution = 6.0;
     float step = abs(end-begin)/resolution/2.0;
     float i = 0.0;
     float render_end = 0.0;
@@ -62,19 +66,31 @@ void main() {
             float rightAngle    = PI * 2.0 / resolution * (j+1);
 
             vec4 offset = vec4(cos(rightAngle) * downRadius, i, -sin(rightAngle) * downRadius, 0.0);
-            gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
-            EmitVertex();
+            vec4 position0 = gl_in[0].gl_Position + viewProjectionMatrix * offset;
 
             offset = vec4(cos(rightAngle) * upRadius, i + step, -sin(rightAngle) * upRadius, 0.0);
-            gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
-            EmitVertex();
+            vec4 position1 = gl_in[0].gl_Position + viewProjectionMatrix * offset;
 
             offset = vec4(cos(leftAngle) * downRadius, i, -sin(leftAngle) * downRadius, 0.0);
-            gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
-            EmitVertex();
+            vec4 position2 = gl_in[0].gl_Position + viewProjectionMatrix * offset;
 
             offset = vec4(cos(leftAngle) * upRadius, i + step, -sin(leftAngle) * upRadius, 0.0);
-            gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
+            vec4 position3 = gl_in[0].gl_Position + viewProjectionMatrix * offset;
+
+            gl_Position = position0;
+            gs_out.normal = cross(vec3(position1) - vec3(position0), vec3(position2) - vec3(position0));
+            EmitVertex();
+
+            gl_Position = position1;
+            gs_out.normal = cross(vec3(position0) - vec3(position1), vec3(position2) - vec3(position1));
+            EmitVertex();
+
+            gl_Position = position2;
+            gs_out.normal = cross(vec3(position3) - vec3(position2), vec3(position3) - vec3(position2));
+            EmitVertex();
+
+            gl_Position = position3;
+            gs_out.normal = cross(vec3(position1) - vec3(position3), vec3(position2) - vec3(position3));
             EmitVertex();
 
             EndPrimitive();
