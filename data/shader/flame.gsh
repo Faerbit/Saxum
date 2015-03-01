@@ -6,10 +6,11 @@ uniform bool bottom;
 uniform bool left;
 
 layout(points) in;
-layout(triangle_strip, max_vertices = 102) out;
+layout(triangle_strip, max_vertices = 78) out;
 
 out GS_OUT {
-    vec3 normal;
+    smooth vec3 normal;
+    smooth vec3 position;
 }gs_out;
 
 in vec3 Color[];
@@ -66,27 +67,31 @@ void main() {
             float rightAngle    = PI * 2.0 / resolution * (j+1);
 
             vec4 offset = vec4(cos(rightAngle) * downRadius, i, -sin(rightAngle) * downRadius, 0.0);
-            vec4 position0 = gl_in[0].gl_Position + viewProjectionMatrix * offset;
-            gl_Position = position0;
-            gs_out.normal = -vec3(position0 - gl_in[0].gl_Position);
+            vec4 position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
+            gl_Position = position;
+            gs_out.normal = vec3(position - gl_in[0].gl_Position);
+            gs_out.position = vec3(position);
             EmitVertex();
 
             offset = vec4(cos(rightAngle) * upRadius, i + step, -sin(rightAngle) * upRadius, 0.0);
-            vec4 position1 = gl_in[0].gl_Position + viewProjectionMatrix * offset;
-            gl_Position = position1;
-            gs_out.normal = -vec3(position1 - gl_in[0].gl_Position);
+            position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
+            gl_Position = position;
+            gs_out.normal = vec3(position - gl_in[0].gl_Position);
+            gs_out.position = vec3(position);
             EmitVertex();
 
             offset = vec4(cos(leftAngle) * downRadius, i, -sin(leftAngle) * downRadius, 0.0);
-            vec4 position2 = gl_in[0].gl_Position + viewProjectionMatrix * offset;
-            gl_Position = position2;
-            gs_out.normal = -vec3(position2 - gl_in[0].gl_Position);
+            position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
+            gl_Position = position;
+            gs_out.normal = vec3(position - gl_in[0].gl_Position);
+            gs_out.position = vec3(position);
             EmitVertex();
 
             offset = vec4(cos(leftAngle) * upRadius, i + step, -sin(leftAngle) * upRadius, 0.0);
-            vec4 position3 = gl_in[0].gl_Position + viewProjectionMatrix * offset;
-            gl_Position = position3;
-            gs_out.normal = -vec3(position3 - gl_in[0].gl_Position);
+            position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
+            gl_Position = position;
+            gs_out.normal = vec3(position - gl_in[0].gl_Position);
+            gs_out.position = vec3(position);
             EmitVertex();
 
             EndPrimitive();
