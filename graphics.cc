@@ -243,8 +243,14 @@ void Graphics::render(double time)
     flameShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
     flameShader->setUniform("time", (float) time);
     flameShader->setUniform("bottom", true);
+    flameShader->setUniform("left", true);
+    flame_positions->render();
+    flameShader->setUniform("left", false);
     flame_positions->render();
     flameShader->setUniform("bottom", false);
+    flameShader->setUniform("left", true);
+    flame_positions->render();
+    flameShader->setUniform("left", false);
     flame_positions->render();
 
     glDisable(GL_CULL_FACE);

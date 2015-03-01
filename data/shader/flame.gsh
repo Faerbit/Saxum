@@ -3,6 +3,7 @@
 uniform mat4 viewProjectionMatrix;
 uniform float time;
 uniform bool bottom;
+uniform bool left;
 
 layout(points) in;
 layout(triangle_strip, max_vertices = 256) out;
@@ -14,7 +15,7 @@ const float sin_p2  = 2;
 const float ex_p1   = 1.093;
 const float ex_p2   = 1.9996;
 const float begin   = 0;
-const float end     = 2.3;
+const float end     = 2.5;
 
 float radiusFunction(float x) {
     if (x < transition_point) {
@@ -38,14 +39,21 @@ void main() {
         i = (end-begin)/2.0;
         render_end = end;
     }
-    for (i; i<render_end-step; i+=step) {
+    for (i; i<render_end; i+=step) {
         float downRadius    = radiusFunction(i);
-        float upRadius = 0.0f;
-        if (i < end - (step+0.0001)) {
-            upRadius = radiusFunction(i+step);
+        float upRadius = radiusFunction(i+step);
+        float circle_end = 0.0;
+        int j = 0;
+        if (left) {
+            j = 0;
+            circle_end = resolution/2.0;
         }
-        for (int j = 0; j<resolution; j++) {
-            float leftAngle     = PI * 2.0 / resolution * j;
+        else {
+            j = int(resolution/2.0);
+            circle_end = resolution;
+        }
+        for (j; j<circle_end; j++) {
+            float leftAngle     = PI * 2.0 / resolution   * j;
             float rightAngle    = PI * 2.0 / resolution * (j+1);
 
             vec4 offset = vec4(cos(leftAngle) * downRadius, i, -sin(leftAngle) * downRadius, 0.0);
