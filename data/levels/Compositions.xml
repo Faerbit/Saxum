@@ -72,8 +72,8 @@
         <yOffset>2</yOffset>
         <zOffset>0.0</zOffset>
         <rColour>1.0</rColour>
-        <gColour>1.0</gColour>
-        <bColour>1.0</bColour>
+        <gColour>0.9</gColour>
+        <bColour>0.3</bColour>
         <intensity>4.0</intensity>
         <flameOffset>-1.5</flameOffset>
     </light>

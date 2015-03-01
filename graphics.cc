@@ -59,6 +59,7 @@ void Graphics::init(Level* level) {
 
     flame_positions_ab = SharedArrayBuffer(new ArrayBuffer());
     flame_positions_ab->defineAttribute("aPosition", GL_FLOAT, 3);
+    flame_positions_ab->defineAttribute("aColor", GL_FLOAT, 3);
     flame_positions = SharedVertexArrayObject(new VertexArrayObject());
     flame_positions->setMode(GL_POINTS);
     flame_positions->attachAllAttributes(flame_positions_ab);
@@ -314,17 +315,21 @@ void Graphics::updateLights() {
         lightingShader->setUniform("directionalIntensity",
             level->getDirectionalLight()->getIntensity());
     }
-    float flamePositionsData[closestLights.size() * 3] = {};
+    float flameData[closestLights.size() * 6] = {};
     int flameIndex = 0;
     for (unsigned int i = 0; i<closestLights.size(); i++) {
         if (closestLights.at(i).getFlameYOffset() != 0.0f) {
-            flamePositionsData[flameIndex + 0] = closestLights.at(i).getPosition().x;
-            flamePositionsData[flameIndex + 1] = closestLights.at(i).getPosition().y + closestLights.at(i).getFlameYOffset();
-            flamePositionsData[flameIndex + 2] = closestLights.at(i).getPosition().z;
-            flameIndex+=3;
+            flameData[flameIndex + 0] = closestLights.at(i).getPosition().x;
+            flameData[flameIndex + 1] = closestLights.at(i).getPosition().y + closestLights.at(i).getFlameYOffset();
+            flameData[flameIndex + 2] = closestLights.at(i).getPosition().z;
+            flameData[flameIndex + 3] = closestLights.at(i).getColour().r;
+            flameData[flameIndex + 3] = closestLights.at(i).getColour().r;
+            flameData[flameIndex + 4] = closestLights.at(i).getColour().g;
+            flameData[flameIndex + 5] = closestLights.at(i).getColour().b;
+            flameIndex+=6;
         }
     }
-    flame_positions_ab->setDataElements(flameIndex, flamePositionsData);
+    flame_positions_ab->setDataElements(flameIndex, flameData);
 }
 
 void Graphics::resize(glm::uvec2 windowSize) {
