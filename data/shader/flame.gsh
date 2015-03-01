@@ -61,19 +61,19 @@ void main() {
             float leftAngle     = PI * 2.0 / resolution   * j;
             float rightAngle    = PI * 2.0 / resolution * (j+1);
 
-            vec4 offset = vec4(cos(leftAngle) * downRadius, i, -sin(leftAngle) * downRadius, 0.0);
-            gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
-            EmitVertex();
-
-            offset = vec4(cos(leftAngle) * upRadius, i + step, -sin(leftAngle) * upRadius, 0.0);
-            gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
-            EmitVertex();
-
-            offset = vec4(cos(rightAngle) * downRadius, i, -sin(rightAngle) * downRadius, 0.0);
+            vec4 offset = vec4(cos(rightAngle) * downRadius, i, -sin(rightAngle) * downRadius, 0.0);
             gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
             EmitVertex();
 
             offset = vec4(cos(rightAngle) * upRadius, i + step, -sin(rightAngle) * upRadius, 0.0);
+            gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
+            EmitVertex();
+
+            offset = vec4(cos(leftAngle) * downRadius, i, -sin(leftAngle) * downRadius, 0.0);
+            gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
+            EmitVertex();
+
+            offset = vec4(cos(leftAngle) * upRadius, i + step, -sin(leftAngle) * upRadius, 0.0);
             gl_Position = gl_in[0].gl_Position + viewProjectionMatrix * offset;
             EmitVertex();
 

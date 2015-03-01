@@ -235,9 +235,8 @@ void Graphics::render(double time)
     level->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
 
     // cull faces to get consistent color while using alpha
-    // cull front faces because normals are on the wrong side
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_FRONT);
+    glCullFace(GL_BACK);
 
     // draw flames on top
     flameShader->use();
