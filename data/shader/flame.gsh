@@ -29,7 +29,10 @@ void main() {
     float step = abs(end-begin)/resolution;
     for (float i = begin; i<end; i+=step) {
         float downRadius    = radiusFunction(i);
-        float upRadius      = radiusFunction(i+step);
+        float upRadius = 0.0f;
+        if (i != end-step) {
+            upRadius = radiusFunction(i+step);
+        }
         for (int j = 0; j<resolution; j++) {
             float leftAngle     = PI * 2.0 / resolution * j;
             float rightAngle    = PI * 2.0 / resolution * (j+1);
