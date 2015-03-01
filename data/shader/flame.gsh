@@ -6,7 +6,10 @@ uniform bool bottom;
 uniform bool left;
 
 layout(points) in;
-layout(triangle_strip, max_vertices = 256) out;
+layout(triangle_strip, max_vertices = 146) out;
+
+in vec3 Color[];
+out vec3 fColor;
 
 const float PI = 3.1415926;
 const float transition_point = 1.178097;
@@ -27,6 +30,8 @@ float radiusFunction(float x) {
 }
 
 void main() {
+    fColor = Color[0];
+
     float resolution = 8.0;
     float step = abs(end-begin)/resolution/2.0;
     float i = 0.0;
