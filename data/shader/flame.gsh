@@ -2,6 +2,7 @@
 
 uniform mat4 viewProjectionMatrix;
 uniform float time;
+uniform bool bottom;
 
 layout(points) in;
 layout(triangle_strip, max_vertices = 256) out;
@@ -26,11 +27,21 @@ float radiusFunction(float x) {
 
 void main() {
     float resolution = 8.0;
-    float step = abs(end-begin)/resolution;
-    for (float i = begin; i<end; i+=step) {
+    float step = abs(end-begin)/resolution/2.0;
+    float i = 0.0;
+    float render_end = 0.0;
+    if (bottom) {
+        i = begin;
+        render_end = (end-begin)/2.0+step;
+    }
+    else {
+        i = (end-begin)/2.0;
+        render_end = end;
+    }
+    for (i; i<render_end-step; i+=step) {
         float downRadius    = radiusFunction(i);
         float upRadius = 0.0f;
-        if (i != end-step) {
+        if (i < end - (step+0.0001)) {
             upRadius = radiusFunction(i+step);
         }
         for (int j = 0; j<resolution; j++) {
