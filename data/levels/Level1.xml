@@ -3671,18 +3671,33 @@
         <strength>12.0</strength>
     </positionConstraint>
     <trigger>
-        <name>-</name>
-        <xPosition>0</xPosition>
-        <yPosition>0</yPosition>
-        <zPosition>0</zPosition>
+        <name>openThirdDoor</name>
+        <xPosition>-161.5</xPosition>
+        <yPosition>21.7</yPosition>
+        <zPosition>67.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>1.0</distance>
+        <distance>0.2</distance>
+        <isBiggerThan>true</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>openThirdDoor.lua</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>178</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+    <trigger>
+        <name>openThirdDoorUndo</name>
+        <xPosition>-161.5</xPosition>
+        <yPosition>21.7</yPosition>
+        <zPosition>67.5</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>0.2</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
-        <luaScript>-</luaScript>
+        <luaScript>openThirdDoorUndo.lua</luaScript>
         <toChangeIdGreen>0</toChangeIdGreen>
-        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeIdBlue>178</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>
     </trigger>
 </composition>
@@ -8571,6 +8586,13 @@
     <idGreen>1</idGreen>
     <idBlue>8</idBlue>
     <typeID>221</typeID>
+    <positionConstraint>
+        <objectNum>0</objectNum>
+        <xPosition>-81.5</xPosition>
+        <yPosition>25.0</yPosition>
+        <zPosition>4.5</zPosition>
+        <strength>100.0</strength>
+    </positionConstraint>
     <trigger>
         <name>-</name>
         <xPosition>0</xPosition>
@@ -10514,6 +10536,13 @@
     <idGreen>0</idGreen>
     <idBlue>178</idBlue>
     <typeID>221</typeID>
+    <positionConstraint>
+        <objectNum>0</objectNum>
+        <xPosition>-172.5</xPosition>
+        <yPosition>25.0</yPosition>
+        <zPosition>58.5</zPosition>
+        <strength>100.0</strength>
+    </positionConstraint>
     <trigger>
         <name>-</name>
         <xPosition>0</xPosition>

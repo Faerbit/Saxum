@@ -1,23 +1,23 @@
 local global = require( "global" )
-if(global.triggeredOpenFirstDoor == nil) then
-    global.triggeredOpenFirstDoor = false
+if(global.triggeredOpenThirdDoor == nil) then
+    global.triggeredOpenThirdDoor = false
 end
 function trigger(objectToChange)
-    if(global.triggeredOpenFirstDoor == false) then
+    if(global.triggeredOpenThirdDoor == false) then
         if(not level) then
             print("No level found in Lua!")
             return
         end
         
         local strength = 100
-        local xPos = 17.5
+        local xPos = -172.5
         local yPos = 33
-        local zPos = 81.5
+        local zPos = 58.5
         level:moveObject(objectToChange, strength, xPos, yPos, zPos)
         
-        global.triggeredOpenFirstDoorUndo = false
+        global.triggeredOpenThirdDoorUndo = false
         
-        global.triggeredOpenFirstDoor = true
-        print("openFirstDoor")
+        global.triggeredOpenThirdDoor = true
+        print("openThirdDoor")
     end
 end
