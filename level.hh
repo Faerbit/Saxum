@@ -24,7 +24,7 @@ class Level {
         Level();
         ~Level();
         void load();
-        void update(float runTime, glm::vec2 mouseDelta,bool wPressed, bool aPressed,bool sPressed, bool dPressed, bool kPressed, bool lPressed);
+        void update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseDelta,bool wPressed, bool aPressed,bool sPressed, bool dPressed, bool kPressed, bool lPressed);
         void render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
             glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs=0);
         glm::vec3 getAmbientLight();
