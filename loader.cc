@@ -57,7 +57,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     float terrainShininess = queryFloat(terrainElement, "shininess");
     Material terrainMaterial = Material(terrainTexture, terrainAmbientFactor, terrainDiffuseFactor, terrainSpecularFactor, terrainShininess);
     Object* terrainObject = new Object(terrainModel, terrainMaterial,
-    glm::vec3(-0.5*(float)level->getTerrain()->getHeightmapHeight(), 0.0f, -0.5f*(float)level->getTerrain()->getHeightmapWidth()),
+    glm::vec3(-0.5*((float)level->getTerrain()->getHeightmapHeight()-1), 0.0f, -0.5f*((float)level->getTerrain()->getHeightmapWidth()-1)),
         glm::vec3(0.0f, 0.0f, 0.0f), true);
     level->addObject(terrainObject);
     level->getPhysics()->addTerrain(level->getTerrain()->getHeightmapWidth(), level->getTerrain()->getHeightmapHeight(), level->getTerrain()->getHeightmap());
