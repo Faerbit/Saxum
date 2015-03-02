@@ -706,6 +706,13 @@
     <idGreen>0</idGreen>
     <idBlue>112</idBlue>
     <typeID>120</typeID>
+    <positionConstraint>
+        <objectNum>0</objectNum>
+        <xPosition>-6.5</xPosition>
+        <yPosition>22.0</yPosition>
+        <zPosition>51.5</zPosition>
+        <strength>12.0</strength>
+    </positionConstraint>
     <trigger>
         <name>-</name>
         <xPosition>0</xPosition>
@@ -735,6 +742,13 @@
     <idGreen>0</idGreen>
     <idBlue>111</idBlue>
     <typeID>120</typeID>
+    <positionConstraint>
+        <objectNum>0</objectNum>
+        <xPosition>-6.5</xPosition>
+        <yPosition>22.0</yPosition>
+        <zPosition>29.5</zPosition>
+        <strength>12.0</strength>
+    </positionConstraint>
     <trigger>
         <name>-</name>
         <xPosition>0</xPosition>
@@ -2388,6 +2402,13 @@
     <idGreen>0</idGreen>
     <idBlue>45</idBlue>
     <typeID>120</typeID>
+    <positionConstraint>
+        <objectNum>0</objectNum>
+        <xPosition>-53.5</xPosition>
+        <yPosition>22.0</yPosition>
+        <zPosition>51.5</zPosition>
+        <strength>12.0</strength>
+    </positionConstraint>
     <trigger>
         <name>-</name>
         <xPosition>0</xPosition>
@@ -2446,6 +2467,13 @@
     <idGreen>0</idGreen>
     <idBlue>43</idBlue>
     <typeID>120</typeID>
+    <positionConstraint>
+        <objectNum>0</objectNum>
+        <xPosition>-53.5</xPosition>
+        <yPosition>22.0</yPosition>
+        <zPosition>29.5</zPosition>
+        <strength>12.0</strength>
+    </positionConstraint>
     <trigger>
         <name>-</name>
         <xPosition>0</xPosition>
@@ -3635,6 +3663,13 @@
     <idGreen>0</idGreen>
     <idBlue>1</idBlue>
     <typeID>120</typeID>
+    <positionConstraint>
+        <objectNum>0</objectNum>
+        <xPosition>-161.5</xPosition>
+        <yPosition>21.7</yPosition>
+        <zPosition>67.5</zPosition>
+        <strength>12.0</strength>
+    </positionConstraint>
     <trigger>
         <name>-</name>
         <xPosition>0</xPosition>
@@ -6105,7 +6140,7 @@
         <xPosition>17.5</xPosition>
         <yPosition>22.0</yPosition>
         <zPosition>159.5</zPosition>
-        <strength>7.0</strength>
+        <strength>12.0</strength>
     </positionConstraint>
     <trigger>
         <name>openFirstDoor</name>
