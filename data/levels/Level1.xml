@@ -714,18 +714,18 @@
         <strength>12.0</strength>
     </positionConstraint>
     <trigger>
-        <name>-</name>
-        <xPosition>0</xPosition>
-        <yPosition>0</yPosition>
-        <zPosition>0</zPosition>
+        <name>openSecondDoor1</name>
+        <xPosition>-6.5</xPosition>
+        <yPosition>22.0</yPosition>
+        <zPosition>51.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>1.0</distance>
-        <isBiggerThan>false</isBiggerThan>
+        <distance>0.2</distance>
+        <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
-        <luaScript>-</luaScript>
-        <toChangeIdGreen>0</toChangeIdGreen>
-        <toChangeIdBlue>0</toChangeIdBlue>
+        <luaScript>openSecondDoor1.lua</luaScript>
+        <toChangeIdGreen>1</toChangeIdGreen>
+        <toChangeIdBlue>8</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>
     </trigger>
 </composition>
@@ -750,18 +750,18 @@
         <strength>12.0</strength>
     </positionConstraint>
     <trigger>
-        <name>-</name>
-        <xPosition>0</xPosition>
-        <yPosition>0</yPosition>
-        <zPosition>0</zPosition>
+        <name>openSecondDoor3</name>
+        <xPosition>-6.5</xPosition>
+        <yPosition>22.0</yPosition>
+        <zPosition>29.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>1.0</distance>
-        <isBiggerThan>false</isBiggerThan>
+        <distance>0.2</distance>
+        <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
-        <luaScript>-</luaScript>
-        <toChangeIdGreen>0</toChangeIdGreen>
-        <toChangeIdBlue>0</toChangeIdBlue>
+        <luaScript>openSecondDoor3.lua</luaScript>
+        <toChangeIdGreen>1</toChangeIdGreen>
+        <toChangeIdBlue>8</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>
     </trigger>
 </composition>
@@ -2410,18 +2410,18 @@
         <strength>12.0</strength>
     </positionConstraint>
     <trigger>
-        <name>-</name>
-        <xPosition>0</xPosition>
-        <yPosition>0</yPosition>
-        <zPosition>0</zPosition>
+        <name>openSecondDoor4</name>
+        <xPosition>-53.5</xPosition>
+        <yPosition>22.0</yPosition>
+        <zPosition>51.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>1.0</distance>
-        <isBiggerThan>false</isBiggerThan>
+        <distance>0.2</distance>
+        <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
-        <luaScript>-</luaScript>
-        <toChangeIdGreen>0</toChangeIdGreen>
-        <toChangeIdBlue>0</toChangeIdBlue>
+        <luaScript>openSecondDoor4.lua</luaScript>
+        <toChangeIdGreen>1</toChangeIdGreen>
+        <toChangeIdBlue>8</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>
     </trigger>
 </composition>
@@ -2475,18 +2475,18 @@
         <strength>12.0</strength>
     </positionConstraint>
     <trigger>
-        <name>-</name>
-        <xPosition>0</xPosition>
-        <yPosition>0</yPosition>
-        <zPosition>0</zPosition>
+        <name>openSecondDoor2</name>
+        <xPosition>-53.5</xPosition>
+        <yPosition>22.0</yPosition>
+        <zPosition>29.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>1.0</distance>
-        <isBiggerThan>false</isBiggerThan>
+        <distance>0.2</distance>
+        <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
-        <luaScript>-</luaScript>
-        <toChangeIdGreen>0</toChangeIdGreen>
-        <toChangeIdBlue>0</toChangeIdBlue>
+        <luaScript>openSecondDoor2.lua</luaScript>
+        <toChangeIdGreen>1</toChangeIdGreen>
+        <toChangeIdBlue>8</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>
     </trigger>
 </composition>
@@ -6153,14 +6153,14 @@
     <positionConstraint>
         <objectNum>0</objectNum>
         <xPosition>17.5</xPosition>
-        <yPosition>22.0</yPosition>
+        <yPosition>21.8</yPosition>
         <zPosition>159.5</zPosition>
         <strength>12.0</strength>
     </positionConstraint>
     <trigger>
         <name>openFirstDoor</name>
         <xPosition>17.5</xPosition>
-        <yPosition>22</yPosition>
+        <yPosition>21.8</yPosition>
         <zPosition>159.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
@@ -6175,7 +6175,7 @@
     <trigger>
         <name>openFirstDoorUndo</name>
         <xPosition>17.5</xPosition>
-        <yPosition>22</yPosition>
+        <yPosition>21.8</yPosition>
         <zPosition>159.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
