@@ -69,7 +69,7 @@
     </object>
     <light>
         <xOffset>0.0</xOffset>
-        <yOffset>2</yOffset>
+        <yOffset>3</yOffset>
         <zOffset>0.0</zOffset>
         <rColour>1.0</rColour>
         <gColour>0.9</gColour>
