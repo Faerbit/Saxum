@@ -287,7 +287,6 @@ void Graphics::render(double time)
     flameShader->use();
     flameShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
     flameShader->setUniform("time", (float) time);
-    flameShader->setUniform("camera", level->getPhysics()->getCameraPosition());
     flameShader->setUniform("bottom", true);
     flameShader->setUniform("left", true);
     flame_positions->render();
