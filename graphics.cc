@@ -35,6 +35,25 @@ void Graphics::init(Level* level) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     glEnable(GL_MULTISAMPLE);
+
+    fullscreen_quad_ab = SharedArrayBuffer(new ArrayBuffer());
+    fullscreen_quad_ab->defineAttribute("aPosition", GL_FLOAT, 2);
+    fullscreen_quad_ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
+
+    float quadData[] = {
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f,  1.0f,  1.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+         1.0f, -1.0f,  1.0f, 0.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+        -1.0f,  1.0f,  0.0f, 1.0f
+    };
+
+    fullscreen_quad_ab->setDataElements(6, quadData);
+
+    fullscreen_quad = SharedVertexArrayObject(new VertexArrayObject);
+    fullscreen_quad->attachAllAttributes(fullscreen_quad_ab);
     
     // update lights on creation
     lastUpdate = -lightUpdateDelay;
@@ -67,11 +86,14 @@ void Graphics::init(Level* level) {
     flameShader = ShaderProgramCreator("flame")
         .attributeLocations(flame_positions->getAttributeLocations()).create();
 
+    flamePostShader = ShaderProgramCreator("flame_post")
+        .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
+
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
     // Exit if we need more texture units
-    if (number_of_texture_units < 14) {
-        printf("You need at least 14 texture units to run this application. Exiting\n");
+    if (number_of_texture_units < 16) {
+        printf("You need at least 16 texture units to run this application. Exiting\n");
         exit(-1);
     }
 
@@ -113,13 +135,32 @@ void Graphics::init(Level* level) {
     
     framebuffer_cube = SharedFrameBufferObject(new FrameBufferObject());
 
-
     if (level->getLights()->size() > 0) {
         for(unsigned int i = 0; i<depth_cubeMaps.size(); i++){
             // start with texture unit 4 because the first four are used by the texture and the directional shadow map
             lightingShader->setTexture("shadowMap_cube" + std::to_string(i), depth_cubeMaps.at(i), i+4);
         }
     }
+
+    flame_fbo_color_texture = SharedTexture2D(new Texture2D(windowSize, GL_RGBA8));
+    flame_fbo_color_texture->setMinFilter(GL_NEAREST);
+    flame_fbo_color_texture->setMagFilter(GL_NEAREST);
+    flame_fbo_color_texture->setWrapS(GL_CLAMP_TO_BORDER);
+    flame_fbo_color_texture->setWrapT(GL_CLAMP_TO_BORDER);
+    flame_fbo_depth_texture = SharedTexture2D(new Texture2D(windowSize, GL_DEPTH_COMPONENT24));
+    flame_fbo_depth_texture->setMinFilter(GL_NEAREST);
+    flame_fbo_depth_texture->setMagFilter(GL_NEAREST);
+    flame_fbo_depth_texture->setWrapS(GL_CLAMP_TO_BORDER);
+    flame_fbo_depth_texture->setWrapT(GL_CLAMP_TO_BORDER);
+    framebuffer_flames = SharedFrameBufferObject(new FrameBufferObject());
+    framebuffer_flames->attachColorTexture("oColor", flame_fbo_color_texture);
+    framebuffer_flames->setDepthTexture(flame_fbo_depth_texture);
+    framebuffer_flames->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+    framebuffer_flames->validate();
+
+    flamePostShader->use();
+    flamePostShader->setTexture("flame_fbo", flame_fbo_color_texture, 15);
+
     updateClosestLights();
 }
 
@@ -187,7 +228,7 @@ void Graphics::render(double time)
         }
     }
     
-    // final render pass
+    // lighting render pass
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
@@ -239,6 +280,10 @@ void Graphics::render(double time)
     glCullFace(GL_BACK);
 
     // draw flames on top
+
+    framebuffer_flames->bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     flameShader->use();
     flameShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
     flameShader->setUniform("time", (float) time);
@@ -255,6 +300,12 @@ void Graphics::render(double time)
     flame_positions->render();
 
     glDisable(GL_CULL_FACE);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    flamePostShader->use();
+    fullscreen_quad->render();
 }
 
 bool Graphics::compareLightDistances(Light a, Light b) {
