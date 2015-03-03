@@ -42,6 +42,9 @@ class Graphics {
         SharedFrameBufferObject framebuffer_flames;
         SharedTexture2D flame_fbo_color_texture;
         SharedTexture2D flame_fbo_depth_texture;
+        SharedFrameBufferObject framebuffer_light;
+        SharedTexture2D light_fbo_color_texture;
+        SharedTexture2D light_fbo_depth_texture;
         SharedVertexArrayObject flame_positions;
         SharedArrayBuffer flame_positions_ab;
         SharedVertexArrayObject fullscreen_quad;

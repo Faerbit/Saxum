@@ -155,11 +155,30 @@ void Graphics::init(Level* level) {
     framebuffer_flames = SharedFrameBufferObject(new FrameBufferObject());
     framebuffer_flames->attachColorTexture("oColor", flame_fbo_color_texture);
     framebuffer_flames->setDepthTexture(flame_fbo_depth_texture);
-    framebuffer_flames->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+    framebuffer_flames->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
     framebuffer_flames->validate();
+
+    light_fbo_color_texture = SharedTexture2D(new Texture2D(windowSize, GL_RGBA8));
+    light_fbo_color_texture->setMinFilter(GL_NEAREST);
+    light_fbo_color_texture->setMagFilter(GL_NEAREST);
+    light_fbo_color_texture->setWrapS(GL_CLAMP_TO_BORDER);
+    light_fbo_color_texture->setWrapT(GL_CLAMP_TO_BORDER);
+    light_fbo_depth_texture = SharedTexture2D(new Texture2D(windowSize, GL_DEPTH_COMPONENT24));
+    light_fbo_depth_texture->setMinFilter(GL_NEAREST);
+    light_fbo_depth_texture->setMagFilter(GL_NEAREST);
+    light_fbo_depth_texture->setWrapS(GL_CLAMP_TO_BORDER);
+    light_fbo_depth_texture->setWrapT(GL_CLAMP_TO_BORDER);
+    framebuffer_light = SharedFrameBufferObject(new FrameBufferObject());
+    framebuffer_light->attachColorTexture("oColor", light_fbo_color_texture);
+    framebuffer_light->setDepthTexture(light_fbo_depth_texture);
+    framebuffer_light->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    framebuffer_light->validate();
 
     flamePostShader->use();
     flamePostShader->setTexture("flame_fbo", flame_fbo_color_texture, 15);
+    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, 16);
+    flamePostShader->setUniform("windowSizeX", int(windowSize.x));
+    flamePostShader->setUniform("windowSizeY", int(windowSize.y));
 
     updateClosestLights();
 }
@@ -229,7 +248,7 @@ void Graphics::render(double time)
     }
     
     // lighting render pass
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    framebuffer_light->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     lightingShader->use();
@@ -387,6 +406,10 @@ void Graphics::resize(glm::uvec2 windowSize) {
     for (unsigned int i = 0; i<depth_directionalMaps.size(); i++) {
         depth_directionalMaps.at(i)->resize(glm::vec2(windowSize.x, windowSize.y));
     }
+    flame_fbo_color_texture->resize(windowSize);
+    flame_fbo_depth_texture->resize(windowSize);
+    flamePostShader->setUniform("windowSizeX", int(windowSize.x));
+    flamePostShader->setUniform("windowSizeY", int(windowSize.y));
 }
 
 glm::mat4 Graphics::buildViewMatrix(Level* level) {
