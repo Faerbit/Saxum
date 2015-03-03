@@ -1,4 +1,5 @@
 #include "trigger.hh"
+#include <sys/stat.h>
 
 Trigger::Trigger(glm::vec3 position, float distance, bool isBigger, Object* object, std::string luaScript, lua_State* luaState, int objectToChange, std::string scriptPath) {
     this->position=position;
@@ -6,6 +7,11 @@ Trigger::Trigger(glm::vec3 position, float distance, bool isBigger, Object* obje
     this->isBigger=isBigger;
     this->object=object;
     this->luaScript= scriptPath + luaScript;
+    struct stat buf;
+    if(stat(this->luaScript.c_str(), &buf) != 0){
+        std::cout << "The lua file " << this->luaScript << " does not exist." << std::endl;
+        exit(-1);
+    }
     this->luaState = luaState;
     if(luaState == nullptr){
         printf("The Lua state is NULL in trigger!\n");

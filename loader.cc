@@ -31,7 +31,7 @@ void Loader::loadConfig(Application* application) {
     application->setLevelXmlPath(queryString(config, "levelXmlPath"));
 }
 
-void Loader::load(std::string filePath, Level* level, std::string compositionsPath, std::string scriptPath) {
+void Loader::load(std::string filePath, Level* level, std::string compositionsPath, std::string scriptPath, std::string globalGeometryPath, std::string globalTexturePath) {
     //Loading from xml:
     XMLDocument* doc = new XMLDocument();
     const char* xmlFile = filePath.c_str();
@@ -55,6 +55,12 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     float terrainDiffuseFactor = queryFloat(terrainElement, "diffuseFactor");
     float terrainSpecularFactor = queryFloat(terrainElement, "specularFactor");
     float terrainShininess = queryFloat(terrainElement, "shininess");
+    struct stat buf;
+    std::string terrainTexturePath = "../" + globalTexturePath + terrainTexture;
+    if(stat(terrainTexturePath.c_str(), &buf) != 0){
+        std::cout << "The texture file " << terrainTexturePath << " does not exist." << std::endl;
+        exit(-1);
+    }
     Material terrainMaterial = Material(terrainTexture, terrainAmbientFactor, terrainDiffuseFactor, terrainSpecularFactor, terrainShininess);
     Object* terrainObject = new Object(terrainModel, terrainMaterial,
     glm::vec3(-0.5*((float)level->getTerrain()->getHeightmapHeight()-1), 0.0f, -0.5f*((float)level->getTerrain()->getHeightmapWidth()-1)),
@@ -64,8 +70,18 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     
     //load the skydome
     XMLElement* skydomeElement = doc->FirstChildElement("skydome");
-    std::string skydomeTexture = queryString(skydomeElement, "texture");;
+    std::string skydomeTexture = queryString(skydomeElement, "texture");
+    std::string skydomePath = "../" + globalGeometryPath + "skydome.obj";
+    if(stat(skydomePath.c_str(), &buf) != 0){
+        std::cout << "The object file " << skydomePath << " does not exist." << std::endl;
+        exit(-1);
+    }
     Model skydomeModel = Model("skydome.obj", level->getSkydomeSize());
+    std::string skydomeTexturePath = "../" + globalTexturePath + skydomeTexture;
+    if(stat(skydomeTexturePath.c_str(), &buf) != 0){
+        std::cout << "The texture file " << skydomeTexturePath << " does not exist." << std::endl;
+        exit(-1);
+    }
     Material skydomeMaterial = Material(skydomeTexture, 0.7f, 0.0f, 0.0f, 0.0f);
     Object* skydomeObject = new Object(skydomeModel, skydomeMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), true);
@@ -139,7 +155,17 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                                 float specularFactor = queryFloat(objectData, "specularFactor");
                                 float shininess = queryFloat(objectData, "shininess");
                                 std::string texturePath = queryString(objectData, "texturePath");
+                                std::string entireTexturePath = "../" + globalTexturePath + texturePath;
+                                if(stat(entireTexturePath.c_str(), &buf) != 0){
+                                    std::cout << "The texture file " << entireTexturePath << " does not exist." << std::endl;
+                                    exit(-1);
+                                }
                                 material = Material(texturePath, ambientFactor, diffuseFactor, specularFactor, shininess);
+                                std::string entireModelPath = "../" + globalGeometryPath + modelPath;
+                                if(stat(entireModelPath.c_str(), &buf) != 0){
+                                    std::cout << "The object file " << entireModelPath << " does not exist." << std::endl;
+                                    exit(-1);
+                                }
                                 model = Model(modelPath, objectScale * compScale);
                             }
                             float compXPos = queryFloat(thisComposition, "xPos");
