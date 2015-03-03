@@ -384,7 +384,7 @@ void Graphics::updateLights() {
         lightingShader->setUniform("directionalIntensity",
             level->getDirectionalLight()->getIntensity());
     }
-    float flameData[closestLights.size() * 6] = {};
+    float* flameData = new float[closestLights.size() * 6];
     int flameIndex = 0;
     for (unsigned int i = 0; i<closestLights.size(); i++) {
         if (closestLights.at(i).getFlameYOffset() != 0.0f) {
