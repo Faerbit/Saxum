@@ -95,8 +95,8 @@ void Graphics::init(Level* level) {
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
     // Exit if we need more texture units
-    if (number_of_texture_units < 15) {
-        printf("You need at least 15 texture units to run this application. Exiting\n");
+    if (number_of_texture_units < 16) {
+        printf("You need at least 16 texture units to run this application. Exiting\n");
         exit(-1);
     }
 
@@ -162,9 +162,12 @@ void Graphics::init(Level* level) {
     framebuffer_light->validate();
 
     flamePostShader->use();
-    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, 15);
+    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, 14);
     flamePostShader->setUniform("windowSizeX", int(windowSize.x));
     flamePostShader->setUniform("windowSizeY", int(windowSize.y));
+
+    skydomeShader->use();
+    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture()->getReference(), 15);
 
     updateClosestLights();
 }
