@@ -31,6 +31,7 @@ class Graphics {
         float farPlane;
         std::vector<Light> closestLights;
         SharedShaderProgram lightingShader;
+        SharedShaderProgram skydomeShader;
         SharedShaderProgram depthCubeShader;
         SharedShaderProgram depthShader;
         SharedShaderProgram flameShader;

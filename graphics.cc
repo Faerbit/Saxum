@@ -69,6 +69,9 @@ void Graphics::init(Level* level) {
     // look up all shader files starting with 'phong' and build a ShaderProgram from it:
     lightingShader = ShaderProgramCreator("phong").attributeLocations(
             vao->getAttributeLocations()).create();
+
+    skydomeShader = ShaderProgramCreator("skydome").attributeLocations(
+            vao->getAttributeLocations()).create();
     
     depthShader = ShaderProgramCreator("depth")
         .attributeLocations(vao->getAttributeLocations()).create();
@@ -233,6 +236,17 @@ void Graphics::render(double time)
     // lighting render pass
     framebuffer_light->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //set view and projection matrix
+    glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
+
+    //render skydome
+    skydomeShader->use();
+    // set fog Parameters
+    skydomeShader->setUniform("farPlane", farPlane);
+    skydomeShader->setUniform("fogColor", level->getFogColour());
+    skydomeShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
+    level->getSkydome()->render(skydomeShader, false, true, &lightingViewProjectionMatrix);
     
     lightingShader->use();
 
@@ -271,9 +285,6 @@ void Graphics::render(double time)
     lightingShader->setUniform("ambientColor", level->getAmbientLight());
     lightingShader->setUniform("camera", level->getPhysics()->getCameraPosition());
     
-    //set view and projection matrix
-    glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
-    
     // render the level
     level->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
 
@@ -282,7 +293,6 @@ void Graphics::render(double time)
     // cull faces to get consistent color while using alpha
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-
 
     // draw with colors
     flameShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
