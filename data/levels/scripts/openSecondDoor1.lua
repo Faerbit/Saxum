@@ -2,6 +2,10 @@ local global = require( "global" )
 if(global.triggeredOpenSecondDoor1 == nil) then
     global.triggeredOpenSecondDoor1 = false
 end
+if(global.triggeredOpenSecondDoor1Undo == nil) then
+    global.triggeredOpenSecondDoor1Undo = true
+end
+
 function trigger(objectToChange)
     if(global.triggeredOpenSecondDoor1 == false) then
         if(not level) then
@@ -25,14 +29,28 @@ function trigger(objectToChange)
                 local zPos = 4.5
                 level:moveObject(objectToChange, strength, xPos, yPos, zPos)
             else
-                global.openSecondDoorCounter = 0
-                global.triggeredOpenSecondDoor1 = false
-                global.triggeredOpenSecondDoor2 = false
-                global.triggeredOpenSecondDoor3 = false
-                global.triggeredOpenSecondDoor4 = false
+                global.triggeredOpenSecondDoor1Undo = false
             end
         end
         
         print("openSecondDoor1")
+    end
+end
+
+function triggerUndo(objectToChange)
+    if(global.triggeredOpenSecondDoor1Undo == false) then
+        if(not level) then
+            print("No level found in Lua!")
+            return
+        end
+        
+        global.openSecondDoorCounter = 0
+        global.triggeredOpenSecondDoor1 = false
+        global.triggeredOpenSecondDoor2 = false
+        global.triggeredOpenSecondDoor3 = false
+        global.triggeredOpenSecondDoor4 = false
+        
+        global.triggeredOpenSecondDoor1Undo = true
+        print("openSecondDoor1Undo")
     end
 end
