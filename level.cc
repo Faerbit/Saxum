@@ -115,7 +115,7 @@ void Level::update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseD
             physicsObjects[i]->setRotation(physics.getRotation(i));
         }
         
-        skydome->setPosition(glm::vec3(cameraCenter->getPosition().x, 
+        skydome.setPosition(glm::vec3(cameraCenter->getPosition().x, 
             0.0f, cameraCenter->getPosition().z));
 
         if (runTime > 2.0f) {
@@ -205,7 +205,7 @@ void Level::setStrength(float strength) {
     this->strength = strength;
 }
 
-void Level::setSkydomeObject(Object* object){
+void Level::setSkydomeObject(Skydome object){
     this->skydome = object;
 }
 
@@ -261,6 +261,6 @@ Terrain* Level::getTerrain() {
     return &terrain;
 }
 
-Object* Level::getSkydome() {
-    return skydome;
+Skydome* Level::getSkydome() {
+    return &skydome;
 }
