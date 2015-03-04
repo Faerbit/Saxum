@@ -14,18 +14,22 @@ Object::~Object() {
 }
 
 void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
-    glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* additionalMatrices) {
+    bool texturePass, glm::mat4* viewProjectionMatrix,
+    std::vector<glm::mat4>* additionalMatrices) {
     if (!renderable) {
         return;
     }
     glm::mat4 modelMatrix = glm::translate(getPosition()) * getRotation() * glm::scale<float>(glm::vec3(model.getScale()));
+    if(texturePass) {
+        shader->setTexture("uTexture", material.getReference(), 0);
+        shader->setUniform("modelMatrix", modelMatrix);
+    }
     if (lightingPass) {
     // set lightning parameters for this object
         shader->setUniform("ambientFactor", material.getAmbientFactor());
         shader->setUniform("diffuseFactor", material.getDiffuseFactor());
         shader->setUniform("specularFactor", material.getSpecularFactor());
         shader->setUniform("shininess", material.getShininess());
-        shader->setTexture("uTexture", material.getReference(), 0);
         // set model matrix
         shader->setUniform("modelMatrix", modelMatrix);
         // set shadowMVPs

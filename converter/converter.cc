@@ -264,6 +264,7 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     XMLElement* trigger = doc->NewElement("trigger");
     newComposition->InsertEndChild(trigger);
     XMLElement* name = doc->NewElement("name");
+    XMLElement* undo = doc->NewElement("undo");
     XMLElement* xPosition = doc->NewElement("xPosition");
     XMLElement* yPosition = doc->NewElement("yPosition");
     XMLElement* zPosition = doc->NewElement("zPosition");
@@ -278,6 +279,7 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     XMLElement* toChangeObjNum = doc->NewElement("toChangeObjNum");
     
     name->SetText("-");
+    undo->SetText("false");
     xPosition->SetText("0");
     yPosition->SetText("0");
     zPosition->SetText("0");
@@ -292,6 +294,7 @@ std::vector<int> Converter::newComposition(int type, float posX, float posZ){
     toChangeObjNum->SetText("0");
     
     trigger->InsertEndChild(name);
+    trigger->InsertEndChild(undo);
     trigger->InsertEndChild(xPosition);
     trigger->InsertEndChild(yPosition);
     trigger->InsertEndChild(zPosition);
