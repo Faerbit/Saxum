@@ -6,7 +6,7 @@
 
 class Light : public Entity {
     public:
-        Light(glm::vec3 position, glm::vec3 colour, float intensity, float flameYOffset = 0.0f);
+        Light(glm::vec3 position, glm::vec3 colour, float intensity, float flameYOffset = 0.0f, float flameHeight = 0.0f, float flameWidth = 0.0f);
         Light();
         glm::vec3 getColour();
         float getIntensity();
@@ -14,6 +14,8 @@ class Light : public Entity {
         ~Light();
     private:
         float flameYOffset;
+        float flameHeight;
+        float flameWidth;
         float intensity;
         glm::vec3 colour;
 };

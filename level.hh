@@ -57,6 +57,7 @@ class Level {
         lua_State* getLuaState();
         Terrain* getTerrain();
         void resetPlayer();
+        void setPlayerIndex(int index);
     private:
         lua_State* luaState=nullptr;
         std::vector<Object*> objects;
@@ -67,6 +68,7 @@ class Level {
         glm::vec4 fogColour;
         Light directionalLight;
         Object* cameraCenter;
+        int playerIndex;
         Object* skydome;
         Physics physics;
         Camera camera;

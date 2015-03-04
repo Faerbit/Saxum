@@ -258,6 +258,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                             
                             if(compositionType == 20){
                                 level->setCameraCenter(object);
+                                level->setPlayerIndex(objectIdentifier[1]);
                             }
                         }//objectData found
                     }//finding the objectData
@@ -298,7 +299,9 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                     if (flameOffset != NULL){
                         float offset = 0;
                         errorCheck(flameOffset->QueryFloatText(&offset));
-                        Light light = Light(lightPosition, lightColour, lightIntensity, offset);
+                        float flameHeight = queryBool(xmlLight, "flameHeight");
+                        float flameWidth = queryBool(xmlLight, "flameWidth");
+                        Light light = Light(lightPosition, lightColour, lightIntensity, offset, flameHeight, flameWidth);
                         level->addLight(light);
                     }
                     else {
