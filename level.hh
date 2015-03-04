@@ -10,6 +10,7 @@
 #include "camera.hh"
 #include "physics.hh"
 #include "trigger.hh"
+#include "skydome.hh"
 
 extern "C" {
 #include "extern/lua/src/lua.h"
@@ -36,13 +37,13 @@ class Level {
         glm::vec4 getFogColour();
         void setSkydomeSize(float size);
         float getSkydomeSize();
-        Object* getSkydome();
+        Skydome* getSkydome();
         std::vector<Object*>* getObjects();
         std::vector<Object*>* getPhysicsObjects();
         void deleteObject(int objectIndex);
         void moveObject(int objectIndex, float strength, float xPos, float yPos, float zPos);
         void setStrength(float strength);
-        void setSkydomeObject(Object* object);
+        void setSkydomeObject(Skydome object);
         void addObject(Object* object);
         void addPhysicsObject(Object* object);
         void setAmbientLight(glm::vec3 colour);
@@ -70,7 +71,7 @@ class Level {
         Light directionalLight;
         Object* cameraCenter;
         int playerIndex;
-        Object* skydome;
+        Skydome skydome;
         Physics physics;
         Camera camera;
         Terrain terrain;
