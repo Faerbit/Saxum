@@ -38,6 +38,7 @@ void Level::load() {
         .addFunction("deleteObject", &Level::deleteObject)
         .addFunction("getObjectCount", &Level::getPhysicsObjectsVectorSize)
         .addFunction("moveObject", &Level::moveObject)
+        .addFunction("resetPlayer", &Level::resetPlayer)
         .endClass();
     //Push the level to Lua as a global variable
     luabridge::push(luaState, this);
@@ -49,9 +50,11 @@ void Level::load() {
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs) {
     for(unsigned int i = 0; i<objects.size(); i++) {
-        // do not project shadow of skydome 
-        if(lightingPass || (objects.at(i) != skydome)) {
-            objects.at(i)->render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
+        if (lightingPass) {
+            objects.at(i)->render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
+        }
+        else {
+            objects.at(i)->render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
         }
     }
 }
@@ -185,7 +188,12 @@ void Level::deleteObject(int objectIndex){
 void Level::resetPlayer(){
     Loader loader = Loader();
     glm::vec3 newPosition = loader.reloadPlayerPosition(xmlFilePath, this);
-    //TODO cameraCenter.setPosition(newPosition);
+    physics.forceMove(newPosition, playerIndex);
+    physics.forceMoveCamera(newPosition + glm::vec3(1,0,0));
+}
+
+void Level::setPlayerIndex(int index){
+    playerIndex = index;
 }
 
 void Level::setStrength(float strength) {
@@ -246,4 +254,8 @@ lua_State* Level::getLuaState() {
 
 Terrain* Level::getTerrain() {
     return &terrain;
+}
+
+Object* Level::getSkydome() {
+    return skydome;
 }

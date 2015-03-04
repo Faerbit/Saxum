@@ -16,7 +16,8 @@ class Object : public Entity {
         Object();
         ~Object();
         void render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
-            glm::mat4* viewProjcetionMatrix, std::vector<glm::mat4>* additionalMatrices);
+            bool texturePass, glm::mat4* viewProjcetionMatrix,
+            std::vector<glm::mat4>* additionalMatrices=0);
     private:
         Model model;
         Material material;
