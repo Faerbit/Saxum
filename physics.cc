@@ -414,9 +414,29 @@ void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, f
         throw std::invalid_argument( "Bodies out of Sync" );
 }
 
+void Physics::prepareCollisionDetection()
+{
+    playerTerrainCol = playerObjectColision = false;
+    int numManifods = world->getDispatcher()->getNumManifolds();
+    
+    for (int i=0;i<numManifods;i++)
+    {
+    }
+}
+
+bool Physics::playerWithGround()
+{
+    return playerTerrainCol;
+}
+
+bool Physics::playerWithObject()
+{
+    return playerObjectColision;
+}
+
 void Physics::addCamera() //Camera Creator automatically called when player is created
 {
-    btSphereShape* sphere = new btSphereShape(0.5f); //we use this to make a more interesting camera, that does not interpenetrate with the terrain/objects
+    btSphereShape* sphere = new btSphereShape(0.2f); //we use this to make a more interesting camera, that does not interpenetrate with the terrain/objects
     
     btVector3 inertia(0,0,0); //rotation handled elsewhere (as it always has to look at the player)
     
@@ -481,7 +501,7 @@ void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength, float dis
     this->cameraDistance = distance;
     //note: in mouseMovement x and y are flipped in contrast to bullet
     btVector3 dodo = btVector3(0,1,0).cross(btVector3(currentDirection.x(),0,currentDirection.z()));
-    currentDirection = currentDirection.rotate(dodo,-mouseMovement.x / 100);//mathhelper 3.14159265359
+    currentDirection = currentDirection.rotate(dodo,-mouseMovement.x / 50);//mathhelper 3.14159265359
     
     btVector3 compare = currentDirection;
     compare.setY(0);
@@ -496,7 +516,7 @@ void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength, float dis
         currentDirection = compare;
     }
     
-    currentDirection = currentDirection.rotate(btVector3(0,1,0),mouseMovement.y/100);
+    currentDirection = currentDirection.rotate(btVector3(0,1,0),-mouseMovement.y/100);
     currentDirection.normalize();
 }
 
@@ -557,6 +577,14 @@ void Physics::addStaticGroundPlane()
 void Physics::forceMove(glm::vec3 newPosition, unsigned indice)//ugly, but needed for reset
 {
     bodies[indice]->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),btVector3(newPosition.x,newPosition.y,newPosition.z)));
+    bodies[indice]->setLinearVelocity(btVector3(0,0,0));
+}
+
+void Physics::forcePlayer(glm::vec3 newPosition)//ugly, but needed for reset
+{
+    playerBall->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),btVector3(newPosition.x,newPosition.y,newPosition.z)));
+    playerBall->setLinearVelocity(btVector3(0,0,0));
+    forceMoveCamera(newPosition + glm::vec3(currentDirection.x()*cameraDistance,currentDirection.y()*cameraDistance,currentDirection.z()*cameraDistance));
 }
 
 void Physics::forceMoveCamera(glm::vec3 newPosition)
