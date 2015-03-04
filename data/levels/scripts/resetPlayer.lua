@@ -8,8 +8,19 @@ function trigger(objectToChange)
             print("No level found in Lua!")
             return
         end
-        
-        level:resetPlayer()
+        if(global.triggeredOpenFirstDoor == true) then
+            if(global.openedSecondDoor == true) then
+                if(global.triggeredOpenThirdDoor == true) then
+                    level:movePlayer(-169.5,22.5,58.5)
+                else
+                    level:movePlayer(-78.5,22.5,4.5)
+                end
+            else
+                level:movePlayer(17.5,22.5,87.0)
+            end
+        else
+            level:resetPlayer()
+        end
         
         --global.triggeredResetPlayer = true
         print("reset player")

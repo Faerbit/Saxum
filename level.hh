@@ -57,6 +57,7 @@ class Level {
         lua_State* getLuaState();
         Terrain* getTerrain();
         void resetPlayer();
+        void movePlayer(float xPosition, float yPosition, float zPosition);
         void setPlayerIndex(int index);
     private:
         lua_State* luaState=nullptr;

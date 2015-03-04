@@ -22,15 +22,7 @@ function trigger(objectToChange)
         global.triggeredOpenSecondDoor1 = true
         
         if(global.triggeredOpenSecondDoor1 == true and global.triggeredOpenSecondDoor2 == true and global.triggeredOpenSecondDoor3 == true and global.triggeredOpenSecondDoor4 == true) then
-            if(global.openSecondDoorCounter == 4) then
-                local strength = 100
-                local xPos = -81.5
-                local yPos = 33
-                local zPos = 4.5
-                level:moveObject(objectToChange, strength, xPos, yPos, zPos)
-            else
-                global.triggeredOpenSecondDoor1Undo = false
-            end
+            global.triggeredOpenSecondDoor1Undo = false
         end
         
         print("openSecondDoor1")
