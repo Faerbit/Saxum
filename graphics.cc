@@ -350,6 +350,9 @@ void Graphics::render(double time)
     glDisable(GL_CULL_FACE);
 
     flamePostShader->use();
+    flamePostShader->setUniform("verticalPass", true);
+    fullscreen_quad->render();
+    flamePostShader->setUniform("verticalPass", false);
     fullscreen_quad->render();
 
     glDisable(GL_STENCIL_TEST);
