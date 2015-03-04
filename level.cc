@@ -57,7 +57,6 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
 }
 
 void Level::update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPressed, bool sPressed, bool dPressed,bool kPressed, bool lPressed) {
-    physics.takeUpdateStep(runTimeSinceLastUpdate);
     
     // Ignore first two mouse updates, because they are incorrect
     // DON'T try to move this functionallity elsewhere
@@ -65,49 +64,56 @@ void Level::update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseD
     if (i <2) {
         i++;
     }
-    else {
-        mouseDelta.x = -mouseDelta.x;
-        camera.updateRotation(mouseDelta/100.0f);
-        physics.updateCameraPos(mouseDelta, 50, camera.getDistance());
-        
-        camera.setPosition(physics.getCameraPosition());
-        camera.setDirection(physics.getCameraToPlayer());
-    }
-    if(wPressed){
-        physics.rollForward(camera.getVector(),strength);
-    }
-    if(aPressed) {
-        physics.rollLeft(camera.getVector(),strength);
-    }
-    if(sPressed) {
-        physics.rollBack(camera.getVector(),strength);
-    }
-    if(dPressed){
-        physics.rollRight(camera.getVector(),strength);
-    }
     
-    if(kPressed)
-        camera.setIsPhysicsCamera(true);
-    if(lPressed)
-        camera.setIsPhysicsCamera(false);
-    
-    cameraCenter->setPosition(physics.getPos(0));
-    cameraCenter->setRotation(physics.getRotation(0));
-    
-    for(unsigned i = 0; i < physicsObjects.size();i++)
+    int runs = 2;
+    for(int j = runs; j > 0; j--)
     {
-        physicsObjects[i]->setPosition(physics.getPos(i));
-        physicsObjects[i]->setRotation(physics.getRotation(i));
-    }
-    
-    skydome->setPosition(glm::vec3(cameraCenter->getPosition().x, 
-        0.0f, cameraCenter->getPosition().z));
-
-    if (runTime > 2.0f) {
-        for(unsigned int i = 0; i<triggers.size(); i++) {
-            triggers.at(i).triggerUpdate();
+        physics.takeUpdateStep(runTimeSinceLastUpdate/runs);
+        if(i>=2)
+        {
+            mouseDelta.x = -mouseDelta.x;
+            camera.updateRotation(mouseDelta/100.0f/(float)runs);
+            physics.updateCameraPos(mouseDelta, 50/runs, camera.getDistance());
+            
+            camera.setPosition(physics.getCameraPosition());
+            camera.setDirection(physics.getCameraToPlayer());
         }
-    }
+        if(wPressed){
+            physics.rollForward(camera.getVector(),strength/runs);
+        }
+        if(aPressed) {
+            physics.rollLeft(camera.getVector(),strength/runs);
+        }
+        if(sPressed) {
+            physics.rollBack(camera.getVector(),strength/runs);
+        }
+        if(dPressed){
+            physics.rollRight(camera.getVector(),strength/runs);
+        }
+     }
+        
+        if(kPressed)
+            camera.setIsPhysicsCamera(true);
+        if(lPressed)
+            camera.setIsPhysicsCamera(false);
+        
+        cameraCenter->setPosition(physics.getPos(0));
+        cameraCenter->setRotation(physics.getRotation(0));
+        
+        for(unsigned i = 0; i < physicsObjects.size();i++)
+        {
+            physicsObjects[i]->setPosition(physics.getPos(i));
+            physicsObjects[i]->setRotation(physics.getRotation(i));
+        }
+        
+        skydome->setPosition(glm::vec3(cameraCenter->getPosition().x, 
+            0.0f, cameraCenter->getPosition().z));
+
+        if (runTime > 2.0f) {
+            for(unsigned int i = 0; i<triggers.size(); i++) {
+                triggers.at(i).triggerUpdate();
+            }
+        }
 }
 
 glm::vec3 Level::getAmbientLight() {
