@@ -186,6 +186,7 @@ void Graphics::render(double time)
     glm::vec3 upvectors[6] = {glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, 0.0f, -1.0f),
         glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f)};
 
+
     framebuffer_cube->bind();
     for (unsigned int i_pointlight = 0; i_pointlight<closestLights.size() && i_pointlight < maxShadowRenderCount; i_pointlight++) {
         // render each side of the cube
@@ -203,6 +204,7 @@ void Graphics::render(double time)
             }
         }
     }
+
     // render depth textures for sun
     depthShader->use();
     glViewport(0, 0, windowSize.x, windowSize.y);
@@ -244,8 +246,11 @@ void Graphics::render(double time)
     skydomeShader->use();
     // set fog Parameters
     skydomeShader->setUniform("farPlane", farPlane);
+    skydomeShader->setUniform("skydomeSize", level->getSkydomeSize());
     skydomeShader->setUniform("fogColor", level->getFogColour());
     skydomeShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
+    skydomeShader->setUniform("directionalVector", level->getDirectionalLight()->getPosition());
+    skydomeShader->setUniform("sunColor", level->getDirectionalLight()->getColour());
     level->getSkydome()->render(skydomeShader, false, true, &lightingViewProjectionMatrix);
     
     lightingShader->use();
