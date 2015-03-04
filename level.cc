@@ -62,23 +62,28 @@ void Level::update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseD
     // Ignore first two mouse updates, because they are incorrect
     // DON'T try to move this functionallity elsewhere
     static int i = 0;
-    if (i <2) {
+    if (i <20) {
         i++;
+        mouseDelta.x=mouseDelta.y=0;
     }
     
     int runs = 2;
+    
+    if(i>=20)
+    {
+        mouseDelta.x = -mouseDelta.x;
+    }
+        
     for(int j = runs; j > 0; j--)
     {
         physics.takeUpdateStep(runTimeSinceLastUpdate/runs);
-        if(i>=2)
-        {
-            mouseDelta.x = -mouseDelta.x;
-            camera.updateRotation(mouseDelta/100.0f/(float)runs);
-            physics.updateCameraPos(mouseDelta, 50/runs, camera.getDistance());
+        
+        camera.updateRotation(mouseDelta/100.0f/(float)runs);
+        physics.updateCameraPos(mouseDelta, 50/runs, camera.getDistance());
             
-            camera.setPosition(physics.getCameraPosition());
-            camera.setDirection(physics.getCameraToPlayer());
-        }
+        camera.setPosition(physics.getCameraPosition());
+        camera.setDirection(physics.getCameraToPlayer());
+        
         if(wPressed){
             physics.rollForward(camera.getVector(),strength/runs);
         }
