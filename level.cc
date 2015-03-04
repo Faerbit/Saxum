@@ -56,8 +56,8 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
     }
 }
 
-void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPressed, bool sPressed, bool dPressed,bool kPressed, bool lPressed) {
-    physics.takeUpdateStep(runTime);
+void Level::update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPressed, bool sPressed, bool dPressed,bool kPressed, bool lPressed) {
+    physics.takeUpdateStep(runTimeSinceLastUpdate);
     
     // Ignore first two mouse updates, because they are incorrect
     // DON'T try to move this functionallity elsewhere
@@ -102,9 +102,11 @@ void Level::update(float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPre
     
     skydome->setPosition(glm::vec3(cameraCenter->getPosition().x, 
         0.0f, cameraCenter->getPosition().z));
-        
-    for(unsigned int i = 0; i<triggers.size(); i++) {
-        triggers.at(i).triggerUpdate();
+
+    if (runTime > 2.0f) {
+        for(unsigned int i = 0; i<triggers.size(); i++) {
+            triggers.at(i).triggerUpdate();
+        }
     }
 }
 

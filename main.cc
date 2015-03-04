@@ -81,7 +81,7 @@ bool createWindow()
     setGLFWHintsForOpenGLVersion( ACGL_OPENGL_VERSION );
     
     // activate multisampling (second parameter is the number of samples):
-    //glfwWindowHint( GLFW_SAMPLES, 8 );
+    glfwWindowHint( GLFW_SAMPLES, 4);
     
     // request an OpenGL debug context:
     glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, true );
@@ -126,12 +126,6 @@ int main( int argc, char *argv[] )
     // Enable vertical sync (on cards that support it) with parameter 1 - 0 means off
     glfwSwapInterval( 0 );
     
-    // OpenGL state:
-    glClearColor( 0.0, 0.0, 0.0, 1.0 );
-    glEnable( GL_DEPTH_TEST );
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     app.init();
     
     int frameCount = 0;
@@ -167,13 +161,13 @@ int main( int argc, char *argv[] )
             double xpos, ypos;
             glfwGetCursorPos(window, &xpos, &ypos);
             glfwSetCursorPos(window, app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
-            app.getLevel()->update(now - lastUpdate,
+            app.getLevel()->update(now - lastUpdate, now,
                     glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
                             (float)xpos-app.getGraphics()->getWindowSize().x/2),
                         stateW == GLFW_PRESS,stateA == GLFW_PRESS,stateS == GLFW_PRESS,stateD == GLFW_PRESS,stateK == GLFW_PRESS,stateL == GLFW_PRESS);
         }
         else {
-            app.getLevel()->update(now - lastUpdate, glm::vec2(0.0f, 0.0f), false, false, false, false,false,false);
+            app.getLevel()->update(now - lastUpdate, now, glm::vec2(0.0f, 0.0f), false, false, false, false,false,false);
             if (app.isLocked()) {
                 app.ignoredOneMouseUpdate();
             }
