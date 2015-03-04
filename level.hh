@@ -36,6 +36,7 @@ class Level {
         glm::vec4 getFogColour();
         void setSkydomeSize(float size);
         float getSkydomeSize();
+        Object* getSkydome();
         std::vector<Object*>* getObjects();
         std::vector<Object*>* getPhysicsObjects();
         void deleteObject(int objectIndex);

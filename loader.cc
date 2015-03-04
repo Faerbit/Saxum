@@ -85,7 +85,6 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     Material skydomeMaterial = Material(skydomeTexture, 0.7f, 0.0f, 0.0f, 0.0f);
     Object* skydomeObject = new Object(skydomeModel, skydomeMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), true);
-    level->addObject(skydomeObject);
     level->setSkydomeObject(skydomeObject);
     
     //load lighting parameters
