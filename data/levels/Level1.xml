@@ -12115,6 +12115,7 @@
 </terrain>
 
 <skydome>
+    <model>skydome.obj</model>
     <texture>skydomeNew.png</texture>
 </skydome>
 
