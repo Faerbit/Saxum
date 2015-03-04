@@ -81,6 +81,23 @@
     </light>
 </composition>
 
+<!-- switchtorch -->
+<composition>
+    <typeID>81</typeID>
+    <ignoreHeightmap>false</ignoreHeightmap>
+    <object>
+        <modelPath>torch.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>0.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.0</scale>
+        <mass>0.0</mass>
+    </object>
+</composition>
+
 <!-- Lightsource -->
 <composition>
     <typeID>85</typeID>
@@ -465,15 +482,33 @@
     <object>
         <modelPath>brazier.obj</modelPath>
         <xOffset>0.0</xOffset>
-        <yOffset>5.0</yOffset>
+        <yOffset>2</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>3.0</scale>
+        <mass>0.0</mass>
+    </object>
+</composition>
+
+<!-- Hint -->
+<composition>
+    <typeID>250</typeID>
+    <ignoreHeightmap>false</ignoreHeightmap>
+    <object>
+        <modelPath>hint.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>0.1</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
         <yRot>0.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.5</scale>
-        <mass>3.0</mass>
+        <mass>0.0</mass>
     </object>
 </composition>
+
 
 
 
@@ -632,6 +667,19 @@
 <objectData>
     <modelPath>brazier.obj</modelPath>
     <texturePath>brazierTexture.png</texturePath>
+    <ambientFactor>0.1</ambientFactor>
+    <diffuseFactor>0.6</diffuseFactor>
+    <specularFactor>0.4</specularFactor>
+    <shininess>2.0</shininess>
+    <physicType>TriangleMesh</physicType>
+    <dampningL>0.555</dampningL>
+    <dampningA>0.5</dampningA>
+    <renderable>true</renderable>
+</objectData>
+
+<objectData>
+    <modelPath>hint.obj</modelPath>
+    <texturePath>hintTexture.png</texturePath>
     <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
