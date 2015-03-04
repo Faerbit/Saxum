@@ -721,7 +721,7 @@
         <zPosition>51.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor1.lua</luaScript>
@@ -737,7 +737,7 @@
         <zPosition>51.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor1.lua</luaScript>
@@ -774,7 +774,7 @@
         <zPosition>29.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor3.lua</luaScript>
@@ -790,7 +790,7 @@
         <zPosition>29.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor3.lua</luaScript>
@@ -2451,7 +2451,7 @@
         <zPosition>51.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor4.lua</luaScript>
@@ -2467,7 +2467,7 @@
         <zPosition>51.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor4.lua</luaScript>
@@ -2533,7 +2533,7 @@
         <zPosition>29.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor2.lua</luaScript>
@@ -2549,7 +2549,7 @@
         <zPosition>29.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor2.lua</luaScript>
@@ -3746,7 +3746,7 @@
         <zPosition>67.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openThirdDoor.lua</luaScript>
@@ -3762,7 +3762,7 @@
         <zPosition>67.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openThirdDoor.lua</luaScript>
@@ -6235,7 +6235,7 @@
         <zPosition>159.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openFirstDoor.lua</luaScript>
@@ -6251,7 +6251,7 @@
         <zPosition>159.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openFirstDoor.lua</luaScript>
@@ -6268,7 +6268,7 @@
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
     <xPos>17.500000</xPos>
-    <yOffset>0.0</yOffset>
+    <yOffset>5.0</yOffset>
     <zPos>81.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>94</idBlue>
@@ -8653,7 +8653,7 @@
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
     <xPos>-81.500000</xPos>
-    <yOffset>0.0</yOffset>
+    <yOffset>5.0</yOffset>
     <zPos>4.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>8</idBlue>
@@ -10603,7 +10603,7 @@
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
     <xPos>-172.500000</xPos>
-    <yOffset>0.0</yOffset>
+    <yOffset>5.0</yOffset>
     <zPos>58.500000</zPos>
     <idGreen>0</idGreen>
     <idBlue>178</idBlue>
@@ -11975,7 +11975,7 @@
 
 <physics>
     <friction>0.9</friction>
-    <strength>100.0</strength>
+    <strength>200.0</strength>
 </physics>
 
 <positionConstraint>

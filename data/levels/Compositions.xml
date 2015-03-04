@@ -454,7 +454,7 @@
         <yRot>0.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.5</scale>
-        <mass>3.0</mass>
+        <mass>2.0</mass>
     </object>
 </composition>
 
