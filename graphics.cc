@@ -35,6 +35,25 @@ void Graphics::init(Level* level) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     glEnable(GL_MULTISAMPLE);
+
+    fullscreen_quad_ab = SharedArrayBuffer(new ArrayBuffer());
+    fullscreen_quad_ab->defineAttribute("aPosition", GL_FLOAT, 2);
+    fullscreen_quad_ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
+
+    float quadData[] = {
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f,  1.0f,  1.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+         1.0f, -1.0f,  1.0f, 0.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+        -1.0f,  1.0f,  0.0f, 1.0f
+    };
+
+    fullscreen_quad_ab->setDataElements(6, quadData);
+
+    fullscreen_quad = SharedVertexArrayObject(new VertexArrayObject);
+    fullscreen_quad->attachAllAttributes(fullscreen_quad_ab);
     
     // update lights on creation
     lastUpdate = -lightUpdateDelay;
@@ -67,11 +86,14 @@ void Graphics::init(Level* level) {
     flameShader = ShaderProgramCreator("flame")
         .attributeLocations(flame_positions->getAttributeLocations()).create();
 
+    flamePostShader = ShaderProgramCreator("flame_post")
+        .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
+
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
     // Exit if we need more texture units
-    if (number_of_texture_units < 14) {
-        printf("You need at least 14 texture units to run this application. Exiting\n");
+    if (number_of_texture_units < 15) {
+        printf("You need at least 15 texture units to run this application. Exiting\n");
         exit(-1);
     }
 
@@ -113,13 +135,34 @@ void Graphics::init(Level* level) {
     
     framebuffer_cube = SharedFrameBufferObject(new FrameBufferObject());
 
-
     if (level->getLights()->size() > 0) {
         for(unsigned int i = 0; i<depth_cubeMaps.size(); i++){
             // start with texture unit 4 because the first four are used by the texture and the directional shadow map
             lightingShader->setTexture("shadowMap_cube" + std::to_string(i), depth_cubeMaps.at(i), i+4);
         }
     }
+
+    light_fbo_color_texture = SharedTexture2D(new Texture2D(windowSize, GL_RGBA8));
+    light_fbo_color_texture->setMinFilter(GL_NEAREST);
+    light_fbo_color_texture->setMagFilter(GL_NEAREST);
+    light_fbo_color_texture->setWrapS(GL_CLAMP_TO_BORDER);
+    light_fbo_color_texture->setWrapT(GL_CLAMP_TO_BORDER);
+    light_fbo_depth_texture = SharedTexture2D(new Texture2D(windowSize, GL_DEPTH24_STENCIL8));
+    light_fbo_depth_texture->setMinFilter(GL_NEAREST);
+    light_fbo_depth_texture->setMagFilter(GL_NEAREST);
+    light_fbo_depth_texture->setWrapS(GL_CLAMP_TO_BORDER);
+    light_fbo_depth_texture->setWrapT(GL_CLAMP_TO_BORDER);
+    framebuffer_light = SharedFrameBufferObject(new FrameBufferObject());
+    framebuffer_light->attachColorTexture("oColor", light_fbo_color_texture);
+    framebuffer_light->setDepthTexture(light_fbo_depth_texture);
+    framebuffer_light->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    framebuffer_light->validate();
+
+    flamePostShader->use();
+    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, 15);
+    flamePostShader->setUniform("windowSizeX", int(windowSize.x));
+    flamePostShader->setUniform("windowSizeY", int(windowSize.y));
+
     updateClosestLights();
 }
 
@@ -187,8 +230,8 @@ void Graphics::render(double time)
         }
     }
     
-    // final render pass
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // lighting render pass
+    framebuffer_light->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     lightingShader->use();
@@ -234,15 +277,18 @@ void Graphics::render(double time)
     // render the level
     level->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
 
+    // draw flames on top
+    flameShader->use();
     // cull faces to get consistent color while using alpha
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
-    // draw flames on top
-    flameShader->use();
+
+    // draw with colors
     flameShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
+    flameShader->setUniform("modelViewProjectionMatrix", lightingViewProjectionMatrix);
+    flameShader->setUniform("withColor", true);
     flameShader->setUniform("time", (float) time);
-    flameShader->setUniform("camera", level->getPhysics()->getCameraPosition());
     flameShader->setUniform("bottom", true);
     flameShader->setUniform("left", true);
     flame_positions->render();
@@ -254,7 +300,48 @@ void Graphics::render(double time)
     flameShader->setUniform("left", false);
     flame_positions->render();
 
+    glDepthMask(GL_FALSE);
+
+    // draw slightly larger only for stencil buffer to blur edges
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF); //Set any stencil to 1
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glStencilMask(0xFF);//write to stencil buffer
+    glClear(GL_STENCIL_BUFFER_BIT);//clear stencil buffer
+
+    glm::mat4 modelMatrix = glm::scale(glm::vec3(1.1f));
+    flameShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
+    flameShader->setUniform("modelViewProjectionMatrix", lightingViewProjectionMatrix * modelMatrix);
+    flameShader->setUniform("withColor", false);
+    flameShader->setUniform("time", (float) time);
+    flameShader->setUniform("bottom", true);
+    flameShader->setUniform("left", true);
+    flame_positions->render();
+    flameShader->setUniform("left", false);
+    flame_positions->render();
+    flameShader->setUniform("bottom", false);
+    flameShader->setUniform("left", true);
+    flame_positions->render();
+    flameShader->setUniform("left", false);
+    flame_positions->render();
+
+    glStencilFunc(GL_EQUAL, 1, 0xFF); //Pass test if stencil value is 1
+    glStencilMask(0x00);// don't write to stencil buffer
+
+    glDepthMask(GL_TRUE);
     glDisable(GL_CULL_FACE);
+
+    flamePostShader->use();
+    fullscreen_quad->render();
+
+    glDisable(GL_STENCIL_TEST);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer_light->getObjectName());
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, 0, 0, windowSize.x, windowSize.y,
+            GL_COLOR_BUFFER_BIT, GL_NEAREST);
 }
 
 bool Graphics::compareLightDistances(Light a, Light b) {
@@ -315,7 +402,7 @@ void Graphics::updateLights() {
         lightingShader->setUniform("directionalIntensity",
             level->getDirectionalLight()->getIntensity());
     }
-    float flameData[closestLights.size() * 6] = {};
+    float* flameData = new float[closestLights.size() * 6];
     int flameIndex = 0;
     for (unsigned int i = 0; i<closestLights.size(); i++) {
         if (closestLights.at(i).getFlameYOffset() != 0.0f) {
@@ -337,6 +424,10 @@ void Graphics::resize(glm::uvec2 windowSize) {
     for (unsigned int i = 0; i<depth_directionalMaps.size(); i++) {
         depth_directionalMaps.at(i)->resize(glm::vec2(windowSize.x, windowSize.y));
     }
+    light_fbo_color_texture->resize(windowSize);
+    light_fbo_depth_texture->resize(windowSize);
+    flamePostShader->setUniform("windowSizeX", int(windowSize.x));
+    flamePostShader->setUniform("windowSizeY", int(windowSize.y));
 }
 
 glm::mat4 Graphics::buildViewMatrix(Level* level) {

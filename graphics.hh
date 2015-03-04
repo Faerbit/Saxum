@@ -8,6 +8,8 @@
 
 #include "level.hh"
 
+using namespace ACGL::OpenGL;
+
 class Graphics {
     public:
         Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane, int cube_size, unsigned int maxShadowRenderCount);
@@ -28,16 +30,22 @@ class Graphics {
         float nearPlane;
         float farPlane;
         std::vector<Light> closestLights;
-        ACGL::OpenGL::SharedShaderProgram lightingShader;
-        ACGL::OpenGL::SharedShaderProgram depthCubeShader;
-        ACGL::OpenGL::SharedShaderProgram depthShader;
-        ACGL::OpenGL::SharedShaderProgram flameShader;
-        std::vector<ACGL::OpenGL::SharedTexture2D> depth_directionalMaps;
-        std::vector<ACGL::OpenGL::SharedFrameBufferObject> framebuffer_directional;
-        std::vector<ACGL::OpenGL::SharedTextureCubeMap> depth_cubeMaps;
-        ACGL::OpenGL::SharedFrameBufferObject framebuffer_cube;
-        ACGL::OpenGL::SharedVertexArrayObject flame_positions;
-        ACGL::OpenGL::SharedArrayBuffer flame_positions_ab;
+        SharedShaderProgram lightingShader;
+        SharedShaderProgram depthCubeShader;
+        SharedShaderProgram depthShader;
+        SharedShaderProgram flameShader;
+        SharedShaderProgram flamePostShader;
+        std::vector<SharedTexture2D> depth_directionalMaps;
+        std::vector<SharedFrameBufferObject> framebuffer_directional;
+        std::vector<SharedTextureCubeMap> depth_cubeMaps;
+        SharedFrameBufferObject framebuffer_cube;
+        SharedFrameBufferObject framebuffer_light;
+        SharedTexture2D light_fbo_color_texture;
+        SharedTexture2D light_fbo_depth_texture;
+        SharedVertexArrayObject flame_positions;
+        SharedArrayBuffer flame_positions_ab;
+        SharedVertexArrayObject fullscreen_quad;
+        SharedArrayBuffer fullscreen_quad_ab;
         int cube_size;
         unsigned int maxShadowRenderCount;
         Level* level;

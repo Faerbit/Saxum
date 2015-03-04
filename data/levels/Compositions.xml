@@ -69,7 +69,7 @@
     </object>
     <light>
         <xOffset>0.0</xOffset>
-        <yOffset>2</yOffset>
+        <yOffset>3</yOffset>
         <zOffset>0.0</zOffset>
         <rColour>1.0</rColour>
         <gColour>0.9</gColour>
@@ -452,7 +452,7 @@
         <yRot>0.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.5</scale>
-        <mass>1.0</mass>
+        <mass>3.0</mass>
     </object>
 </composition>
 
