@@ -1,7 +1,7 @@
 #include "trigger.hh"
 #include <sys/stat.h>
 
-Trigger::Trigger(glm::vec3 position, float distance, bool isBigger, Object* object, std::string luaScript, lua_State* luaState, int objectToChange, std::string scriptPath) {
+Trigger::Trigger(glm::vec3 position, float distance, bool isBigger, Object* object, std::string luaScript, lua_State* luaState, int objectToChange, std::string scriptPath, bool undo) {
     this->position=position;
     this->distance=distance;
     this->isBigger=isBigger;
@@ -17,6 +17,7 @@ Trigger::Trigger(glm::vec3 position, float distance, bool isBigger, Object* obje
         printf("The Lua state is NULL in trigger!\n");
     }
     this->objectToChange = objectToChange;
+    this->undo = undo;
 }
 
 Trigger::Trigger(){
@@ -28,11 +29,19 @@ Trigger::~Trigger(){
 void Trigger::triggerUpdate(){
         if (isBigger && (glm::distance(object->getPosition(), position) > distance)) {
             luaL_dofile(luaState, luaScript.c_str());
-            luabridge::getGlobal(luaState, "trigger")(objectToChange);
+            if (undo){
+                luabridge::getGlobal(luaState, "triggerUndo")(objectToChange);
+            }else{
+                luabridge::getGlobal(luaState, "trigger")(objectToChange);
+            }
         }
         else if (!isBigger && (glm::distance(object->getPosition(), position) < distance)) {
             luaL_dofile(luaState, luaScript.c_str());
-            luabridge::getGlobal(luaState, "trigger")(objectToChange);
+            if (undo){
+                luabridge::getGlobal(luaState, "triggerUndo")(objectToChange);
+            }else{
+                luabridge::getGlobal(luaState, "trigger")(objectToChange);
+            }
         }
 }
 
