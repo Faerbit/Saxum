@@ -715,6 +715,7 @@
     </positionConstraint>
     <trigger>
         <name>openSecondDoor1</name>
+        <undo>false</undo>
         <xPosition>-6.5</xPosition>
         <yPosition>22.0</yPosition>
         <zPosition>51.5</zPosition>
@@ -722,6 +723,22 @@
         <targetIdBlue>-</targetIdBlue>
         <distance>0.2</distance>
         <isBiggerThan>true</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>openSecondDoor1.lua</luaScript>
+        <toChangeIdGreen>1</toChangeIdGreen>
+        <toChangeIdBlue>8</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+    <trigger>
+        <name>openSecondDoor1Undo</name>
+        <undo>true</undo>
+        <xPosition>-6.5</xPosition>
+        <yPosition>22.0</yPosition>
+        <zPosition>51.5</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>0.2</distance>
+        <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor1.lua</luaScript>
         <toChangeIdGreen>1</toChangeIdGreen>
@@ -751,6 +768,7 @@
     </positionConstraint>
     <trigger>
         <name>openSecondDoor3</name>
+        <undo>false</undo>
         <xPosition>-6.5</xPosition>
         <yPosition>22.0</yPosition>
         <zPosition>29.5</zPosition>
@@ -758,6 +776,22 @@
         <targetIdBlue>-</targetIdBlue>
         <distance>0.2</distance>
         <isBiggerThan>true</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>openSecondDoor3.lua</luaScript>
+        <toChangeIdGreen>1</toChangeIdGreen>
+        <toChangeIdBlue>8</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+    <trigger>
+        <name>openSecondDoor3Undo</name>
+        <undo>true</undo>
+        <xPosition>-6.5</xPosition>
+        <yPosition>22.0</yPosition>
+        <zPosition>29.5</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>0.2</distance>
+        <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor3.lua</luaScript>
         <toChangeIdGreen>1</toChangeIdGreen>
@@ -2411,6 +2445,7 @@
     </positionConstraint>
     <trigger>
         <name>openSecondDoor4</name>
+        <undo>false</undo>
         <xPosition>-53.5</xPosition>
         <yPosition>22.0</yPosition>
         <zPosition>51.5</zPosition>
@@ -2418,6 +2453,22 @@
         <targetIdBlue>-</targetIdBlue>
         <distance>0.2</distance>
         <isBiggerThan>true</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>openSecondDoor4.lua</luaScript>
+        <toChangeIdGreen>1</toChangeIdGreen>
+        <toChangeIdBlue>8</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+    <trigger>
+        <name>openSecondDoor4Undo</name>
+        <undo>true</undo>
+        <xPosition>-53.5</xPosition>
+        <yPosition>22.0</yPosition>
+        <zPosition>51.5</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>0.2</distance>
+        <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor4.lua</luaScript>
         <toChangeIdGreen>1</toChangeIdGreen>
@@ -2476,6 +2527,7 @@
     </positionConstraint>
     <trigger>
         <name>openSecondDoor2</name>
+        <undo>false</undo>
         <xPosition>-53.5</xPosition>
         <yPosition>22.0</yPosition>
         <zPosition>29.5</zPosition>
@@ -2483,6 +2535,22 @@
         <targetIdBlue>-</targetIdBlue>
         <distance>0.2</distance>
         <isBiggerThan>true</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>openSecondDoor2.lua</luaScript>
+        <toChangeIdGreen>1</toChangeIdGreen>
+        <toChangeIdBlue>8</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+    <trigger>
+        <name>openSecondDoor2Undo</name>
+        <undo>true</undo>
+        <xPosition>-53.5</xPosition>
+        <yPosition>22.0</yPosition>
+        <zPosition>29.5</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>0.2</distance>
+        <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor2.lua</luaScript>
         <toChangeIdGreen>1</toChangeIdGreen>
@@ -3672,6 +3740,7 @@
     </positionConstraint>
     <trigger>
         <name>openThirdDoor</name>
+        <undo>false</undo>
         <xPosition>-161.5</xPosition>
         <yPosition>21.7</yPosition>
         <zPosition>67.5</zPosition>
@@ -3687,6 +3756,7 @@
     </trigger>
     <trigger>
         <name>openThirdDoorUndo</name>
+        <undo>true</undo>
         <xPosition>-161.5</xPosition>
         <yPosition>21.7</yPosition>
         <zPosition>67.5</zPosition>
@@ -3695,7 +3765,7 @@
         <distance>0.2</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
-        <luaScript>openThirdDoorUndo.lua</luaScript>
+        <luaScript>openThirdDoor.lua</luaScript>
         <toChangeIdGreen>0</toChangeIdGreen>
         <toChangeIdBlue>178</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>
@@ -6159,6 +6229,7 @@
     </positionConstraint>
     <trigger>
         <name>openFirstDoor</name>
+        <undo>false</undo>
         <xPosition>17.5</xPosition>
         <yPosition>21.8</yPosition>
         <zPosition>159.5</zPosition>
@@ -6174,6 +6245,7 @@
     </trigger>
     <trigger>
         <name>openFirstDoorUndo</name>
+        <undo>true</undo>
         <xPosition>17.5</xPosition>
         <yPosition>21.8</yPosition>
         <zPosition>159.5</zPosition>
@@ -6182,7 +6254,7 @@
         <distance>0.2</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
-        <luaScript>openFirstDoorUndo.lua</luaScript>
+        <luaScript>openFirstDoor.lua</luaScript>
         <toChangeIdGreen>1</toChangeIdGreen>
         <toChangeIdBlue>94</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>

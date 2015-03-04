@@ -39,9 +39,6 @@ class Graphics {
         std::vector<SharedFrameBufferObject> framebuffer_directional;
         std::vector<SharedTextureCubeMap> depth_cubeMaps;
         SharedFrameBufferObject framebuffer_cube;
-        SharedFrameBufferObject framebuffer_flames;
-        SharedTexture2D flame_fbo_color_texture;
-        SharedTexture2D flame_fbo_depth_texture;
         SharedFrameBufferObject framebuffer_light;
         SharedTexture2D light_fbo_color_texture;
         SharedTexture2D light_fbo_depth_texture;

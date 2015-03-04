@@ -325,6 +325,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                 float xPos = queryFloat(xmlTrigger, "xPosition");
                 float yPos = queryFloat(xmlTrigger, "yPosition");
                 float zPos = queryFloat(xmlTrigger, "zPosition");
+                bool undo = queryBool(xmlTrigger, "undo");
                 glm::vec3 position = glm::vec3(xPos, yPos, zPos);
                 std::string stringTarget = queryString(xmlTrigger, "targetIdGreen");
                 if (stringTarget.compare("-") != 0){
@@ -381,7 +382,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                     printf("No Identifier found for an object that was to be changed by a trigger.\n");
                 }
                 if (object != 0) {
-                    Trigger trigger = Trigger(position, distance, isBigger, object, luaScript, level->getLuaState(), objectToChange, scriptPath);
+                    Trigger trigger = Trigger(position, distance, isBigger, object, luaScript, level->getLuaState(), objectToChange, scriptPath, undo);
                     level->addTrigger(trigger);
                 }
                 else {
