@@ -71,18 +71,19 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     //load the skydome
     XMLElement* skydomeElement = doc->FirstChildElement("skydome");
     std::string skydomeTexture = queryString(skydomeElement, "texture");
-    std::string skydomePath = "../" + globalGeometryPath + "skydome.obj";
+    std::string skydomeModelFileName = queryString(skydomeElement, "model");
+    std::string skydomePath = "../" + globalGeometryPath + skydomeModelFileName;
     if(stat(skydomePath.c_str(), &buf) != 0){
         std::cout << "The object file " << skydomePath << " does not exist." << std::endl;
         exit(-1);
     }
-    Model skydomeModel = Model("skydome.obj", level->getSkydomeSize());
+    Model skydomeModel = Model(skydomeModelFileName, level->getSkydomeSize());
     std::string skydomeTexturePath = "../" + globalTexturePath + skydomeTexture;
     if(stat(skydomeTexturePath.c_str(), &buf) != 0){
         std::cout << "The texture file " << skydomeTexturePath << " does not exist." << std::endl;
         exit(-1);
     }
-    Material skydomeMaterial = Material(skydomeTexture, 0.7f, 0.0f, 0.0f, 0.0f);
+    Material skydomeMaterial = Material(skydomeTexture, 1.0f, 0.0f, 0.0f, 0.0f);
     Object* skydomeObject = new Object(skydomeModel, skydomeMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, 0.0f), true);
     level->setSkydomeObject(skydomeObject);
