@@ -244,8 +244,11 @@ void Graphics::render(double time)
     skydomeShader->use();
     // set fog Parameters
     skydomeShader->setUniform("farPlane", farPlane);
+    skydomeShader->setUniform("skydomeSize", level->getSkydomeSize());
     skydomeShader->setUniform("fogColor", level->getFogColour());
     skydomeShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
+    skydomeShader->setUniform("directionalVector", level->getDirectionalLight()->getPosition());
+    skydomeShader->setUniform("sunColor", level->getDirectionalLight()->getColour());
     level->getSkydome()->render(skydomeShader, false, true, &lightingViewProjectionMatrix);
     
     lightingShader->use();
