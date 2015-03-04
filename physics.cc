@@ -44,25 +44,16 @@ void Physics::takeUpdateStep(float timeDiff)
     
     
     btVector3 position = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition(); //gets a vector from the player to the camera    
+    position = currentDirection;
     position.normalize();
     position *= cameraDistance;
     position += playerBall->getCenterOfMassPosition(); //is the position cameraDistance away from the player in the direction of the camera
   
     //prevent the camera from being dragged along on the ground
-    if (position.getY() < playerBall->getCenterOfMassPosition().getY() + cameraDistance/2)
-        position.setY(playerBall->getCenterOfMassPosition().getY() + cameraDistance/2);
     
     btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
     float str = 50 * dir.length() / cameraBody->getInvMass(); //getInvMass() returns the inverted mass
-    
-          
-    /*if(dir.length() > -0.1f && dir.length() < 0.1f)
-    {
-        cameraBody->setLinearVelocity(btVector3(0,0,0));
-        world->stepSimulation(timeDiff);
-        return;
-    }*/
-    
+
     cameraBody->setLinearVelocity(btVector3(0,0,0));
     cameraBody->applyCentralForce(-dir*str*10) ; //scale the force by camera mass
     counter=0;
@@ -117,7 +108,7 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
     btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia); //next we process all data for the rigid body into info
     
     info.m_friction = friction*2; //here we modify the friction and restitution (bounciness) of the object
-    info.m_restitution = 0.1f;
+    info.m_restitution = 0.0f;
     
     playerBall = new btRigidBody(info); //finally we create the rigid body using the info
     
@@ -164,6 +155,80 @@ void Physics::addTerrain(int width, int length, float** heightData) //The terrai
         printf("No World while adding terrain.\n");
     }
     world->addRigidBody(terrainBody, COL_TERRAIN, COL_TERRAIN | COL_OBJECTS); //COL_XXXX are collision masks, allowing us to ignore collisions between certain object groups (required for buttons)
+}
+
+void Physics::addConvexBody(Entity entity, std::string path, float mass, float dampningL, float dampningA, unsigned indice, float scaling, bool rotate)
+{    
+    
+    if(bodies.size() == indice)
+        throw std::invalid_argument( "Bodies out of Sync" );
+    
+    std::vector< unsigned int > vertexIndices; //temp lists for data sets
+    std::vector< btVector3 > temp_vertices;
+    path = "../" + geometryPath + path;
+    FILE * file = fopen(path.c_str(), "r");
+    if( file == NULL ){
+        throw std::invalid_argument( "Impossible to open the file" ); //create correct filepath and report error if cannot open
+    }
+    while( 1 ){
+        char lineHeader[128];
+        //read the first word of the line
+        int res = fscanf(file, "%s", lineHeader);
+        if (res == EOF)
+            break; //while not at end do loop
+        if ( strcmp( lineHeader, "v" ) == 0 ){ //if a vertex
+            glm::vec3 vertex;
+            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
+            temp_vertices.push_back(btVector3(vertex.x,vertex.y,vertex.z)); //save vertex in array
+        }
+        else if ( strcmp( lineHeader, "f" ) == 0 ){ //if face (index for 3 vertexes for a triangle)
+            std::string vertex1, vertex2, vertex3;
+            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+            vertexIndices.push_back(vertexIndex[0]);
+            vertexIndices.push_back(vertexIndex[1]);
+            vertexIndices.push_back(vertexIndex[2]); //save 3 indexes in array
+        }
+    }
+    //finally start making body
+    btTriangleMesh* triMesh = new btTriangleMesh();
+    
+    for(unsigned i = 2; i < vertexIndices.size();i+=3)
+    {
+        triMesh->addTriangle(temp_vertices[vertexIndices[i]],temp_vertices[vertexIndices[i-1]],temp_vertices[vertexIndices[i-2]]); //for every face (3 elements in vertexIndices) create triangle use the indices to find correct vertexes to make the triangle
+    }
+    
+    btConvexTriangleMeshShape* shape = new btConvexTriangleMeshShape(triMesh,true);
+    shape->setLocalScaling(btVector3(scaling,scaling,scaling)); //we need to add a scaling here because the objects seem to have diffrent sizes when loaded (no clue why, see composition.xml for exact scaling factors)
+    
+    
+    glm::quat glmQuat = glm::quat_cast(entity.getRotation());
+
+    btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(glmQuat.x,glmQuat.y,glmQuat.z,glmQuat.w),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z)));
+	
+    btVector3 inertia(0,0,0);
+    if(mass != 0.0)
+    {
+        shape->calculateLocalInertia((btScalar)mass,inertia);
+    }
+    
+    btRigidBody::btRigidBodyConstructionInfo info(mass,motion,shape,inertia);
+    
+    btRigidBody* body = new btRigidBody(info);
+    
+    body->setDamping(dampningL,dampningA);
+    
+    bodies.push_back(body);
+    
+    world->addRigidBody(body,COL_OBJECTS, objectsPhysicsCollision);
+    
+    if(!rotate)//rotate lets certain objects get inertia (0,0,0) (not rotateable)
+    {
+        body->setAngularFactor(btVector3(0,0,0));
+    }
+    
+    if(bodies.size() != indice)
+        throw std::invalid_argument( "Bodies out of Sync" );
 }
 
 void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA,unsigned indice,float scaling, bool rotate)
@@ -415,15 +480,24 @@ void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength, float dis
 {
     this->cameraDistance = distance;
     //note: in mouseMovement x and y are flipped in contrast to bullet
-    btVector3 change =  playerBall->getCenterOfMassPosition()-cameraBody->getCenterOfMassPosition();
-    change.setY(0);
-    change.normalize(); //normalize so that the distance between camera and body does not matter
-    change *= (mouseMovement.y); //we start with left/right movement because this needs to be calculated via a crossproduct, and the up down value would alter that
-    change = btCross(btVector3(0,1,0),change);
-    change.setY(mouseMovement.x); //scaleing because otherwise oup/down much stronger then left right
-    change *= strength / cameraBody->getInvMass();
+    btVector3 dodo = btVector3(0,1,0).cross(btVector3(currentDirection.x(),0,currentDirection.z()));
+    currentDirection = currentDirection.rotate(dodo,-mouseMovement.x / 100);//mathhelper 3.14159265359
     
-    cameraBody->applyCentralForce(change);
+    btVector3 compare = currentDirection;
+    compare.setY(0);
+    compare.normalize();
+    if(currentDirection.angle(compare)>= 3.14159265359/4)
+    {
+        dodo = btVector3(0,1,0).cross(btVector3(currentDirection.x(),0,currentDirection.z()));
+        compare = compare.rotate(-dodo, 3.14159265359/4);
+        if(currentDirection.y()<0)
+            compare.setY(-compare.y());
+        
+        currentDirection = compare;
+    }
+    
+    currentDirection = currentDirection.rotate(btVector3(0,1,0),mouseMovement.y/100);
+    currentDirection.normalize();
 }
 
 //use the crossproduct to correctly apply a torque to the palyer if function called
