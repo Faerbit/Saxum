@@ -10,9 +10,9 @@ function trigger(objectToChange)
         end
         
         local strength = 100
-        local xPos = 81.5
+        local xPos = 17.5
         local yPos = 25
-        local zPos = 17.5
+        local zPos = 81.5
         level:moveObject(objectToChange, strength, xPos, yPos, zPos)
         
         global.triggeredOpenFirstDoor = false

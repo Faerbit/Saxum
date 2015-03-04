@@ -3,12 +3,16 @@
 in vec3 vNormal;
 in vec2 vTexCoord;
 in vec4 fragPosition;
-in vec4 shadowCoord;
+in vec4 shadowCoord0;
+in vec4 shadowCoord1;
+in vec4 shadowCoord2;
 
 out vec4 oColor;
 
 uniform sampler2D uTexture;
-uniform sampler2DShadow shadowMap;
+uniform sampler2DShadow shadowMap_directional0;
+uniform sampler2DShadow shadowMap_directional1;
+uniform sampler2DShadow shadowMap_directional2;
 uniform samplerCubeShadow shadowMap_cube0;
 uniform samplerCubeShadow shadowMap_cube1;
 uniform samplerCubeShadow shadowMap_cube2;
@@ -56,12 +60,13 @@ vec2 poissonDisk[16] = vec2[](
    vec2( 0.14383161, -0.14100790 )
 );
 
-float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
+float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord, float maxBias ) {
     float visibility = 1.0;
+    const float stretching = 650.0;
     float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
-    bias = clamp(bias, 0.0, 0.01);
+    bias = clamp(bias, 0.0, maxBias);
     for (int i=0; i<4; i++) {
-        visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, shadowCoord.z - bias)));
+        visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/stretching, shadowCoord.z - bias)));
     }
     if (visibility == 1.0-(directionalIntensity/16)*4)
     {
@@ -69,7 +74,7 @@ float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord) {
     }
     else if (visibility != 1.0) {
         for (int i=0; i<12; i++) {
-            visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/700.0, shadowCoord.z - bias)));
+            visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/stretching, shadowCoord.z - bias)));
         }
     }
     return visibility;
@@ -82,7 +87,6 @@ float samplePointShadow(samplerCubeShadow shadowMap, vec3 lightDirection) {
     float compValue = 0.5*(-A*length(lightDirection) + B)/length(lightDirection) + 0.5;
     float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
     bias = clamp(bias, 0.0, 0.01);
-    //return texture(shadowMap, vec4(lightDirection , length(lightDirection)/farPlane - bias));
     return texture(shadowMap, vec4(lightDirection , compValue - bias));
 }
 
@@ -102,7 +106,28 @@ void main()
     // direction lighting
     if(length(directionalLightVector)>0.0f) {
         vec3 directionalVector = normalize(directionalLightVector);
-        float directionalVisibility = sampleDirectionalShadow(shadowMap, shadowCoord);
+        float directionalVisibility = 1.0f;
+        if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.2) {
+            if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.2) {
+                directionalVisibility = sampleDirectionalShadow(shadowMap_directional0, shadowCoord0, 0.001);
+            }
+            else if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.0) {
+                float directionalVisibility0 = sampleDirectionalShadow(shadowMap_directional0, shadowCoord0, 0.001);
+                float directionalVisibility1 = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.002);
+                directionalVisibility = mix(directionalVisibility0, directionalVisibility1, distanceToBorder(shadowCoord0.xy) * 5);
+            }
+            else {
+                directionalVisibility = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.002);
+            }
+        }
+        else if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.0) {
+            float directionalVisibility1 = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.01);
+            float directionalVisibility2 = sampleDirectionalShadow(shadowMap_directional2, shadowCoord2, 0.01);
+            directionalVisibility = mix(directionalVisibility1, directionalVisibility2, distanceToBorder(shadowCoord1.xy) * 5);
+        }
+        else {
+            directionalVisibility = sampleDirectionalShadow(shadowMap_directional2, shadowCoord2, 0.01);
+        }
         diffuseColor += clamp(dot(normalize(vNormal), directionalVector)
         *diffuseFactor*directionalIntensity*directionalColor, 0.0, 1.0)*directionalVisibility;
         vec3 cameraVector = normalize(camera - vec3(fragPosition));
