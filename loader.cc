@@ -127,10 +127,12 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
         int thisType = queryInt(thisComposition, "typeID");
         //iterate over all compositions in Compositions.xml to find the one corresponding to the current composition
         XMLElement* composition = compositions->FirstChildElement("composition");
+        bool typeExists = false;
         for(; composition; composition=composition->NextSiblingElement("composition")){
             int compositionType = queryInt(composition, "typeID");
             //corect composition found
             if(thisType == compositionType){
+                typeExists = true;
                 //iterate over all objects of the composition
                 XMLElement* xmlObject = composition->FirstChildElement("object");
                 int objectNum = 0;
@@ -311,6 +313,9 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                 }//iterating over all lights of the composition
             }//corect composition found
         }//iterating over all compositions in Compositions.xml
+        if (!typeExists){
+            std::cout << "The typeID " << thisType << " exists in the level xml but is not a Compositions." << std::endl;
+        }
     }//iterating over all compositions in Level.xml
     
     //load triggers
