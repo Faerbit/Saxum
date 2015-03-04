@@ -34,7 +34,7 @@ void Graphics::init(Level* level) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-    glEnable(GL_MULTISAMPLE);
+    //glEnable(GL_MULTISAMPLE);
 
     fullscreen_quad_ab = SharedArrayBuffer(new ArrayBuffer());
     fullscreen_quad_ab->defineAttribute("aPosition", GL_FLOAT, 2);
