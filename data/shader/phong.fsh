@@ -60,9 +60,29 @@ vec2 poissonDisk[16] = vec2[](
    vec2( 0.14383161, -0.14100790 )
 );
 
+vec3 poissonDisk3D[16] = vec3[] (
+    vec3( 0.541140674379, -0.67854138769, 0.482325914183 ), 
+    vec3( -0.427608163826, 0.79190057714, -0.403470341832 ), 
+    vec3( -0.226067542852, -0.628594453842, -0.661035377645 ), 
+    vec3( -0.811708612677, -0.0340861134035, 0.580406649804 ), 
+    vec3( 0.731005386334, 0.0695021546098, -0.606146385926 ), 
+    vec3( 0.213076426293, 0.6269493206, 0.744636925499 ), 
+    vec3( -0.124461723355, 0.0768244304602, 0.0386785336463 ), 
+    vec3( -0.945249148757, 0.00944808073483, -0.318861658446 ), 
+    vec3( 0.802723394956, 0.124750583818, 0.273800670393 ), 
+    vec3( -0.0571970562351, -0.156203447559, 0.908410256437 ), 
+    vec3( -0.442066534087, -0.709699743423, 0.232493422739 ), 
+    vec3( -0.317263286361, 0.194934041517, -0.923816906742 ), 
+    vec3( 0.381481981953, 0.798989636516, -0.0466460997255 ), 
+    vec3( -0.42752547127, 0.597430401925, 0.374108050255 ), 
+    vec3( 0.12603138305, -0.980780120028, -0.120190366913 ), 
+    vec3( 0.470540545819, -0.633374601042, -0.585070778068 )
+);
+    
+
 float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord, float maxBias ) {
-    float visibility = 1.0;
     const float stretching = 650.0;
+    float visibility = 1.0;
     float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
     bias = clamp(bias, 0.0, maxBias);
     for (int i=0; i<4; i++) {
@@ -80,14 +100,28 @@ float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord, float
     return visibility;
 }
 
-float samplePointShadow(samplerCubeShadow shadowMap, vec3 lightDirection) {
+float samplePointShadow(samplerCubeShadow shadowMap, vec3 lightDirection, float intensity) {
+    const float stretching = 10.0;
+    float visibility = 1.0;
     float nearPlane = 0.1;
     float A = -(farPlane+nearPlane)/(farPlane-nearPlane);
     float B = -2*(farPlane*nearPlane)/(farPlane - nearPlane);
     float compValue = 0.5*(-A*length(lightDirection) + B)/length(lightDirection) + 0.5;
     float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
     bias = clamp(bias, 0.0, 0.01);
-    return texture(shadowMap, vec4(lightDirection , compValue - bias));
+    for (int i=0; i<4; i++) {
+        visibility -= intensity/16*(1.0-texture(shadowMap, vec4(lightDirection + poissonDisk3D[i]/stretching, compValue - bias)));
+    }
+    if (visibility == 1.0-(directionalIntensity/16)*4)
+    {
+        visibility = 1.0-directionalIntensity;
+    }
+    else if (visibility != 1.0) {
+        for (int i=0; i<12; i++) {
+            visibility -= intensity/16*(1.0-texture(shadowMap, vec4(lightDirection + poissonDisk3D[i]/stretching, compValue - bias)));
+        }
+    }
+    return visibility;
 }
 
 float distanceToBorder(vec2 vector) {
@@ -141,39 +175,41 @@ void main()
     for(int i = 0; i<lightCount; i++) {
         vec3 lightDirection = vec3(fragPosition) - lightSources[i];
         float distance = length(lightDirection);
-        float pointVisibility = 1.0f;
+        float pointVisibility = 1.0;
         // only take lights into account with meaningful contribution
         if (distance < farPlane) {
             if (i == 0 && i<maxShadowRenderCount) {
-                pointVisibility = samplePointShadow(shadowMap_cube0, lightDirection);
+                pointVisibility = samplePointShadow(shadowMap_cube0, lightDirection, lightIntensities[i]);
             }
             if (i == 1 && i<maxShadowRenderCount) {
-                pointVisibility = samplePointShadow(shadowMap_cube1, lightDirection);
+                pointVisibility = samplePointShadow(shadowMap_cube1, lightDirection, lightIntensities[i]);
             }
             if (i == 2 && i<maxShadowRenderCount) {
-                pointVisibility = samplePointShadow(shadowMap_cube2, lightDirection);
+                pointVisibility = samplePointShadow(shadowMap_cube2, lightDirection, lightIntensities[i]);
             }
             if (i == 3 && i<maxShadowRenderCount) {
-                pointVisibility = samplePointShadow(shadowMap_cube3, lightDirection);
+                pointVisibility = samplePointShadow(shadowMap_cube3, lightDirection, lightIntensities[i]);
             }
             if (i == 4 && i<maxShadowRenderCount) {
-                pointVisibility = samplePointShadow(shadowMap_cube4, lightDirection);
+                pointVisibility = samplePointShadow(shadowMap_cube4, lightDirection, lightIntensities[i]);
             }
             if (i == 5 && i<maxShadowRenderCount) {
-                pointVisibility = samplePointShadow(shadowMap_cube5, lightDirection);
+                pointVisibility = samplePointShadow(shadowMap_cube5, lightDirection, lightIntensities[i]);
             }
             if (i == 6 && i<maxShadowRenderCount) {
-                pointVisibility = samplePointShadow(shadowMap_cube6, lightDirection);
+                pointVisibility = samplePointShadow(shadowMap_cube6, lightDirection, lightIntensities[i]);
             }
             if (i == 7 && i<maxShadowRenderCount) {
-                pointVisibility = samplePointShadow(shadowMap_cube7, lightDirection);
+                pointVisibility = samplePointShadow(shadowMap_cube7, lightDirection, lightIntensities[i]);
             }
             if (i == 8 && i<maxShadowRenderCount) {
-                pointVisibility = samplePointShadow(shadowMap_cube8, lightDirection);
+                pointVisibility = samplePointShadow(shadowMap_cube8, lightDirection, lightIntensities[i]);
             }
             if (i == 9 && i<maxShadowRenderCount) {
-                pointVisibility = samplePointShadow(shadowMap_cube9, lightDirection);
+                pointVisibility = samplePointShadow(shadowMap_cube9, lightDirection, lightIntensities[i]);
             }
+            pointVisibility = clamp(pointVisibility, 0.0, 1.0);
+            //pointVisibility = 0.00001;
             vec3 lightVector = normalize(lightSources[i]-vec3(fragPosition));
             float intensity = clamp(exp(-(1/lightIntensities[i])*distance), 0.0, 1.0);
             diffuseColor += clamp(dot(normalize(vNormal), lightVector)
