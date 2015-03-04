@@ -74,6 +74,10 @@ class Physics {
 	void forceMove(glm::vec3 newPosition, unsigned indice);
 	void forceMoveCamera(glm::vec3 newPosition);    
 	void addConvexBody(Entity entity, std::string path, float mass, float dampningL, float dampningA, unsigned indice, float scaling, bool rotate);
+	void prepareCollisionDetection();
+	bool playerWithGround();
+	bool playerWithObject();
+    void forcePlayer(glm::vec3 newPosition);
 
     struct positionConstraint{btRigidBody* body; float strength; btVector3 position;};
 
@@ -98,6 +102,8 @@ class Physics {
     int counter = 0;
     std::string geometryPath;
     float cameraDistance = 5; //distance of the camera to the player.
+    bool playerTerrainCol = false;
+    bool playerObjectColision = false;
 };
 
 enum collisionTypes{
