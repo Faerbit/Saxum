@@ -278,18 +278,16 @@ void Graphics::render(double time)
     level->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
 
     // draw flames on top
+    flameShader->use();
     // cull faces to get consistent color while using alpha
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    glEnable(GL_STENCIL_TEST);
-    glStencilFunc(GL_ALWAYS, 1, 0xFF); //Set any stencil to 1
-    glStencilFunc(GL_ALWAYS, 1, 0xFF);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-    glStencilMask(0xFF);//write to stencil buffer
-    glClear(GL_STENCIL_BUFFER_BIT);//clear stencil buffer
 
-    flameShader->use();
+
+    // draw with colors
     flameShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
+    flameShader->setUniform("modelViewProjectionMatrix", lightingViewProjectionMatrix);
+    flameShader->setUniform("withColor", true);
     flameShader->setUniform("time", (float) time);
     flameShader->setUniform("bottom", true);
     flameShader->setUniform("left", true);
@@ -302,10 +300,36 @@ void Graphics::render(double time)
     flameShader->setUniform("left", false);
     flame_positions->render();
 
-    glDisable(GL_CULL_FACE);
+    glDepthMask(GL_FALSE);
+
+    // draw slightly larger only for stencil buffer to blur edges
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF); //Set any stencil to 1
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glStencilMask(0xFF);//write to stencil buffer
+    glClear(GL_STENCIL_BUFFER_BIT);//clear stencil buffer
+
+    glm::mat4 modelMatrix = glm::scale(glm::vec3(1.1f));
+    flameShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
+    flameShader->setUniform("modelViewProjectionMatrix", lightingViewProjectionMatrix * modelMatrix);
+    flameShader->setUniform("withColor", false);
+    flameShader->setUniform("time", (float) time);
+    flameShader->setUniform("bottom", true);
+    flameShader->setUniform("left", true);
+    flame_positions->render();
+    flameShader->setUniform("left", false);
+    flame_positions->render();
+    flameShader->setUniform("bottom", false);
+    flameShader->setUniform("left", true);
+    flame_positions->render();
+    flameShader->setUniform("left", false);
+    flame_positions->render();
 
     glStencilFunc(GL_EQUAL, 1, 0xFF); //Pass test if stencil value is 1
-    glStencilMask(0x00); //don't write to stencil buffer
+    glStencilMask(0x00);// don't write to stencil buffer
+
+    glDepthMask(GL_TRUE);
+    glDisable(GL_CULL_FACE);
 
     flamePostShader->use();
     fullscreen_quad->render();
