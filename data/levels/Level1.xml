@@ -11970,7 +11970,7 @@
 </terrain>
 
 <skydome>
-    <texture>skydome.png</texture>
+    <texture>skydomeNew.png</texture>
 </skydome>
 
 <physics>
