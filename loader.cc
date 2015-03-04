@@ -259,6 +259,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                             
                             if(compositionType == 20){
                                 level->setCameraCenter(object);
+                                level->setPlayerIndex(objectIdentifier[1]);
                             }
                         }//objectData found
                     }//finding the objectData

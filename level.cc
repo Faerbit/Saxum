@@ -38,6 +38,7 @@ void Level::load() {
         .addFunction("deleteObject", &Level::deleteObject)
         .addFunction("getObjectCount", &Level::getPhysicsObjectsVectorSize)
         .addFunction("moveObject", &Level::moveObject)
+        .addFunction("resetPlayer", &Level::resetPlayer)
         .endClass();
     //Push the level to Lua as a global variable
     luabridge::push(luaState, this);
@@ -180,7 +181,12 @@ void Level::deleteObject(int objectIndex){
 void Level::resetPlayer(){
     Loader loader = Loader();
     glm::vec3 newPosition = loader.reloadPlayerPosition(xmlFilePath, this);
-    //TODO cameraCenter.setPosition(newPosition);
+    physics.forceMove(newPosition, playerIndex);
+    physics.forceMoveCamera(newPosition + glm::vec3(1,0,0));
+}
+
+void Level::setPlayerIndex(int index){
+    playerIndex = index;
 }
 
 void Level::setStrength(float strength) {
