@@ -12,5 +12,4 @@ void main() {
     float B = -2*(farPlane*nearPlane)/(farPlane - nearPlane);
     float value = 0.5*(-A*length(fragPosition) + B)/length(fragPosition) + 0.5;
     gl_FragDepth = value;
-    //gl_FragDepth = length(fragPosition)/farPlane;
 }
