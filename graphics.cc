@@ -92,11 +92,14 @@ void Graphics::init(Level* level) {
     flamePostShader = ShaderProgramCreator("flame_post")
         .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
 
+    gaussShader = ShaderProgramCreator("gauss_blur")
+        .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
+
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
     // Exit if we need more texture units
-    if (number_of_texture_units < 16) {
-        printf("You need at least 16 texture units to run this application. Exiting\n");
+    if (number_of_texture_units < 17) {
+        printf("You need at least 17 texture units to run this application. Exiting\n");
         exit(-1);
     }
 
@@ -136,7 +139,7 @@ void Graphics::init(Level* level) {
         depth_cubeMaps.at(i)->setCompareMode(GL_COMPARE_REF_TO_TEXTURE);
     }
     
-    framebuffer_cube = SharedFrameBufferObject(new FrameBufferObject());
+    framebuffer_cube_blurred = SharedFrameBufferObject(new FrameBufferObject());
 
     if (level->getLights()->size() > 0) {
         for(unsigned int i = 0; i<depth_cubeMaps.size(); i++){
@@ -166,8 +169,24 @@ void Graphics::init(Level* level) {
     flamePostShader->setUniform("windowSizeX", int(windowSize.x));
     flamePostShader->setUniform("windowSizeY", int(windowSize.y));
 
+
     skydomeShader->use();
     skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture()->getReference(), 15);
+
+    framebuffer_cube_texture = SharedTexture2D(new Texture2D(glm::vec2(cube_size, cube_size), GL_RGBA8));
+    framebuffer_cube_texture->setMinFilter(GL_NEAREST);
+    framebuffer_cube_texture->setMagFilter(GL_NEAREST);
+    framebuffer_cube_texture->setWrapS(GL_CLAMP_TO_BORDER);
+    framebuffer_cube_texture->setWrapT(GL_CLAMP_TO_BORDER);
+    
+    framebuffer_cube = SharedFrameBufferObject(new FrameBufferObject());
+    framebuffer_cube->attachColorTexture("gl_FragDepth", framebuffer_cube_texture);
+    framebuffer_cube->validate();
+
+    gaussShader->use();
+    gaussShader->setTexture("screen", framebuffer_cube_texture, 16);
+    gaussShader->setUniform("windowSizeX", cube_size);
+    gaussShader->setUniform("windowSizeY", cube_size);
 
     updateClosestLights();
 }
@@ -190,19 +209,30 @@ void Graphics::render(double time)
         glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f)};
 
 
-    framebuffer_cube->bind();
     for (unsigned int i_pointlight = 0; i_pointlight<closestLights.size() && i_pointlight < maxShadowRenderCount; i_pointlight++) {
         // render each side of the cube
         for (int i_face = 0; i_face<6; i_face++) {
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
+            framebuffer_cube->bind();
+            depthCubeShader->use();
             glClear(GL_DEPTH_BUFFER_BIT);
             glm::mat4 viewMatrix = glm::lookAt(closestLights.at(i_pointlight).getPosition(),
                 closestLights.at(i_pointlight).getPosition() + looking_directions[i_face], upvectors[i_face]);
             glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * viewMatrix;
-            std::vector<glm::mat4> viewMatrixVector = std::vector<glm::mat4>();
-            viewMatrixVector.push_back(viewMatrix);
+            std::vector<glm::mat4> viewMatrixVector = std::vector<glm::mat4>(1);
+            viewMatrixVector.at(0) = viewMatrix;
             level->render(depthCubeShader, false, &depthViewProjectionMatrix_face, &viewMatrixVector);
             if (!framebuffer_cube->isFrameBufferObjectComplete()) {
+                printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
+            }
+            framebuffer_cube_blurred->bind();
+            gaussShader->use();
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
+            glClear(GL_DEPTH_BUFFER_BIT);
+            gaussShader->setUniform("verticalPass", true);
+            fullscreen_quad->render();
+            gaussShader->setUniform("verticalPass", false);
+            fullscreen_quad->render();
+            if (!framebuffer_cube_blurred->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
         }
