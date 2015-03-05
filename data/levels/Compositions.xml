@@ -482,12 +482,12 @@
     <object>
         <modelPath>brazier.obj</modelPath>
         <xOffset>0.0</xOffset>
-        <yOffset>2</yOffset>
+        <yOffset>0.5</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
         <yRot>0.0</yRot>
         <zRot>0.0</zRot>
-        <scale>3.0</scale>
+        <scale>6.0</scale>
         <mass>0.0</mass>
     </object>
 </composition>
@@ -670,7 +670,7 @@
     <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
-    <shininess>2.0</shininess>
+    <shininess>1.0</shininess>
     <physicType>TriangleMesh</physicType>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
