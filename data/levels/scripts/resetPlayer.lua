@@ -2,12 +2,14 @@ local global = require( "global" )
 if(global.triggeredResetPlayer == nil) then
     global.triggeredResetPlayer = false
 end
+
 function trigger(objectToChange)
     if(global.triggeredResetPlayer == false) then
         if(not level) then
             print("No level found in Lua!")
             return
         end
+        
         if(global.triggeredOpenFirstDoor == true) then
             if(global.openedSecondDoor == true) then
                 if(global.triggeredOpenThirdDoor == true) then
@@ -22,7 +24,6 @@ function trigger(objectToChange)
             level:resetPlayer()
         end
         
-        --global.triggeredResetPlayer = true
         print("reset player")
     end
 end
