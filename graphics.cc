@@ -90,6 +90,9 @@ void Graphics::init(Level* level) {
     flameShader = ShaderProgramCreator("flame")
         .attributeLocations(flame_positions->getAttributeLocations()).create();
 
+    flameColorShader = ShaderProgramCreator("flame_color")
+        .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
+
     flamePostShader = ShaderProgramCreator("flame_post")
         .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
 
@@ -99,8 +102,8 @@ void Graphics::init(Level* level) {
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
     // Exit if we need more texture units
-    if (number_of_texture_units < 18) {
-        printf("You need at least 18 texture units to run this application. Exiting\n");
+    if (number_of_texture_units < 19) {
+        printf("You need at least 19 texture units to run this application. Exiting\n");
         exit(-1);
     }
 
@@ -187,6 +190,9 @@ void Graphics::init(Level* level) {
     mergeShader->use();
     mergeShader->setTexture("flame_fbo", flame_fbo_color_texture, 16);
     mergeShader->setTexture("light_fbo", light_fbo_color_texture, 17);
+
+    flameColorShader->use();
+    flameColorShader->setTexture("flame_fbo", flame_fbo_color_texture, 18);
 
     updateClosestLights();
 }
@@ -340,8 +346,11 @@ void Graphics::render(double time)
     flame_positions->render();
     glDisable(GL_CULL_FACE);
 
-    framebuffer_light->bind();
     glDepthMask(GL_FALSE);
+    flameColorShader->use();
+    fullscreen_quad->render();
+
+    framebuffer_light->bind();
     mergeShader->use();
     glDisable(GL_DEPTH_TEST);
     fullscreen_quad->render();

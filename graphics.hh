@@ -35,6 +35,7 @@ class Graphics {
         SharedShaderProgram depthCubeShader;
         SharedShaderProgram depthShader;
         SharedShaderProgram flameShader;
+        SharedShaderProgram flameColorShader;
         SharedShaderProgram flamePostShader;
         SharedShaderProgram mergeShader;
         std::vector<SharedTexture2D> depth_directionalMaps;
