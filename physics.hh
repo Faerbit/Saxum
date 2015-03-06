@@ -72,7 +72,7 @@ class Physics {
 	void kill();
 	void addButtonFrame(Entity entity);
 	void forceMove(glm::vec3 newPosition, unsigned indice);
-	void forceMoveCamera(glm::vec3 newPosition);    
+	void forceMoveCamera(btVector3 newPosition);    
 	void addConvexBody(Entity entity, std::string path, float mass, float dampningL, float dampningA, unsigned indice, float scaling, bool rotate);
 	void prepareCollisionDetection();
 	bool playerWithGround();
@@ -82,6 +82,10 @@ class Physics {
     struct positionConstraint{btRigidBody* body; float strength; btVector3 position;};
 
     private:
+    btVector3 startPosition = btVector3(0,0,0);
+    float resetHight = 0;
+    bool simulationActive = true;
+    bool sinking = true;
     btVector3 currentDirection = btVector3(1,1,1);
 	btRigidBody* playerBall;    //allows for easier access to the ball
 	btRigidBody* terrainBody;   //duh
