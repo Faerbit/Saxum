@@ -11936,6 +11936,38 @@
         <toChangeIdBlue>105</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>
     </trigger>
+    <trigger>
+        <name>sunStart</name>
+        <undo>false</undo>
+        <xPosition>-216</xPosition>
+        <yPosition>20</yPosition>
+        <zPosition>34</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>10</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>sunStart.lua</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>105</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+    <trigger>
+        <name>sunUpdate</name>
+        <undo>false</undo>
+        <xPosition>-216</xPosition>
+        <yPosition>20</yPosition>
+        <zPosition>34</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>10</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>sunUpdate.lua</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>105</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
 </composition>
 
 <composition>
