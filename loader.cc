@@ -70,22 +70,28 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     
     //load the skydome
     XMLElement* skydomeElement = doc->FirstChildElement("skydome");
-    std::string skydomeTexture = queryString(skydomeElement, "texture");
-    std::string skydomePath = "../" + globalGeometryPath + "skydome.obj";
+    std::string skydomeModelFileName = queryString(skydomeElement, "model");
+    std::string skydomePath = "../" + globalGeometryPath + skydomeModelFileName;
     if(stat(skydomePath.c_str(), &buf) != 0){
         std::cout << "The object file " << skydomePath << " does not exist." << std::endl;
         exit(-1);
     }
-    Model skydomeModel = Model("skydome.obj", level->getSkydomeSize());
+    Model skydomeModel = Model(skydomeModelFileName, level->getSkydomeSize());
+    std::string skydomeTexture = queryString(skydomeElement, "texture");
     std::string skydomeTexturePath = "../" + globalTexturePath + skydomeTexture;
     if(stat(skydomeTexturePath.c_str(), &buf) != 0){
         std::cout << "The texture file " << skydomeTexturePath << " does not exist." << std::endl;
         exit(-1);
     }
-    Material skydomeMaterial = Material(skydomeTexture, 0.7f, 0.0f, 0.0f, 0.0f);
-    Object* skydomeObject = new Object(skydomeModel, skydomeMaterial, glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f), true);
-    level->addObject(skydomeObject);
+    Material skydomeMaterial = Material(skydomeTexture, 1.0f, 0.0f, 0.0f, 0.0f);
+    std::string nightTexture = queryString(skydomeElement, "nightTexture");
+    std::string nightTexturePath = "../" + globalTexturePath + nightTexture;
+    if(stat(nightTexturePath.c_str(), &buf) != 0){
+        std::cout << "The texture file " << nightTexturePath << " does not exist." << std::endl;
+        exit(-1);
+    }
+    Material nightMaterial = Material(nightTexture, 1.0f, 0.0f, 0.0f, 0.0f);
+    Skydome skydomeObject = Skydome(skydomeModel, skydomeMaterial, nightMaterial);
     level->setSkydomeObject(skydomeObject);
     
     //load lighting parameters
@@ -128,10 +134,12 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
         int thisType = queryInt(thisComposition, "typeID");
         //iterate over all compositions in Compositions.xml to find the one corresponding to the current composition
         XMLElement* composition = compositions->FirstChildElement("composition");
+        bool typeExists = false;
         for(; composition; composition=composition->NextSiblingElement("composition")){
             int compositionType = queryInt(composition, "typeID");
             //corect composition found
             if(thisType == compositionType){
+                typeExists = true;
                 //iterate over all objects of the composition
                 XMLElement* xmlObject = composition->FirstChildElement("object");
                 int objectNum = 0;
@@ -312,6 +320,9 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                 }//iterating over all lights of the composition
             }//corect composition found
         }//iterating over all compositions in Compositions.xml
+        if (!typeExists){
+            std::cout << "The typeID " << thisType << " exists in the level xml but is not a Compositions." << std::endl;
+        }
     }//iterating over all compositions in Level.xml
     
     //load triggers

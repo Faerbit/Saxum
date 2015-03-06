@@ -39,6 +39,8 @@ void Level::load() {
         .addFunction("getObjectCount", &Level::getPhysicsObjectsVectorSize)
         .addFunction("moveObject", &Level::moveObject)
         .addFunction("resetPlayer", &Level::resetPlayer)
+        .addFunction("movePlayer", &Level::movePlayer)
+        .addFunction("setSunDirection", &Level::setSunDirection)
         .endClass();
     //Push the level to Lua as a global variable
     luabridge::push(luaState, this);
@@ -50,9 +52,11 @@ void Level::load() {
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs) {
     for(unsigned int i = 0; i<objects.size(); i++) {
-        // do not project shadow of skydome 
-        if(lightingPass || (objects.at(i) != skydome)) {
-            objects.at(i)->render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
+        if (lightingPass) {
+            objects.at(i)->render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
+        }
+        else {
+            objects.at(i)->render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
         }
     }
 }
@@ -112,7 +116,7 @@ void Level::update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseD
             physicsObjects[i]->setRotation(physics.getRotation(i));
         }
         
-        skydome->setPosition(glm::vec3(cameraCenter->getPosition().x, 
+        skydome.setPosition(glm::vec3(cameraCenter->getPosition().x, 
             0.0f, cameraCenter->getPosition().z));
 
         if (runTime > 2.0f) {
@@ -186,8 +190,12 @@ void Level::deleteObject(int objectIndex){
 void Level::resetPlayer(){
     Loader loader = Loader();
     glm::vec3 newPosition = loader.reloadPlayerPosition(xmlFilePath, this);
-    physics.forceMove(newPosition, playerIndex);
-    physics.forceMoveCamera(newPosition + glm::vec3(1,0,0));
+    physics.forcePlayer(newPosition);
+}
+
+void Level::movePlayer(float xPosition, float yPosition, float zPosition){
+    glm::vec3 newPosition = glm::vec3(xPosition, yPosition, zPosition);
+    physics.forcePlayer(newPosition);
 }
 
 void Level::setPlayerIndex(int index){
@@ -198,7 +206,7 @@ void Level::setStrength(float strength) {
     this->strength = strength;
 }
 
-void Level::setSkydomeObject(Object* object){
+void Level::setSkydomeObject(Skydome object){
     this->skydome = object;
 }
 
@@ -220,6 +228,13 @@ void Level::setFogColour(glm::vec4 colour) {
 
 void Level::setDirectionalLight(Light light) {
     this->directionalLight = light;
+}
+
+void Level::setSunDirection(float x, float y, float z){
+    glm::vec3 lightPosition = glm::vec3(x,y,z);
+    glm::vec3 lightColour = this->directionalLight.getColour();
+    float lightIntensity = this->directionalLight.getIntensity();
+    this->directionalLight = Light(lightPosition, lightColour, lightIntensity);
 }
 
 Physics* Level::getPhysics() {
@@ -252,4 +267,8 @@ lua_State* Level::getLuaState() {
 
 Terrain* Level::getTerrain() {
     return &terrain;
+}
+
+Skydome* Level::getSkydome() {
+    return &skydome;
 }

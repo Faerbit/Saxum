@@ -15,7 +15,7 @@ function trigger(objectToChange)
         
         local strength = 100
         local xPos = 17.5
-        local yPos = 33
+        local yPos = 33.0
         local zPos = 81.5
         level:moveObject(objectToChange, strength, xPos, yPos, zPos)
         
@@ -35,7 +35,7 @@ function triggerUndo(objectToChange)
         
         local strength = 100
         local xPos = 17.5
-        local yPos = 25
+        local yPos = 25.0
         local zPos = 81.5
         level:moveObject(objectToChange, strength, xPos, yPos, zPos)
         
