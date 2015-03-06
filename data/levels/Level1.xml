@@ -4,6 +4,906 @@
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
+    <xPos>142.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>166.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>107</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>110.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>197.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>106</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>27.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>92.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>105</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>26.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>159.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>104</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>23.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>236.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>102</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>17.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>39.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>101</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>17.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>4.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>100</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>8.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>159.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>93</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>8.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>92.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>81</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-18.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>231.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>43</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-29.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>74.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>18</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-29.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>39.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>6</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-29.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>4.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>5</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-42.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>134.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>4</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-76.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>74.500000</zPos>
+    <idGreen>1</idGreen>
+    <idBlue>0</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-76.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>39.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>255</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-76.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>4.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>251</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-86.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>216.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>250</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-95.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>14.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>249</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-96.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>216.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>245</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-101.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>108.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>244</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-101.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>91.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>243</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-107.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>1.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>239</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-109.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>167.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>238</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-150.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>72.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>237</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-166.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>56.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>233</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-204.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>31.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>232</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-226.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>31.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>140</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-227.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>132.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>139</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-228.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>99.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>138</idBlue>
+    <typeID>80</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
     <xPos>-215.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>31.500000</zPos>
