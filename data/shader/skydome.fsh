@@ -14,7 +14,7 @@ uniform vec3 cameraCenter;
 uniform vec3 sunColor;
 uniform vec3 directionalVector;
 
-const float sunSize = 40.0;
+const float sunSize = 20.0;
 
 void main() {
     vec4 textureColor = vec4(0.0, 0.0, 0.0, 1.0);
