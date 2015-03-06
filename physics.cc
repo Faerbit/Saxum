@@ -57,14 +57,14 @@ void Physics::takeUpdateStep(float timeDiff)
         float str = 50 * dir.length() / cameraBody->getInvMass(); //getInvMass() returns the inverted mass
 
         cameraBody->setLinearVelocity(btVector3(0,0,0));
-        cameraBody->applyCentralForce(-dir*str*10) ; //scale the force by camera mass
+        cameraBody->applyCentralForce(-dir*str*3) ; //scale the force by camera mass
         counter=0;
-        float speed = cameraBody->getLinearVelocity().length();
-        if(speed>20.0f)
+        float force = cameraBody->getTotalForce().length();
+        if(force>1.0f)
         {
-            position = cameraBody->getLinearVelocity();
-            position.normalize();
-            cameraBody->setLinearVelocity(position*20);
+            btVector3 currentForce = cameraBody->getTotalForce();
+            cameraBody->clearForces();
+            cameraBody->applyCentralForce(currentForce*1.0/force);
         }
         world->stepSimulation(timeDiff);
     }
@@ -73,7 +73,7 @@ void Physics::takeUpdateStep(float timeDiff)
         if(sinking)
         {
             btVector3 currentPos = playerBall->getCenterOfMassPosition();
-            currentPos -= btVector3(0,0.003f,0);
+            currentPos -= btVector3(0,0.005f,0);
             playerBall->setCenterOfMassTransform(btTransform(playerBall->getOrientation(),currentPos));
             if(playerBall->getCenterOfMassPosition().y() < resetHight - 3)
             {
@@ -470,7 +470,7 @@ bool Physics::playerWithObject()
 
 void Physics::addCamera() //Camera Creator automatically called when player is created
 {
-    btSphereShape* sphere = new btSphereShape(0.5f); //we use this to make a more interesting camera, that does not interpenetrate with the terrain/objects
+    btSphereShape* sphere = new btSphereShape(1.0f); //we use this to make a more interesting camera, that does not interpenetrate with the terrain/objects
     
     btVector3 inertia(0,0,0); //rotation handled elsewhere (as it always has to look at the player)
     
@@ -535,7 +535,7 @@ void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength, float dis
     this->cameraDistance = distance;
     //note: in mouseMovement x and y are flipped in contrast to bullet
     btVector3 dodo = btVector3(0,1,0).cross(btVector3(currentDirection.x(),0,currentDirection.z()));
-    currentDirection = currentDirection.rotate(dodo,-mouseMovement.x / 50);//mathhelper 3.14159265359
+    currentDirection = currentDirection.rotate(dodo,mouseMovement.x / 500);//mathhelper 3.14159265359
     
     btVector3 compare = currentDirection;
     compare.setY(0);
@@ -550,7 +550,7 @@ void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength, float dis
         currentDirection = compare;
     }
     
-    currentDirection = currentDirection.rotate(btVector3(0,1,0),-mouseMovement.y/100);
+    currentDirection = currentDirection.rotate(btVector3(0,1,0),-mouseMovement.y/1000);
     currentDirection.normalize();
 }
 
