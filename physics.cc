@@ -24,47 +24,79 @@ void Physics::init(std::string geometryPath) //prepares bullet by creating all i
 
 void Physics::takeUpdateStep(float timeDiff)
 {
-    counter++;
-    if(counter<1)
+    if(simulationActive)
     {
-        world->stepSimulation(timeDiff); //allows the world to be simmulated correctly indipendant of the timedifferences between frames
-        return;
-    }
-    
-    for(unsigned i = 0; i < allPositionConstraints.size();i++) //this handles the spring constraints
-    {
-        if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition()) //if constraint != position of the body because otherwise dir = 0
+        counter++;
+        if(counter<1)
         {
-            btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
-            dir = dir*allPositionConstraints[i].strength - allPositionConstraints[i].body->getLinearVelocity()
-                                                           *allPositionConstraints[i].body->getLinearVelocity().length();
-            allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength); //apply a foce upon the object pushing it towards the constraint position
+            world->stepSimulation(timeDiff); //allows the world to be simmulated correctly indipendant of the timedifferences between frames
+            return;
+        }
+        
+        for(unsigned i = 0; i < allPositionConstraints.size();i++) //this handles the spring constraints
+        {
+            if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition()) //if constraint != position of the body because otherwise dir = 0
+            {
+                btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
+                dir = dir*allPositionConstraints[i].strength - allPositionConstraints[i].body->getLinearVelocity()
+                                                               *allPositionConstraints[i].body->getLinearVelocity().length();
+                allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength); //apply a foce upon the object pushing it towards the constraint position
+            }
+        }
+        
+        
+        btVector3 position = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition(); //gets a vector from the player to the camera    
+        position = currentDirection;
+        position.normalize();
+        position *= cameraDistance;
+        position += playerBall->getCenterOfMassPosition(); //is the position cameraDistance away from the player in the direction of the camera
+      
+        //prevent the camera from being dragged along on the ground
+        
+        btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
+        float str = 50 * dir.length() / cameraBody->getInvMass(); //getInvMass() returns the inverted mass
+
+        cameraBody->setLinearVelocity(btVector3(0,0,0));
+        cameraBody->applyCentralForce(-dir*str*10) ; //scale the force by camera mass
+        counter=0;
+        float speed = cameraBody->getLinearVelocity().length();
+        if(speed>20.0f)
+        {
+            position = cameraBody->getLinearVelocity();
+            position.normalize();
+            cameraBody->setLinearVelocity(position*20);
+        }
+        world->stepSimulation(timeDiff);
+    }
+    else
+    {
+        if(sinking)
+        {
+            btVector3 currentPos = playerBall->getCenterOfMassPosition();
+            currentPos -= btVector3(0,0.003f,0);
+            playerBall->setCenterOfMassTransform(btTransform(playerBall->getOrientation(),currentPos));
+            if(playerBall->getCenterOfMassPosition().y() < resetHight - 3)
+            {
+                playerBall->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),btVector3(startPosition.x(),startPosition.y() - 3,startPosition.z())));
+                playerBall->setLinearVelocity(btVector3(0,0,0));
+                playerBall->setAngularVelocity(btVector3(0,0,0));
+                forceMoveCamera(startPosition + btVector3(currentDirection.x()*cameraDistance,currentDirection.y()*cameraDistance,currentDirection.z()*cameraDistance));
+                sinking = false;
+            }
+        }
+        else
+        {            
+            btVector3 currentPos = playerBall->getCenterOfMassPosition();
+            currentPos += btVector3(0,0.009f,0);                                
+            playerBall->setCenterOfMassTransform(btTransform(playerBall->getOrientation(),currentPos));
+            
+            if(playerBall->getCenterOfMassPosition().y() >= startPosition.y() + 1)
+            {
+                sinking = true;
+                simulationActive = true;
+            }
         }
     }
-    
-    
-    btVector3 position = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition(); //gets a vector from the player to the camera    
-    position = currentDirection;
-    position.normalize();
-    position *= cameraDistance;
-    position += playerBall->getCenterOfMassPosition(); //is the position cameraDistance away from the player in the direction of the camera
-  
-    //prevent the camera from being dragged along on the ground
-    
-    btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
-    float str = 50 * dir.length() / cameraBody->getInvMass(); //getInvMass() returns the inverted mass
-
-    cameraBody->setLinearVelocity(btVector3(0,0,0));
-    cameraBody->applyCentralForce(-dir*str*10) ; //scale the force by camera mass
-    counter=0;
-    float speed = cameraBody->getLinearVelocity().length();
-    if(speed>20.0f)
-    {
-        position = cameraBody->getLinearVelocity();
-        position.normalize();
-        cameraBody->setLinearVelocity(position*20);
-    }
-    world->stepSimulation(timeDiff);
 }
 
 void Physics::removePositionConstraint(int bodyIndice) //remover function for deleting all pos constraints on one body
@@ -105,6 +137,8 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
     
     btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(glmQuat.x,glmQuat.y,glmQuat.z,glmQuat.w),btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z))); //next we define the motionstate, wich describes the innital position and rotation
     
+    startPosition =btVector3(entity.getPosition().x,entity.getPosition().y,entity.getPosition().z);
+    
     btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia); //next we process all data for the rigid body into info
     
     info.m_friction = friction*2; //here we modify the friction and restitution (bounciness) of the object
@@ -144,7 +178,7 @@ void Physics::addTerrain(int width, int length, float** heightData) //The terrai
     
     btHeightfieldTerrainShape* terrainShape = new btHeightfieldTerrainShape(length,width,heightfield,highest,1,true,false);
     btRigidBody::btRigidBodyConstructionInfo info(0,new btDefaultMotionState(),terrainShape,btVector3(0,0,0)); //next we process all data for the rigid body into info
-    info.m_friction = 1;
+    info.m_friction = 0.8f;
     info.m_restitution = 0;
     btRigidBody* tBody = new btRigidBody(info);
     
@@ -436,7 +470,7 @@ bool Physics::playerWithObject()
 
 void Physics::addCamera() //Camera Creator automatically called when player is created
 {
-    btSphereShape* sphere = new btSphereShape(0.2f); //we use this to make a more interesting camera, that does not interpenetrate with the terrain/objects
+    btSphereShape* sphere = new btSphereShape(0.5f); //we use this to make a more interesting camera, that does not interpenetrate with the terrain/objects
     
     btVector3 inertia(0,0,0); //rotation handled elsewhere (as it always has to look at the player)
     
@@ -578,18 +612,22 @@ void Physics::forceMove(glm::vec3 newPosition, unsigned indice)//ugly, but neede
 {
     bodies[indice]->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),btVector3(newPosition.x,newPosition.y,newPosition.z)));
     bodies[indice]->setLinearVelocity(btVector3(0,0,0));
+    bodies[indice]->setAngularVelocity(btVector3(0,0,0));
 }
 
 void Physics::forcePlayer(glm::vec3 newPosition)//ugly, but needed for reset
 {
-    playerBall->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),btVector3(newPosition.x,newPosition.y,newPosition.z)));
-    playerBall->setLinearVelocity(btVector3(0,0,0));
-    forceMoveCamera(newPosition + glm::vec3(currentDirection.x()*cameraDistance,currentDirection.y()*cameraDistance,currentDirection.z()*cameraDistance));
+    if(!simulationActive)
+        return;
+    simulationActive = false;
+    resetHight = playerBall->getCenterOfMassPosition().y();
+    
+    startPosition = btVector3(newPosition.x,newPosition.y,newPosition.z);
 }
 
-void Physics::forceMoveCamera(glm::vec3 newPosition)
+void Physics::forceMoveCamera(btVector3 newPosition)
 {
-    cameraBody->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),btVector3(newPosition.x,newPosition.y,newPosition.z)));
+    cameraBody->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),newPosition));
 }
 
 void Physics::kill() //delete dynamically allocated memory

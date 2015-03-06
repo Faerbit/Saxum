@@ -71,7 +71,7 @@ void Level::update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseD
         mouseDelta.x=mouseDelta.y=0;
     }
     
-    int runs = 2;
+    int runs = 4;
     
     if(i>=20)
     {
