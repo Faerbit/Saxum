@@ -32,6 +32,7 @@ void Graphics::init(Level* level) {
     glClearColor( 0.0, 0.0, 0.0, 1.0 );
     glEnable( GL_DEPTH_TEST );
     glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     //glEnable(GL_MULTISAMPLE);
@@ -92,11 +93,14 @@ void Graphics::init(Level* level) {
     flamePostShader = ShaderProgramCreator("flame_post")
         .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
 
+    mergeShader = ShaderProgramCreator("merge")
+        .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
+
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
     // Exit if we need more texture units
-    if (number_of_texture_units < 16) {
-        printf("You need at least 16 texture units to run this application. Exiting\n");
+    if (number_of_texture_units < 18) {
+        printf("You need at least 18 texture units to run this application. Exiting\n");
         exit(-1);
     }
 
@@ -168,6 +172,21 @@ void Graphics::init(Level* level) {
 
     skydomeShader->use();
     skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture()->getReference(), 15);
+
+    flame_fbo_color_texture = SharedTexture2D(new Texture2D(windowSize, GL_RGBA8));
+    flame_fbo_color_texture->setMinFilter(GL_NEAREST);
+    flame_fbo_color_texture->setMagFilter(GL_NEAREST);
+    flame_fbo_color_texture->setWrapS(GL_CLAMP_TO_BORDER);
+    flame_fbo_color_texture->setWrapT(GL_CLAMP_TO_BORDER);
+    framebuffer_flame = SharedFrameBufferObject(new FrameBufferObject());
+    framebuffer_flame->attachColorTexture("oColor", flame_fbo_color_texture);
+    framebuffer_flame->setDepthTexture(light_fbo_depth_texture);
+    framebuffer_flame->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+    framebuffer_flame->validate();
+
+    mergeShader->use();
+    mergeShader->setTexture("flame_fbo", flame_fbo_color_texture, 16);
+    mergeShader->setTexture("light_fbo", light_fbo_color_texture, 17);
 
     updateClosestLights();
 }
@@ -298,6 +317,8 @@ void Graphics::render(double time)
 
     // draw flames on top
     flameShader->use();
+    framebuffer_flame->bind();
+    glClear(GL_COLOR_BUFFER_BIT);
     // cull faces to get consistent color while using alpha
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -317,10 +338,18 @@ void Graphics::render(double time)
     flame_positions->render();
     flameShader->setUniform("left", false);
     flame_positions->render();
+    glDisable(GL_CULL_FACE);
 
+    framebuffer_light->bind();
     glDepthMask(GL_FALSE);
+    mergeShader->use();
+    glDisable(GL_DEPTH_TEST);
+    fullscreen_quad->render();
+    glEnable(GL_DEPTH_TEST);
+
 
     // draw slightly larger only for stencil buffer to blur edges
+    flameShader->use();
     glEnable(GL_STENCIL_TEST);
     glStencilFunc(GL_ALWAYS, 1, 0xFF); //Set any stencil to 1
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -346,11 +375,9 @@ void Graphics::render(double time)
     glStencilFunc(GL_EQUAL, 1, 0xFF); //Pass test if stencil value is 1
     glStencilMask(0x00);// don't write to stencil buffer
 
-    glDepthMask(GL_TRUE);
-    glDisable(GL_CULL_FACE);
-
     flamePostShader->use();
     fullscreen_quad->render();
+    glDepthMask(GL_TRUE);
 
     glDisable(GL_STENCIL_TEST);
 
