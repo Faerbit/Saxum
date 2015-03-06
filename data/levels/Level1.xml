@@ -4782,18 +4782,19 @@
     <idBlue>2</idBlue>
     <typeID>240</typeID>
     <trigger>
-        <name>-</name>
+        <name>resetBox</name>
+        <undo>false</undo>
         <xPosition>0</xPosition>
-        <yPosition>0</yPosition>
+        <yPosition>-100000</yPosition>
         <zPosition>0</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>1.0</distance>
+        <distance>100015</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
-        <luaScript>-</luaScript>
+        <luaScript>resetBox.lua</luaScript>
         <toChangeIdGreen>0</toChangeIdGreen>
-        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeIdBlue>2</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>
     </trigger>
 </composition>

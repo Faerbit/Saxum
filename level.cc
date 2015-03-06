@@ -41,6 +41,7 @@ void Level::load() {
         .addFunction("resetPlayer", &Level::resetPlayer)
         .addFunction("movePlayer", &Level::movePlayer)
         .addFunction("setSunDirection", &Level::setSunDirection)
+        .addFunction("forceMove", &Level::forceMove)
         .endClass();
     //Push the level to Lua as a global variable
     luabridge::push(luaState, this);
@@ -271,4 +272,9 @@ Terrain* Level::getTerrain() {
 
 Skydome* Level::getSkydome() {
     return &skydome;
+}
+
+void Level::forceMove(float x, float y, float z, unsigned indice){
+    glm::vec3 position = glm::vec3(x,y,z);
+    physics.forceMove(position, indice);
 }
