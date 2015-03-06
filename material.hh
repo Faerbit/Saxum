@@ -9,7 +9,7 @@
 class Material{
     public:
         Material(std::string filePath, float ambientFactor,
-            float diffuseFactor, float specularFactor, float shininess);
+            float diffuseFactor, float specularFactor, float shininess, bool movingTexture = false);
         Material();
         ACGL::OpenGL::SharedTexture2D getReference();
         ~Material();
@@ -17,12 +17,15 @@ class Material{
         float getDiffuseFactor();
         float getSpecularFactor();
         float getShininess();
+        bool isMoving();
+
     private:
         ACGL::OpenGL::SharedTexture2D reference;
         float ambientFactor;
         float diffuseFactor;
         float specularFactor;
         float shininess;
+        bool movingTexture;
 };
 
 #endif
