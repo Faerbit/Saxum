@@ -13,7 +13,7 @@ function trigger(objectToChange)
         local time = os.clock()
         global.sunStartTime = time
         global.triggeredSunStart = true
-        
+        level:activateEndgame()
         print("sunStart")
     end
 end

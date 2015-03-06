@@ -17,6 +17,6 @@ out vec4 sunPosition;
 void main() {
     fragPosition = modelMatrix * vec4(aPosition, 1.0);
     vTexCoord = aTexCoord;
-    sunPosition = (normalize(vec4(directionalVector, 0.0)) * skydomeSize) + vec4(cameraCenter, 1.0);
+    sunPosition = (normalize(vec4(directionalVector, 0.0)) * skydomeSize) + vec4(cameraCenter.x, 0, cameraCenter.z, 1.0);
     gl_Position = modelViewProjectionMatrix * vec4(aPosition, 1.0);
 }

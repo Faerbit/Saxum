@@ -13,12 +13,12 @@ function trigger(objectToChange)
         if(global.triggeredOpenFirstDoor == true) then
             if(global.openedSecondDoor == true) then
                 if(global.triggeredOpenThirdDoor == true) then
-                    level:movePlayer(-169.5,22.5,58.5)
+                    level:movePlayer(-169.5,21.5,58.5)
                 else
-                    level:movePlayer(-78.5,22.5,4.5)
+                    level:movePlayer(-78.5,21.75,4.5)
                 end
             else
-                level:movePlayer(17.5,22.5,87.0)
+                level:movePlayer(17.5,21.0,87.0)
             end
         else
             level:resetPlayer()
