@@ -1,4 +1,5 @@
 #include "loader.hh"
+#include <ACGL/OpenGL/Objects/VertexArrayObject.hh>
 using namespace tinyxml2;
 
 Loader::Loader() {
@@ -93,6 +94,41 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     Material nightMaterial = Material(nightTexture, 1.0f, 0.0f, 0.0f, 0.0f);
     Skydome skydomeObject = Skydome(skydomeModel, skydomeMaterial, nightMaterial);
     level->setSkydomeObject(skydomeObject);
+    
+    //load the waterPlane
+    XMLElement* waterElement = doc->FirstChildElement("waterPlane");
+    if (waterElement != NULL){
+        float waterHeight = queryFloat(waterElement, "yPosition");
+        std::string waterTexture = queryString(waterElement, "texture");
+        std::string waterTexturePath = "../" + globalTexturePath + waterTexture;
+        if(stat(waterTexturePath.c_str(), &buf) != 0){
+            std::cout << "The texture file " << waterTexturePath << " does not exist." << std::endl;
+            exit(-1);
+        }
+        float heightmapHeight = level->getTerrain()->getHeightmapHeight();
+        float heightmapWidth = level->getTerrain()->getHeightmapWidth();
+        float planeData[] = {
+            -heightmapWidth/2.0f, waterHeight, -heightmapHeight/2.0f, 0.0f, 1.0f,   0.0f, 1.0f, 0.0f,
+            -heightmapWidth/2.0f, waterHeight, heightmapHeight/2.0f, 0.0f, 0.0f,   0.0f, 1.0f, 0.0f,
+            heightmapWidth/2.0f, waterHeight, -heightmapHeight/2.0f, 1.0f, 1.0f,   0.0f, 1.0f, 0.0f, 
+            
+            heightmapWidth/2.0f, waterHeight, heightmapHeight/2.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+            -heightmapWidth/2.0f, waterHeight, heightmapHeight/2.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+            heightmapWidth/2.0f, waterHeight, -heightmapHeight/2.0f, 1.0f, 1.0f,  0.0f, 1.0f, 0.0f
+        };
+        ACGL::OpenGL::SharedArrayBuffer water_ab = ACGL::OpenGL::SharedArrayBuffer(new ACGL::OpenGL::ArrayBuffer());
+        water_ab->defineAttribute("aPosition", GL_FLOAT, 3);
+        water_ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
+        water_ab->defineAttribute("aNormal", GL_FLOAT, 3);
+        water_ab->setDataElements(6, planeData);
+        ACGL::OpenGL::SharedVertexArrayObject water_vao = ACGL::OpenGL::SharedVertexArrayObject(new ACGL::OpenGL::VertexArrayObject());
+        water_vao->bind();
+        water_vao->setMode(GL_TRIANGLES);
+        water_vao->attachAllAttributes(water_ab);
+        Material water_material = Material(waterTexture, 0.1f, 0.2f, 0.8f, 5.0f, true);
+        Object* water_object = new Object(water_vao, water_material, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), true);
+        level->addObject(water_object);
+    }
     
     //load lighting parameters
     float rColour, gColour, bColour, alpha, xOffset, yOffset, zOffset, intensity;
