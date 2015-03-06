@@ -144,7 +144,7 @@ void Physics::addTerrain(int width, int length, float** heightData) //The terrai
     
     btHeightfieldTerrainShape* terrainShape = new btHeightfieldTerrainShape(length,width,heightfield,highest,1,true,false);
     btRigidBody::btRigidBodyConstructionInfo info(0,new btDefaultMotionState(),terrainShape,btVector3(0,0,0)); //next we process all data for the rigid body into info
-    info.m_friction = 1;
+    info.m_friction = 0.8f;
     info.m_restitution = 0;
     btRigidBody* tBody = new btRigidBody(info);
     
@@ -436,7 +436,7 @@ bool Physics::playerWithObject()
 
 void Physics::addCamera() //Camera Creator automatically called when player is created
 {
-    btSphereShape* sphere = new btSphereShape(0.2f); //we use this to make a more interesting camera, that does not interpenetrate with the terrain/objects
+    btSphereShape* sphere = new btSphereShape(0.5f); //we use this to make a more interesting camera, that does not interpenetrate with the terrain/objects
     
     btVector3 inertia(0,0,0); //rotation handled elsewhere (as it always has to look at the player)
     
