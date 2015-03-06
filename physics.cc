@@ -79,7 +79,7 @@ void Physics::takeUpdateStep(float timeDiff)
         if(sinking)
         {
             btVector3 currentPos = playerBall->getCenterOfMassPosition();
-            currentPos -= btVector3(0,0.005f,0);
+            currentPos -= btVector3(0,0.35f*timeDiff,0);
             playerBall->setCenterOfMassTransform(btTransform(playerBall->getOrientation(),currentPos));
             if(playerBall->getCenterOfMassPosition().y() < resetHight - 1.5f)
             {
@@ -95,7 +95,7 @@ void Physics::takeUpdateStep(float timeDiff)
         else
         {            
             btVector3 currentPos = playerBall->getCenterOfMassPosition();
-            currentPos += btVector3(0,0.009f,0);                                
+            currentPos += btVector3(0,0.9f*timeDiff,0);                                
             playerBall->setCenterOfMassTransform(btTransform(playerBall->getOrientation(),currentPos));
             
             if(playerBall->getCenterOfMassPosition().y() >= startPosition.y() + 1)
