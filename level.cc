@@ -41,6 +41,7 @@ void Level::load() {
         .addFunction("resetPlayer", &Level::resetPlayer)
         .addFunction("movePlayer", &Level::movePlayer)
         .addFunction("setSunDirection", &Level::setSunDirection)
+        .addFunction("activateEndgame", &Level::activateEndgame)
         .endClass();
     //Push the level to Lua as a global variable
     luabridge::push(luaState, this);
@@ -271,4 +272,8 @@ Terrain* Level::getTerrain() {
 
 Skydome* Level::getSkydome() {
     return &skydome;
+}
+
+void Level::activateEndgame(){
+    physics.activateEndgame();
 }

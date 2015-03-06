@@ -7,7 +7,7 @@ function trigger(objectToChange)
             return
         end
         
-        local maxTimeDiff = 5
+        local maxTimeDiff = 20
         local timeDiff = os.clock()- global.sunStartTime
         if(timeDiff > maxTimeDiff)then
             timeDiff = maxTimeDiff

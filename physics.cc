@@ -44,14 +44,17 @@ void Physics::takeUpdateStep(float timeDiff)
             }
         }
         
+        if(endgame)
+        {
+            currentDirection = playerBall->getCenterOfMassPosition();
+            currentDirection.setY(0);
+            currentDirection.normalize();
+        }          
+        btVector3 position = currentDirection;
         
-        btVector3 position = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition(); //gets a vector from the player to the camera    
-        position = currentDirection;
         position.normalize();
         position *= cameraDistance;
         position += playerBall->getCenterOfMassPosition(); //is the position cameraDistance away from the player in the direction of the camera
-      
-        //prevent the camera from being dragged along on the ground
         
         btVector3 dir = cameraBody->getCenterOfMassPosition() - position;
         float str = 50 * dir.length() / cameraBody->getInvMass(); //getInvMass() returns the inverted mass
@@ -66,6 +69,9 @@ void Physics::takeUpdateStep(float timeDiff)
             position.normalize();
             cameraBody->setLinearVelocity(position*20);
         }
+        
+       
+        
         world->stepSimulation(timeDiff);
     }
     else
@@ -628,6 +634,19 @@ void Physics::forcePlayer(glm::vec3 newPosition)//ugly, but needed for reset
 void Physics::forceMoveCamera(btVector3 newPosition)
 {
     cameraBody->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),newPosition));
+}
+
+void Physics::activateEndgame()
+{
+    if(endgame)
+        return;
+    endgame = true;
+    positionConstraint cons;
+    cons.body = playerBall;
+    cons.strength = 1;
+    cons.position = playerBall->getCenterOfMassPosition() + btVector3(0,15,0);
+    playerBall->setGravity(btVector3(0,0,0));
+    allPositionConstraints.push_back(cons);   
 }
 
 void Physics::kill() //delete dynamically allocated memory
