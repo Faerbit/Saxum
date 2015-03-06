@@ -1,13 +1,14 @@
 #include "material.hh"
 
 Material::Material(std::string filePath, float ambientFactor, float diffuseFactor,
-        float specularFactor, float shininess) {
+        float specularFactor, float shininess, bool movingTexture) {
     reference = ACGL::OpenGL::Texture2DFileManager::the()->get(ACGL::OpenGL::Texture2DCreator(filePath));
     reference->generateMipmaps();
     this->ambientFactor = ambientFactor;
     this->diffuseFactor = diffuseFactor;
     this->specularFactor = specularFactor;
     this->shininess = shininess;
+    this->movingTexture = movingTexture;
 }
 
 Material::Material() {
@@ -34,4 +35,8 @@ float Material::getSpecularFactor() {
 
 float Material::getShininess() {
     return shininess;
+}
+
+bool Material::isMoving(){
+    return movingTexture;
 }
