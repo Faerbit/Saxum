@@ -49,6 +49,7 @@ class Level {
         void setAmbientLight(glm::vec3 colour);
         void setFogColour(glm::vec4 colour);
         void setDirectionalLight(Light light);
+        void setSunDirection(float x, float y, float z);
         Physics* getPhysics();
         unsigned int getObjectsVectorSize();
         unsigned int getPhysicsObjectsVectorSize();

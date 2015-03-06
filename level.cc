@@ -40,6 +40,7 @@ void Level::load() {
         .addFunction("moveObject", &Level::moveObject)
         .addFunction("resetPlayer", &Level::resetPlayer)
         .addFunction("movePlayer", &Level::movePlayer)
+        .addFunction("setSunDirection", &Level::setSunDirection)
         .endClass();
     //Push the level to Lua as a global variable
     luabridge::push(luaState, this);
@@ -227,6 +228,13 @@ void Level::setFogColour(glm::vec4 colour) {
 
 void Level::setDirectionalLight(Light light) {
     this->directionalLight = light;
+}
+
+void Level::setSunDirection(float x, float y, float z){
+    glm::vec3 lightPosition = glm::vec3(x,y,z);
+    glm::vec3 lightColour = this->directionalLight.getColour();
+    float lightIntensity = this->directionalLight.getIntensity();
+    this->directionalLight = Light(lightPosition, lightColour, lightIntensity);
 }
 
 Physics* Level::getPhysics() {

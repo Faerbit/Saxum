@@ -14,8 +14,8 @@ function trigger(objectToChange)
         end
         timeDiff = timeDiff/maxTimeDiff
         local x = 1 - 0.3 * timeDiff
-        local y = 0.7 * timeDiff
-        local z = timeDiff^0.5 * 0.6 -0.1
-        level:setSunAngle(x,y,z)
+        local y = math.sqrt(timeDiff) * 1.0 - 0.1
+        local z = 0.7 * timeDiff
+        level:setSunDirection(x,y,z)
     end
 end
