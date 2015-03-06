@@ -27,22 +27,30 @@ Trigger::~Trigger(){
 }
 
 void Trigger::triggerUpdate(){
-        if (isBigger && (glm::distance(object->getPosition(), position) > distance)) {
-            luaL_dofile(luaState, luaScript.c_str());
-            if (undo){
-                luabridge::getGlobal(luaState, "triggerUndo")(objectToChange);
-            }else{
-                luabridge::getGlobal(luaState, "trigger")(objectToChange);
-            }
+    if (isBigger && (glm::distance(object->getPosition(), position) > distance)) {
+        int error = luaL_dofile(luaState, luaScript.c_str());
+        if (error != 0) {
+            std::cout << "Couldn't load file: " << this->luaScript << std::endl;
+            exit(-1);
         }
-        else if (!isBigger && (glm::distance(object->getPosition(), position) < distance)) {
-            luaL_dofile(luaState, luaScript.c_str());
-            if (undo){
-                luabridge::getGlobal(luaState, "triggerUndo")(objectToChange);
-            }else{
-                luabridge::getGlobal(luaState, "trigger")(objectToChange);
-            }
+        if (undo){
+            luabridge::getGlobal(luaState, "triggerUndo")(objectToChange);
+        }else{
+            luabridge::getGlobal(luaState, "trigger")(objectToChange);
         }
+    }
+    else if (!isBigger && (glm::distance(object->getPosition(), position) < distance)) {
+        int error = luaL_dofile(luaState, luaScript.c_str());
+        if (error != 0) {
+            std::cout << "Couldn't load file: " << this->luaScript << std::endl;
+            exit(-1);
+        }
+        if (undo){
+            luabridge::getGlobal(luaState, "triggerUndo")(objectToChange);
+        }else{
+            luabridge::getGlobal(luaState, "trigger")(objectToChange);
+        }
+    }
 }
 
 bool Trigger::deleteNotification(int deletedObjectIndex){
