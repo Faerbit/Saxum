@@ -12152,6 +12152,11 @@
     <nightTexture>nightskydome.png</nightTexture>
 </skydome>
 
+<waterPlane>
+    <yPosition>15</yPosition>
+    <texture>skydomeNew.png</texture>
+</waterPlane>
+
 <physics>
     <friction>0.9</friction>
     <strength>200.0</strength>

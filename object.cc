@@ -21,6 +21,12 @@ void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
     }
     glm::mat4 modelMatrix = glm::translate(getPosition()) * getRotation() * glm::scale<float>(glm::vec3(model.getScale()));
     if(texturePass) {
+        if (material.isMoving()) {
+            shader->setUniform("movingTexture", true);
+        }
+        else {
+            shader->setUniform("movingTexture", false);
+        }
         shader->setTexture("uTexture", material.getReference(), 0);
         shader->setUniform("modelMatrix", modelMatrix);
     }
