@@ -32,9 +32,10 @@ void Graphics::init(Level* level) {
     glClearColor( 0.0, 0.0, 0.0, 1.0 );
     glEnable( GL_DEPTH_TEST );
     glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-    glEnable(GL_MULTISAMPLE);
+    //glEnable(GL_MULTISAMPLE);
 
     fullscreen_quad_ab = SharedArrayBuffer(new ArrayBuffer());
     fullscreen_quad_ab->defineAttribute("aPosition", GL_FLOAT, 2);
@@ -69,6 +70,9 @@ void Graphics::init(Level* level) {
     // look up all shader files starting with 'phong' and build a ShaderProgram from it:
     lightingShader = ShaderProgramCreator("phong").attributeLocations(
             vao->getAttributeLocations()).create();
+
+    skydomeShader = ShaderProgramCreator("skydome").attributeLocations(
+            vao->getAttributeLocations()).create();
     
     depthShader = ShaderProgramCreator("depth")
         .attributeLocations(vao->getAttributeLocations()).create();
@@ -86,14 +90,20 @@ void Graphics::init(Level* level) {
     flameShader = ShaderProgramCreator("flame")
         .attributeLocations(flame_positions->getAttributeLocations()).create();
 
+    flameColorShader = ShaderProgramCreator("flame_color")
+        .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
+
     flamePostShader = ShaderProgramCreator("flame_post")
+        .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
+
+    mergeShader = ShaderProgramCreator("merge")
         .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
 
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
     // Exit if we need more texture units
-    if (number_of_texture_units < 15) {
-        printf("You need at least 15 texture units to run this application. Exiting\n");
+    if (number_of_texture_units < 19) {
+        printf("You need at least 19 texture units to run this application. Exiting\n");
         exit(-1);
     }
 
@@ -159,9 +169,30 @@ void Graphics::init(Level* level) {
     framebuffer_light->validate();
 
     flamePostShader->use();
-    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, 15);
+    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, 14);
     flamePostShader->setUniform("windowSizeX", int(windowSize.x));
     flamePostShader->setUniform("windowSizeY", int(windowSize.y));
+
+    skydomeShader->use();
+    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture()->getReference(), 15);
+
+    flame_fbo_color_texture = SharedTexture2D(new Texture2D(windowSize, GL_RGBA8));
+    flame_fbo_color_texture->setMinFilter(GL_NEAREST);
+    flame_fbo_color_texture->setMagFilter(GL_NEAREST);
+    flame_fbo_color_texture->setWrapS(GL_CLAMP_TO_BORDER);
+    flame_fbo_color_texture->setWrapT(GL_CLAMP_TO_BORDER);
+    framebuffer_flame = SharedFrameBufferObject(new FrameBufferObject());
+    framebuffer_flame->attachColorTexture("oColor", flame_fbo_color_texture);
+    framebuffer_flame->setDepthTexture(light_fbo_depth_texture);
+    framebuffer_flame->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+    framebuffer_flame->validate();
+
+    mergeShader->use();
+    mergeShader->setTexture("flame_fbo", flame_fbo_color_texture, 16);
+    mergeShader->setTexture("light_fbo", light_fbo_color_texture, 17);
+
+    flameColorShader->use();
+    flameColorShader->setTexture("flame_fbo", flame_fbo_color_texture, 18);
 
     updateClosestLights();
 }
@@ -183,6 +214,7 @@ void Graphics::render(double time)
     glm::vec3 upvectors[6] = {glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, 0.0f, -1.0f),
         glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f)};
 
+
     framebuffer_cube->bind();
     for (unsigned int i_pointlight = 0; i_pointlight<closestLights.size() && i_pointlight < maxShadowRenderCount; i_pointlight++) {
         // render each side of the cube
@@ -200,6 +232,7 @@ void Graphics::render(double time)
             }
         }
     }
+
     // render depth textures for sun
     depthShader->use();
     glViewport(0, 0, windowSize.x, windowSize.y);
@@ -233,6 +266,20 @@ void Graphics::render(double time)
     // lighting render pass
     framebuffer_light->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //set view and projection matrix
+    glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
+
+    //render skydome
+    skydomeShader->use();
+    // set fog Parameters
+    skydomeShader->setUniform("farPlane", farPlane);
+    skydomeShader->setUniform("skydomeSize", level->getSkydomeSize());
+    skydomeShader->setUniform("fogColor", level->getFogColour());
+    skydomeShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
+    skydomeShader->setUniform("directionalVector", level->getDirectionalLight()->getPosition());
+    skydomeShader->setUniform("sunColor", level->getDirectionalLight()->getColour());
+    level->getSkydome()->render(skydomeShader, false, true, &lightingViewProjectionMatrix);
     
     lightingShader->use();
 
@@ -271,18 +318,16 @@ void Graphics::render(double time)
     lightingShader->setUniform("ambientColor", level->getAmbientLight());
     lightingShader->setUniform("camera", level->getPhysics()->getCameraPosition());
     
-    //set view and projection matrix
-    glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
-    
     // render the level
     level->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
 
     // draw flames on top
     flameShader->use();
+    framebuffer_flame->bind();
+    glClear(GL_COLOR_BUFFER_BIT);
     // cull faces to get consistent color while using alpha
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-
 
     // draw with colors
     flameShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
@@ -299,10 +344,21 @@ void Graphics::render(double time)
     flame_positions->render();
     flameShader->setUniform("left", false);
     flame_positions->render();
+    glDisable(GL_CULL_FACE);
 
     glDepthMask(GL_FALSE);
+    flameColorShader->use();
+    fullscreen_quad->render();
+
+    framebuffer_light->bind();
+    mergeShader->use();
+    glDisable(GL_DEPTH_TEST);
+    fullscreen_quad->render();
+    glEnable(GL_DEPTH_TEST);
+
 
     // draw slightly larger only for stencil buffer to blur edges
+    flameShader->use();
     glEnable(GL_STENCIL_TEST);
     glStencilFunc(GL_ALWAYS, 1, 0xFF); //Set any stencil to 1
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -328,11 +384,9 @@ void Graphics::render(double time)
     glStencilFunc(GL_EQUAL, 1, 0xFF); //Pass test if stencil value is 1
     glStencilMask(0x00);// don't write to stencil buffer
 
-    glDepthMask(GL_TRUE);
-    glDisable(GL_CULL_FACE);
-
     flamePostShader->use();
     fullscreen_quad->render();
+    glDepthMask(GL_TRUE);
 
     glDisable(GL_STENCIL_TEST);
 

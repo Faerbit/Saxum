@@ -28,6 +28,7 @@ function trigger(objectToChange)
                 local yPos = 33
                 local zPos = 4.5
                 level:moveObject(objectToChange, strength, xPos, yPos, zPos)
+                global.openedSecondDoor = true
             else
                 global.triggeredOpenSecondDoor4Undo = false
             end

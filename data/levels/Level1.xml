@@ -4,6 +4,151 @@
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
+    <xPos>-91.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>216.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>142</idBlue>
+    <typeID>250</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-6.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>54.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>140</idBlue>
+    <typeID>81</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-6.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>26.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>139</idBlue>
+    <typeID>81</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-53.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>54.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>138</idBlue>
+    <typeID>81</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
+    <xPos>-53.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>26.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>137</idBlue>
+    <typeID>81</typeID>
+    <trigger>
+        <name>-</name>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
     <xPos>40.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>-15.500000</zPos>
@@ -721,7 +866,7 @@
         <zPosition>51.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor1.lua</luaScript>
@@ -737,7 +882,7 @@
         <zPosition>51.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor1.lua</luaScript>
@@ -774,7 +919,7 @@
         <zPosition>29.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor3.lua</luaScript>
@@ -790,7 +935,7 @@
         <zPosition>29.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor3.lua</luaScript>
@@ -2451,7 +2596,7 @@
         <zPosition>51.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor4.lua</luaScript>
@@ -2467,7 +2612,7 @@
         <zPosition>51.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor4.lua</luaScript>
@@ -2533,7 +2678,7 @@
         <zPosition>29.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor2.lua</luaScript>
@@ -2549,7 +2694,7 @@
         <zPosition>29.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openSecondDoor2.lua</luaScript>
@@ -3746,7 +3891,7 @@
         <zPosition>67.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openThirdDoor.lua</luaScript>
@@ -3762,7 +3907,7 @@
         <zPosition>67.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openThirdDoor.lua</luaScript>
@@ -6235,7 +6380,7 @@
         <zPosition>159.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>true</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openFirstDoor.lua</luaScript>
@@ -6251,7 +6396,7 @@
         <zPosition>159.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>0.2</distance>
+        <distance>0.1</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>openFirstDoor.lua</luaScript>
@@ -6268,7 +6413,7 @@
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
     <xPos>17.500000</xPos>
-    <yOffset>0.0</yOffset>
+    <yOffset>5.0</yOffset>
     <zPos>81.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>94</idBlue>
@@ -8653,7 +8798,7 @@
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
     <xPos>-81.500000</xPos>
-    <yOffset>0.0</yOffset>
+    <yOffset>5.0</yOffset>
     <zPos>4.500000</zPos>
     <idGreen>1</idGreen>
     <idBlue>8</idBlue>
@@ -10603,7 +10748,7 @@
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
     <xPos>-172.500000</xPos>
-    <yOffset>0.0</yOffset>
+    <yOffset>5.0</yOffset>
     <zPos>58.500000</zPos>
     <idGreen>0</idGreen>
     <idBlue>178</idBlue>
@@ -11791,6 +11936,38 @@
         <toChangeIdBlue>105</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>
     </trigger>
+    <trigger>
+        <name>sunStart</name>
+        <undo>false</undo>
+        <xPosition>-216</xPosition>
+        <yPosition>20</yPosition>
+        <zPosition>34</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>10</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>sunStart.lua</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>105</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+    <trigger>
+        <name>sunUpdate</name>
+        <undo>false</undo>
+        <xPosition>-216</xPosition>
+        <yPosition>20</yPosition>
+        <zPosition>34</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>10</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>sunUpdate.lua</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>105</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
 </composition>
 
 <composition>
@@ -11970,12 +12147,14 @@
 </terrain>
 
 <skydome>
-    <texture>skydome.png</texture>
+    <model>skydome.obj</model>
+    <texture>skydomeNew.png</texture>
+    <nightTexture>nightskydome.png</nightTexture>
 </skydome>
 
 <physics>
     <friction>0.9</friction>
-    <strength>100.0</strength>
+    <strength>200.0</strength>
 </physics>
 
 <positionConstraint>
