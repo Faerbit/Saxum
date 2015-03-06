@@ -81,12 +81,14 @@ void Physics::takeUpdateStep(float timeDiff)
             btVector3 currentPos = playerBall->getCenterOfMassPosition();
             currentPos -= btVector3(0,0.003f,0);
             playerBall->setCenterOfMassTransform(btTransform(playerBall->getOrientation(),currentPos));
-            if(playerBall->getCenterOfMassPosition().y() < resetHight - 3)
+            if(playerBall->getCenterOfMassPosition().y() < resetHight - 1.5f)
             {
                 playerBall->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),btVector3(startPosition.x(),startPosition.y() - 3,startPosition.z())));
                 playerBall->setLinearVelocity(btVector3(0,0,0));
                 playerBall->setAngularVelocity(btVector3(0,0,0));
-                forceMoveCamera(startPosition + btVector3(currentDirection.x()*cameraDistance,currentDirection.y()*cameraDistance,currentDirection.z()*cameraDistance));
+                currentDirection = btVector3(1,1,1);
+                currentDirection.normalize();
+                forceMoveCamera(startPosition + currentDirection*cameraDistance);
                 sinking = false;
             }
         }
@@ -563,6 +565,8 @@ void Physics::updateCameraPos(glm::vec2 mouseMovement, float strength, float dis
 //use the crossproduct to correctly apply a torque to the palyer if function called
 void Physics::rollForward(glm::vec3 camPos,float strength)
 {
+    if(!simulationActive)
+        return;
     btVector3 pos = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition();
     pos.setY(0);
     pos.normalize();
@@ -573,6 +577,8 @@ void Physics::rollForward(glm::vec3 camPos,float strength)
 
 void Physics::rollBack(glm::vec3 camPos,float strength)
 {
+    if(!simulationActive)
+        return;
     btVector3 pos = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition();
     pos.setY(0);
     pos.normalize();
@@ -583,6 +589,8 @@ void Physics::rollBack(glm::vec3 camPos,float strength)
 
 void Physics::rollLeft(glm::vec3 camPos,float strength)
 {
+    if(!simulationActive)
+        return;
     btVector3 pos = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition();
     pos.setY(0);
     pos.normalize();
@@ -592,6 +600,8 @@ void Physics::rollLeft(glm::vec3 camPos,float strength)
 
 void Physics::rollRight(glm::vec3 camPos,float strength)
 {
+    if(!simulationActive)
+        return;
     btVector3 pos = cameraBody->getCenterOfMassPosition() - playerBall->getCenterOfMassPosition();
     pos.setY(0);
     pos.normalize();
