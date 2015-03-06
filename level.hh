@@ -61,6 +61,7 @@ class Level {
         void resetPlayer();
         void movePlayer(float xPosition, float yPosition, float zPosition);
         void setPlayerIndex(int index);
+        void activateEndgame();
     private:
         lua_State* luaState=nullptr;
         std::vector<Object*> objects;
