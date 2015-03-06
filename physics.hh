@@ -77,6 +77,7 @@ class Physics {
 	void prepareCollisionDetection();
 	bool playerWithGround();
 	bool playerWithObject();
+	void activateEndgame();
     void forcePlayer(glm::vec3 newPosition);
 
     struct positionConstraint{btRigidBody* body; float strength; btVector3 position;};
@@ -86,6 +87,7 @@ class Physics {
     float resetHight = 0;
     bool simulationActive = true;
     bool sinking = true;
+    bool endgame = false;
     btVector3 currentDirection = btVector3(1,1,1);
 	btRigidBody* playerBall;    //allows for easier access to the ball
 	btRigidBody* terrainBody;   //duh

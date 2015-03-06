@@ -12879,7 +12879,7 @@
         <zPosition>34</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>10</distance>
+        <distance>2</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>sunStart.lua</luaScript>
@@ -12891,11 +12891,11 @@
         <name>sunUpdate</name>
         <undo>false</undo>
         <xPosition>-216</xPosition>
-        <yPosition>20</yPosition>
+        <yPosition>27.5</yPosition>
         <zPosition>34</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>10</distance>
+        <distance>12</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>sunUpdate.lua</luaScript>
@@ -13088,7 +13088,7 @@
 </skydome>
 
 <waterPlane>
-    <yPosition>15</yPosition>
+    <yPosition>14.5</yPosition>
     <texture>skydomeNew.png</texture>
 </waterPlane>
 
