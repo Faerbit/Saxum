@@ -4,6 +4,36 @@
     <yRot>0.0</yRot>
     <zRot>0.0</zRot>
     <manualPos>false</manualPos>
+    <xPos>-215.500000</xPos>
+    <yOffset>0.0</yOffset>
+    <zPos>31.500000</zPos>
+    <idGreen>0</idGreen>
+    <idBlue>137</idBlue>
+    <typeID>254</typeID>
+    <trigger>
+        <name>-</name>
+        <undo>false</undo>
+        <xPosition>0</xPosition>
+        <yPosition>0</yPosition>
+        <zPosition>0</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>1.0</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>-</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>0</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
+</composition>
+
+<composition>
+    <scale>1.0</scale>
+    <xRot>0.0</xRot>
+    <yRot>0.0</yRot>
+    <zRot>0.0</zRot>
+    <manualPos>false</manualPos>
     <xPos>-6.500000</xPos>
     <yOffset>0.0</yOffset>
     <zPos>54.500000</zPos>
@@ -3883,7 +3913,7 @@
     <positionConstraint>
         <objectNum>0</objectNum>
         <xPosition>-161.5</xPosition>
-        <yPosition>21.7</yPosition>
+        <yPosition>20.9</yPosition>
         <zPosition>67.5</zPosition>
         <strength>12.0</strength>
     </positionConstraint>
@@ -3891,7 +3921,7 @@
         <name>openThirdDoor</name>
         <undo>false</undo>
         <xPosition>-161.5</xPosition>
-        <yPosition>21.7</yPosition>
+        <yPosition>20.9</yPosition>
         <zPosition>67.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
@@ -3907,7 +3937,7 @@
         <name>openThirdDoorUndo</name>
         <undo>true</undo>
         <xPosition>-161.5</xPosition>
-        <yPosition>21.7</yPosition>
+        <yPosition>20.9</yPosition>
         <zPosition>67.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
@@ -6372,7 +6402,7 @@
     <positionConstraint>
         <objectNum>0</objectNum>
         <xPosition>17.5</xPosition>
-        <yPosition>21.8</yPosition>
+        <yPosition>21.0</yPosition>
         <zPosition>159.5</zPosition>
         <strength>12.0</strength>
     </positionConstraint>
@@ -6380,7 +6410,7 @@
         <name>openFirstDoor</name>
         <undo>false</undo>
         <xPosition>17.5</xPosition>
-        <yPosition>21.8</yPosition>
+        <yPosition>21.0</yPosition>
         <zPosition>159.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
@@ -6396,7 +6426,7 @@
         <name>openFirstDoorUndo</name>
         <undo>true</undo>
         <xPosition>17.5</xPosition>
-        <yPosition>21.8</yPosition>
+        <yPosition>21.0</yPosition>
         <zPosition>159.5</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
@@ -12155,6 +12185,11 @@
     <texture>skydomeNew.png</texture>
     <nightTexture>nightskydome.png</nightTexture>
 </skydome>
+
+<waterPlane>
+    <yPosition>15</yPosition>
+    <texture>skydomeNew.png</texture>
+</waterPlane>
 
 <physics>
     <friction>0.9</friction>
