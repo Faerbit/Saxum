@@ -482,7 +482,7 @@
     <object>
         <modelPath>brazier.obj</modelPath>
         <xOffset>0.0</xOffset>
-        <yOffset>0.35</yOffset>
+        <yOffset>0.36</yOffset>
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
         <yRot>0.0</yRot>
@@ -508,6 +508,25 @@
         <mass>0.0</mass>
     </object>
 </composition>
+
+<!-- Exit -->
+<composition>
+    <typeID>254</typeID>
+    <ignoreHeightmap>false</ignoreHeightmap>
+    <object>
+        <modelPath>exit.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>0.1</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+</composition>
+
+
 
 
 
@@ -680,6 +699,19 @@
 <objectData>
     <modelPath>hint.obj</modelPath>
     <texturePath>hintTexture.png</texturePath>
+    <ambientFactor>0.1</ambientFactor>
+    <diffuseFactor>0.6</diffuseFactor>
+    <specularFactor>0.4</specularFactor>
+    <shininess>2.0</shininess>
+    <physicType>TriangleMesh</physicType>
+    <dampningL>0.555</dampningL>
+    <dampningA>0.5</dampningA>
+    <renderable>true</renderable>
+</objectData>
+
+<objectData>
+    <modelPath>exit.obj</modelPath>
+    <texturePath>exitTexture.png</texturePath>
     <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
