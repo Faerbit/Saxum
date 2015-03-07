@@ -8,7 +8,7 @@ def main():
     # user defined options
     disk = True                # this parameter defines if we look for Poisson-like distribution on a disk/sphere (center at 0, radius 1) or in a square/box (0-1 on x and y)
     repeatPattern = True        # this parameter defines if we look for "repeating" pattern so if we should maximize distances also with pattern repetitions
-    num_points = 2              # number of points we are looking for
+    num_points = 5              # number of points we are looking for
     num_iterations = 4          # number of iterations in which we take average minimum squared distances between points and try to maximize them
     first_point_zero = False     # should be first point zero (useful if we already have such sample) or random
     iterations_per_point = 128  # iterations per point trying to look for a new point with larger distance
@@ -43,9 +43,13 @@ def main():
     print("")
     print("")
     #format output
-    print("vec3 starPositions[{}] = vec3[](".format(num_points))
-    for vector in final_points:
-        print("    vec3({}, {}, {}),".format(vector[0], vector[1], vector[2]))
+    print("const int starCount = {};".format(num_points))
+    print("vec3 starPositions[starCount] = vec3[](")
+    for i, vector in enumerate(final_points):
+        if (i == len(final_points)-1):
+            print("    vec3({}, {}, {})".format(vector[0], vector[1], vector[2]))
+        else:
+            print("    vec3({}, {}, {}),".format(vector[0], vector[1], vector[2]))
     print(");")
 
 
