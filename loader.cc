@@ -365,9 +365,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                         float offset = 0;
                         errorCheck(flameOffset->QueryFloatText(&offset));
                         float flameHeight = queryFloat(xmlLight, "flameHeight");
-                        printf("loading: flameHeight: %2.2f\n", flameHeight);
                         float flameWidth = queryFloat(xmlLight, "flameWidth");
-                        printf("loading: flameWidth: %2.2f\n", flameWidth);
                         Light light = Light(lightPosition, lightColour, lightIntensity, offset, flameHeight, flameWidth);
                         level->addLight(light);
                     }
