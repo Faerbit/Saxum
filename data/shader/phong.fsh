@@ -40,6 +40,9 @@ uniform float lightIntensities[32];
 uniform float farPlane;
 uniform vec4 fogColor;
 uniform vec3 cameraCenter;
+uniform bool movingTexture;
+uniform vec2 movement;
+uniform float time;
 
 vec2 poissonDisk[16] = vec2[](
    vec2( -0.94201624, -0.39906216 ),
@@ -191,7 +194,13 @@ void main()
     float fogFactor = clamp((1.0 - ((farPlane - 35.0) -distanceCameraCenter)/30.0), 0.0, 1.0);
     fogFactor *= clamp((1.0-((fragPosition.y-40.0)/30.0)), 0.0, 1.0);
 
-    vec4 texture = texture(uTexture, vTexCoord).rgba;
-    oColor = vec4(finalColor, 1.0f)*texture;
+    vec4 textureColor = vec4(0.0, 0.0, 0.0, 1.0);
+    if (movingTexture == true) {
+        textureColor = texture(uTexture, vec2(vTexCoord.x + movement.x * time, vTexCoord.y + movement.y * time)).rgba;
+    }
+    else {
+        textureColor = texture(uTexture, vTexCoord).rgba;
+    }
+    oColor = vec4(finalColor, 1.0f)*textureColor;
     oColor = mix(oColor, fogColor, fogFactor);
 }
