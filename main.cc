@@ -144,7 +144,6 @@ int main( int argc, char *argv[] )
     double showNextFPS = startTimeInSeconds + FPSdelay;
     
     double lastUpdate=0.0f;
-    bool gameStarted = false;
     
     do {
         
@@ -159,6 +158,7 @@ int main( int argc, char *argv[] )
             frameCount = 0;
         }
         if (app.isGameStarted()) {
+            static float gameStart = now;
             if (app.isLocked() && app.getIgnoredMouseUpdates() == 0) {
                 int stateW = glfwGetKey(window, GLFW_KEY_W);
                 int stateA = glfwGetKey(window, GLFW_KEY_A);
@@ -170,13 +170,13 @@ int main( int argc, char *argv[] )
                 double xpos, ypos;
                 glfwGetCursorPos(window, &xpos, &ypos);
                 glfwSetCursorPos(window, app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
-                app.getLevel()->update(now - lastUpdate, now,
+                app.getLevel()->update(now - lastUpdate, now - gameStart,
                         glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
                                 (float)xpos-app.getGraphics()->getWindowSize().x/2),
                             stateW == GLFW_PRESS,stateA == GLFW_PRESS,stateS == GLFW_PRESS,stateD == GLFW_PRESS,stateK == GLFW_PRESS,stateL == GLFW_PRESS);
             }
             else {
-                app.getLevel()->update(now - lastUpdate, now, glm::vec2(0.0f, 0.0f), false, false, false, false,false,false);
+                app.getLevel()->update(now - lastUpdate, now-gameStart, glm::vec2(0.0f, 0.0f), false, false, false, false,false,false);
                 if (app.isLocked()) {
                     app.ignoredOneMouseUpdate();
                 }
