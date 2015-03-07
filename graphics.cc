@@ -102,8 +102,8 @@ void Graphics::init(Level* level) {
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
     // Exit if we need more texture units
-    if (number_of_texture_units < 19) {
-        printf("You need at least 19 texture units to run this application. Exiting\n");
+    if (number_of_texture_units < 18) {
+        printf("You need at least 18 texture units to run this application. Exiting\n");
         exit(-1);
     }
 
@@ -173,9 +173,6 @@ void Graphics::init(Level* level) {
     flamePostShader->setUniform("windowSizeX", int(windowSize.x));
     flamePostShader->setUniform("windowSizeY", int(windowSize.y));
 
-    skydomeShader->use();
-    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture()->getReference(), 15);
-
     flame_fbo_color_texture = SharedTexture2D(new Texture2D(windowSize, GL_RGBA8));
     flame_fbo_color_texture->setMinFilter(GL_NEAREST);
     flame_fbo_color_texture->setMagFilter(GL_NEAREST);
@@ -188,11 +185,11 @@ void Graphics::init(Level* level) {
     framebuffer_flame->validate();
 
     mergeShader->use();
-    mergeShader->setTexture("flame_fbo", flame_fbo_color_texture, 16);
-    mergeShader->setTexture("light_fbo", light_fbo_color_texture, 17);
+    mergeShader->setTexture("flame_fbo", flame_fbo_color_texture, 15);
+    mergeShader->setTexture("light_fbo", light_fbo_color_texture, 16);
 
     flameColorShader->use();
-    flameColorShader->setTexture("flame_fbo", flame_fbo_color_texture, 18);
+    flameColorShader->setTexture("flame_fbo", flame_fbo_color_texture, 17);
 
     updateClosestLights();
 }
