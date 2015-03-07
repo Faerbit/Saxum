@@ -4,9 +4,15 @@ Light::Light(glm::vec3 position, glm::vec3 colour, float intensity, float flameY
     : Entity(position, glm::vec3(0.0f, 0.0f, 0.0f)) {
     this->colour = colour;
     this->intensity = intensity;
-    this->flameYOffset = flameYOffset;
-    this->flameHeight = flameHeight;
-    this->flameWidth = flameWidth;
+    if (flameYOffset != 0.0f) {
+        this->withFlame = true;
+        glm::vec3 flamePosition = glm::vec3(position.x, position.y + flameYOffset, position.z);
+        glm::vec3 flameSize = glm::vec3(flameWidth, flameHeight, flameWidth);
+        this->flame = Flame(flamePosition, colour, flameSize);
+    }
+    else {
+        this->withFlame = false;
+    }
 }
 
 Light::Light() {
@@ -23,6 +29,10 @@ float Light::getIntensity() {
     return intensity;
 }
 
-float Light::getFlameYOffset() {
-    return flameYOffset;
+Flame* Light::getFlame() {
+    return &flame;
+}
+
+bool Light::isFlame() {
+    return withFlame;
 }

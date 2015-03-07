@@ -39,6 +39,7 @@ class Graphics {
         SharedTexture2D loadingScreen;
         SharedTexture2D loadingContinueScreen;
         std::vector<Light> closestLights;
+        std::vector<Flame*> closestFlames;
         SharedShaderProgram loadingShader;
         SharedShaderProgram lightingShader;
         SharedShaderProgram skydomeShader;
@@ -53,8 +54,6 @@ class Graphics {
         SharedFrameBufferObject framebuffer_light;
         SharedTexture2D light_fbo_color_texture;
         SharedTexture2D light_fbo_depth_texture;
-        SharedVertexArrayObject flame_positions;
-        SharedArrayBuffer flame_positions_ab;
         SharedVertexArrayObject fullscreen_quad;
         SharedArrayBuffer fullscreen_quad_ab;
         int cube_size;
