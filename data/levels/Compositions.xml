@@ -76,8 +76,8 @@
         <bColour>0.3</bColour>
         <intensity>4.0</intensity>
         <flameOffset>-1.5</flameOffset>
-        <flameHeight>3.0</flameHeight>
-        <flameWidth>0.8</flameWidth>
+        <flameHeight>1.0</flameHeight>
+        <flameWidth>1.0</flameWidth>
     </light>
 </composition>
 

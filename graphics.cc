@@ -68,11 +68,10 @@ void Graphics::init(Level* level) {
     depthCubeShader = ShaderProgramCreator("depth_cube")
         .attributeLocations(vao->getAttributeLocations()).create();
 
-    flame_positions_ab = SharedArrayBuffer(new ArrayBuffer());
+    SharedArrayBuffer flame_positions_ab = SharedArrayBuffer(new ArrayBuffer());
     flame_positions_ab->defineAttribute("aPosition", GL_FLOAT, 3);
     flame_positions_ab->defineAttribute("aColor", GL_FLOAT, 3);
-    flame_positions = SharedVertexArrayObject(new VertexArrayObject());
-    flame_positions->setMode(GL_POINTS);
+    SharedVertexArrayObject flame_positions = SharedVertexArrayObject(new VertexArrayObject());
     flame_positions->attachAllAttributes(flame_positions_ab);
 
     flameShader = ShaderProgramCreator("flame")
@@ -346,45 +345,21 @@ void Graphics::render(double time)
         glCullFace(GL_BACK);
 
         // draw with colors
-        flameShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
-        flameShader->setUniform("modelViewProjectionMatrix", lightingViewProjectionMatrix);
-        flameShader->setUniform("withColor", true);
-        flameShader->setUniform("time", (float) time);
-        flameShader->setUniform("bottom", true);
-        flameShader->setUniform("left", true);
-        flame_positions->render();
-        flameShader->setUniform("left", false);
-        flame_positions->render();
-        flameShader->setUniform("bottom", false);
-        flameShader->setUniform("left", true);
-        flame_positions->render();
-        flameShader->setUniform("left", false);
-        flame_positions->render();
+        for(unsigned int i = 0; i<closestFlames.size(); i++) {
+            closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), true);
+        }
         glDisable(GL_CULL_FACE);
 
         // draw slightly larger only for stencil buffer to blur edges
-        flameShader->use();
         glEnable(GL_STENCIL_TEST);
         glStencilFunc(GL_ALWAYS, 1, 0xFF); //Set any stencil to 1
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         glStencilMask(0xFF);//write to stencil buffer
         glClear(GL_STENCIL_BUFFER_BIT);//clear stencil buffer
 
-        glm::mat4 modelMatrix = glm::scale(glm::vec3(1.1f));
-        flameShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
-        flameShader->setUniform("modelViewProjectionMatrix", lightingViewProjectionMatrix * modelMatrix);
-        flameShader->setUniform("withColor", false);
-        flameShader->setUniform("time", (float) time);
-        flameShader->setUniform("bottom", true);
-        flameShader->setUniform("left", true);
-        flame_positions->render();
-        flameShader->setUniform("left", false);
-        flame_positions->render();
-        flameShader->setUniform("bottom", false);
-        flameShader->setUniform("left", true);
-        flame_positions->render();
-        flameShader->setUniform("left", false);
-        flame_positions->render();
+        for(unsigned int i = 0; i<closestFlames.size(); i++) {
+            closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), false);
+        }
 
         glStencilFunc(GL_EQUAL, 1, 0xFF); //Pass test if stencil value is 1
         glStencilMask(0x00);// don't write to stencil buffer
@@ -462,21 +437,12 @@ void Graphics::updateLights() {
         lightingShader->setUniform("directionalIntensity",
             level->getDirectionalLight()->getIntensity());
     }
-    float* flameData = new float[closestLights.size() * 6];
-    int flameIndex = 0;
+    closestFlames = std::vector<Flame*>();
     for (unsigned int i = 0; i<closestLights.size(); i++) {
-        if (closestLights.at(i).getFlameYOffset() != 0.0f) {
-            flameData[flameIndex + 0] = closestLights.at(i).getPosition().x;
-            flameData[flameIndex + 1] = closestLights.at(i).getPosition().y + closestLights.at(i).getFlameYOffset();
-            flameData[flameIndex + 2] = closestLights.at(i).getPosition().z;
-            flameData[flameIndex + 3] = closestLights.at(i).getColour().r;
-            flameData[flameIndex + 3] = closestLights.at(i).getColour().r;
-            flameData[flameIndex + 4] = closestLights.at(i).getColour().g;
-            flameData[flameIndex + 5] = closestLights.at(i).getColour().b;
-            flameIndex+=6;
+        if (closestLights.at(i).isFlame()) {
+            closestFlames.push_back(closestLights.at(i).getFlame());
         }
     }
-    flame_positions_ab->setDataElements(flameIndex, flameData);
 }
 
 void Graphics::resize(glm::uvec2 windowSize) {

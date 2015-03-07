@@ -2,6 +2,7 @@
 #define LIGHT_HH_INCLUDED
 
 #include "entity.hh"
+#include "flame.hh"
 #include <ACGL/Math/Math.hh>
 
 class Light : public Entity {
@@ -10,12 +11,12 @@ class Light : public Entity {
         Light();
         glm::vec3 getColour();
         float getIntensity();
-        float getFlameYOffset();
+        Flame* getFlame();
         ~Light();
+        bool isFlame();
     private:
-        float flameYOffset;
-        float flameHeight;
-        float flameWidth;
+        bool withFlame;
+        Flame flame;
         float intensity;
         glm::vec3 colour;
 };
