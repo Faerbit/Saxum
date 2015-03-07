@@ -3,11 +3,12 @@ import numpy as np
 import math
 import poisson
 import array
+from random import uniform
 
 def main():
     # user defined options
     disk = True                # this parameter defines if we look for Poisson-like distribution on a disk/sphere (center at 0, radius 1) or in a square/box (0-1 on x and y)
-    repeatPattern = True        # this parameter defines if we look for "repeating" pattern so if we should maximize distances also with pattern repetitions
+    repeatPattern = False        # this parameter defines if we look for "repeating" pattern so if we should maximize distances also with pattern repetitions
     num_points = 5              # number of points we are looking for
     num_iterations = 4          # number of iterations in which we take average minimum squared distances between points and try to maximize them
     first_point_zero = False     # should be first point zero (useful if we already have such sample) or random
@@ -42,7 +43,7 @@ def main():
     print("")
     print("")
     print("")
-    #format output
+    # format output
     print("const int starCount = {};".format(num_points))
     print("vec3 starPositions[starCount] = vec3[](")
     for i, vector in enumerate(final_points):
@@ -50,6 +51,19 @@ def main():
             print("    vec3({}, {}, {})".format(vector[0], vector[1], vector[2]))
         else:
             print("    vec3({}, {}, {}),".format(vector[0], vector[1], vector[2]))
+    print(");")
+    print("")
+    # generate star sizes
+    sizes = []
+    for i in range(num_points):
+        sizes.append(uniform(0.3, 1.5))
+
+    print("float starSizes[starCount] = float[](")
+    for i, size in enumerate(sizes):
+        if (i==len(sizes)):
+            print("    float({})".format(size))
+        else:
+            print("    float({}),".format(size))
     print(");")
 
 
