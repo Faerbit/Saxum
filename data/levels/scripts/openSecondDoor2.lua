@@ -25,6 +25,11 @@ function trigger(objectToChange)
             global.triggeredOpenSecondDoor2Undo = false
         end
         
+        local xPos = -53.5
+        local yPos = 25.0
+        local zPos = 26.5
+        level:preloadLightPosition(xPos, yPos, zPos)
+        level:addLightByParameters(0.2, 0.9, 0.0, 4.0, -1.5, 3.0, 0.8)
         print("openSecondDoor2")
     end
 end
@@ -41,6 +46,7 @@ function triggerUndo(objectToChange)
         global.triggeredOpenSecondDoor2 = false
         global.triggeredOpenSecondDoor3 = false
         global.triggeredOpenSecondDoor4 = false
+        level:deleteFourLights()
         
         global.triggeredOpenSecondDoor2Undo = true
         print("openSecondDoor2Undo")
