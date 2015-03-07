@@ -108,13 +108,13 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
         float heightmapHeight = level->getTerrain()->getHeightmapHeight();
         float heightmapWidth = level->getTerrain()->getHeightmapWidth();
         float planeData[] = {
-            -heightmapWidth/2.0f, waterHeight, -heightmapHeight/2.0f, 0.0f, 1.0f,   0.0f, 1.0f, 0.0f,
+            -heightmapWidth/2.0f, waterHeight, -heightmapHeight/2.0f, 0.0f, heightmapHeight,   0.0f, 1.0f, 0.0f,
             -heightmapWidth/2.0f, waterHeight, heightmapHeight/2.0f, 0.0f, 0.0f,   0.0f, 1.0f, 0.0f,
-            heightmapWidth/2.0f, waterHeight, -heightmapHeight/2.0f, 1.0f, 1.0f,   0.0f, 1.0f, 0.0f, 
+            heightmapWidth/2.0f, waterHeight, -heightmapHeight/2.0f, heightmapWidth, heightmapHeight,   0.0f, 1.0f, 0.0f, 
             
-            heightmapWidth/2.0f, waterHeight, heightmapHeight/2.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+            heightmapWidth/2.0f, waterHeight, heightmapHeight/2.0f, heightmapWidth, 0.0f,  0.0f, 1.0f, 0.0f,
             -heightmapWidth/2.0f, waterHeight, heightmapHeight/2.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f,
-            heightmapWidth/2.0f, waterHeight, -heightmapHeight/2.0f, 1.0f, 1.0f,  0.0f, 1.0f, 0.0f
+            heightmapWidth/2.0f, waterHeight, -heightmapHeight/2.0f, heightmapWidth, heightmapHeight,  0.0f, 1.0f, 0.0f
         };
         ACGL::OpenGL::SharedArrayBuffer water_ab = ACGL::OpenGL::SharedArrayBuffer(new ACGL::OpenGL::ArrayBuffer());
         water_ab->defineAttribute("aPosition", GL_FLOAT, 3);
