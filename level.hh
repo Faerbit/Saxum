@@ -55,6 +55,9 @@ class Level {
         unsigned int getPhysicsObjectsVectorSize();
         void setCameraCenter(Object* object);
         void addLight(Light light);
+        void preloadLightPosition(float xPos, float yPos, float zPos);
+        void addLightByParameters(float redColour, float greenColour, float blueColour, float intensity, float flameYOffset, float flameHeight, float flameWidth);
+        void deleteFourLights();
         void addTrigger(Trigger trigger);
         lua_State* getLuaState();
         Terrain* getTerrain();
@@ -81,6 +84,7 @@ class Level {
         float skydomeSize;
         float strength;
         std::string xmlFilePath;
+        glm::vec3 nextLightPosition;
 };
 
 #endif
