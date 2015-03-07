@@ -6,9 +6,6 @@ Loader::Loader() {
 }
 
 void Loader::loadConfig(Application* application) {
-    int windowWidth, windowHeight, shadowCubeSize, maxShadowRenderCount;
-    float farPlane;
-    std::string compositionsPath, shaderPath, geometryPath, texturePath, scriptPath, heightmapPath, levelXmlPath;
     XMLDocument* config = new XMLDocument();
     const char* xmlFile = "../data/config.xml";
     config->LoadFile(xmlFile);
@@ -26,10 +23,33 @@ void Loader::loadConfig(Application* application) {
     application->setCompositionsPath(queryString(config, "compositionsPath"));
     application->setShaderPath(queryString(config, "shaderPath"));
     application->setGeometryPath(queryString(config, "geometryPath"));
-    application->setTexturePath(queryString(config, "texturePath"));
+    std::string texturePath = queryString(config, "texturePath");
+    application->setTexturePath(texturePath);
     application->setScriptPath(queryString(config, "scriptPath"));
     application->setHeightmapPath(queryString(config, "heightmapPath"));
     application->setLevelXmlPath(queryString(config, "levelXmlPath"));
+    XMLElement* loadingScreen = config->FirstChildElement("loadingScreen");
+    if (loadingScreen != NULL) {
+        std::string screenPath = queryString(loadingScreen, "screenPath");
+        std::string screenContinuePath = queryString(loadingScreen, "screenContinuePath");
+        std::string screenCheckPath = "../" + texturePath + screenPath;
+        std::string screenContinueCheckPath = "../" + texturePath + screenPath;
+        struct stat buf;
+        if(stat(screenCheckPath.c_str(), &buf) != 0){
+            std::cout << "The texture file " << screenCheckPath << " does not exist." << std::endl;
+            exit(-1);
+        }
+        if(stat(screenContinueCheckPath.c_str(), &buf) != 0){
+            std::cout << "The texture file " << screenContinueCheckPath << " does not exist." << std::endl;
+            exit(-1);
+        }
+        application->setLoadingScreenPath(screenPath);
+        application->setLoadingScreenContinuePath(screenContinuePath);
+    }
+    else {
+        printf("Could not find loading screen settings in config.xml. Exiting.\n");
+        exit(-1);
+    }
 }
 
 void Loader::load(std::string filePath, Level* level, std::string compositionsPath, std::string scriptPath, std::string globalGeometryPath, std::string globalTexturePath) {

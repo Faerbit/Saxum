@@ -12,7 +12,9 @@ using namespace ACGL::OpenGL;
 
 class Graphics {
     public:
-        Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane, int cube_size, unsigned int maxShadowRenderCount);
+        Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane, int cube_size, 
+                unsigned int maxShadowRenderCount, std::string screenPath,
+                std::string screenContinuePath);
         Graphics();
         void init(Level* level);
         void render(double time);
@@ -20,7 +22,10 @@ class Graphics {
         glm::uvec2 getWindowSize();
         void resize(glm::uvec2 windowSize);
         float getFarPlane();
+        void startGame();
+        void renderLoadingScreen();
     private:
+        void bindTextureUnits();
         void updateLights();
         void updateClosestLights();
         bool compareLightDistances(Light a, Light b);
@@ -29,7 +34,12 @@ class Graphics {
         glm::uvec2 windowSize;
         float nearPlane;
         float farPlane;
+        std::string loadingScreenPath;
+        std::string loadingScreenContinuePath;
+        SharedTexture2D loadingScreen;
+        SharedTexture2D loadingContinueScreen;
         std::vector<Light> closestLights;
+        SharedShaderProgram loadingShader;
         SharedShaderProgram lightingShader;
         SharedShaderProgram skydomeShader;
         SharedShaderProgram depthCubeShader;
@@ -51,6 +61,7 @@ class Graphics {
         unsigned int maxShadowRenderCount;
         Level* level;
         int number_of_texture_units = 0;
+        bool gameStart;
 };
 
 #endif

@@ -11,6 +11,7 @@ class Application {
         Graphics* getGraphics();
         Level* getLevel();
         void init();
+        void initLevel();
         void setFocused(bool focused);
         bool isFocused();
         void setCameraLock(bool locked);
@@ -30,7 +31,12 @@ class Application {
         void setScriptPath(std::string scriptPath);
         void setHeightmapPath(std::string heightmapPath);
         void setLevelXmlPath(std::string levelXmlPath);
+        void setLoadingScreenPath(std::string path);
+        void setLoadingScreenContinuePath(std::string path);
+        bool isGameStarted();
+        void startGame();
     private:
+        bool gameStarted;
         int ignoredMouseUpdates;
         bool focused;
         bool cameraLock;
@@ -48,6 +54,8 @@ class Application {
         std::string scriptPath;
         std::string heightmapPath;
         std::string levelXmlPath;
+        std::string screenPath;
+        std::string screenContinuePath;
 };
 
 #endif
