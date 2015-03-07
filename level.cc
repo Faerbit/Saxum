@@ -43,6 +43,9 @@ void Level::load() {
         .addFunction("setSunDirection", &Level::setSunDirection)
         .addFunction("forceMove", &Level::forceMove)
         .addFunction("activateEndgame", &Level::activateEndgame)
+        .addFunction("preloadLightPosition", &Level::preloadLightPosition)
+        .addFunction("addLightByParameters", &Level::addLightByParameters)
+        .addFunction("deleteFourLights", &Level::deleteFourLights)
         .endClass();
     //Push the level to Lua as a global variable
     luabridge::push(luaState, this);
@@ -257,6 +260,23 @@ void Level::setCameraCenter(Object* object) {
 
 void Level::addLight(Light light) {
     this->lights.push_back(light);
+}
+
+void Level::preloadLightPosition(float xPos, float yPos, float zPos){
+    nextLightPosition = glm::vec3(xPos, yPos, zPos);
+}
+
+void Level::addLightByParameters(float redColour, float greenColour, float blueColour,  float intensity, float flameYOffset, float flameHeight, float flameWidth){
+    glm::vec3 colour = glm::vec3(redColour, greenColour, blueColour);
+    this->lights.push_back(Light(nextLightPosition, colour, intensity, flameYOffset, flameHeight, flameWidth));
+}
+
+void Level::deleteFourLights(){
+    int indice = lights.size()-4;
+    lights.erase(lights.begin() + indice);
+    lights.erase(lights.begin() + indice);
+    lights.erase(lights.begin() + indice);
+    lights.erase(lights.begin() + indice);
 }
 
 void Level::addTrigger(Trigger trigger) {
