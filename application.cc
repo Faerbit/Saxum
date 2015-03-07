@@ -5,14 +5,24 @@ Application::Application() {
     Loader loader = Loader();
     //load the config.xml
     loader.loadConfig(this);
-    graphics = Graphics(glm::uvec2(windowWidth, windowHeight), 0.1f, farPlane, shadowCubeSize, maxShadowRenderCount);
+    graphics = Graphics(glm::uvec2(windowWidth, windowHeight), 0.1f, farPlane, shadowCubeSize, maxShadowRenderCount, screenPath, screenContinuePath);
+    gameStarted = false;
 }
 
 void Application::init()
 {
+    // define where shaders and textures can be found:
+    ACGL::Base::Settings::the()->setResourcePath("../");
+    ACGL::Base::Settings::the()->setShaderPath(shaderPath);
+    ACGL::Base::Settings::the()->setTexturePath(texturePath);
+    ACGL::Base::Settings::the()->setGeometryPath(geometryPath);
+    graphics.renderLoadingScreen();
     // init random generator
     std::srand(std::time(NULL));
     // choose Level             TODO: Choose this in a menu
+}
+
+void Application::initLevel() {
     std::string heightmapFilePath = heightmapPath + "heightmapLvl1.png";
     std::string levelXmlFilePath = levelXmlPath + "Level1.xml";
     this->level = Level(heightmapFilePath, levelXmlFilePath);
@@ -23,11 +33,6 @@ void Application::init()
     // set Skybox size
     level.setSkydomeSize((graphics.getFarPlane())-31.0f);
     
-    // define where shaders and textures can be found:
-    ACGL::Base::Settings::the()->setResourcePath("../");
-    ACGL::Base::Settings::the()->setShaderPath(shaderPath);
-    ACGL::Base::Settings::the()->setTexturePath(texturePath);
-    ACGL::Base::Settings::the()->setGeometryPath(geometryPath);
     
     // load Level
     level.load();
@@ -126,4 +131,20 @@ void Application::setLevelXmlPath(std::string levelXmlPath) {
 
 void Application::setMaxShadowRenderCount(int count) {
     this->maxShadowRenderCount = count;
+}
+
+void Application::setLoadingScreenPath(std::string path) {
+    this->screenPath = path;
+}
+void Application::setLoadingScreenContinuePath(std::string path) {
+    this->screenContinuePath = path;
+}
+
+void Application::startGame() {
+    gameStarted = true;
+    graphics.startGame();
+}
+
+bool Application::isGameStarted() {
+    return gameStarted;
 }

@@ -12,6 +12,9 @@ static void resizeCallback(GLFWwindow* window, int newWidth, int newHeight)
 
 static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
 {
+    if (!app.isGameStarted() && _action == GLFW_PRESS) {
+        app.startGame();
+    }
     if (_key == GLFW_KEY_ESCAPE && _action == GLFW_PRESS) {
         if (app.isFocused() && !app.isLocked()) {
             glfwSetWindowShouldClose( _window, GL_TRUE );
@@ -22,6 +25,9 @@ static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
 }
 
 static void mouseCallback(GLFWwindow* window, int button, int action, int) {
+    if (!app.isGameStarted() && action == GLFW_PRESS) {
+        app.startGame();
+    }
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
         glfwSetCursorPos(window, app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
@@ -127,6 +133,9 @@ int main( int argc, char *argv[] )
     glfwSwapInterval( 0 );
     
     app.init();
+    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    glfwSwapBuffers(window);
+    app.initLevel();
     
     int frameCount = 0;
     
@@ -135,6 +144,7 @@ int main( int argc, char *argv[] )
     double showNextFPS = startTimeInSeconds + FPSdelay;
     
     double lastUpdate=0.0f;
+    bool gameStarted = false;
     
     do {
         
@@ -148,28 +158,28 @@ int main( int argc, char *argv[] )
             showNextFPS = now + FPSdelay;
             frameCount = 0;
         }
-        
-        
-        if (app.isLocked() && app.getIgnoredMouseUpdates() == 0) {
-            int stateW = glfwGetKey(window, GLFW_KEY_W);
-            int stateA = glfwGetKey(window, GLFW_KEY_A);
-            int stateS = glfwGetKey(window, GLFW_KEY_S);
-            int stateD = glfwGetKey(window, GLFW_KEY_D);
-            int stateK = glfwGetKey(window, GLFW_KEY_K);
-            int stateL = glfwGetKey(window, GLFW_KEY_L);
-            
-            double xpos, ypos;
-            glfwGetCursorPos(window, &xpos, &ypos);
-            glfwSetCursorPos(window, app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
-            app.getLevel()->update(now - lastUpdate, now,
-                    glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
-                            (float)xpos-app.getGraphics()->getWindowSize().x/2),
-                        stateW == GLFW_PRESS,stateA == GLFW_PRESS,stateS == GLFW_PRESS,stateD == GLFW_PRESS,stateK == GLFW_PRESS,stateL == GLFW_PRESS);
-        }
-        else {
-            app.getLevel()->update(now - lastUpdate, now, glm::vec2(0.0f, 0.0f), false, false, false, false,false,false);
-            if (app.isLocked()) {
-                app.ignoredOneMouseUpdate();
+        if (app.isGameStarted()) {
+            if (app.isLocked() && app.getIgnoredMouseUpdates() == 0) {
+                int stateW = glfwGetKey(window, GLFW_KEY_W);
+                int stateA = glfwGetKey(window, GLFW_KEY_A);
+                int stateS = glfwGetKey(window, GLFW_KEY_S);
+                int stateD = glfwGetKey(window, GLFW_KEY_D);
+                int stateK = glfwGetKey(window, GLFW_KEY_K);
+                int stateL = glfwGetKey(window, GLFW_KEY_L);
+                
+                double xpos, ypos;
+                glfwGetCursorPos(window, &xpos, &ypos);
+                glfwSetCursorPos(window, app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
+                app.getLevel()->update(now - lastUpdate, now,
+                        glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
+                                (float)xpos-app.getGraphics()->getWindowSize().x/2),
+                            stateW == GLFW_PRESS,stateA == GLFW_PRESS,stateS == GLFW_PRESS,stateD == GLFW_PRESS,stateK == GLFW_PRESS,stateL == GLFW_PRESS);
+            }
+            else {
+                app.getLevel()->update(now - lastUpdate, now, glm::vec2(0.0f, 0.0f), false, false, false, false,false,false);
+                if (app.isLocked()) {
+                    app.ignoredOneMouseUpdate();
+                }
             }
         }
         

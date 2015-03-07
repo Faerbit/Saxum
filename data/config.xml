@@ -22,3 +22,8 @@
 <heightmapPath>data/levels/</heightmapPath>
 
 <levelXmlPath>data/levels/</levelXmlPath>
+
+<loadingScreen>
+    <screenPath>loadingscreen.png</screenPath>
+    <screenContinuePath>loadingscreenContinue.png</screenContinuePath>
+</loadingScreen>
