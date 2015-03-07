@@ -314,6 +314,8 @@ void Graphics::render(double time)
     // set Material Parameters
     lightingShader->setUniform("ambientColor", level->getAmbientLight());
     lightingShader->setUniform("camera", level->getPhysics()->getCameraPosition());
+    lightingShader->setUniform("movement", glm::vec2(-0.3f, -0.4f));
+    lightingShader->setUniform("time", (float) time);
     
     // render the level
     level->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
