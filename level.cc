@@ -151,8 +151,16 @@ Light* Level::getDirectionalLight() {
     return &directionalLight;
 }
 
-glm::vec4 Level::getFogColour() {
-    return fogColour;
+glm::vec4 Level::getFogColourDay() {
+    return fogColourDay;
+}
+
+glm::vec4 Level::getFogColourRise() {
+    return fogColourRise;
+}
+
+glm::vec4 Level::getFogColourNight() {
+    return fogColourNight;
 }
 
 glm::vec3 Level::getCameraPosition() {
@@ -227,8 +235,16 @@ void Level::setAmbientLight(glm::vec3 colour) {
     this->ambientLight = colour;
 }
 
-void Level::setFogColour(glm::vec4 colour) {
-    this->fogColour = colour;
+void Level::setFogColourDay(glm::vec4 colour) {
+    this->fogColourDay = colour;
+}
+
+void Level::setFogColourRise(glm::vec4 colour) {
+    this->fogColourRise = colour;
+}
+
+void Level::setFogColourNight(glm::vec4 colour) {
+    this->fogColourNight = colour;
 }
 
 void Level::setDirectionalLight(Light light) {

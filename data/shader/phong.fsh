@@ -39,7 +39,9 @@ uniform vec3 lightColors[32];
 uniform float lightIntensities[32];
 uniform bool isFlame[32];
 uniform float farPlane;
-uniform vec4 fogColor;
+uniform vec4 fogColorDay;
+uniform vec4 fogColorRise;
+uniform vec4 fogColorNight;
 uniform vec3 cameraCenter;
 uniform bool movingTexture;
 uniform vec2 movement;
@@ -66,6 +68,38 @@ vec2 poissonDisk[16] = vec2[](
 
 float flickerFunction(int index) {
     return 0.7*pow(sin(20.0*time + lightSources[index].x*lightSources[index].z), 2) + 0.3;
+}
+
+vec4 fogColor(float dot) {
+    float riseFactor = 0.0;
+    float dayFactor = 0.0;
+
+    if(dot<-0.52) {
+        riseFactor = 0.0;
+    }
+    else if (dot>0.52) {
+        riseFactor = 0.0;
+    }
+    else {
+        riseFactor = cos(3*dot);
+    }
+
+    if(dot<0.0) {
+        dayFactor = 0.0;
+    }
+    else if(dot>0.51) {
+        dayFactor = 1.0;
+    }
+    else {
+        dayFactor = sin(3*dot);
+    }
+    if (dot <0.0) {
+        return mix(fogColorNight, fogColorRise, riseFactor);
+    }
+    else {
+        return mix(fogColorRise, fogColorDay, dayFactor);
+    }
+
 }
 
 float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord, float maxBias ) {
@@ -112,9 +146,11 @@ void main()
 
 
     // direction lighting
+    float sunAngle = -1.0;
     if(length(directionalLightVector)>0.0f) {
         vec3 directionalVector = normalize(directionalLightVector);
-        if (dot(vec3(0.0, 1.0, 0.0), directionalVector) > 0.0) {
+        sunAngle = dot(vec3(0.0, 1.0, 0.0), directionalVector);
+        if ( sunAngle > -0.5) {
             float directionalVisibility = 1.0f;
             if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.2) {
                 if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.2) {
@@ -215,5 +251,5 @@ void main()
         textureColor = texture(uTexture, vTexCoord).rgba;
     }
     oColor = vec4(finalColor, 1.0f)*textureColor;
-    oColor = mix(oColor, fogColor, fogFactor);
+    oColor = mix(oColor, fogColor(sunAngle), fogFactor);
 }
