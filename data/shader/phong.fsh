@@ -37,6 +37,7 @@ uniform float directionalIntensity;
 uniform vec3 lightSources[32];
 uniform vec3 lightColors[32];
 uniform float lightIntensities[32];
+uniform bool isFlame[32];
 uniform float farPlane;
 uniform vec4 fogColor;
 uniform vec3 cameraCenter;
@@ -62,6 +63,10 @@ vec2 poissonDisk[16] = vec2[](
    vec2( 0.19984126, 0.78641367 ),
    vec2( 0.14383161, -0.14100790 )
 );
+
+float flickerFunction() {
+    return sin(time);
+}
 
 float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord, float maxBias ) {
     float visibility = 1.0;
@@ -178,7 +183,13 @@ void main()
                 pointVisibility = samplePointShadow(shadowMap_cube9, lightDirection);
             }
             vec3 lightVector = normalize(lightSources[i]-vec3(fragPosition));
-            float intensity = clamp(exp(-(1/lightIntensities[i])*distance), 0.0, 1.0);
+            float intensity = 0.0f;
+            if (isFlame[i] == true) {
+                intensity = clamp(exp(-(1/(lightIntensities[i] + flickerFunction()))*distance), 0.0, 1.0);
+            }
+            else {
+                intensity = clamp(exp(-(1/lightIntensities[i])*distance), 0.0, 1.0);
+            }
             diffuseColor += clamp(dot(normalize(vNormal), lightVector)
             *diffuseFactor*intensity*lightColors[i], 0.0, 1.0)*pointVisibility;
             vec3 cameraVector = normalize(camera - vec3(fragPosition));
