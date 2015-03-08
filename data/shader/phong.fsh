@@ -64,8 +64,8 @@ vec2 poissonDisk[16] = vec2[](
    vec2( 0.14383161, -0.14100790 )
 );
 
-float flickerFunction() {
-    return pow(0.6*sin(20.0*time), 2) + 0.4;
+float flickerFunction(int index) {
+    return 0.7*pow(sin(20.0*time + lightSources[index].x*lightSources[index].z), 2) + 0.3;
 }
 
 float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord, float maxBias ) {
@@ -187,7 +187,7 @@ void main()
             vec3 lightVector = normalize(lightSources[i]-vec3(fragPosition));
             float intensity = 0.0f;
             if (isFlame[i] == true) {
-                intensity = clamp(exp(-(1/(lightIntensities[i] + flickerFunction()))*distance), 0.0, 1.0);
+                intensity = clamp(exp(-(1/(lightIntensities[i] + flickerFunction(i)))*distance), 0.0, 1.0);
             }
             else {
                 intensity = clamp(exp(-(1/lightIntensities[i])*distance), 0.0, 1.0);

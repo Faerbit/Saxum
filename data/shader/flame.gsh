@@ -12,37 +12,37 @@ in vec3 Color[];
 out vec3 fColor;
 
 const float PI = 3.1415926;
-const float transition_point_1 = 1.178097;
-const float sin_p1_1  = 0.4;
-const float sin_p2_1  = 2;
-const float ex_p1_1   = 1.093;
-const float ex_p2_1   = 1.9996;
-const float begin_1   = 0;
-const float end_1     = 2.5;
+const float transition_point_1 = 0.486946;
+const float cos_p1_1  = 0.35;
+const float cos_p2_1  = 2.0;
+const float ex_p1_1   = -0.193;
+const float ex_p2_1   = 2.9426;
+const float begin_1   = -0.785398;
+const float end_1     = 1.5;
 
-const float transition_point_2 = 1.570796;
-const float sin_p1_2  = 0.2;
-const float sin_p2_2  = 1.5;
-const float ex_p1_2   = 0.4;
-const float ex_p2_2   = 1.5;
-const float begin_2   = 0;
-const float end_2     = 3;
+const float transition_point_2 = 0.600598;
+const float cos_p1_2  = 0.3;
+const float cos_p2_2  = 1.7;
+const float ex_p1_2   = -0.19;
+const float ex_p2_2   = 2.762;
+const float begin_2   = -0.923998;
+const float end_2     = 2;
 
 float flickerFunction() {
-    return pow(0.6*sin(20.0*time), 2) + 0.4;
+    return pow(sin(20.0*time + gl_in[0].gl_Position.x*gl_in[0].gl_Position.z), 2);
 }
 
 float radiusFunction(float x) {
     float value_1 = 0.0;
     float value_2 = 0.0;
     if (x < transition_point_1) {
-        value_1 = sin_p1_1 * sin(sin_p2_1 * x);
+        value_1 = cos_p1_1 * cos(cos_p2_1 * x);
     }
     else {
         value_1 = exp(ex_p1_1 - ex_p2_1 * x);
     }
     if (x < transition_point_2) {
-        value_2 = sin_p1_2 * sin(sin_p2_2 * x);
+        value_2 = cos_p1_2 * cos(cos_p2_2 * x);
     }
     else {
         value_2 = exp(ex_p1_2 - ex_p2_2 * x);
@@ -53,7 +53,7 @@ float radiusFunction(float x) {
 void main() {
     fColor = Color[0];
 
-    float resolution = 8.0;
+    float resolution = 6.0;
     float this_begin = mix(begin_1, begin_2, flickerFunction());
     float this_end = mix(end_1, end_2, flickerFunction());
     float step = abs(this_end-this_begin)/resolution/2.0;

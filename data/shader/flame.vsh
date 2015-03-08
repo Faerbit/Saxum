@@ -1,6 +1,7 @@
 #version 150
 
 uniform mat4 viewProjectionMatrix;
+uniform vec2 skew;
 
 in vec3 aPosition;
 in vec3 aColor;
