@@ -114,34 +114,36 @@ void main()
     // direction lighting
     if(length(directionalLightVector)>0.0f) {
         vec3 directionalVector = normalize(directionalLightVector);
-        float directionalVisibility = 1.0f;
-        if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.2) {
-            if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.2) {
-                directionalVisibility = sampleDirectionalShadow(shadowMap_directional0, shadowCoord0, 0.001);
+        if (dot(vec3(0.0, 1.0, 0.0), directionalVector) > 0.0) {
+            float directionalVisibility = 1.0f;
+            if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.2) {
+                if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.2) {
+                    directionalVisibility = sampleDirectionalShadow(shadowMap_directional0, shadowCoord0, 0.001);
+                }
+                else if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.0) {
+                    float directionalVisibility0 = sampleDirectionalShadow(shadowMap_directional0, shadowCoord0, 0.001);
+                    float directionalVisibility1 = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.002);
+                    directionalVisibility = mix(directionalVisibility0, directionalVisibility1, distanceToBorder(shadowCoord0.xy) * 5);
+                }
+                else {
+                    directionalVisibility = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.002);
+                }
             }
-            else if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.0) {
-                float directionalVisibility0 = sampleDirectionalShadow(shadowMap_directional0, shadowCoord0, 0.001);
-                float directionalVisibility1 = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.002);
-                directionalVisibility = mix(directionalVisibility0, directionalVisibility1, distanceToBorder(shadowCoord0.xy) * 5);
+            else if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.0) {
+                float directionalVisibility1 = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.01);
+                float directionalVisibility2 = sampleDirectionalShadow(shadowMap_directional2, shadowCoord2, 0.01);
+                directionalVisibility = mix(directionalVisibility1, directionalVisibility2, distanceToBorder(shadowCoord1.xy) * 5);
             }
             else {
-                directionalVisibility = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.002);
+                directionalVisibility = sampleDirectionalShadow(shadowMap_directional2, shadowCoord2, 0.01);
             }
+            diffuseColor += clamp(dot(normalize(vNormal), directionalVector)
+            *diffuseFactor*directionalIntensity*directionalColor, 0.0, 1.0)*directionalVisibility;
+            vec3 cameraVector = normalize(camera - vec3(fragPosition));
+            specularColor += clamp(pow((dot((cameraVector+directionalVector),normalize(vNormal))/
+            (length(cameraVector+directionalVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
+            *specularFactor*directionalIntensity*directionalColor*directionalVisibility;
         }
-        else if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.0) {
-            float directionalVisibility1 = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.01);
-            float directionalVisibility2 = sampleDirectionalShadow(shadowMap_directional2, shadowCoord2, 0.01);
-            directionalVisibility = mix(directionalVisibility1, directionalVisibility2, distanceToBorder(shadowCoord1.xy) * 5);
-        }
-        else {
-            directionalVisibility = sampleDirectionalShadow(shadowMap_directional2, shadowCoord2, 0.01);
-        }
-        diffuseColor += clamp(dot(normalize(vNormal), directionalVector)
-        *diffuseFactor*directionalIntensity*directionalColor, 0.0, 1.0)*directionalVisibility;
-        vec3 cameraVector = normalize(camera - vec3(fragPosition));
-        specularColor += clamp(pow((dot((cameraVector+directionalVector),normalize(vNormal))/
-        (length(cameraVector+directionalVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
-        *specularFactor*directionalIntensity*directionalColor*directionalVisibility;
     }
 
     // point lights
