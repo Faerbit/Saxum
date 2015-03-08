@@ -65,7 +65,7 @@ vec2 poissonDisk[16] = vec2[](
 );
 
 float flickerFunction() {
-    return pow(0.6*sin(10.0*time), 2) + 0.4;
+    return pow(0.6*sin(20.0*time), 2) + 0.4;
 }
 
 float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord, float maxBias ) {
