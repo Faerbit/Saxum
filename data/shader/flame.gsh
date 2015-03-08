@@ -29,7 +29,7 @@ const float begin_2   = 0;
 const float end_2     = 3;
 
 float flickerFunction() {
-    return sin(time);
+    return pow(0.6*sin(10.0*time), 2) + 0.4;
 }
 
 float radiusFunction(float x) {
