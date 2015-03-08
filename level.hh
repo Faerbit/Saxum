@@ -34,7 +34,9 @@ class Level {
         Object* getCameraCenter();
         Camera* getCamera();
         glm::vec3 getCameraPosition();
-        glm::vec4 getFogColour();
+        glm::vec4 getFogColourDay();
+        glm::vec4 getFogColourRise();
+        glm::vec4 getFogColourNight();
         void setSkydomeSize(float size);
         float getSkydomeSize();
         Skydome* getSkydome();
@@ -47,7 +49,9 @@ class Level {
         void addObject(Object* object);
         void addPhysicsObject(Object* object);
         void setAmbientLight(glm::vec3 colour);
-        void setFogColour(glm::vec4 colour);
+        void setFogColourDay(glm::vec4 colour);
+        void setFogColourRise(glm::vec4 colour);
+        void setFogColourNight(glm::vec4 colour);
         void setDirectionalLight(Light light);
         void setSunDirection(float x, float y, float z);
         Physics* getPhysics();
@@ -73,7 +77,9 @@ class Level {
         std::vector<Light> lights;
         std::vector<Trigger> triggers;
         glm::vec3 ambientLight;
-        glm::vec4 fogColour;
+        glm::vec4 fogColourDay;
+        glm::vec4 fogColourRise;
+        glm::vec4 fogColourNight;
         Light directionalLight;
         Object* cameraCenter;
         int playerIndex;

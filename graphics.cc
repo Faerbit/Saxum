@@ -265,7 +265,7 @@ void Graphics::render(double time)
         for (unsigned int i = 0; i<framebuffer_directional.size(); i++) {
             framebuffer_directional.at(i)->bind(); 
             glClear(GL_DEPTH_BUFFER_BIT);
-            if (sunAngle > 0.0f) {
+            if (sunAngle > -0.5f) {
                 float projection_size = 0.0f;
                 switch(i) {
                     case 0:
@@ -302,7 +302,9 @@ void Graphics::render(double time)
         // set fog Parameters
         skydomeShader->setUniform("farPlane", farPlane);
         skydomeShader->setUniform("skydomeSize", level->getSkydomeSize());
-        skydomeShader->setUniform("fogColor", level->getFogColour());
+        skydomeShader->setUniform("fogColorDay", level->getFogColourDay());
+        skydomeShader->setUniform("fogColorRise", level->getFogColourRise());
+        skydomeShader->setUniform("fogColorNight", level->getFogColourNight());
         skydomeShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
         skydomeShader->setUniform("directionalVector", level->getDirectionalLight()->getPosition());
         skydomeShader->setUniform("sunColor", level->getDirectionalLight()->getColour());
@@ -332,7 +334,9 @@ void Graphics::render(double time)
         lightingShader->setUniform("farPlane", farPlane);
         
         // set fog Parameters
-        lightingShader->setUniform("fogColor", level->getFogColour());
+        lightingShader->setUniform("fogColorDay", level->getFogColourDay());
+        lightingShader->setUniform("fogColorRise", level->getFogColourRise());
+        lightingShader->setUniform("fogColorNight", level->getFogColourNight());
         lightingShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
         
         // set Material Parameters

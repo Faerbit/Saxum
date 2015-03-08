@@ -158,13 +158,27 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     bColour = queryFloat(ambientElement, "bColour");
     level->setAmbientLight(glm::vec3(rColour,gColour,bColour));
     
-    XMLElement* fogElement = doc->FirstChildElement("fogColour");
+    XMLElement* fogElement = doc->FirstChildElement("fogColourDay");
     rColour = queryFloat(fogElement, "rColour");
     gColour = queryFloat(fogElement, "gColour");
     bColour = queryFloat(fogElement, "bColour");
     alpha = queryFloat(fogElement, "alpha");
-    level->setFogColour(glm::vec4(rColour,gColour,bColour, alpha));
+    level->setFogColourDay(glm::vec4(rColour,gColour,bColour, alpha));
     
+    fogElement = doc->FirstChildElement("fogColourRise");
+    rColour = queryFloat(fogElement, "rColour");
+    gColour = queryFloat(fogElement, "gColour");
+    bColour = queryFloat(fogElement, "bColour");
+    alpha = queryFloat(fogElement, "alpha");
+    level->setFogColourRise(glm::vec4(rColour,gColour,bColour, alpha));
+
+    fogElement = doc->FirstChildElement("fogColourNight");
+    rColour = queryFloat(fogElement, "rColour");
+    gColour = queryFloat(fogElement, "gColour");
+    bColour = queryFloat(fogElement, "bColour");
+    alpha = queryFloat(fogElement, "alpha");
+    level->setFogColourNight(glm::vec4(rColour,gColour,bColour, alpha));
+
     XMLElement* directionalElement = doc->FirstChildElement("directionalLight");
     xOffset = queryFloat(directionalElement, "xOffset");
     yOffset = queryFloat(directionalElement, "yOffset");
