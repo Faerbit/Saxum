@@ -440,12 +440,18 @@ void Graphics::updateLights() {
         lightingShader->setUniform("directionalIntensity",
             level->getDirectionalLight()->getIntensity());
     }
+    bool isFlame[closestLights.size()];
     closestFlames = std::vector<Flame*>();
     for (unsigned int i = 0; i<closestLights.size(); i++) {
         if (closestLights.at(i).isFlame()) {
             closestFlames.push_back(closestLights.at(i).getFlame());
+            isFlame[i] = true;
+        }
+        else {
+            isFlame[i] = false;
         }
     }
+    glUniform1iv(lightingShader->getUniformLocation("isFlame"), sizeof(isFlame), (GLint*) isFlame);
 }
 
 void Graphics::resize(glm::uvec2 windowSize) {
