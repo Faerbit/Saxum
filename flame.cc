@@ -38,16 +38,21 @@ void Flame::render(SharedShaderProgram shader, glm::mat4 viewProjectionMatrix, f
                   0.0f, tan(skewing.y), 1.0f, 0.0f,
                   0.0f,      0.0f, 0.0f, 1.0f);
     if (!withColor) {
-        modelMatrix = skewMatrixX * skewMatrixZ * glm::scale<float>(size * glm::vec3(1.1f));
+        modelMatrix = skewMatrixX * skewMatrixZ * glm::scale<float>(size * glm::vec3(1.1f))
+            * glm::rotate(skewing.x, glm::vec3(1.0f, 0.0f, 0.0f))
+            * glm::rotate(skewing.y, glm::vec3(0.0f, 0.0f, 1.0f));
     }
     else {
-        modelMatrix = skewMatrixX * skewMatrixZ * glm::scale<float>(size);
+        modelMatrix = skewMatrixX * skewMatrixZ * glm::scale<float>(size)
+            * glm::rotate(skewing.x, glm::vec3(1.0f, 0.0f, 0.0f))
+            * glm::rotate(skewing.y, glm::vec3(0.0f, 0.0f, 1.0f));
     }
     glm::mat4 modelViewProjectionMatrix = viewProjectionMatrix * modelMatrix;
     shader->setUniform("modelViewProjectionMatrix", modelViewProjectionMatrix);
     shader->setUniform("viewProjectionMatrix", viewProjectionMatrix);
     shader->setUniform("withColor", withColor);
     shader->setUniform("time", time);
+    shader->setUniform("skew", skewing);
     shader->setUniform("bottom", true);
     shader->setUniform("left", true);
     vao->render();

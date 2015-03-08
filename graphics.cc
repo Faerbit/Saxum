@@ -292,7 +292,7 @@ void Graphics::render(double time)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //wind
-        glm::vec2 wind = glm::vec2(-0.4f, 0.3f);
+        glm::vec2 wind = glm::vec2(0.0f, 0.0f);
 
         //set view and projection matrix
         glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
