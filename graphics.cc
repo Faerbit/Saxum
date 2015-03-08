@@ -352,7 +352,7 @@ void Graphics::render(double time)
 
         // draw with colors
         for(unsigned int i = 0; i<closestFlames.size(); i++) {
-            closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), true, wind);
+            closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), true, wind, level->getPhysics()->getCameraPosition());
         }
         glDisable(GL_CULL_FACE);
 
@@ -364,7 +364,7 @@ void Graphics::render(double time)
         glClear(GL_STENCIL_BUFFER_BIT);//clear stencil buffer
 
         for(unsigned int i = 0; i<closestFlames.size(); i++) {
-            closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), false, wind);
+            closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), false, wind, level->getPhysics()->getCameraPosition());
         }
 
         glStencilFunc(GL_EQUAL, 1, 0xFF); //Pass test if stencil value is 1

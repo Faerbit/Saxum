@@ -1,15 +1,22 @@
 #version 150
 
 uniform mat4 modelViewProjectionMatrix;
+uniform mat4 viewProjectionMatrix;
 uniform float time;
 uniform bool bottom;
 uniform bool left;
+uniform vec3 camera;
 
 layout(points) in;
-layout(triangle_strip, max_vertices = 146) out;
+layout(triangle_strip, max_vertices = 85) out;
+
+out GS_OUT {
+    float maxAngle;
+    vec3 position;
+}gs_out;
 
 in vec3 Color[];
-out vec3 fColor;
+out vec4 flameCenter;
 
 const float PI = 3.1415926;
 const float transition_point_1 = 1.178097;
@@ -29,8 +36,10 @@ const float begin_2   = 0;
 const float end_2     = 3;
 
 float flickerFunction() {
-    return pow(0.6*sin(20.0*time), 2) + 0.4;
+    //return pow(0.6*sin(20.0*time), 2) + 0.4;
+    return 1.0;
 }
+
 
 float radiusFunction(float x) {
     float value_1 = 0.0;
@@ -51,7 +60,18 @@ float radiusFunction(float x) {
 }
 
 void main() {
-    fColor = Color[0];
+    flameCenter = gl_in[0].gl_Position;
+    vec3 color = Color[0];
+    vec2 cameraXZ = vec2(camera.x, camera.z);
+    vec3 cameraVector = vec3(flameCenter) - camera;
+    vec2 cameraVectorXZ = normalize(vec2(cameraVector.x, cameraVector.z));
+    vec2 rightAngleVector;
+    if (cameraVectorXZ.y == 0.0) {
+       rightAngleVector = vec2(0.0, 1.0); 
+    }
+    else {
+        rightAngleVector = normalize(vec2(1.0, -cameraVectorXZ.x/cameraVectorXZ.y));
+    }
 
     float resolution = 8.0;
     float this_begin = mix(begin_1, begin_2, flickerFunction());
@@ -70,6 +90,8 @@ void main() {
     for (i; i<render_end; i+=step) {
         float downRadius    = radiusFunction(i);
         float upRadius = radiusFunction(i+step);
+        float maxUpAngle = acos(dot(cameraVectorXZ, normalize((vec2(gl_in[0].gl_Position.x, gl_in[0].gl_Position.z) + rightAngleVector * upRadius) - cameraXZ)));
+        float maxDownAngle = acos(dot(cameraVectorXZ, normalize((vec2(gl_in[0].gl_Position.x, gl_in[0].gl_Position.z) + rightAngleVector * downRadius) - cameraXZ)));
         float circle_end = 0.0;
         int j = 0;
         if (left) {
@@ -85,18 +107,26 @@ void main() {
             float rightAngle    = PI * 2.0 / resolution * (j+1);
 
             vec4 offset = vec4(cos(rightAngle) * downRadius, i, -sin(rightAngle) * downRadius, 0.0);
+            gs_out.position = vec3(gl_in[0].gl_Position + offset);
+            gs_out.maxAngle = maxDownAngle;
             gl_Position = gl_in[0].gl_Position + modelViewProjectionMatrix * offset;
             EmitVertex();
 
             offset = vec4(cos(rightAngle) * upRadius, i + step, -sin(rightAngle) * upRadius, 0.0);
+            gs_out.position = vec3(gl_in[0].gl_Position + offset);
+            gs_out.maxAngle = maxUpAngle;
             gl_Position = gl_in[0].gl_Position + modelViewProjectionMatrix * offset;
             EmitVertex();
 
             offset = vec4(cos(leftAngle) * downRadius, i, -sin(leftAngle) * downRadius, 0.0);
+            gs_out.position = vec3(gl_in[0].gl_Position + offset);
+            gs_out.maxAngle = maxDownAngle;
             gl_Position = gl_in[0].gl_Position + modelViewProjectionMatrix * offset;
             EmitVertex();
 
             offset = vec4(cos(leftAngle) * upRadius, i + step, -sin(leftAngle) * upRadius, 0.0);
+            gs_out.position = vec3(gl_in[0].gl_Position + offset);
+            gs_out.maxAngle = maxUpAngle;
             gl_Position = gl_in[0].gl_Position + modelViewProjectionMatrix * offset;
             EmitVertex();
 
