@@ -253,26 +253,29 @@ void Graphics::render(double time)
         glViewport(0, 0, windowSize.x, windowSize.y);
        
         std::vector<glm::mat4> depthViewProjectionMatrices = std::vector<glm::mat4>(framebuffer_directional.size());
+        float sunAngle = glm::dot(glm::vec3(0.0f, 1.0f, 0.0f), glm::normalize(level->getDirectionalLight()->getPosition()));
         glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
 
         for (unsigned int i = 0; i<framebuffer_directional.size(); i++) {
             framebuffer_directional.at(i)->bind(); 
             glClear(GL_DEPTH_BUFFER_BIT);
-            float projection_size = 0.0f;
-            switch(i) {
-                case 0:
-                    projection_size = 10.0f;
-                    break;
-                case 1:
-                    projection_size = 30.0f;
-                    break;
-                case 2:
-                    projection_size = farPlane/1.5f;
-                    break;
+            if (sunAngle > 0.0f) {
+                float projection_size = 0.0f;
+                switch(i) {
+                    case 0:
+                        projection_size = 10.0f;
+                        break;
+                    case 1:
+                        projection_size = 30.0f;
+                        break;
+                    case 2:
+                        projection_size = farPlane/1.5f;
+                        break;
+                }
+                depthViewProjectionMatrices.at(i) =  glm::ortho<float>(-projection_size, projection_size, -projection_size, projection_size, -farPlane/1.5f, farPlane/1.5f) *
+                    glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
+                level->render(depthShader, false, &depthViewProjectionMatrices.at(i));
             }
-            depthViewProjectionMatrices.at(i) =  glm::ortho<float>(-projection_size, projection_size, -projection_size, projection_size, -farPlane/1.5f, farPlane/1.5f) *
-                glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-            level->render(depthShader, false, &depthViewProjectionMatrices.at(i));
             if (!framebuffer_directional.at(i)->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
             }
