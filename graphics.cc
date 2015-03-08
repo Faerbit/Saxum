@@ -282,6 +282,9 @@ void Graphics::render(double time)
         framebuffer_light->bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        //wind
+        glm::vec2 wind = glm::vec2(-0.4f, 0.3f);
+
         //set view and projection matrix
         glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
 
@@ -332,7 +335,7 @@ void Graphics::render(double time)
         // set Material Parameters
         lightingShader->setUniform("ambientColor", level->getAmbientLight());
         lightingShader->setUniform("camera", level->getPhysics()->getCameraPosition());
-        lightingShader->setUniform("movement", glm::vec2(-0.3f, -0.4f));
+        lightingShader->setUniform("movement", wind);
         lightingShader->setUniform("time", (float) time);
         
         // render the level
@@ -346,7 +349,7 @@ void Graphics::render(double time)
 
         // draw with colors
         for(unsigned int i = 0; i<closestFlames.size(); i++) {
-            closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), true);
+            closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), true, wind);
         }
         glDisable(GL_CULL_FACE);
 
@@ -358,7 +361,7 @@ void Graphics::render(double time)
         glClear(GL_STENCIL_BUFFER_BIT);//clear stencil buffer
 
         for(unsigned int i = 0; i<closestFlames.size(); i++) {
-            closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), false);
+            closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), false, wind);
         }
 
         glStencilFunc(GL_EQUAL, 1, 0xFF); //Pass test if stencil value is 1
