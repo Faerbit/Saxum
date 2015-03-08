@@ -7,16 +7,16 @@ from collections import namedtuple
 Result = namedtuple("Result", ["p1", "p2", "error"])
 
 def main():
-    # f(x) = p1 * sin(p2 * x)
+    # f(x) = p1 * cos(p2 * x)
 
-    parameter_sin_1=2
-    parameter_sin_2=0.5
+    parameter_cos_1=0.3
+    parameter_cos_2=1.5
 
-    transition_point = (1/parameter_sin_2) * pi * 0.75
+    transition_point = (1/parameter_cos_2) * pi/2 * 0.65
 
-    sin_value = parameter_sin_1 * sin(parameter_sin_2 * transition_point)
+    cos_value = parameter_cos_1 * cos(parameter_cos_2 * transition_point)
 
-    derived_sin_value = parameter_sin_1 * parameter_sin_2 * cos(parameter_sin_2 * transition_point)
+    derived_cos_value = parameter_cos_1 * parameter_cos_2 * -sin(parameter_cos_2 * transition_point)
 
     #g(x) = e^(p1 - p2 * x)
     result = Result(10, 10, 1)
@@ -26,16 +26,16 @@ def main():
         parameter_ex_p2 = list(arange(result.p2 - step, result.p2 + step, step/100))
         step /= 10
 
-        result = calculate(parameter_ex_p1, parameter_ex_p2, transition_point, sin_value, derived_sin_value)
+        result = calculate(parameter_ex_p1, parameter_ex_p2, transition_point, cos_value, derived_cos_value)
 
-    print("sin p1: " + str(parameter_sin_1))
-    print("sin p2: " + str(parameter_sin_2))
+    print("cos p1: " + str(parameter_cos_1))
+    print("cos p2: " + str(parameter_cos_2))
     print("transition point: " + str(transition_point))
     print("p1: " + str(result.p1))
     print("p2: " + str(result.p2))
     print("combined error: " + str(result.error))
 
-def calculate(parameter_ex_p1, parameter_ex_p2, transition_point, sin_value, derived_sin_value):
+def calculate(parameter_ex_p1, parameter_ex_p2, transition_point, cos_value, derived_cos_value):
     best_parameter_ex_p1 = -1
     best_parameter_ex_p2 = -1
     best_combined_error = 100
@@ -43,8 +43,8 @@ def calculate(parameter_ex_p1, parameter_ex_p2, transition_point, sin_value, der
         for p2 in parameter_ex_p2:
                 value = exp(p1 - p2 * transition_point)
                 derived_value = - p2 * exp(p1 - p2 * transition_point)
-                error = abs(value - sin_value)
-                derived_error = abs(derived_value - derived_sin_value)
+                error = abs(value - cos_value)
+                derived_error = abs(derived_value - derived_cos_value)
                 combined_error = error + derived_error
                 if combined_error < best_combined_error:
                     best_parameter_ex_p1 = p1
