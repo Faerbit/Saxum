@@ -218,6 +218,12 @@ void Graphics::render(double time)
         fullscreen_quad->render();
     }
     else {
+        double nextUpdate = lastUpdate + lightUpdateDelay;
+        if (time >= nextUpdate)
+        {
+            updateLights();
+            lastUpdate = time;
+        }
         // At first render shadows
         depthCubeShader->use();
         depthCubeShader->setUniform("farPlane", farPlane);
@@ -309,12 +315,6 @@ void Graphics::render(double time)
         // TODO look into doing this less often, offload to another thread?
         // TODO figure out how to deal with bigger numbers of lights. load the nearest on demand?
 
-        double nextUpdate = lastUpdate + lightUpdateDelay;
-        if (time >= nextUpdate)
-        {
-            updateLights();
-            lastUpdate = time;
-        }
         
         // convert texture to homogenouse coordinates
         glm::mat4 biasMatrix(
@@ -409,6 +409,7 @@ void Graphics::updateClosestLights() {
 void Graphics::updateLights() {
     updateClosestLights();
     if (closestLights.size() > 0) {
+        lightingShader->use();
         lightingShader->setUniform("lightCount", (int) closestLights.size());
         lightingShader->setUniform("maxShadowRenderCount", std::min((int) closestLights.size(), (int)maxShadowRenderCount));
 
