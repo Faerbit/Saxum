@@ -22,7 +22,6 @@ void main() {
     vec4 dayColor = texture(uTexture, vTexCoord);
     if (sunAngle >= 0.0) {
         textureColor = mix(dayColor, texture(nightTexture, vTexCoord), sunAngle);
-        textureColor = mix(vec4(0.0, 0.0, 0.0, 1.0), textureColor, 1.0 - sunAngle);
     }
     else {
         textureColor = dayColor;

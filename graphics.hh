@@ -21,6 +21,7 @@ class Graphics {
         void resize(glm::uvec2 windowSize);
         float getFarPlane();
     private:
+        void bindTextureUnits();
         void updateLights();
         void updateClosestLights();
         bool compareLightDistances(Light a, Light b);

@@ -126,10 +126,6 @@ void Graphics::init(Level* level) {
 
     lightingShader->use();
 
-    for (unsigned int i = 0; i<depth_directionalMaps.size(); i++) {
-        // start with texture unit 1 because the first is reserved for the texture
-        lightingShader->setTexture("shadowMap_directional" + std::to_string(i), depth_directionalMaps.at(i), i+1);
-    }
 
 
     // always generate and bind 10 cube maps, because otherwise the shader won't work
@@ -145,12 +141,6 @@ void Graphics::init(Level* level) {
     
     framebuffer_cube = SharedFrameBufferObject(new FrameBufferObject());
 
-    if (level->getLights()->size() > 0) {
-        for(unsigned int i = 0; i<depth_cubeMaps.size(); i++){
-            // start with texture unit 4 because the first four are used by the texture and the directional shadow map
-            lightingShader->setTexture("shadowMap_cube" + std::to_string(i), depth_cubeMaps.at(i), i+4);
-        }
-    }
 
     light_fbo_color_texture = SharedTexture2D(new Texture2D(windowSize, GL_RGBA8));
     light_fbo_color_texture->setMinFilter(GL_NEAREST);
@@ -169,12 +159,9 @@ void Graphics::init(Level* level) {
     framebuffer_light->validate();
 
     flamePostShader->use();
-    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, 14);
     flamePostShader->setUniform("windowSizeX", int(windowSize.x));
     flamePostShader->setUniform("windowSizeY", int(windowSize.y));
 
-    skydomeShader->use();
-    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture()->getReference(), 15);
 
     flame_fbo_color_texture = SharedTexture2D(new Texture2D(windowSize, GL_RGBA8));
     flame_fbo_color_texture->setMinFilter(GL_NEAREST);
@@ -187,18 +174,37 @@ void Graphics::init(Level* level) {
     framebuffer_flame->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
     framebuffer_flame->validate();
 
-    mergeShader->use();
-    mergeShader->setTexture("flame_fbo", flame_fbo_color_texture, 16);
-    mergeShader->setTexture("light_fbo", light_fbo_color_texture, 17);
-
-    flameColorShader->use();
-    flameColorShader->setTexture("flame_fbo", flame_fbo_color_texture, 18);
+    bindTextureUnits();
 
     updateClosestLights();
 }
 
 glm::uvec2 Graphics::getWindowSize() {
     return windowSize;
+}
+
+void Graphics::bindTextureUnits() {
+    lightingShader->use();
+    for (unsigned int i = 0; i<depth_directionalMaps.size(); i++) {
+        // start with texture unit 1 because the first is reserved for the texture
+        lightingShader->setTexture("shadowMap_directional" + std::to_string(i), depth_directionalMaps.at(i), i+1);
+    }
+    if (level->getLights()->size() > 0) {
+        for(unsigned int i = 0; i<depth_cubeMaps.size(); i++){
+            // start with texture unit 4 because the first four are used by the texture and the directional shadow map
+            lightingShader->setTexture("shadowMap_cube" + std::to_string(i), depth_cubeMaps.at(i), i+4);
+        }
+    }
+    flamePostShader->use();
+    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, 14);
+    skydomeShader->use();
+    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture()->getReference(), 15);
+    mergeShader->use();
+    mergeShader->setTexture("flame_fbo", flame_fbo_color_texture, 16);
+    mergeShader->setTexture("light_fbo", light_fbo_color_texture, 17);
+
+    flameColorShader->use();
+    flameColorShader->setTexture("flame_fbo", flame_fbo_color_texture, 18);
 }
 
 void Graphics::render(double time)
@@ -480,8 +486,10 @@ void Graphics::resize(glm::uvec2 windowSize) {
     }
     light_fbo_color_texture->resize(windowSize);
     light_fbo_depth_texture->resize(windowSize);
+    flame_fbo_color_texture->resize(windowSize);
     flamePostShader->setUniform("windowSizeX", int(windowSize.x));
     flamePostShader->setUniform("windowSizeY", int(windowSize.y));
+    bindTextureUnits();
 }
 
 glm::mat4 Graphics::buildViewMatrix(Level* level) {
