@@ -24,13 +24,24 @@ Flame::Flame() {
 }
 
 void Flame::render(SharedShaderProgram shader, glm::mat4 viewProjectionMatrix, float time,
-    bool withColor) {
+    bool withColor, glm::vec2 skewing) {
     glm::mat4 modelMatrix;
+    // matrix is column major
+    glm::mat4 skewMatrixX = 
+        glm::mat4(1.0f, tan(skewing.x), 0.0f, 0.0f,
+                  0.0f,      1.0f, 0.0f, 0.0f,
+                  0.0f,      0.0f, 1.0f, 0.0f,
+                  0.0f,      0.0f, 0.0f, 1.0f);
+    glm::mat4 skewMatrixZ = 
+        glm::mat4(1.0f,      0.0f, 0.0f, 0.0f,
+                  0.0f,      1.0f, 0.0f, 0.0f,
+                  0.0f, tan(skewing.y), 1.0f, 0.0f,
+                  0.0f,      0.0f, 0.0f, 1.0f);
     if (!withColor) {
-        modelMatrix = glm::scale<float>(size * glm::vec3(1.1f));
+        modelMatrix = skewMatrixX * skewMatrixZ * glm::scale<float>(size * glm::vec3(1.1f));
     }
     else {
-        modelMatrix = glm::scale<float>(size);
+        modelMatrix = skewMatrixX * skewMatrixZ * glm::scale<float>(size);
     }
     glm::mat4 modelViewProjectionMatrix = viewProjectionMatrix * modelMatrix;
     shader->setUniform("modelViewProjectionMatrix", modelViewProjectionMatrix);
