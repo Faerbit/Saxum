@@ -30,7 +30,13 @@ class Graphics {
         void updateClosestLights();
         bool compareLightDistances(Light a, Light b);
         void saveDepthBufferToDisk(int face, std::string);
-        double lastUpdate;
+        double lastLightUpdate;
+        double lastWindUpdate;
+        float windTarget;
+        glm::vec2 wind;
+        glm::vec2 windDirection;
+        glm::vec2 windDirectionTarget;
+        glm::vec2 textureMovementPosition;
         glm::uvec2 windowSize;
         float nearPlane;
         float farPlane;
@@ -56,11 +62,15 @@ class Graphics {
         SharedTexture2D light_fbo_depth_texture;
         SharedVertexArrayObject fullscreen_quad;
         SharedArrayBuffer fullscreen_quad_ab;
+        SharedVertexArrayObject fullscreen_quad_loading;
+        SharedArrayBuffer fullscreen_quad_ab_loading;
         int cube_size;
         unsigned int maxShadowRenderCount;
         Level* level;
         int number_of_texture_units = 0;
         bool gameStart;
+        float loadingScreenWidth;
+        float loadingScreenHeight;
 };
 
 #endif

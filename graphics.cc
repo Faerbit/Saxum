@@ -10,6 +10,7 @@
 using namespace ACGL::OpenGL;
 
 const double lightUpdateDelay = 0.5f;
+const double windUpdateDelay = 0.5f;
 
 Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, 
     float farPlane, int cube_size,
@@ -45,7 +46,14 @@ void Graphics::init(Level* level) {
 
     
     // update lights on creation
-    lastUpdate = -lightUpdateDelay;
+    lastLightUpdate = -lightUpdateDelay;
+
+    lastWindUpdate = - windUpdateDelay;
+    windTarget = 0.0f;
+    wind = glm::vec2(0.0f, 0.0f);
+    windDirection = glm::vec2(-1.0f, -1.0f);
+    windDirectionTarget = glm::vec2(-1.0f, -1.0f);
+    textureMovementPosition = glm::vec2(0.0, 0.0);
     
     // construct VAO to give shader correct Attribute locations
     SharedArrayBuffer ab = SharedArrayBuffer(new ArrayBuffer());
@@ -76,6 +84,25 @@ void Graphics::init(Level* level) {
 
     flameShader = ShaderProgramCreator("flame")
         .attributeLocations(flame_positions->getAttributeLocations()).create();
+
+    fullscreen_quad_ab = SharedArrayBuffer(new ArrayBuffer());
+    fullscreen_quad_ab->defineAttribute("aPosition", GL_FLOAT, 2);
+    fullscreen_quad_ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
+
+    float quadData[] = {
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f,  1.0f,  1.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+         1.0f, -1.0f,  1.0f, 0.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+        -1.0f,  1.0f,  0.0f, 1.0f
+    };
+
+    fullscreen_quad_ab->setDataElements(6, quadData);
+
+    fullscreen_quad = SharedVertexArrayObject(new VertexArrayObject);
+    fullscreen_quad->attachAllAttributes(fullscreen_quad_ab);
 
     flamePostShader = ShaderProgramCreator("flame_post")
         .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
@@ -173,35 +200,58 @@ void Graphics::renderLoadingScreen() {
         printf("You need at least 18 texture units to run this application. Exiting\n");
         exit(-1);
     }
-    fullscreen_quad_ab = SharedArrayBuffer(new ArrayBuffer());
-    fullscreen_quad_ab->defineAttribute("aPosition", GL_FLOAT, 2);
-    fullscreen_quad_ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
-
-    float quadData[] = {
-        -1.0f,  1.0f,  0.0f, 1.0f,
-         1.0f,  1.0f,  1.0f, 1.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-
-         1.0f, -1.0f,  1.0f, 0.0f,
-        -1.0f, -1.0f,  0.0f, 0.0f,
-        -1.0f,  1.0f,  0.0f, 1.0f
-    };
-
-    fullscreen_quad_ab->setDataElements(6, quadData);
-
-    fullscreen_quad = SharedVertexArrayObject(new VertexArrayObject);
-    fullscreen_quad->attachAllAttributes(fullscreen_quad_ab);
     loadingScreen = Texture2DFileManager::the()->get(Texture2DCreator(loadingScreenPath));
     loadingScreen->generateMipmaps();
     loadingContinueScreen = Texture2DFileManager::the()->get(Texture2DCreator(loadingScreenContinuePath));
     loadingContinueScreen->generateMipmaps();
+    loadingScreenWidth = (float)loadingScreen->getWidth();
+    loadingScreenHeight = (float)loadingScreen->getHeight();
+
+    fullscreen_quad_ab_loading = SharedArrayBuffer(new ArrayBuffer());
+    fullscreen_quad_ab_loading->defineAttribute("aPosition", GL_FLOAT, 2);
+    fullscreen_quad_ab_loading->defineAttribute("aTexCoord", GL_FLOAT, 2);
+    
+    float quadData[24];
+    if (loadingScreenWidth/loadingScreenHeight < ((float)windowSize.x)/((float)windowSize.y)) {
+        float quadTemp[24] ={
+        -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f,
+         (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  1.0f, 1.0f,
+         (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+
+         (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+        -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  0.0f, 0.0f,
+        -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f
+        };
+        for(int i = 0; i<24; i++) {
+            quadData[i] = quadTemp[i];
+        }
+    }
+    else {
+        float quadTemp[24] = {
+            -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f,
+             1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 1.0f,
+             1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+
+             1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+            -1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 0.0f,
+            -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f
+        };
+        for(int i = 0; i<24; i++) {
+            quadData[i] = quadTemp[i];
+        }
+    }
+
+    fullscreen_quad_ab_loading->setDataElements(6, quadData);
+
+    fullscreen_quad_loading = SharedVertexArrayObject(new VertexArrayObject);
+    fullscreen_quad_loading->attachAllAttributes(fullscreen_quad_ab_loading);
     loadingShader = ShaderProgramCreator("loading")
-        .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
+        .attributeLocations(fullscreen_quad_loading->getAttributeLocations()).create();
     loadingShader->use();
     loadingShader->setUniform("time", 0.0f);
     loadingShader->setTexture("screen", loadingScreen, 16);
     loadingShader->setTexture("screenContinue", loadingContinueScreen, 17);
-    fullscreen_quad->render();
+    fullscreen_quad_loading->render();
 }
 
 glm::uvec2 Graphics::getWindowSize() {
@@ -215,14 +265,47 @@ void Graphics::render(double time)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         loadingShader->use();
         loadingShader->setUniform("time", float(time));
-        fullscreen_quad->render();
+        float quadData[24];
+        if (loadingScreenWidth/loadingScreenHeight < ((float)windowSize.x)/((float)windowSize.y)) {
+            float quadTemp[24] ={
+            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f,
+             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  1.0f, 1.0f,
+             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+
+             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  0.0f, 0.0f,
+            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f
+            };
+            for(int i = 0; i<24; i++) {
+                quadData[i] = quadTemp[i];
+            }
+        }
+        else {
+            float quadTemp[24] = {
+                -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f,
+                 1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 1.0f,
+                 1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+
+                 1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+                -1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 0.0f,
+                -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f
+            };
+            for(int i = 0; i<24; i++) {
+                quadData[i] = quadTemp[i];
+            }
+        }
+
+        fullscreen_quad_ab_loading->setDataElements(6, quadData);
+        fullscreen_quad_loading = SharedVertexArrayObject(new VertexArrayObject);
+        fullscreen_quad_loading->attachAllAttributes(fullscreen_quad_ab_loading);
+        fullscreen_quad_loading->render();
     }
     else {
-        double nextUpdate = lastUpdate + lightUpdateDelay;
-        if (time >= nextUpdate)
+        double nextLightUpdate = lastLightUpdate + lightUpdateDelay;
+        if (time >= nextLightUpdate)
         {
             updateLights();
-            lastUpdate = time;
+            lastLightUpdate = time;
         }
         // At first render shadows
         depthCubeShader->use();
@@ -292,7 +375,34 @@ void Graphics::render(double time)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //wind
-        glm::vec2 wind = glm::vec2(0.0f, 0.0f);
+        double nextWindUpdate = lastWindUpdate + lightUpdateDelay;
+        if (time >= nextWindUpdate)
+        {
+            const float windTargetEnd = 0.7f;
+            windTarget = static_cast<float>(rand()) / static_cast<float>(RAND_MAX/pow(windTargetEnd, 2));
+            windTarget = sqrt(windTarget);
+            windTarget *= 0.8f*pow(sin(0.1f*time), 2) +0.2f;
+            const float windDirectionXEnd = 0.5f;
+            float windDirectionX = static_cast<float>(rand()) / static_cast<float>(RAND_MAX/pow(windDirectionXEnd, 2));
+            windDirectionX = sqrt(windDirectionX);
+            const float windDirectionYEnd = 0.5f;
+            float windDirectionY = static_cast<float>(rand()) / static_cast<float>(RAND_MAX/pow(windDirectionYEnd, 2));
+            windDirectionY = sqrt(windDirectionY);
+            windDirectionTarget = glm::vec2(windDirectionX, windDirectionY);
+            lastWindUpdate = time;
+        }
+    
+        const float windApproachSpeed= 0.0005f;
+
+        if (windApproachSpeed*static_cast<float>(time)>1.0f) {
+            wind = glm::normalize(windDirection)*windTarget;
+            windDirection = windDirectionTarget;
+        }
+        else {
+            windDirection.x = windDirection.x + windApproachSpeed*static_cast<float>(time)*windDirectionTarget.x - windDirection.x;
+            windDirection.y = windDirection.y + windApproachSpeed*static_cast<float>(time)*windDirectionTarget.y - windDirection.x;
+            wind = wind + (windApproachSpeed*static_cast<float>(time)) * (glm::normalize(windDirection)*windTarget - wind);
+        }
 
         //set view and projection matrix
         glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
@@ -342,7 +452,10 @@ void Graphics::render(double time)
         // set Material Parameters
         lightingShader->setUniform("ambientColor", level->getAmbientLight());
         lightingShader->setUniform("camera", level->getPhysics()->getCameraPosition());
+        textureMovementPosition += wind/5.0f;
+        lightingShader->setUniform("movingTextureOffset", textureMovementPosition);
         lightingShader->setUniform("movement", wind);
+
         lightingShader->setUniform("time", (float) time);
         
         // render the level
