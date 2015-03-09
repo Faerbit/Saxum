@@ -13057,23 +13057,23 @@
 </ambientLight>
 
 <fogColourDay>
-    <rColour>0.10</rColour>
-    <gColour>0.14</gColour>
-    <bColour>0.14</bColour>
+    <rColour>0.57</rColour>
+    <gColour>0.80</gColour>
+    <bColour>0.98</bColour>
     <alpha>1.0</alpha>
 </fogColourDay>
 
 <fogColourRise>
-    <rColour>0.60</rColour>
-    <gColour>0.14</gColour>
-    <bColour>0.14</bColour>
+    <rColour>0.88</rColour>
+    <gColour>0.38</gColour>
+    <bColour>0.38</bColour>
     <alpha>1.0</alpha>
 </fogColourRise>
 
 <fogColourNight>
-    <rColour>0.05</rColour>
-    <gColour>0.07</gColour>
-    <bColour>0.34</bColour>
+    <rColour>0.09</rColour>
+    <gColour>0.1</gColour>
+    <bColour>0.24</bColour>
     <alpha>1.0</alpha>
 </fogColourNight>
 
