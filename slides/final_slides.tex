@@ -1,0 +1,100 @@
+%*****************************************************************************%
+% This LaTeX-Template is based on the beamer package:                         %
+% http://latex-beamer.sourceforge.net                                         %
+%                                                                             %
+% For further details on how to create beamer slides you can check their      %
+% documentation:                                                              %
+% http://mirror.ctan.org/macros/latex/contrib/beamer/doc/beameruserguide.pdf  %
+%                                                                             %
+% The layout fits the current standard of the acg color scheme.               %
+% Version: 1.0                                                                %
+% Authors: Lars Krecklau <krecklau@informatik.rwth-aachen.de>                 %
+%*****************************************************************************%
+\documentclass{beamer}
+
+\usepackage{graphicx}
+\usepackage[german]{babel}
+
+% Place in these lines your title and the author's names:
+\newcommand{\myTitle}{\includegraphics[width=9cm]{saxum_logo.png}}
+\newcommand{\myAutors}{Fabian Klemp, Steffen F\"undgens, Simon Froitzheim, Jasper Manousek}
+\newcommand{\myAutorsFoot}{\myAutors}
+
+% If you want to draw images by latex:
+% http://www.texample.net/tikz/
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes}
+
+% Apply the acg layout
+\include{layoutacg}
+
+% Setup the title page
+\title{\myTitle}
+\author{\myAutors}
+\institute{RWTH Aachen University}
+\date{\today}
+\subject{\myTitle}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\section{\myTitle}
+
+\subsection{Overview}
+
+\begin{frame}
+	\begin{itemize}
+		\item Puzzle/Exploration marble game in a desert-ruins setting
+		\item Player is in search for the missing sun
+		\item Pseudo-realistic graphics style
+		\item Focus on physics-based gameplay
+	\end{itemize}
+\end{frame}
+
+
+
+\subsection{Fabian - Graphics}
+\begin{frame}
+    \begin{itemize}
+		\item Phong Shading
+		\item Shadow Mapping
+		\item Simple flame simulation with geometry shader
+		\item Blurring of flames
+    \end{itemize}
+\end{frame}
+
+\subsection{Simon - Content Creation}
+\begin{frame}
+    \begin{itemize}
+    	\item Modeling
+    	\item Texturing
+    	\item Level design   	
+    \end{itemize}
+\end{frame}
+
+\subsection{Steffen - General Programming}
+\begin{frame}
+    \begin{itemize}
+		\item Converter
+		\item Loading
+		\item Triggers and Lua scripts
+	\end{itemize}
+\end{frame}
+
+\subsection{Jasper - Game Logic}
+\begin{frame}
+    \begin{itemize}
+		\item Bullet integration
+		\item Custom constraints
+		\item Camera
+		\item Simple animations
+    \end{itemize}
+\end{frame}
+
+
+
+
+\end{document}
