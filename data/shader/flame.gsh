@@ -4,6 +4,7 @@ uniform mat4 modelViewProjectionMatrix;
 uniform float time;
 uniform bool bottom;
 uniform bool left;
+uniform vec2 skew;
 
 layout(points) in;
 layout(triangle_strip, max_vertices = 146) out;
@@ -18,18 +19,22 @@ const float cos_p2_1  = 2.0;
 const float ex_p1_1   = -0.193;
 const float ex_p2_1   = 2.9426;
 const float begin_1   = -0.8;
-const float end_1     = 1.5;
+const float end_1     = 2;
 
-const float transition_point_2 = 0.600598;
-const float cos_p1_2  = 0.3;
-const float cos_p2_2  = 1.7;
-const float ex_p1_2   = -0.19;
-const float ex_p2_2   = 2.762;
+const float transition_point_2 = 0.549778;
+const float cos_p1_2  = 0.5;
+const float cos_p2_2  = 2.0;
+const float ex_p1_2   = 0.677;
+const float ex_p2_2   = 3.9314;
 const float begin_2   = -0.8;
-const float end_2     = 2;
+const float end_2     = 1.3;
 
 float flickerFunction() {
-    return pow(sin(20.0*time + gl_in[0].gl_Position.x*gl_in[0].gl_Position.z), 2);
+    float windPower = length(skew);
+    if (windPower < 0.8) {
+        windPower += 0.2;
+    }
+    return windPower * pow(sin((20.0/(windPower))*time + gl_in[0].gl_Position.x*gl_in[0].gl_Position.z), 2) + (1-windPower);
 }
 
 float radiusFunction(float x) {
