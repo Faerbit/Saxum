@@ -524,9 +524,9 @@ void Graphics::updateClosestLights() {
     std::sort(closestLights.begin(),
         closestLights.end(),
         [this](Light a, Light b) {return compareLightDistances(a, b); });
-    if (level->getLights()->size() > 32) {
+    if (level->getLights()->size() > 15) {
         closestLights = std::vector<Light>(&closestLights[0],
-                &closestLights[31]);
+                &closestLights[14]);
     }
 }
 
