@@ -41,7 +41,7 @@ void Graphics::init(Level* level) {
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-    //glEnable(GL_MULTISAMPLE);
+    glEnable(GL_MULTISAMPLE);
 
     
     // update lights on creation
@@ -288,7 +288,7 @@ void Graphics::render(double time)
         }
         
         // lighting render pass
-        framebuffer_light->bind();
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //wind
@@ -359,6 +359,13 @@ void Graphics::render(double time)
             closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), true, wind);
         }
         glDisable(GL_CULL_FACE);
+
+        framebuffer_light->bind();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer_light->getObjectName());
+        glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, 0, 0, windowSize.x, windowSize.y,
+                GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
         // draw slightly larger only for stencil buffer to blur edges
         glEnable(GL_STENCIL_TEST);
