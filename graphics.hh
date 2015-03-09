@@ -62,11 +62,15 @@ class Graphics {
         SharedTexture2D light_fbo_depth_texture;
         SharedVertexArrayObject fullscreen_quad;
         SharedArrayBuffer fullscreen_quad_ab;
+        SharedVertexArrayObject fullscreen_quad_loading;
+        SharedArrayBuffer fullscreen_quad_ab_loading;
         int cube_size;
         unsigned int maxShadowRenderCount;
         Level* level;
         int number_of_texture_units = 0;
         bool gameStart;
+        float loadingScreenWidth;
+        float loadingScreenHeight;
 };
 
 #endif

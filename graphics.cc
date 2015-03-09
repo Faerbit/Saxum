@@ -85,6 +85,25 @@ void Graphics::init(Level* level) {
     flameShader = ShaderProgramCreator("flame")
         .attributeLocations(flame_positions->getAttributeLocations()).create();
 
+    fullscreen_quad_ab = SharedArrayBuffer(new ArrayBuffer());
+    fullscreen_quad_ab->defineAttribute("aPosition", GL_FLOAT, 2);
+    fullscreen_quad_ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
+
+    float quadData[] = {
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f,  1.0f,  1.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+         1.0f, -1.0f,  1.0f, 0.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+        -1.0f,  1.0f,  0.0f, 1.0f
+    };
+
+    fullscreen_quad_ab->setDataElements(6, quadData);
+
+    fullscreen_quad = SharedVertexArrayObject(new VertexArrayObject);
+    fullscreen_quad->attachAllAttributes(fullscreen_quad_ab);
+
     flamePostShader = ShaderProgramCreator("flame_post")
         .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
 
@@ -181,35 +200,58 @@ void Graphics::renderLoadingScreen() {
         printf("You need at least 18 texture units to run this application. Exiting\n");
         exit(-1);
     }
-    fullscreen_quad_ab = SharedArrayBuffer(new ArrayBuffer());
-    fullscreen_quad_ab->defineAttribute("aPosition", GL_FLOAT, 2);
-    fullscreen_quad_ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
-
-    float quadData[] = {
-        -1.0f,  1.0f,  0.0f, 1.0f,
-         1.0f,  1.0f,  1.0f, 1.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-
-         1.0f, -1.0f,  1.0f, 0.0f,
-        -1.0f, -1.0f,  0.0f, 0.0f,
-        -1.0f,  1.0f,  0.0f, 1.0f
-    };
-
-    fullscreen_quad_ab->setDataElements(6, quadData);
-
-    fullscreen_quad = SharedVertexArrayObject(new VertexArrayObject);
-    fullscreen_quad->attachAllAttributes(fullscreen_quad_ab);
     loadingScreen = Texture2DFileManager::the()->get(Texture2DCreator(loadingScreenPath));
     loadingScreen->generateMipmaps();
     loadingContinueScreen = Texture2DFileManager::the()->get(Texture2DCreator(loadingScreenContinuePath));
     loadingContinueScreen->generateMipmaps();
+    loadingScreenWidth = (float)loadingScreen->getWidth();
+    loadingScreenHeight = (float)loadingScreen->getHeight();
+
+    fullscreen_quad_ab_loading = SharedArrayBuffer(new ArrayBuffer());
+    fullscreen_quad_ab_loading->defineAttribute("aPosition", GL_FLOAT, 2);
+    fullscreen_quad_ab_loading->defineAttribute("aTexCoord", GL_FLOAT, 2);
+    
+    float quadData[24];
+    if (loadingScreenWidth/loadingScreenHeight < ((float)windowSize.x)/((float)windowSize.y)) {
+        float quadTemp[24] ={
+        -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f,
+         (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  1.0f, 1.0f,
+         (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+
+         (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+        -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  0.0f, 0.0f,
+        -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f
+        };
+        for(int i = 0; i<24; i++) {
+            quadData[i] = quadTemp[i];
+        }
+    }
+    else {
+        float quadTemp[24] = {
+            -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f,
+             1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 1.0f,
+             1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+
+             1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+            -1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 0.0f,
+            -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f
+        };
+        for(int i = 0; i<24; i++) {
+            quadData[i] = quadTemp[i];
+        }
+    }
+
+    fullscreen_quad_ab_loading->setDataElements(6, quadData);
+
+    fullscreen_quad_loading = SharedVertexArrayObject(new VertexArrayObject);
+    fullscreen_quad_loading->attachAllAttributes(fullscreen_quad_ab_loading);
     loadingShader = ShaderProgramCreator("loading")
-        .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
+        .attributeLocations(fullscreen_quad_loading->getAttributeLocations()).create();
     loadingShader->use();
     loadingShader->setUniform("time", 0.0f);
     loadingShader->setTexture("screen", loadingScreen, 16);
     loadingShader->setTexture("screenContinue", loadingContinueScreen, 17);
-    fullscreen_quad->render();
+    fullscreen_quad_loading->render();
 }
 
 glm::uvec2 Graphics::getWindowSize() {
@@ -223,7 +265,40 @@ void Graphics::render(double time)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         loadingShader->use();
         loadingShader->setUniform("time", float(time));
-        fullscreen_quad->render();
+        float quadData[24];
+        if (loadingScreenWidth/loadingScreenHeight < ((float)windowSize.x)/((float)windowSize.y)) {
+            float quadTemp[24] ={
+            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f,
+             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  1.0f, 1.0f,
+             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+
+             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  0.0f, 0.0f,
+            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f
+            };
+            for(int i = 0; i<24; i++) {
+                quadData[i] = quadTemp[i];
+            }
+        }
+        else {
+            float quadTemp[24] = {
+                -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f,
+                 1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 1.0f,
+                 1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+
+                 1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+                -1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 0.0f,
+                -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f
+            };
+            for(int i = 0; i<24; i++) {
+                quadData[i] = quadTemp[i];
+            }
+        }
+
+        fullscreen_quad_ab_loading->setDataElements(6, quadData);
+        fullscreen_quad_loading = SharedVertexArrayObject(new VertexArrayObject);
+        fullscreen_quad_loading->attachAllAttributes(fullscreen_quad_ab_loading);
+        fullscreen_quad_loading->render();
     }
     else {
         double nextLightUpdate = lastLightUpdate + lightUpdateDelay;
