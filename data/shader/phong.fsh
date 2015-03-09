@@ -92,11 +92,11 @@ vec4 fogColor(float dot) {
     if(dot<0.0) {
         dayFactor = 0.0;
     }
-    else if(dot>0.51) {
+    else if(dot>1.0) {
         dayFactor = 1.0;
     }
     else {
-        dayFactor = sin(3*dot);
+        dayFactor = sin(1.5*dot);
     }
     if (dot <0.0) {
         return mix(fogColorNight, fogColorRise, riseFactor);
@@ -155,7 +155,7 @@ void main()
     if(length(directionalLightVector)>0.0f) {
         vec3 directionalVector = normalize(directionalLightVector);
         sunAngle = dot(vec3(0.0, 1.0, 0.0), directionalVector);
-        if ( sunAngle > -0.5) {
+        if ( sunAngle > -0.7) {
             float directionalVisibility = 1.0f;
             if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.2) {
                 if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.2) {

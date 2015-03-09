@@ -2,5 +2,5 @@
 
 if ./build.sh
 then
-    cd binaries; ./MarbleRaceGroupC
+    cd binaries; ./saxum
 fi
