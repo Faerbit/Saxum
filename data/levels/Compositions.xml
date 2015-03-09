@@ -81,7 +81,7 @@
     </light>
 </composition>
 
-<!-- switchtorch -->
+<!-- hinttorch -->
 <composition>
     <typeID>81</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
@@ -96,6 +96,18 @@
         <scale>1.0</scale>
         <mass>0.0</mass>
     </object>
+    <light>
+        <xOffset>0.0</xOffset>
+        <yOffset>3</yOffset>
+        <zOffset>0.0</zOffset>
+        <rColour>0.2</rColour>
+        <gColour>0.9</gColour>
+        <bColour>0</bColour>
+        <intensity>10.0</intensity>
+        <flameOffset>-0.5</flameOffset>
+        <flameHeight>1.0</flameHeight>
+        <flameWidth>1.0</flameWidth>
+    </light>
 </composition>
 
 <!-- Lightsource -->
