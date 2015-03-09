@@ -63,6 +63,8 @@ class Graphics {
         Level* level;
         int number_of_texture_units = 0;
         bool gameStart;
+        float loadingScreenWidth;
+        float loadingScreenHeight;
 };
 
 #endif

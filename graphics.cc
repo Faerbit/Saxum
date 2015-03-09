@@ -196,23 +196,23 @@ void Graphics::renderLoadingScreen() {
     loadingScreen->generateMipmaps();
     loadingContinueScreen = Texture2DFileManager::the()->get(Texture2DCreator(loadingScreenContinuePath));
     loadingContinueScreen->generateMipmaps();
-    int loadingScreenWidth = loadingScreen->getWidth();
-    int loadingScreenHeight = loadingScreen->getHeight();
+    loadingScreenWidth = (float)loadingScreen->getWidth();
+    loadingScreenHeight = (float)loadingScreen->getHeight();
 
     fullscreen_quad_ab_loading = SharedArrayBuffer(new ArrayBuffer());
     fullscreen_quad_ab_loading->defineAttribute("aPosition", GL_FLOAT, 2);
     fullscreen_quad_ab_loading->defineAttribute("aTexCoord", GL_FLOAT, 2);
     
     float quadData[24];
-    if (loadingScreenWidth/loadingScreenHeight < (int)windowSize.x/(int)windowSize.y) {
+    if (loadingScreenWidth/loadingScreenHeight < ((float)windowSize.x)/((float)windowSize.y)) {
         float quadTemp[24] ={
-        -1.0f + ((windowSize.y*loadingScreenWidth)/(windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f,
-         1.0f - ((windowSize.y*loadingScreenWidth)/(windowSize.x*loadingScreenHeight)),  1.0f,  1.0f, 1.0f,
-         1.0f - ((windowSize.y*loadingScreenWidth)/(windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+        -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f,
+         (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  1.0f, 1.0f,
+         (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
 
-         1.0f - ((windowSize.y*loadingScreenWidth)/(windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
-        -1.0f + ((windowSize.y*loadingScreenWidth)/(windowSize.x*loadingScreenHeight)), -1.0f,  0.0f, 0.0f,
-        -1.0f + ((windowSize.y*loadingScreenWidth)/(windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f
+         (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+        -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  0.0f, 0.0f,
+        -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f
         };
         for(int i = 0; i<24; i++) {
             quadData[i] = quadTemp[i];
@@ -220,13 +220,13 @@ void Graphics::renderLoadingScreen() {
     }
     else {
         float quadTemp[24] = {
-            -1.0f,  1.0f - (windowSize.x*loadingScreenHeight)/(windowSize.y*loadingScreenWidth),  0.0f, 1.0f,
-             1.0f,  1.0f - (windowSize.x*loadingScreenHeight)/(windowSize.y*loadingScreenWidth),  1.0f, 1.0f,
-             1.0f, -1.0f + (windowSize.x*loadingScreenHeight)/(windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+            -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f,
+             1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 1.0f,
+             1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
 
-             1.0f, -1.0f + (windowSize.x*loadingScreenHeight)/(windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
-            -1.0f, -1.0f + (windowSize.x*loadingScreenHeight)/(windowSize.y*loadingScreenWidth),  0.0f, 0.0f,
-            -1.0f,  1.0f - (windowSize.x*loadingScreenHeight)/(windowSize.y*loadingScreenWidth),  0.0f, 1.0f
+             1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+            -1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 0.0f,
+            -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f
         };
         for(int i = 0; i<24; i++) {
             quadData[i] = quadTemp[i];
@@ -257,6 +257,39 @@ void Graphics::render(double time)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         loadingShader->use();
         loadingShader->setUniform("time", float(time));
+        float quadData[24];
+        if (loadingScreenWidth/loadingScreenHeight < ((float)windowSize.x)/((float)windowSize.y)) {
+            float quadTemp[24] ={
+            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f,
+             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  1.0f, 1.0f,
+             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+
+             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  0.0f, 0.0f,
+            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f
+            };
+            for(int i = 0; i<24; i++) {
+                quadData[i] = quadTemp[i];
+            }
+        }
+        else {
+            float quadTemp[24] = {
+                -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f,
+                 1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 1.0f,
+                 1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+
+                 1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+                -1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 0.0f,
+                -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f
+            };
+            for(int i = 0; i<24; i++) {
+                quadData[i] = quadTemp[i];
+            }
+        }
+
+        fullscreen_quad_ab_loading->setDataElements(6, quadData);
+        fullscreen_quad_loading = SharedVertexArrayObject(new VertexArrayObject);
+        fullscreen_quad_loading->attachAllAttributes(fullscreen_quad_ab_loading);
         fullscreen_quad_loading->render();
     }
     else {
@@ -334,7 +367,7 @@ void Graphics::render(double time)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //wind
-        glm::vec2 wind = glm::vec2(-0.3f, 0.0f);
+        glm::vec2 wind = glm::vec2(-0.4f, 0.3f);
 
         //set view and projection matrix
         glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
