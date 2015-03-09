@@ -348,7 +348,7 @@ void Graphics::render(double time)
         for (unsigned int i = 0; i<framebuffer_directional.size(); i++) {
             framebuffer_directional.at(i)->bind(); 
             glClear(GL_DEPTH_BUFFER_BIT);
-            if (sunAngle > -0.7f) {
+            if (sunAngle > -0.6f) {
                 float projection_size = 0.0f;
                 switch(i) {
                     case 0:

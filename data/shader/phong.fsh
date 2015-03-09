@@ -155,7 +155,7 @@ void main()
     if(length(directionalLightVector)>0.0f) {
         vec3 directionalVector = normalize(directionalLightVector);
         sunAngle = dot(vec3(0.0, 1.0, 0.0), directionalVector);
-        if ( sunAngle > -0.7) {
+        if ( sunAngle > -0.6) {
             float directionalVisibility = 1.0f;
             if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.2) {
                 if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.2) {
