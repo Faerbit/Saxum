@@ -13079,7 +13079,7 @@
 
 <directionalLight>
     <xOffset>-1.0</xOffset>
-    <yOffset>-6</yOffset>
+    <yOffset>6</yOffset>
     <zOffset>1.0</zOffset>
     <rColour>1.0</rColour>
     <gColour>1.0</gColour>
@@ -13108,7 +13108,7 @@
 
 <physics>
     <friction>0.9</friction>
-    <strength>200.0</strength>
+    <strength>300.0</strength>
 </physics>
 
 <positionConstraint>
