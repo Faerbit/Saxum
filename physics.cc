@@ -85,7 +85,7 @@ void Physics::takeUpdateStep(float timeDiff)
         if(sinking)
         {
             btVector3 currentPos = playerBall->getCenterOfMassPosition();
-            currentPos -= btVector3(0,0.35f*timeDiff,0);
+            currentPos -= btVector3(0,0.8f*timeDiff,0);
             float damp = playerBall->getAngularDamping();
             playerBall->setDamping(playerBall->getLinearDamping(),0.9);
             world->stepSimulation(timeDiff);
@@ -106,7 +106,7 @@ void Physics::takeUpdateStep(float timeDiff)
         else
         {            
             btVector3 currentPos = playerBall->getCenterOfMassPosition();
-            currentPos += btVector3(0,0.9f*timeDiff,0);              
+            currentPos += btVector3(0,3.0f*timeDiff,0);              
             world->stepSimulation(timeDiff);                  
             playerBall->setCenterOfMassTransform(btTransform(playerBall->getOrientation(),currentPos));
             cameraBody->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),camPos));
