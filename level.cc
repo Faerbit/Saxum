@@ -56,13 +56,17 @@ void Level::load() {
 }
 
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
-        glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs) {
+        glm::mat4* viewProjectionMatrix, float farPlane, std::vector<glm::mat4>* shadowVPs) {
     for(unsigned int i = 0; i<objects.size(); i++) {
         if (lightingPass) {
-            objects.at(i)->render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
+            if (glm::distance(objects.at(i)->getPosition(), cameraCenter->getPosition()) < farPlane + 5.0f || objects.at(i) == terrainObject) {
+                objects.at(i)->render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
+            }
         }
         else {
-            objects.at(i)->render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
+            if (glm::distance(objects.at(i)->getPosition(), cameraCenter->getPosition()) < farPlane + 5.0f || objects.at(i) == terrainObject) {
+                objects.at(i)->render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
+            }
         }
     }
     if (lightingPass) {
@@ -340,4 +344,9 @@ void Level::activateEndgame(){
 
 void Level::setWaterPlane(Object* water) {
     this->waterPlane = water;
+}
+
+void Level::addTerrain(Object* terrain) {
+    this->terrainObject = terrain;
+    objects.push_back(terrain);
 }

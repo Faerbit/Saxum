@@ -330,7 +330,7 @@ void Graphics::render(double time)
                 glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * viewMatrix;
                 std::vector<glm::mat4> viewMatrixVector = std::vector<glm::mat4>();
                 viewMatrixVector.push_back(viewMatrix);
-                level->render(depthCubeShader, false, &depthViewProjectionMatrix_face, &viewMatrixVector);
+                level->render(depthCubeShader, false, &depthViewProjectionMatrix_face, farPlane, &viewMatrixVector);
                 if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                     printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
                 }
@@ -363,7 +363,7 @@ void Graphics::render(double time)
                 }
                 depthViewProjectionMatrices.at(i) =  glm::ortho<float>(-projection_size, projection_size, -projection_size, projection_size, -farPlane/1.5f, farPlane/1.5f) *
                     glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-                level->render(depthShader, false, &depthViewProjectionMatrices.at(i));
+                level->render(depthShader, false, &depthViewProjectionMatrices.at(i), farPlane);
             }
             if (!framebuffer_directional.at(i)->isFrameBufferObjectComplete()) {
                 printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
@@ -459,7 +459,7 @@ void Graphics::render(double time)
         lightingShader->setUniform("time", (float) time);
         
         // render the level
-        level->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
+        level->render(lightingShader, true, &lightingViewProjectionMatrix, farPlane, &depthBiasVPs);
 
         // draw flames on top
         flameShader->use();

@@ -28,7 +28,7 @@ class Level {
         void update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseDelta,bool wPressed, bool aPressed,bool sPressed, bool dPressed, bool kPressed, bool lPressed,
             bool f1Pressed, bool f2Pressed, bool f3Pressed, bool f4Pressed );
         void render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
-            glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs=0);
+            glm::mat4* viewProjectionMatrix, float farPlane, std::vector<glm::mat4>* shadowVPs=0);
         glm::vec3 getAmbientLight();
         Light* getDirectionalLight();
         std::vector<Light>* getLights();
@@ -67,6 +67,7 @@ class Level {
         void addTrigger(Trigger trigger);
         lua_State* getLuaState();
         Terrain* getTerrain();
+        void addTerrain(Object* terrain);
         void resetPlayer();
         void movePlayer(float xPosition, float yPosition, float zPosition);
         void setPlayerIndex(int index);
@@ -94,6 +95,7 @@ class Level {
         float strength;
         std::string xmlFilePath;
         glm::vec3 nextLightPosition;
+        Object* terrainObject;
 };
 
 #endif
