@@ -74,7 +74,7 @@
         <rColour>1.0</rColour>
         <gColour>0.9</gColour>
         <bColour>0.3</bColour>
-        <intensity>4.0</intensity>
+        <intensity>10.0</intensity>
         <flameOffset>-0.5</flameOffset>
         <flameHeight>1.0</flameHeight>
         <flameWidth>1.0</flameWidth>
