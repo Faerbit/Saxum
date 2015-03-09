@@ -147,7 +147,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
         water_vao->attachAllAttributes(water_ab);
         Material water_material = Material(waterTexture, 0.1f, 0.2f, 0.8f, 5.0f, true);
         Object* water_object = new Object(water_vao, water_material, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), true);
-        level->addObject(water_object);
+        level->setWaterPlane(water_object);
     }
     
     //load lighting parameters

@@ -39,6 +39,7 @@ class Level {
         glm::vec4 getFogColourNight();
         void setSkydomeSize(float size);
         float getSkydomeSize();
+        void setWaterPlane(Object* water);
         Skydome* getSkydome();
         std::vector<Object*>* getObjects();
         std::vector<Object*>* getPhysicsObjects();
@@ -76,6 +77,7 @@ class Level {
         std::vector<Object*> physicsObjects;
         std::vector<Light> lights;
         std::vector<Trigger> triggers;
+        Object* waterPlane;
         glm::vec3 ambientLight;
         glm::vec4 fogColourDay;
         glm::vec4 fogColourRise;
