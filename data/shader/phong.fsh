@@ -67,7 +67,11 @@ vec2 poissonDisk[16] = vec2[](
 );
 
 float flickerFunction(int index) {
-    return 0.7*pow(sin(20.0*time + lightSources[index].x*lightSources[index].z), 2) + 0.3;
+    float windPower = length(movement);
+    if (windPower < 0.8) {
+        windPower += 0.2;
+    }
+    return windPower * pow(sin((20.0/(windPower))*time + lightSources[index].x*lightSources[index].z), 2) + (1-windPower);
 }
 
 vec4 fogColor(float dot) {
