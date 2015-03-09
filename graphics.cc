@@ -10,6 +10,7 @@
 using namespace ACGL::OpenGL;
 
 const double lightUpdateDelay = 0.5f;
+const double windUpdateDelay = 0.5f;
 
 Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, 
     float farPlane, int cube_size,
@@ -45,7 +46,14 @@ void Graphics::init(Level* level) {
 
     
     // update lights on creation
-    lastUpdate = -lightUpdateDelay;
+    lastLightUpdate = -lightUpdateDelay;
+
+    lastWindUpdate = - windUpdateDelay;
+    windTarget = 0.0f;
+    wind = glm::vec2(0.0f, 0.0f);
+    windDirection = glm::vec2(-1.0f, -1.0f);
+    windDirectionTarget = glm::vec2(-1.0f, -1.0f);
+    textureMovementPosition = glm::vec2(0.0, 0.0);
     
     // construct VAO to give shader correct Attribute locations
     SharedArrayBuffer ab = SharedArrayBuffer(new ArrayBuffer());
@@ -218,11 +226,11 @@ void Graphics::render(double time)
         fullscreen_quad->render();
     }
     else {
-        double nextUpdate = lastUpdate + lightUpdateDelay;
-        if (time >= nextUpdate)
+        double nextLightUpdate = lastLightUpdate + lightUpdateDelay;
+        if (time >= nextLightUpdate)
         {
             updateLights();
-            lastUpdate = time;
+            lastLightUpdate = time;
         }
         // At first render shadows
         depthCubeShader->use();
@@ -292,7 +300,34 @@ void Graphics::render(double time)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //wind
-        glm::vec2 wind = glm::vec2(0.0f, 0.0f);
+        double nextWindUpdate = lastWindUpdate + lightUpdateDelay;
+        if (time >= nextWindUpdate)
+        {
+            const float windTargetEnd = 0.7f;
+            windTarget = static_cast<float>(rand()) / static_cast<float>(RAND_MAX/pow(windTargetEnd, 2));
+            windTarget = sqrt(windTarget);
+            windTarget *= 0.8f*pow(sin(0.1f*time), 2) +0.2f;
+            const float windDirectionXEnd = 0.5f;
+            float windDirectionX = static_cast<float>(rand()) / static_cast<float>(RAND_MAX/pow(windDirectionXEnd, 2));
+            windDirectionX = sqrt(windDirectionX);
+            const float windDirectionYEnd = 0.5f;
+            float windDirectionY = static_cast<float>(rand()) / static_cast<float>(RAND_MAX/pow(windDirectionYEnd, 2));
+            windDirectionY = sqrt(windDirectionY);
+            windDirectionTarget = glm::vec2(windDirectionX, windDirectionY);
+            lastWindUpdate = time;
+        }
+    
+        const float windApproachSpeed= 0.0005f;
+
+        if (windApproachSpeed*static_cast<float>(time)>1.0f) {
+            wind = glm::normalize(windDirection)*windTarget;
+            windDirection = windDirectionTarget;
+        }
+        else {
+            windDirection.x = windDirection.x + windApproachSpeed*static_cast<float>(time)*windDirectionTarget.x - windDirection.x;
+            windDirection.y = windDirection.y + windApproachSpeed*static_cast<float>(time)*windDirectionTarget.y - windDirection.x;
+            wind = wind + (windApproachSpeed*static_cast<float>(time)) * (glm::normalize(windDirection)*windTarget - wind);
+        }
 
         //set view and projection matrix
         glm::mat4 lightingViewProjectionMatrix = glm::perspective(1.571f, (float)windowSize.x/(float)windowSize.y, 0.1f, farPlane) * buildViewMatrix(level);
@@ -342,7 +377,10 @@ void Graphics::render(double time)
         // set Material Parameters
         lightingShader->setUniform("ambientColor", level->getAmbientLight());
         lightingShader->setUniform("camera", level->getPhysics()->getCameraPosition());
+        textureMovementPosition += wind/5.0f;
+        lightingShader->setUniform("movingTextureOffset", textureMovementPosition);
         lightingShader->setUniform("movement", wind);
+
         lightingShader->setUniform("time", (float) time);
         
         // render the level
