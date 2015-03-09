@@ -7,7 +7,7 @@
 
 <farPlane>150.0</farPlane>
 
-<maxShadowRenderCount>10</maxShadowRenderCount>
+<maxShadowRenderCount>5</maxShadowRenderCount>
 
 <compositionsPath>data/levels/Compositions.xml</compositionsPath>
 
