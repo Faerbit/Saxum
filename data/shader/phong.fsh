@@ -45,6 +45,7 @@ uniform vec4 fogColorNight;
 uniform vec3 cameraCenter;
 uniform bool movingTexture;
 uniform vec2 movement;
+uniform vec2 movingTextureOffset;
 uniform float time;
 
 vec2 poissonDisk[16] = vec2[](
@@ -249,7 +250,7 @@ void main()
 
     vec4 textureColor = vec4(0.0, 0.0, 0.0, 1.0);
     if (movingTexture == true) {
-        textureColor = texture(uTexture, vec2(vTexCoord.x + movement.x * time, vTexCoord.y + movement.y * time)).rgba;
+        textureColor = texture(uTexture, vec2(vTexCoord.x + movingTextureOffset.x, vTexCoord.y + movingTextureOffset.y)).rgba;
     }
     else {
         textureColor = texture(uTexture, vTexCoord).rgba;

@@ -30,7 +30,13 @@ class Graphics {
         void updateClosestLights();
         bool compareLightDistances(Light a, Light b);
         void saveDepthBufferToDisk(int face, std::string);
-        double lastUpdate;
+        double lastLightUpdate;
+        double lastWindUpdate;
+        float windTarget;
+        glm::vec2 wind;
+        glm::vec2 windDirection;
+        glm::vec2 windDirectionTarget;
+        glm::vec2 textureMovementPosition;
         glm::uvec2 windowSize;
         float nearPlane;
         float farPlane;
