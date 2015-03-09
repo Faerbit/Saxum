@@ -13079,7 +13079,7 @@
 
 <directionalLight>
     <xOffset>-1.0</xOffset>
-    <yOffset>1.5</yOffset>
+    <yOffset>-6</yOffset>
     <zOffset>1.0</zOffset>
     <rColour>1.0</rColour>
     <gColour>1.0</gColour>
