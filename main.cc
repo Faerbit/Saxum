@@ -87,7 +87,7 @@ bool createWindow()
     setGLFWHintsForOpenGLVersion( ACGL_OPENGL_VERSION );
     
     // activate multisampling (second parameter is the number of samples):
-    //glfwWindowHint( GLFW_SAMPLES, 4);
+    glfwWindowHint( GLFW_SAMPLES, 4);
     
     // request an OpenGL debug context:
     glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, true );
