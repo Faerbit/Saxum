@@ -17,7 +17,7 @@ const float cos_p1_1  = 0.35;
 const float cos_p2_1  = 2.0;
 const float ex_p1_1   = -0.193;
 const float ex_p2_1   = 2.9426;
-const float begin_1   = -0.785398;
+const float begin_1   = -0.8;
 const float end_1     = 1.5;
 
 const float transition_point_2 = 0.600598;
@@ -25,7 +25,7 @@ const float cos_p1_2  = 0.3;
 const float cos_p2_2  = 1.7;
 const float ex_p1_2   = -0.19;
 const float ex_p2_2   = 2.762;
-const float begin_2   = -0.923998;
+const float begin_2   = -0.8;
 const float end_2     = 2;
 
 float flickerFunction() {

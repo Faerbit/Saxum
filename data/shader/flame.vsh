@@ -8,7 +8,10 @@ in vec3 aColor;
 
 out vec3 Color;
 
+const float end = 0.8;
+
 void main () {
     Color = aColor;
-    gl_Position = viewProjectionMatrix * vec4(aPosition, 1.0);
+    vec3 position = aPosition + vec3(-sin(skew.y)*end, 0.0, sin(skew.x)*end);
+    gl_Position = viewProjectionMatrix * vec4(position, 1.0);
 }
