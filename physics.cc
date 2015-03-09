@@ -26,12 +26,6 @@ void Physics::takeUpdateStep(float timeDiff)
 {
     if(simulationActive)
     {
-        counter++;
-        if(counter<1)
-        {
-            world->stepSimulation(timeDiff); //allows the world to be simmulated correctly indipendant of the timedifferences between frames
-            return;
-        }
         
         for(unsigned i = 0; i < allPositionConstraints.size();i++) //this handles the spring constraints
         {
@@ -76,10 +70,27 @@ void Physics::takeUpdateStep(float timeDiff)
     }
     else
     {
+        for(unsigned i = 0; i < allPositionConstraints.size();i++) //this handles the spring constraints
+        {
+            if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition()) //if constraint != position of the body because otherwise dir = 0
+            {
+                btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
+                dir = dir*allPositionConstraints[i].strength - allPositionConstraints[i].body->getLinearVelocity()
+                                                               *allPositionConstraints[i].body->getLinearVelocity().length();
+                allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength); //apply a foce upon the object pushing it towards the constraint position
+            }
+        }
+        
+        btVector3 camPos = cameraBody->getCenterOfMassPosition();
         if(sinking)
         {
             btVector3 currentPos = playerBall->getCenterOfMassPosition();
             currentPos -= btVector3(0,0.35f*timeDiff,0);
+            float damp = playerBall->getAngularDamping();
+            playerBall->setDamping(playerBall->getLinearDamping(),0.9);
+            world->stepSimulation(timeDiff);
+            cameraBody->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),camPos));
+            playerBall->setDamping(playerBall->getLinearDamping(),damp);
             playerBall->setCenterOfMassTransform(btTransform(playerBall->getOrientation(),currentPos));
             if(playerBall->getCenterOfMassPosition().y() < resetHight - 1.5f)
             {
@@ -95,8 +106,10 @@ void Physics::takeUpdateStep(float timeDiff)
         else
         {            
             btVector3 currentPos = playerBall->getCenterOfMassPosition();
-            currentPos += btVector3(0,0.9f*timeDiff,0);                                
+            currentPos += btVector3(0,0.9f*timeDiff,0);              
+            world->stepSimulation(timeDiff);                  
             playerBall->setCenterOfMassTransform(btTransform(playerBall->getOrientation(),currentPos));
+            cameraBody->setCenterOfMassTransform(btTransform(btQuaternion(0,0,0,1),camPos));
             
             if(playerBall->getCenterOfMassPosition().y() >= startPosition.y() + 1)
             {
