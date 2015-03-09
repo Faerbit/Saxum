@@ -29,7 +29,7 @@ function trigger(objectToChange)
         local yPos = 25.0
         local zPos = 26.5
         level:preloadLightPosition(xPos, yPos, zPos)
-        level:addLightByParameters(0.2, 0.9, 0.0, 4.0, -2.5, 1.3, 2.3)
+        level:addLightByParameters(0.2, 0.9, 0.0, 4.0, -2.0, 1.3, 2.0)
         print("openSecondDoor2")
     end
 end
