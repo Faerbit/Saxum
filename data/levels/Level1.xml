@@ -13089,10 +13089,10 @@
 
 <terrain>
     <texture>seamlessTerrain.png</texture>
-    <ambientFactor>0.13</ambientFactor>
+    <ambientFactor>0.14</ambientFactor>
     <diffuseFactor>0.8</diffuseFactor>
     <specularFactor>0.2</specularFactor>
-    <shininess>3.0</shininess>
+    <shininess>1.0</shininess>
 </terrain>
 
 <skydome>

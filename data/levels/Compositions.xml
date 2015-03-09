@@ -629,7 +629,7 @@
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
-    <shininess>2.0</shininess>
+    <shininess>1.0</shininess>
     <physicType>None</physicType>
     <renderable>true</renderable>
 </objectData>
@@ -641,7 +641,7 @@
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
-    <shininess>2.0</shininess>
+    <shininess>1.0</shininess>
     <physicType>Box</physicType>
     <width>1.2</width>
     <height>6</height>
@@ -702,7 +702,7 @@
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
-    <shininess>2.0</shininess>
+    <shininess>1.0</shininess>
     <physicType>TriangleMesh</physicType>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
@@ -715,7 +715,7 @@
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
-    <shininess>2.0</shininess>
+    <shininess>1.0</shininess>
     <physicType>TriangleMesh</physicType>
     <dampningL>0.555</dampningL>
     <dampningA>0.5</dampningA>
