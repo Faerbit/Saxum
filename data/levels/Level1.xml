@@ -13103,7 +13103,7 @@
 
 <waterPlane>
     <yPosition>14.5</yPosition>
-    <texture>skydomeNew.png</texture>
+    <texture>waterTexture.png</texture>
 </waterPlane>
 
 <physics>
