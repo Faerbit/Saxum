@@ -19,8 +19,8 @@ Level::~Level() {
     }
     for(unsigned int i = 0; i<objects.size(); i++) {
         delete(objects.at(i));
-        delete(waterPlane);
     }
+    delete(waterPlane);
 }
 
 void Level::load() {
@@ -60,11 +60,13 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
     for(unsigned int i = 0; i<objects.size(); i++) {
         if (lightingPass) {
             objects.at(i)->render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
-            waterPlane->render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
         }
         else {
             objects.at(i)->render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
         }
+    }
+    if (lightingPass) {
+            waterPlane->render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
     }
 }
 
