@@ -43,6 +43,7 @@ void Physics::takeUpdateStep(float timeDiff)
             currentDirection = playerBall->getCenterOfMassPosition();
             currentDirection.setY(0);
             currentDirection.normalize();
+            cameraDistance = 15;
         }          
         btVector3 position = currentDirection;
         

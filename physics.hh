@@ -88,7 +88,7 @@ class Physics {
     bool simulationActive = true;
     bool sinking = true;
     bool endgame = false;
-    btVector3 currentDirection = btVector3(1,1,1);
+    btVector3 currentDirection = btVector3(-1,1,1);
 	btRigidBody* playerBall;    //allows for easier access to the ball
 	btRigidBody* terrainBody;   //duh
 	btRigidBody* cameraBody;
