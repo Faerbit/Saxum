@@ -133,7 +133,7 @@ float samplePointShadow(samplerCubeShadow shadowMap, vec3 lightDirection) {
     float B = -2*(farPlane*nearPlane)/(farPlane - nearPlane);
     float compValue = 0.5*(-A*length(lightDirection) + B)/length(lightDirection) + 0.5;
     float bias = 0.001*tan(acos(clamp(dot(vNormal, lightDirection), 0.0, 1.0)));
-    bias = clamp(bias, 0.0, 0.001);
+    bias = clamp(bias, 0.0, 0.0005);
     return texture(shadowMap, vec4(lightDirection , compValue - bias));
 }
 
