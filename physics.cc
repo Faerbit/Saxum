@@ -162,7 +162,7 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
     
     btRigidBody::btRigidBodyConstructionInfo info(mass,motion,sphere,inertia); //next we process all data for the rigid body into info
     
-    info.m_friction = friction*2; //here we modify the friction and restitution (bounciness) of the object
+    info.m_friction = friction; //here we modify the friction and restitution (bounciness) of the object
     info.m_restitution = 0.0f;
     
     playerBall = new btRigidBody(info); //finally we create the rigid body using the info
@@ -378,6 +378,9 @@ void Physics::addButton(float width, float height, float length, Entity entity, 
         box->calculateLocalInertia((btScalar)mass,inertia);
     }
     btRigidBody::btRigidBodyConstructionInfo info(mass,motion,box,inertia);
+    
+    info.m_friction = 0.2; //here we modify the friction and restitution (bounciness) of the object
+    info.m_restitution = 0.0f;
     
     btRigidBody* body = new btRigidBody(info);
     
