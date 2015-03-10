@@ -39,7 +39,7 @@ vec4 fogColor(float dot) {
         dayFactor = 1.0;
     }
     else {
-        dayFactor = sin(1.5*dot);
+        dayFactor = sin(dot);
     }
     if (dot <0.0) {
         return mix(fogColorNight, fogColorRise, riseFactor);
