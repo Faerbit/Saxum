@@ -6,8 +6,8 @@ University, Germany)}
 
 \author{Jasper Veit Manousek\thanks{Jasper.Manousek@rwth-aachen.de} 
 \and    Steffen F\"undgens\thanks{Steffen.Fuendgens@rwth-aachen.de} 
-\and    Fabian Klemp\thanks{fabian.klemp1@rwth-aachen.de} 
-\and    Simon Froitzheim\thanks{simon.froitzheim@rwth-aachen.de} }
+\and    Fabian Klemp\thanks{Fabian.Klemp1@rwth-aachen.de} 
+\and    Simon Froitzheim\thanks{Simon.Froitzheim@rwth-aachen.de} }
 
 \pdfauthor{Jasper Veit Manousek, Steffen F\"undgens, Fabian Klemp, Simon Froitzheim}
 
@@ -26,9 +26,16 @@ University, Germany)}
 
 \begin{abstract}
 
-Marble racing games are a sub-genre of games where the player controls a marble to either run races, solve puzzles or complete some other tasks. In Saxum the player must travel through an open level completing some basic switch tasks and a simple puzzle to help the sun rise again.
+Marble Racing games are a sub-genre of games where the player controls a marble to either run races, solve puzzles or complete similar tasks. In Saxum the player must travel through an open level completing some basic switch tasks and a simple puzzle to help the sun rise again.
  
 \end{abstract}
+
+\section{Gameplay}
+Common Marble Racing Games usually strive for action- and skill-based gameplay with many obstacles and a fast pace. Our game takes a different approach and explores the possibility of a more puzzle-based concept with exploration elements: The player is located in an initially dark 
+area where only a few torches light the path ahead. Only if he manages to master the obstacles on his way (like impassable water), he can reach the end of the stage and let the sun rise again as shown in Figure 1.
+
+Level design is certainly not completely open but leaves room for a bit of exploration. The in comparison rather slow marble speed helps to create a for the most part relaxing gaming experience which gets further emphasized by generous checkpoint distribution and the resignation of flashy effects. Puzzles revolve around moving blocks onto switches and pushing switches in the correct order.
+
 
 \section{Basic Layout}
 
@@ -94,7 +101,7 @@ Additionally the respawn animation was created using the physics engine. It lets
 The physics came with many challenges, partially stemming from our integration into a new field, but also partially due to the nature of Bullet Physics itself. If bullet does not recieve enough updates the simulation becomes jagged and unrealistic. To solve this it is suggested to recall the world multiple times per frame to allow a more accurate simulation. Unfortunately, especially with the introduction of the physics based camera, problems arose. To solve this we not only recalled the complete update method within the physics, but also recall the complete update method in the level to stabilize the experience.
 
 \subsection{Content Creation}
-
+Saxum contains many custom models that we created with the tools that the program Blender provides as well as several textures from the website cgtextures.com. We edited these textures, so they can fit our purposes: Texture editing work included smoothing for better UV-Mapping, removing seams etc. All editing, including the creation of the PNGs that are used for heightmap generation and object placement, as well as our completely custom textures were done with the GNU Image Manipulation Program.
 \section{Conclusion}
 
 Our group had no prior experience with such large projects. Though our lack of previous experience hampered our progress, we have managed to amass a great deal of experience in game design, project management and teamwork, as well as knowledge in the underlying framework of games.
