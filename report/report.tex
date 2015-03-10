@@ -6,10 +6,10 @@ University, Germany)}
 
 \author{Jasper Veit Manousek\thanks{Jasper.Manousek@rwth-aachen.de} 
 \and    Steffen F\"undgens\thanks{Steffen.Fuendgens@rwth-aachen.de} 
-\and    Author 3\thanks{author3@rwth-aachen.de} 
-\and    Author 4\thanks{author4@rwth-aachen.de} }
+\and    Fabian Klemp\thanks{fabian.klemp1@rwth-aachen.de} 
+\and    Simon Froitzheim\thanks{simon.froitzheim@rwth-aachen.de} }
 
-\pdfauthor{Jasper Veit Manousek, Author 2, Author 3, Author 4}
+\pdfauthor{Jasper Veit Manousek, Steffen F\"undgens, Fabian Klemp, Simon Froitzheim}
 
 \keywords{game programming, pinball game}
 
@@ -47,11 +47,40 @@ We decided to let the red value of the pixel identify which kind of composition 
 
 \subsection{Triggers}
 
-Because a lot of the gameplay in Saxum is focused on solving challenges and activating events, we decided to integrate the scripting language LUA to make our triggers customizable. In the level XML we can add triggers to objects. We define a region in global space and when the object enters or leaves the region a LUA script is called. The script can then activate different events like opening a door or letting the sun rise at the end of the level.
+Because a lot of the gameplay in Saxum is focused on solving challenges and activating events, we decided to integrate the scripting language Lua to make our triggers customizable. In the level XML we can add triggers to objects. We define a region in global space and when the object enters or leaves the region a Lua script is called. The script can then activate different events like opening a door or letting the sun rise at the end of the level.
 
 \subsection{Graphics}
 
-Some techniques are a little bit more advanced, so that you can even use subsections.
+For the visual aspects we started with basic rendering of OBJ files. Every object has a position and a rotation.
+The loading of the OBJ files and the textures was already implemented in ACGL.
+Next we implemented Phong shading for point lights and directional lights.
+This gave us a basic lighting model, based on the normals of the triangle meshes.
+
+We then moved on to shadow mapping for shadows.
+We started with shadow mapping for our only directional light(the sun), because it was the easiest to implement.
+To further refine our shadows we implemented Cascaded Shadow Mapping, which utilizes several shadow maps with different
+resolutions(the closer to the camera, the higher the resolution).
+
+Later we expanded on this by implementing shadow mapping for point lights using cube map textures. It took quite some time to implement them correctly due to
+discrepancies of how OpenGL defined the up vector and how we thought it should be.
+
+We implemented a basic day/night cycle using one sky texture for the day and one for the night which get blended together depending of the height
+of the sun.
+
+The sky textures were mapped on a skydome and the sun was procedually painted on top. This allowed the sun to easily be moved during runtime.
+
+To hide the popping of object and the terrain into the view frustum we implemented a basic fog.
+We later changed the color of the for depeding of the sun height to get a more realistic sun rise.
+
+The last feature we implemented was a basic flame rendering. 
+To do that we used a geometry shader to generate a basic flame shape during runtime.
+The circular flame shape is generated using a cosine and a exponential function.
+
+To get a simple illusion of heat we blurred the flames:
+We do this in several render passes:
+At first we render the flames with color.
+After that we increase the size of the flames a little bit and render the flames without color while also writing to the stencil buffer.
+We then blur the parts selected by the stencil shader.
 
 \subsection{Physics}
 
@@ -76,20 +105,20 @@ Through the experience we have gained we are confident that all our future proje
 
 
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.3\linewidth]{images/Dummy}
-    \caption{\label{fig:OneImage} Use one image.}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \parbox{0.3\linewidth}{\centering \includegraphics[width=\linewidth]{images/Dummy} \\ (a)}
-    \parbox{0.3\linewidth}{\centering \includegraphics[width=\linewidth]{images/Dummy} \\ (b)}
-    \parbox{0.3\linewidth}{\centering \includegraphics[width=\linewidth]{images/Dummy} \\ (c)}
-    \caption{\label{fig:SeveralImages} 
-    Use several images.}
-\end{figure}
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=0.3\linewidth]{images/Dummy}
+%    \caption{\label{fig:OneImage} Use one image.}
+%\end{figure}
+%
+%\begin{figure}[t]
+%    \centering
+%    \parbox{0.3\linewidth}{\centering \includegraphics[width=\linewidth]{images/Dummy} \\ (a)}
+%    \parbox{0.3\linewidth}{\centering \includegraphics[width=\linewidth]{images/Dummy} \\ (b)}
+%    \parbox{0.3\linewidth}{\centering \includegraphics[width=\linewidth]{images/Dummy} \\ (c)}
+%    \caption{\label{fig:SeveralImages} 
+%    Use several images.}
+%\end{figure}
 
 \bibliographystyle{acmsiggraph}
 \bibliography{references}
