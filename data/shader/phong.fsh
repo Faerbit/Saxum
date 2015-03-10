@@ -107,6 +107,20 @@ vec4 fogColor(float dot) {
 
 }
 
+vec3 sunColor(float dot){
+    float riseFactor = 0.0;
+    if(dot<-0.79) {
+        riseFactor = 0.0;
+    }
+    else if (dot>0.79) {
+        riseFactor = 0.0;
+    }
+    else {
+        riseFactor = cos(2*dot);
+    }
+    return mix(directionalColor, vec3(fogColorRise), riseFactor);
+}
+
 float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord, float maxBias ) {
     float visibility = 1.0;
     const float stretching = 650.0;
@@ -179,11 +193,11 @@ void main()
                 directionalVisibility = sampleDirectionalShadow(shadowMap_directional2, shadowCoord2, 0.01);
             }
             diffuseColor += clamp(dot(normalize(vNormal), directionalVector)
-            *diffuseFactor*directionalIntensity*directionalColor, 0.0, 1.0)*directionalVisibility;
+            *diffuseFactor*directionalIntensity*sunColor(sunAngle), 0.0, 1.0)*directionalVisibility;
             vec3 cameraVector = normalize(camera - vec3(fragPosition));
             specularColor += clamp(pow((dot((cameraVector+directionalVector),normalize(vNormal))/
             (length(cameraVector+directionalVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
-            *specularFactor*directionalIntensity*directionalColor*directionalVisibility;
+            *specularFactor*directionalIntensity*sunColor(sunAngle)*directionalVisibility;
         }
     }
 
