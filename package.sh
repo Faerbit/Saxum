@@ -21,7 +21,7 @@ then
     ./build.sh clean
 fi
 
-./build.sh $platform
+./build.sh $platform Release
 
 rc=$?
 
