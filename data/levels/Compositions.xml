@@ -551,7 +551,7 @@
 <!-- Do not change the radius, it has to match the .obj -->
 <objectData>
     <modelPath>marbleSmooth.obj</modelPath>
-    <texturePath>marbleTexture.png</texturePath>
+    <texturePath>cgtextures/marbleTexture.png</texturePath>
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.5</diffuseFactor>
     <specularFactor>0.5</specularFactor>
@@ -566,7 +566,7 @@
 <!-- Do not change width height or length, they have to match the .obj -->
 <objectData>
     <modelPath>block.obj</modelPath>
-    <texturePath>blockTexture_small.png</texturePath>
+    <texturePath>cgtextures/blockTexture_small.png</texturePath>
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
@@ -582,7 +582,7 @@
 
 <objectData>
     <modelPath>column.obj</modelPath>
-    <texturePath>columnTexture2.png</texturePath>
+    <texturePath>cgtextures/columnTexture2.png</texturePath>
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
@@ -595,7 +595,7 @@
 
 <objectData>
     <modelPath>torch.obj</modelPath>    
-    <texturePath>torchTexture2.png</texturePath>
+    <texturePath>cgtextures/torchTexture2.png</texturePath>
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.3</diffuseFactor>
     <specularFactor>0.7</specularFactor>
@@ -609,7 +609,7 @@
 <!-- Do not change width height or length, they have to match the .obj -->
 <objectData>
     <modelPath>switchInner.obj</modelPath>
-    <texturePath>switchInnerTexture.png</texturePath>
+    <texturePath>cgtextures/switchInnerTexture.png</texturePath>
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>        
@@ -637,7 +637,7 @@
 
 <objectData>
     <modelPath>switchOuter.obj</modelPath>
-    <texturePath>switchOuterTexture.png</texturePath>
+    <texturePath>cgtextures/switchOuterTexture.png</texturePath>
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
@@ -649,7 +649,7 @@
 <!-- lengh may not be exact -->
 <objectData>
     <modelPath>simpleWall.obj</modelPath>
-    <texturePath>simpleWallTexture.png</texturePath>
+    <texturePath>cgtextures/simpleWallTexture.png</texturePath>
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
@@ -665,7 +665,7 @@
 
 <objectData>
     <modelPath>gate.obj</modelPath>
-    <texturePath>gateTexture.png</texturePath> 
+    <texturePath>cgtextures/gateTexture.png</texturePath> 
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
@@ -681,7 +681,7 @@
 
 <objectData>
     <modelPath>movableBlock.obj</modelPath>
-    <texturePath>movableBlockTexture.png</texturePath>
+    <texturePath>cgtextures/movableBlockTexture.png</texturePath>
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
@@ -697,7 +697,7 @@
 
 <objectData>
     <modelPath>brazier.obj</modelPath>
-    <texturePath>brazierTexture.png</texturePath>
+    <texturePath>cgtextures/brazierTexture.png</texturePath>
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
@@ -723,7 +723,7 @@
 
 <objectData>
     <modelPath>exit.obj</modelPath>
-    <texturePath>exitTexture.png</texturePath>
+    <texturePath>cgtextures/exitTexture.png</texturePath>
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>

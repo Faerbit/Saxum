@@ -13223,7 +13223,7 @@
 
 <waterPlane>
     <yPosition>14.5</yPosition>
-    <texture>waterTexture.png</texture>
+    <texture>cgtextures/waterTexture.png</texture>
 </waterPlane>
 
 <physics>
