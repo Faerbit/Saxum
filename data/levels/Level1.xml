@@ -13218,7 +13218,7 @@
 <skydome>
     <model>skydome.obj</model>
     <texture>skydomeNew.png</texture>
-    <nightTexture>nightskydome.png</nightTexture>
+    <nightTexture>bluenightskydome.png</nightTexture>
 </skydome>
 
 <waterPlane>
