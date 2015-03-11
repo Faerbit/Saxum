@@ -76,7 +76,6 @@ FILE(GLOB_RECURSE README_FILES "${CMAKE_SOURCE_DIR}/../Readme.md")
 #
 # all we need for ACGL:
 #
-ADD_DEFINITIONS(-DACGL_ERROR_LEVEL_EC3)
 INCLUDE(${CMAKE_SOURCE_DIR}/extern/acgl/CMakeListsStaticInclude.txt)
 #
 #
