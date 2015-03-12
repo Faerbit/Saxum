@@ -19,8 +19,8 @@ database:
 
 test:
     override:
-        - docker run -v ~/swp:/swp/swp -w=/swp/swp -u=$(id -u) faerbit/swp ./package.sh linux
-        - docker run -v ~/swp:/swp/swp -w=/swp/swp -u=$(id -u) faerbit/swp ./package.sh windows
+        - docker run -v ~/saxum:/saxum/saxum -w=/saxum/saxum -u=$(id -u) faerbit/saxum ./package.sh linux
+        - docker run -v ~/saxum:/saxum/saxum -w=/saxum/saxum -u=$(id -u) faerbit/saxum ./package.sh windows
         - if [ -f MarbleGame_Windows.zip ]; then cp MarbleGame_Windows.zip $CIRCLE_ARTIFACTS; fi
         - if [ -f MarbleGame_Linux.zip ]; then cp MarbleGame_Linux.zip $CIRCLE_ARTIFACTS; fi
 
