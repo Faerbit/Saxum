@@ -1,0 +1,440 @@
+All code except the one in extern is subject to the following license:
+
+The MIT License (MIT)
+
+Copyright (c) 2014-2015 Fabian Klemp, Steffen Fündgens, Jasper Manousek, Simon
+Froitzheim
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-------------------------------------------------------------------------------------
+
+The code in extern contains the following libraries with their respective
+licenses:
+
+-------------------------------------------------------------------------------------
+
+ACGL: ACGL - Aachen Computer Graphics Library
+
+Intended to speed up graphics/OpenGL prototyping. Developed by Lars Krecklau
+and Robert Menzel with help from Andreas Neu, Janis Born, Kersten Schuster, Ole
+Untzelmann, based on prior work from Lars Krecklau.
+
+Included third-party software:
+* Includes lodepng by Lode Vandevenne, unchanged except for the include path in
+* lodepng.cpp. lodepng is provided as-is, see license text in the lodepng
+* source code.  Includes OpenGL loader code created by a modified glLoadGen by
+* Jason McKesson.  Includes GLM by Christophe Riccio.  Includes data type
+* definitions from libspnav header originally by John Tsiombikas (see
+* mini_spnav.h for details).  Includes RGBE/Radiance image import by Bruce
+* Walter (code provided 'as-is') minimally adjusted to reduce compiler
+* warnings.
+
+Additional documentation:
+http://www.graphics.rwth-aachen.de/redmine/projects/acgl/wiki
+
+License:
+
+ACGL is distributed under the terms of the MIT license stated below.
+
+Copyright (C) 2011-2012 Computer Graphics Group RWTH Aachen University
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-------------------------------------------------------------------------------------
+
+GLM License:
+
+The MIT License
+
+Copyright (c) 2005 - 2013 G-Truc Creation
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-------------------------------------------------------------------------------------
+
+Linux Joystick License:
+
+Copyright (C) 2008 Andreas Volz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the “Software”), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies of the Software and its Copyright notices. In addition publicly
+documented acknowledgment must be given that this software has been used if no
+source code of this software is made available publicly. This includes
+acknowledgments in either Copyright notices, Manuals, Publicity and Marketing
+documents or any documentation provided with any product containing this
+software. This License does not apply to any software that links to the
+libraries provided by this software (statically or dynamically), but only to
+the software provided.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-------------------------------------------------------------------------------------
+
+Bullet Physics License:
+
+Bullet Continuous Collision Detection and Physics Library Copyright (c)
+2003-2011 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.  In
+no event will the authors be held liable for any damages arising from the use
+of this software.  Permission is granted to anyone to use this software for any
+purpose, including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim
+that you wrote the original software. If you use this software in a product, an
+acknowledgment in the product documentation would be appreciated but is not
+required.  2. Altered source versions must be plainly marked as such, and must
+not be misrepresented as being the original software.  3. This notice may not
+be removed or altered from any source distribution.
+
+
+All files in the extern/bullet/src folder are under this Zlib license.  Files in the
+Extras and Demos folder may have a different license, see the respective files.
+
+-------------------------------------------------------------------------------------
+
+GLFW License:
+
+Copyright (c) 2002-2006 Marcus Geelnard
+Copyright (c) 2006-2010 Camilla Berglund <elmindreda@elmindreda.org>
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would
+   be appreciated but is not required.
+
+2. Altered source versions must be plainly marked as such, and must not
+   be misrepresented as being the original software.
+
+3. This notice may not be removed or altered from any source
+   distribution.
+
+-------------------------------------------------------------------------------------
+
+Lua License:
+
+Copyright © 1994–2015 Lua.org, PUC-Rio.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. 
+
+-------------------------------------------------------------------------------------
+
+LuaBridge License:
+
+https://github.com/vinniefalco/LuaBridge
+
+Copyright 2012, Vinnie Falco <vinnie.falco@gmail.com>
+Copyright 2007, Nathan Reed
+
+License: The MIT License (http://www.opensource.org/licenses/mit-license.php)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+
+Licenses for Models and Textures:
+-------------------------------------------------------------------------------------
+
+data/textures/seamlessTerrain.png is from
+http://hhh316.deviantart.com/art/Seamless-Beach-Sand-Texture-271683282
+
+-------------------------------------------------------------------------------------
+
+data/textures/bluenightskydome.png was generated with:
+http://wwwtyro.github.io/procedural.js/space/ Source code here:
+https://github.com/wwwtyro/procedural.js
+
+-------------------------------------------------------------------------------------
+
+data/textures/skydomeNew.png was modified and originally taken from:
+http://www.tutorialsforblender3d.com/Textures/Skys/Sky_Dome_1.html
+
+The author states that the images were created with "Terragen(tm) Classic for
+Windows" and according to ther license, the textures are free for personal
+non-commercial use.
+
+-------------------------------------------------------------------------------------
+
+All textures in data/textures/cgtextures are subject to the following license:
+
+This document is a license agreement ("License") by CGTextures between the user
+("You") and CGTextures. Use of the photographs on the CGTextures website is
+conditional upon the your agreement to the terms and conditions of purchase set
+out below. If you do not agree to these terms, then you must not accept the
+terms hereof or purchase, download, access or otherwise use any products from
+CGTextures.
+
+CGTextures may revise and update this Agreement at anytime and without notice.
+Your continued use of the website after any such changes are posted will
+constitute your acceptance of these changes.
+
+LICENSE
+
+CGTextures offers photographs of materials ("Textures") on its website
+(www.cgtextures.com) for game developers, special effects artists, graphic
+designers and other professions. No payment or royalties are required to use
+these Textures. The use of Textures is non-exclusive, royalty free, and you
+have the right to modify them for the uses permitted under the clause
+Conditions of Use.  Most Textures on the CGTextures website are photographed by
+CGTextures. A small part is photographed by third party contributors
+("Contributors"). CGTextures has separate agreements with these Contributors in
+which they grant CGTextures permission to add their Textures to the website.
+All terms and conditions in this License apply to both groups of Textures.  All
+Textures and materials remain in ownership of CGTextures or the Contributor and
+the Textures and materials are licensed to you, not sold.
+
+The license granted for the use of the textures gives you no lawful right to
+submit, use or otherwise make available the textures in Second Life or
+otherwise to Linden Research, Inc. Use of the textures in such manner will be
+an infringement of the intellectual property rights if CGTextures and
+CGTextures reserves its right to take action to prevent any such infringement.
+
+INTELLECTUAL PROPERTY
+
+All materials including the organization and presentation of these materials on
+the CGTextures website are the property of CGTextures or its Contributors and
+are protected by intellectual property laws. Some images contain graphic
+materials like wallpaper patterns, logos, names or signs. The use of these kind
+of images is at your own discretion. The rights for the photo lie with
+CGTextures and the photo has been taken in a public space, but using the
+patterns, logos or name in your work might not be allowed.
+
+CONDITIONS OF USE
+
+Use of the Textures is only allowed under the following conditions:
+- Private or commercial use
+- Use in 2D or 3D computer graphics, movies and printed media
+- Incorporation in computer games, 3D models
+- Selling 3D models bundled with modified versions of the textures, when the
+  texture is customized for the 3D model
+
+It is NOT permitted to:
+- Sell or distribute any of these textures in an unmodified form, or where the
+  derived product you are selling or distributing is a Texture or a collection
+  of Textures. IN OTHER WORDS: Do not sell or distribute any of these textures
+  (modified or not) by itself or in a texture pack, material, clipart, website
+  theme or scrapbooking pack!
+- Bundle the images with software such as paint programs, 3D programs,
+  photo-kiosk software.
+- Reselling or redistributing the images at 'print on demand' services (mugs,
+  t-shirts, mouse mats, etc)
+- Use the textures in graphic design themes or templates sold to multiple
+  customers on digital market places (this includes templates of websites and
+  business cards and e-cards).
+- Selling or redistributing skins for laptops, phones and other devices,
+  created with images from CGTextures.
+- Stockpile images with the goal of making a local texture library.
+- Using a special program (spider, leecher) or script to automatically download
+  all Textures on the CGTextures website. Users who try to mass download will
+  be banned from the website automatically.
+- Interfere with the security or otherwise abuse, disrupt, place excessive
+  loads on, or attempt to gain unauthorized access to the CGTextures website or
+  any system resources or networks connected to this website.
+- Release the Textures or derivative products under Open Source Licences
+
+RESALE OR REDISTRIBUTION OF 3D MODELS TEXTURED WITH IMAGES FROM CGTEXTURES
+
+When selling or redistributing a 3D model bundled with textures from CGTextures
+please add the following text in the documentation accompanying the model:
+
+"One or more textures on this 3D model have been created with images from
+CGTextures.com. These images may not be redistributed by default, please visit
+www.cgtextures.com for more information."
+
+STOCKPILING IMAGES
+
+CGTextures is meant as a 'download when you need it' resource. Downloading
+complete categories with the goal of making a local copy of the texture
+collection is not allowed.
+
+PRIVACY
+
+CGTextures respects the privacy of the personal information of the individuals
+with whom we interact. CGTextures does not disclose personal information of our
+members or those individuals who visit our website. No newsletters or offers
+will be sent to you without your prior consent. Any information submitted by
+the buyer will be used solely for the purpose of completing the transaction,
+delivering the product and addressing any customer service issues.
+
+We use third-party advertising companies (Google Adsense) to serve ads when you
+visit our website. These companies may use information (not including
+personally identifying information such as your name, address, email address,
+or telephone number) about your visits to this and other websites in order to
+provide advertisements about goods and services of interest to you.  For more
+information about this subject (including on how to "Opt-Out" on advertising
+cookies) please visit this link: Google Advertsing and Privacy page
+
+
+LIMITATION OF LIABILITY
+
+You assume all responsibility and risk for the use of the CGTextures website,
+the Textures, materials and information.  CGTextures does not represent or
+warrant that the site or any content available for downloading through the site
+will be free of viruses or similar contaminations of destructive features.
+
+In no event shall CGTextures or any of its affiliates, employees or
+Contributors be liable for any incidental, indirect, punitive, exemplary or
+consequential damages whatsoever, including damages for loss of profits,
+interruption, loss of business information, loss of data, or any other
+pecuniary loss in connection with any claim, loss, action, suit, damage or
+other proceeding arising under or out of this License, including without
+limitation your use of, reliance upon, access to or exploitation of the
+CGTextures website, the materials or any part thereof, or any rights granted to
+you hereunder, even if we have been advised of the possibility of such damaged,
+wheter the action is based on contract, tort (including negligence),
+infringement of intellectual property rights or otherwise.
+
+INDEMNIFICATION
+
+You agree to indemnify and hold CGTextures harmless against all claims or
+liability asserted against CGTextures arising out of or in connection with any
+breach by you or anyone acting on your behalf of any of this License
+
+GENERAL
+
+This License shall be governed by and construed in accordance with the laws of
+The Netherlands, without regards to conflict of laws provisions thereto. The
+parties consent to the exclusive jurisdiction of the courts of, and venue and
+situs in The Netherlands.
+
+TERMINATION
+
+CGTextures reserves the right to terminate the license of the use of the
+materials on CGTextures if the user is found in breach of this License and does
+not remedy that breach within three (3) days of receiving notice from
+CGTextures.
+
+
+EMAIL
+
+Feel free to email any questions regarding this license or any other questions
+about CGTextures to support@cgtextures.com Correspondence can be in English or
+Dutch.
+
+ADDRESS
+
+CGTextures.com Krommedijk 231 3312LE Dordrecht The Netherlands
+
+-------------------------------------------------------------------------------------
+
+The logo in logo/ and also contained in the loading
+screen(data/textures/loadingscreen.png and
+data/textures/loadingscreenContinue.png) is subject to the following license:
+
+Created by Fabian Klemp and Jeremy Theocharis in 2015.
+Licensed by CC BY 4.0.
+(see https://creativecommons.org/licenses/by/4.0/ for full license text)
+
+
+-------------------------------------------------------------------------------------
+
+All other models and textures contained in data/textures and data/geometry and
+also the corresponding GIMP files in GIMPfiles and the Blender files in
+Blenderfiles are subject to the following license:
+
+Created by Simon Froitzheim, Fabian Klemp, Steffen Fündgens and Jasper Manousek in 2014 and 2015.
+Licensed by CC BY 4.0.
+(see https://creativecommons.org/licenses/by/4.0/ for full license text)
