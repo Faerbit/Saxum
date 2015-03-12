@@ -1,5 +1,5 @@
 #include "terrain.hh"
-#include "lodepng.h"
+#include <lodepng/lodepng.h>
 
 Terrain::Terrain(std::string heightmapFilePath){
     this->heightmapFilePath = heightmapFilePath;

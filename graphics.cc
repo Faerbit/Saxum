@@ -1,5 +1,5 @@
 #include "graphics.hh"
-#include "lodepng.h"
+#include <lodepng/lodepng.h>
 
 #include <iomanip>
 #include <sstream>

@@ -1,4 +1,4 @@
-#include "lodepng.hh"
+#include <lodepng/lodepng.h>
 #include <string>
 #include "converter.hh"
 #include <vector>
