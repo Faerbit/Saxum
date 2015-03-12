@@ -29,8 +29,8 @@ static void mouseCallback(GLFWwindow* window, int button, int action, int) {
         app.startGame();
     }
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-        glfwSetCursorPos(window, app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetCursorPos(window, ((double)app.getGraphics()->getWindowSize().x)/2.0, ((double)app.getGraphics()->getWindowSize().y)/2.0);
         app.setCameraLock(true);
     }
 }
@@ -42,7 +42,7 @@ static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
 static void focusCallback(GLFWwindow* window, int focused) {
     if (focused) {
         // Hide mouse cursor
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         app.setFocused(focused);
     }
     else {
@@ -173,7 +173,7 @@ int main( int argc, char *argv[] )
                 
                 double xpos, ypos;
                 glfwGetCursorPos(window, &xpos, &ypos);
-                glfwSetCursorPos(window, app.getGraphics()->getWindowSize().x/2, app.getGraphics()->getWindowSize().y/2);
+                glfwSetCursorPos(window, ((double)app.getGraphics()->getWindowSize().x)/2.0, ((double)app.getGraphics()->getWindowSize().y)/2.0);
                 app.getLevel()->update(now - lastUpdate, now - gameStart,
                         glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
                                 (float)xpos-app.getGraphics()->getWindowSize().x/2),
