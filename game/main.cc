@@ -2,6 +2,7 @@
 
 #include <iomanip>
 #include <sstream>
+#include "keyboardState.hh"
 
 static void resizeCallback(GLFWwindow* window, int newWidth, int newHeight)
 {
@@ -144,6 +145,8 @@ int main( int argc, char *argv[] )
     double showNextFPS = startTimeInSeconds + FPSdelay;
     
     double lastUpdate=0.0f;
+
+    KeyboardState keyboardState;
     
     do {
         
@@ -160,28 +163,38 @@ int main( int argc, char *argv[] )
         if (app.isGameStarted()) {
             static float gameStart = now;
             if (app.isLocked() && app.getIgnoredMouseUpdates() == 0) {
-                int stateW = glfwGetKey(window, GLFW_KEY_W);
-                int stateA = glfwGetKey(window, GLFW_KEY_A);
-                int stateS = glfwGetKey(window, GLFW_KEY_S);
-                int stateD = glfwGetKey(window, GLFW_KEY_D);
-                int stateK = glfwGetKey(window, GLFW_KEY_K);
-                int stateL = glfwGetKey(window, GLFW_KEY_L);
-                int stateF1 = glfwGetKey(window, GLFW_KEY_F1);
-                int stateF2 = glfwGetKey(window, GLFW_KEY_F2);
-                int stateF3 = glfwGetKey(window, GLFW_KEY_F3);
-                int stateF4 = glfwGetKey(window, GLFW_KEY_F4);
+                keyboardState.wPressed  = glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS;
+                keyboardState.aPressed  = glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS;
+                keyboardState.sPressed  = glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS;
+                keyboardState.dPressed  = glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
+                keyboardState.lPressed  = glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS;
+                keyboardState.kPressed  = glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS;
+                keyboardState.f1Pressed = glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS;
+                keyboardState.f2Pressed = glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS;
+                keyboardState.f3Pressed = glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS;
+                keyboardState.f4Pressed = glfwGetKey(window, GLFW_KEY_F4) == GLFW_PRESS;
                 
                 double xpos, ypos;
                 glfwGetCursorPos(window, &xpos, &ypos);
                 glfwSetCursorPos(window, ((double)app.getGraphics()->getWindowSize().x)/2.0, ((double)app.getGraphics()->getWindowSize().y)/2.0);
                 app.getLevel()->update(now - lastUpdate, now - gameStart,
-                        glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
-                                (float)xpos-app.getGraphics()->getWindowSize().x/2),
-                            stateW == GLFW_PRESS,stateA == GLFW_PRESS,stateS == GLFW_PRESS,stateD == GLFW_PRESS,stateK == GLFW_PRESS,stateL == GLFW_PRESS, stateF1 == GLFW_PRESS,
-                            stateF2 == GLFW_PRESS, stateF3 == GLFW_PRESS, stateF4 == GLFW_PRESS);
+                    glm::vec2((float)ypos-app.getGraphics()->getWindowSize().y/2,
+                    (float)xpos-app.getGraphics()->getWindowSize().x/2),
+                    &keyboardState);
             }
             else {
-                app.getLevel()->update(now - lastUpdate, now-gameStart, glm::vec2(0.0f, 0.0f), false, false, false, false,false,false,false,false,false,false);
+                keyboardState.wPressed  = false;
+                keyboardState.aPressed  = false;
+                keyboardState.sPressed  = false;
+                keyboardState.dPressed  = false;
+                keyboardState.lPressed  = false;
+                keyboardState.kPressed  = false;
+                keyboardState.f1Pressed = false;
+                keyboardState.f2Pressed = false;
+                keyboardState.f3Pressed = false;
+                keyboardState.f4Pressed = false;
+                app.getLevel()->update(now - lastUpdate, now-gameStart, glm::vec2(0.0f, 0.0f), 
+                        &keyboardState);
                 if (app.isLocked()) {
                     app.ignoredOneMouseUpdate();
                 }

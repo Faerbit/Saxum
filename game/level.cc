@@ -70,8 +70,8 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
     }
 }
 
-void Level::update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseDelta, bool wPressed, bool aPressed, bool sPressed, bool dPressed,bool kPressed, bool lPressed,
-        bool f1Pressed, bool f2Pressed, bool f3Pressed, bool f4Pressed) {
+void Level::update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseDelta, 
+        KeyboardState* keyboardState) {
     
     // Ignore first two mouse updates, because they are incorrect
     // DON'T try to move this functionallity elsewhere
@@ -98,36 +98,36 @@ void Level::update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseD
         camera.setPosition(physics.getCameraPosition());
         camera.setDirection(physics.getCameraToPlayer());
         
-        if(wPressed){
+        if(keyboardState->wPressed){
             physics.rollForward(camera.getVector(),strength/runs);
         }
-        if(aPressed) {
+        if(keyboardState->aPressed) {
             physics.rollLeft(camera.getVector(),strength/runs);
         }
-        if(sPressed) {
+        if(keyboardState->sPressed) {
             physics.rollBack(camera.getVector(),strength/runs);
         }
-        if(dPressed){
+        if(keyboardState->dPressed){
             physics.rollRight(camera.getVector(),strength/runs);
         }
      }
         
-        if(f1Pressed) {
+        if(keyboardState->f1Pressed) {
             physics.forcePlayer(glm::vec3(17.5, 21.0, 87.0));
         }
-        if(f2Pressed) {
+        if(keyboardState->f2Pressed) {
             physics.forcePlayer(glm::vec3(-78.5, 21.75, 4.5));
         }
-        if(f3Pressed) {
+        if(keyboardState->f3Pressed) {
             physics.forcePlayer(glm::vec3(-169.5, 21.5, 58.5));
         }
-        if(f4Pressed) {
+        if(keyboardState->f4Pressed) {
             physics.forcePlayer(glm::vec3(-180.5, 21.75, 58.5));
         }
 
-        if(kPressed)
+        if(keyboardState->kPressed)
             camera.setIsPhysicsCamera(true);
-        if(lPressed)
+        if(keyboardState->lPressed)
             camera.setIsPhysicsCamera(false);
         
         cameraCenter->setPosition(physics.getPos(0));
