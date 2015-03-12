@@ -24,6 +24,10 @@ class Graphics {
         float getFarPlane();
         void startGame();
         void renderLoadingScreen();
+        void setRenderShadows(bool state);
+        void setRenderFlames(bool state);
+        bool getRenderShadows();
+        bool getRenderFlames();
     private:
         void bindTextureUnits();
         void updateLights();
@@ -71,6 +75,8 @@ class Graphics {
         bool gameStart;
         float loadingScreenWidth;
         float loadingScreenHeight;
+        bool renderShadows;
+        bool renderFlames;
 };
 
 #endif

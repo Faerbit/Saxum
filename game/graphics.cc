@@ -25,6 +25,8 @@ Graphics::Graphics(glm::uvec2 windowSize, float nearPlane,
     this->loadingScreenPath = screenPath;
     this->loadingScreenContinuePath = screenContinuePath;
     gameStart = false;
+    renderShadows = true;
+    renderFlames = true;
 }
 
 Graphics::Graphics() {
@@ -307,66 +309,70 @@ void Graphics::render(double time)
             updateLights();
             lastLightUpdate = time;
         }
+
         // At first render shadows
-        depthCubeShader->use();
-        depthCubeShader->setUniform("farPlane", farPlane);
-        // render depth textures for point lights
-        glViewport(0, 0, cube_size, cube_size);
-        glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  farPlane);
-        glm::vec3 looking_directions[6] = {glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
-            glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
-        glm::vec3 upvectors[6] = {glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, 0.0f, -1.0f),
-            glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f)};
-
-
-        framebuffer_cube->bind();
-        for (unsigned int i_pointlight = 0; i_pointlight<closestLights.size() && i_pointlight < maxShadowRenderCount; i_pointlight++) {
-            // render each side of the cube
-            for (int i_face = 0; i_face<6; i_face++) {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
-                glClear(GL_DEPTH_BUFFER_BIT);
-                glm::mat4 viewMatrix = glm::lookAt(closestLights.at(i_pointlight).getPosition(),
-                    closestLights.at(i_pointlight).getPosition() + looking_directions[i_face], upvectors[i_face]);
-                glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * viewMatrix;
-                std::vector<glm::mat4> viewMatrixVector = std::vector<glm::mat4>();
-                viewMatrixVector.push_back(viewMatrix);
-                level->render(depthCubeShader, false, &depthViewProjectionMatrix_face, &viewMatrixVector);
-                if (!framebuffer_cube->isFrameBufferObjectComplete()) {
-                    printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
-                }
-            }
-        }
-
-        // render depth textures for sun
-        depthShader->use();
-        glViewport(0, 0, windowSize.x, windowSize.y);
-       
         std::vector<glm::mat4> depthViewProjectionMatrices = std::vector<glm::mat4>(framebuffer_directional.size());
-        float sunAngle = glm::dot(glm::vec3(0.0f, 1.0f, 0.0f), glm::normalize(level->getDirectionalLight()->getPosition()));
-        glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
+        if (renderShadows) {
+            depthCubeShader->use();
+            depthCubeShader->setUniform("farPlane", farPlane);
+            // render depth textures for point lights
+            glViewport(0, 0, cube_size, cube_size);
+            glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  farPlane);
+            glm::vec3 looking_directions[6] = {glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
+                glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
+            glm::vec3 upvectors[6] = {glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, 0.0f, -1.0f),
+                glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f)};
 
-        for (unsigned int i = 0; i<framebuffer_directional.size(); i++) {
-            framebuffer_directional.at(i)->bind(); 
-            glClear(GL_DEPTH_BUFFER_BIT);
-            if (sunAngle > -0.6f) {
-                float projection_size = 0.0f;
-                switch(i) {
-                    case 0:
-                        projection_size = 10.0f;
-                        break;
-                    case 1:
-                        projection_size = 30.0f;
-                        break;
-                    case 2:
-                        projection_size = farPlane/1.5f;
-                        break;
+
+            framebuffer_cube->bind();
+            for (unsigned int i_pointlight = 0; i_pointlight<closestLights.size() && i_pointlight < maxShadowRenderCount; i_pointlight++) {
+                // render each side of the cube
+                for (int i_face = 0; i_face<6; i_face++) {
+                    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
+                    glClear(GL_DEPTH_BUFFER_BIT);
+                    glm::mat4 viewMatrix = glm::lookAt(closestLights.at(i_pointlight).getPosition(),
+                        closestLights.at(i_pointlight).getPosition() + looking_directions[i_face], upvectors[i_face]);
+                    glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * viewMatrix;
+                    std::vector<glm::mat4> viewMatrixVector = std::vector<glm::mat4>();
+                    viewMatrixVector.push_back(viewMatrix);
+                    level->render(depthCubeShader, false, &depthViewProjectionMatrix_face, &viewMatrixVector);
+                    if (!framebuffer_cube->isFrameBufferObjectComplete()) {
+                        printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
+                    }
                 }
-                depthViewProjectionMatrices.at(i) =  glm::ortho<float>(-projection_size, projection_size, -projection_size, projection_size, -farPlane/1.5f, farPlane/1.5f) *
-                    glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-                level->render(depthShader, false, &depthViewProjectionMatrices.at(i));
             }
-            if (!framebuffer_directional.at(i)->isFrameBufferObjectComplete()) {
-                printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
+
+            // render depth textures for sun
+            depthShader->use();
+            glViewport(0, 0, windowSize.x, windowSize.y);
+           
+            
+            float sunAngle = glm::dot(glm::vec3(0.0f, 1.0f, 0.0f), glm::normalize(level->getDirectionalLight()->getPosition()));
+            glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
+
+            for (unsigned int i = 0; i<framebuffer_directional.size(); i++) {
+                framebuffer_directional.at(i)->bind(); 
+                glClear(GL_DEPTH_BUFFER_BIT);
+                if (sunAngle > -0.6f) {
+                    float projection_size = 0.0f;
+                    switch(i) {
+                        case 0:
+                            projection_size = 10.0f;
+                            break;
+                        case 1:
+                            projection_size = 30.0f;
+                            break;
+                        case 2:
+                            projection_size = farPlane/1.5f;
+                            break;
+                    }
+                    depthViewProjectionMatrices.at(i) =  glm::ortho<float>(-projection_size, projection_size, -projection_size, projection_size, -farPlane/1.5f, farPlane/1.5f) *
+                        glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
+                    level->render(depthShader, false, &depthViewProjectionMatrices.at(i));
+                    if (!framebuffer_directional.at(i)->isFrameBufferObjectComplete()) {
+                        printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
+                    }
+                }
             }
         }
         
@@ -421,12 +427,6 @@ void Graphics::render(double time)
         level->getSkydome()->render(skydomeShader, false, true, &lightingViewProjectionMatrix);
         
         lightingShader->use();
-
-        //set lighting parameters
-        
-        // TODO look into doing this less often, offload to another thread?
-        // TODO figure out how to deal with bigger numbers of lights. load the nearest on demand?
-
         
         // convert texture to homogenouse coordinates
         glm::mat4 biasMatrix(
@@ -462,50 +462,52 @@ void Graphics::render(double time)
         level->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
 
         // draw flames on top
-        flameShader->use();
-        // cull faces to get consistent color while using alpha
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
+        if (renderFlames) {
+            flameShader->use();
+            // cull faces to get consistent color while using alpha
+            glEnable(GL_CULL_FACE);
+            glCullFace(GL_BACK);
 
-        // draw with colors
-        for(unsigned int i = 0; i<closestFlames.size(); i++) {
-            closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), true, wind);
+            // draw with colors
+            for(unsigned int i = 0; i<closestFlames.size(); i++) {
+                closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), true, wind);
+            }
+            glDisable(GL_CULL_FACE);
+
+            framebuffer_light->bind();
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer_light->getObjectName());
+            glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, 0, 0, windowSize.x, windowSize.y,
+                    GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+            // draw slightly larger only for stencil buffer to blur edges
+            glEnable(GL_STENCIL_TEST);
+            glStencilFunc(GL_ALWAYS, 1, 0xFF); //Set any stencil to 1
+            glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+            glStencilMask(0xFF);//write to stencil buffer
+            glClear(GL_STENCIL_BUFFER_BIT);//clear stencil buffer
+
+            for(unsigned int i = 0; i<closestFlames.size(); i++) {
+                closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), false, wind);
+            }
+
+            glStencilFunc(GL_EQUAL, 1, 0xFF); //Pass test if stencil value is 1
+            glStencilMask(0x00);// don't write to stencil buffer
+
+            flamePostShader->use();
+            fullscreen_quad->render();
+            glDepthMask(GL_TRUE);
+
+            glDisable(GL_STENCIL_TEST);
+
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer_light->getObjectName());
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+            glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, 0, 0, windowSize.x, windowSize.y,
+                    GL_COLOR_BUFFER_BIT, GL_NEAREST);
         }
-        glDisable(GL_CULL_FACE);
-
-        framebuffer_light->bind();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer_light->getObjectName());
-        glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, 0, 0, windowSize.x, windowSize.y,
-                GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-
-        // draw slightly larger only for stencil buffer to blur edges
-        glEnable(GL_STENCIL_TEST);
-        glStencilFunc(GL_ALWAYS, 1, 0xFF); //Set any stencil to 1
-        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-        glStencilMask(0xFF);//write to stencil buffer
-        glClear(GL_STENCIL_BUFFER_BIT);//clear stencil buffer
-
-        for(unsigned int i = 0; i<closestFlames.size(); i++) {
-            closestFlames.at(i)->render(flameShader, lightingViewProjectionMatrix, float(time), false, wind);
-        }
-
-        glStencilFunc(GL_EQUAL, 1, 0xFF); //Pass test if stencil value is 1
-        glStencilMask(0x00);// don't write to stencil buffer
-
-        flamePostShader->use();
-        fullscreen_quad->render();
-        glDepthMask(GL_TRUE);
-
-        glDisable(GL_STENCIL_TEST);
-
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer_light->getObjectName());
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-        glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, 0, 0, windowSize.x, windowSize.y,
-                GL_COLOR_BUFFER_BIT, GL_NEAREST);
     }
 }
 
@@ -631,4 +633,32 @@ void Graphics::saveDepthBufferToDisk(int face, std::string filename) {
 
 void Graphics::startGame() {
     gameStart = true;
+}
+
+void Graphics::setRenderShadows(bool state) {
+    if(!state) {
+        for(unsigned int i = 0; i<framebuffer_directional.size(); i++) {
+            framebuffer_directional.at(i)->bind();
+            glClear(GL_DEPTH_BUFFER_BIT);
+        }
+        for(unsigned int i_pointlight = 0; i_pointlight<depth_cubeMaps.size(); i_pointlight++) {
+            for(int i_face = 0; i_face<6; i_face++) {
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i_pointlight)->getObjectName(), 0);
+                glClear(GL_DEPTH_BUFFER_BIT);
+            }
+        }
+    }
+    renderShadows = state;
+}
+
+void Graphics::setRenderFlames(bool state) {
+    renderFlames = state;
+}
+
+bool Graphics::getRenderShadows() {
+    return renderShadows;
+}
+
+bool Graphics::getRenderFlames() {
+    return renderFlames;
 }

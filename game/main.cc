@@ -23,6 +23,12 @@ static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         app.setCameraLock(false);
     }
+    if (_key == GLFW_KEY_F5 && _action == GLFW_PRESS) {
+        app.getGraphics()->setRenderShadows(!app.getGraphics()->getRenderShadows());
+    }
+    if (_key == GLFW_KEY_F6 && _action == GLFW_PRESS) {
+        app.getGraphics()->setRenderFlames(!app.getGraphics()->getRenderFlames());
+    }
 }
 
 static void mouseCallback(GLFWwindow* window, int button, int action, int) {
