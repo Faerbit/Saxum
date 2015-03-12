@@ -27,6 +27,7 @@ rc=$?
 
 if [[ $rc == 0 ]]
 then
+    cd binaries; strip -s *; cd ..
     mkdir  "MarbleGame_${platform^}"
     cp -r binaries data LICENSE.txt "MarbleGame_${platform^}"
     zip -r "MarbleGame_${platform^}.zip" "MarbleGame_${platform^}"
