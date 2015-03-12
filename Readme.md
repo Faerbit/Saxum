@@ -4,7 +4,7 @@ This is a Marble Puzzle/Exploration Game developed in the practical course
 at the institute for Computer Graphics and Multimedia at the RWTH Aachen.
 
 ##Downloads
-See [release page](https://github.com/Faerbit/Saxum/releases) for downloads.
+See [release page](https://github.com/Faerbit/Saxum/releases) for downloads(Cooming soon(tm)).
 
 ##Controls
 You can control the camera by moving the mouse. You can zoom with the mouse wheel.
