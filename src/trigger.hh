@@ -4,11 +4,11 @@
 #include <vector>
 #include "object.hh"
 extern "C" {
-#include "extern/lua/src/lua.h"
-#include "extern/lua/src/lualib.h"
-#include "extern/lua/src/lauxlib.h"
+    #include "lua.h"
+    #include "lualib.h"
+    #include "lauxlib.h"
 }
-#include "extern/luabridge/LuaBridge.h"
+#include "LuaBridge.h"
 
 class Level;
 

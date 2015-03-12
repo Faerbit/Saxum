@@ -1,5 +1,4 @@
 #include "physics.hh"
-#include "extern/bullet/Extras/Serialize/BulletWorldImporter/btBulletWorldImporter.h"
 
 
 Physics::Physics() {

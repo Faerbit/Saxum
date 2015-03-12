@@ -9,40 +9,40 @@
 
 #include "entity.hh"
 
-#include "extern/bullet/src/BulletDynamics/Dynamics/btRigidBody.h"
-#include "extern/bullet/src/BulletDynamics/Dynamics/btDynamicsWorld.h"
-#include "extern/bullet/src/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
+#include "BulletDynamics/Dynamics/btRigidBody.h"
+#include "BulletDynamics/Dynamics/btDynamicsWorld.h"
+#include "BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
 
-#include "extern/bullet/src/BulletCollision/CollisionShapes/btSphereShape.h"
-#include "extern/bullet/src/BulletCollision/CollisionShapes/btBoxShape.h"
-#include "extern/bullet/src/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
-#include "extern/bullet/src/BulletCollision/CollisionShapes/btStaticPlaneShape.h"
-#include "extern/bullet/src/BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h"
-#include "extern/bullet/src/BulletCollision/CollisionShapes/btTriangleMesh.h"
-#include "extern/bullet/src/BulletCollision/CollisionShapes/btCollisionShape.h"
-#include "extern/bullet/src/BulletCollision/CollisionShapes/btConvexTriangleMeshShape.h"
-#include "extern/bullet/src/BulletCollision/CollisionShapes/btCylinderShape.h"
-#include "extern/bullet/src/BulletCollision/CollisionShapes/btConvexHullShape.h"
-#include "extern/bullet/src/BulletCollision/CollisionShapes/btConvexTriangleMeshShape.h"
+#include "BulletCollision/CollisionShapes/btSphereShape.h"
+#include "BulletCollision/CollisionShapes/btBoxShape.h"
+#include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
+#include "BulletCollision/CollisionShapes/btStaticPlaneShape.h"
+#include "BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h"
+#include "BulletCollision/CollisionShapes/btTriangleMesh.h"
+#include "BulletCollision/CollisionShapes/btCollisionShape.h"
+#include "BulletCollision/CollisionShapes/btConvexTriangleMeshShape.h"
+#include "BulletCollision/CollisionShapes/btCylinderShape.h"
+#include "BulletCollision/CollisionShapes/btConvexHullShape.h"
+#include "BulletCollision/CollisionShapes/btConvexTriangleMeshShape.h"
 
 
-#include "extern/bullet/src/BulletDynamics/ConstraintSolver/btConstraintSolver.h"
-#include "extern/bullet/src/BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"//YAY!
-#include "extern/bullet/src/BulletDynamics/ConstraintSolver/btPoint2PointConstraint.h"
+#include "BulletDynamics/ConstraintSolver/btConstraintSolver.h"
+#include "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"//YAY!
+#include "BulletDynamics/ConstraintSolver/btPoint2PointConstraint.h"
 
-#include "extern/bullet/src/BulletCollision/CollisionDispatch/btCollisionConfiguration.h"
-#include "extern/bullet/src/BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h"
+#include "BulletCollision/CollisionDispatch/btCollisionConfiguration.h"
+#include "BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h"
 
-#include "extern/bullet/src/BulletCollision/BroadphaseCollision/btBroadphaseInterface.h"
-#include "extern/bullet/src/BulletCollision/BroadphaseCollision/btDbvtBroadphase.h"
-#include "extern/bullet/src/BulletCollision/BroadphaseCollision/btDispatcher.h"
+#include "BulletCollision/BroadphaseCollision/btBroadphaseInterface.h"
+#include "BulletCollision/BroadphaseCollision/btDbvtBroadphase.h"
+#include "BulletCollision/BroadphaseCollision/btDispatcher.h"
 
-#include "extern/bullet/src/LinearMath/btScalar.h"
-#include "extern/bullet/src/LinearMath/btMotionState.h"
-#include "extern/bullet/src/LinearMath/btDefaultMotionState.h"
-#include "extern/bullet/src/LinearMath/btQuaternion.h"
-#include "extern/bullet/src/LinearMath/btVector3.h"
-#include "extern/bullet/src/LinearMath/btMatrix3x3.h"
+#include "LinearMath/btScalar.h"
+#include "LinearMath/btMotionState.h"
+#include "LinearMath/btDefaultMotionState.h"
+#include "LinearMath/btQuaternion.h"
+#include "LinearMath/btVector3.h"
+#include "LinearMath/btMatrix3x3.h"
 
 class Physics {
     public:
