@@ -79,6 +79,7 @@ class Physics {
 	bool playerWithObject();
 	void activateEndgame();
     void forcePlayer(glm::vec3 newPosition);
+    btDynamicsWorld* getWorld();
 
     struct positionConstraint{btRigidBody* body; float strength; btVector3 position;};
 

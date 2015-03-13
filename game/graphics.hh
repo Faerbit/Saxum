@@ -7,6 +7,7 @@
 #include <ACGL/OpenGL/Objects/FrameBufferObject.hh>
 
 #include "level.hh"
+#include "debugDraw.hh"
 
 using namespace ACGL::OpenGL;
 
@@ -26,8 +27,10 @@ class Graphics {
         void renderLoadingScreen();
         void setRenderShadows(bool state);
         void setRenderFlames(bool state);
+        void setRenderDebug(bool state);
         bool getRenderShadows();
         bool getRenderFlames();
+        bool getRenderDebug();
     private:
         void bindTextureUnits();
         void updateLights();
@@ -77,6 +80,12 @@ class Graphics {
         float loadingScreenHeight;
         bool renderShadows;
         bool renderFlames;
+        bool renderDebug;
+        DebugDraw debugDrawer;
+        SharedArrayBuffer debug_ab;
+        SharedVertexArrayObject debug_vao;
+        SharedShaderProgram debugShader;
+
 };
 
 #endif

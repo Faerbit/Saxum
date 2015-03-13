@@ -29,6 +29,9 @@ static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
     if (_key == GLFW_KEY_F6 && _action == GLFW_PRESS) {
         app.getGraphics()->setRenderFlames(!app.getGraphics()->getRenderFlames());
     }
+    if (_key == GLFW_KEY_F7 && _action == GLFW_PRESS) {
+        app.getGraphics()->setRenderDebug(!app.getGraphics()->getRenderDebug());
+    }
 }
 
 static void mouseCallback(GLFWwindow* window, int button, int action, int) {

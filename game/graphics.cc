@@ -6,6 +6,7 @@
 #include <functional>
 
 #include <ACGL/OpenGL/Creator/ShaderProgramCreator.hh>
+#include "LinearMath/btIDebugDraw.h"
 
 using namespace ACGL::OpenGL;
 
@@ -27,6 +28,7 @@ Graphics::Graphics(glm::uvec2 windowSize, float nearPlane,
     gameStart = false;
     renderShadows = true;
     renderFlames = true;
+    renderDebug = false;
 }
 
 Graphics::Graphics() {
@@ -108,6 +110,20 @@ void Graphics::init(Level* level) {
 
     flamePostShader = ShaderProgramCreator("flame_post")
         .attributeLocations(fullscreen_quad->getAttributeLocations()).create();
+
+    debug_ab = SharedArrayBuffer(new ArrayBuffer());
+    debug_ab->defineAttribute("aPosition", GL_FLOAT, 3);
+    debug_ab->defineAttribute("aColor", GL_FLOAT, 3);
+    debug_vao = SharedVertexArrayObject(new VertexArrayObject());
+    debug_vao->attachAllAttributes(debug_ab);
+    debug_vao->setMode(GL_LINES);
+
+    debugShader = ShaderProgramCreator("debug")
+        .attributeLocations(debug_vao->getAttributeLocations()).create();
+
+    debugDrawer = DebugDraw();
+
+    level->getPhysics()->getWorld()->setDebugDrawer(&debugDrawer);
 
 
     depth_directionalMaps = std::vector<SharedTexture2D>(3);
@@ -508,6 +524,21 @@ void Graphics::render(double time)
             glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, 0, 0, windowSize.x, windowSize.y,
                     GL_COLOR_BUFFER_BIT, GL_NEAREST);
         }
+        if (renderDebug) {
+            debugDrawer.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+            level->getPhysics()->getWorld()->debugDrawWorld();
+            debugDrawer.setDebugMode(btIDebugDraw::DBG_NoDebug);
+            unsigned int data_count = debugDrawer.getData()->size();
+            float* debugData = new float[data_count];
+            for (unsigned int i = 0; i<data_count; i++) {
+                debugData[i] = debugDrawer.getData()->at(i);
+            }
+            debug_ab->setDataElements(data_count/6, debugData);
+            debugDrawer.clearData();
+            debugShader->use();
+            debugShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
+            debug_vao->render();
+        }
     }
 }
 
@@ -661,4 +692,13 @@ bool Graphics::getRenderShadows() {
 
 bool Graphics::getRenderFlames() {
     return renderFlames;
+}
+
+
+void Graphics::setRenderDebug(bool state) {
+    renderDebug = state;
+}
+
+bool Graphics::getRenderDebug() {
+    return renderDebug;
 }

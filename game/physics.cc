@@ -710,3 +710,7 @@ void Physics::kill() //delete dynamically allocated memory
     
     //feel like a good little programmer because everything is clean
 }
+
+btDynamicsWorld* Physics::getWorld() {
+    return world;
+}
