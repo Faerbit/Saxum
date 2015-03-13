@@ -476,10 +476,6 @@ void Physics::prepareCollisionDetection()
 {
     playerTerrainCol = playerObjectColision = false;
     int numManifods = world->getDispatcher()->getNumManifolds();
-    
-    for (int i=0;i<numManifods;i++)
-    {
-    }
 }
 
 bool Physics::playerWithGround()
