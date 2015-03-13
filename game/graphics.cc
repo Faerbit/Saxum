@@ -28,6 +28,7 @@ Graphics::Graphics(glm::uvec2 windowSize, float nearPlane,
     gameStart = false;
     renderShadows = true;
     renderFlames = true;
+    renderWorld = true;
     renderDebug = false;
 }
 
@@ -473,9 +474,12 @@ void Graphics::render(double time)
         lightingShader->setUniform("movement", wind);
 
         lightingShader->setUniform("time", (float) time);
-        
-        // render the level
-        level->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
+    
+
+        if (renderWorld) {
+            // render the level
+            level->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
+        }
 
         // draw flames on top
         if (renderFlames) {
@@ -701,4 +705,12 @@ void Graphics::setRenderDebug(bool state) {
 
 bool Graphics::getRenderDebug() {
     return renderDebug;
+}
+
+void Graphics::setRenderWorld(bool state) {
+    renderWorld = state;
+}
+
+bool Graphics::getRenderWorld() {
+    return renderWorld;
 }

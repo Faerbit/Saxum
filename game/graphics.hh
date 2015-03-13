@@ -28,9 +28,11 @@ class Graphics {
         void setRenderShadows(bool state);
         void setRenderFlames(bool state);
         void setRenderDebug(bool state);
+        void setRenderWorld(bool state);
         bool getRenderShadows();
         bool getRenderFlames();
         bool getRenderDebug();
+        bool getRenderWorld();
     private:
         void bindTextureUnits();
         void updateLights();
@@ -81,6 +83,7 @@ class Graphics {
         bool renderShadows;
         bool renderFlames;
         bool renderDebug;
+        bool renderWorld;
         DebugDraw debugDrawer;
         SharedArrayBuffer debug_ab;
         SharedVertexArrayObject debug_vao;
