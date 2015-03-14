@@ -22,8 +22,7 @@ void Application::init()
 }
 
 void Application::initLevel() {
-    std::string levelXmlFilePath = levelXmlPath + "Level1.xml";
-    this->level = Level(levelXmlFilePath);
+    this->level = Level(levelXmlPath);
     level.getPhysics()->init(geometryPath);
     // Don't change this!
     ignoredMouseUpdates = 0;
@@ -36,7 +35,7 @@ void Application::initLevel() {
     level.load();
     Loader loader = Loader();
     
-    loader.load(levelXmlFilePath, &level, compositionsPath, scriptPath, geometryPath, texturePath, heightmapPath);
+    loader.load(levelXmlPath, &level, compositionsPath, scriptPath, geometryPath, texturePath, heightmapPath);
     graphics.init(&level);
     
     // just in case: check for errors
