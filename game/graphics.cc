@@ -474,11 +474,26 @@ void Graphics::render(double time)
         lightingShader->setUniform("movement", wind);
 
         lightingShader->setUniform("time", (float) time);
-    
 
         if (renderWorld) {
             // render the level
             level->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
+        }
+
+        if (renderDebug) {
+            debugDrawer.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+            level->getPhysics()->getWorld()->debugDrawWorld();
+            debugDrawer.setDebugMode(btIDebugDraw::DBG_NoDebug);
+            unsigned int data_count = debugDrawer.getData()->size();
+            float* debugData = new float[data_count];
+            for (unsigned int i = 0; i<data_count; i++) {
+                debugData[i] = debugDrawer.getData()->at(i);
+            }
+            debug_ab->setDataElements(data_count/6, debugData);
+            debugDrawer.clearData();
+            debugShader->use();
+            debugShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
+            debug_vao->render();
         }
 
         // draw flames on top
@@ -527,21 +542,6 @@ void Graphics::render(double time)
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
             glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, 0, 0, windowSize.x, windowSize.y,
                     GL_COLOR_BUFFER_BIT, GL_NEAREST);
-        }
-        if (renderDebug) {
-            debugDrawer.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-            level->getPhysics()->getWorld()->debugDrawWorld();
-            debugDrawer.setDebugMode(btIDebugDraw::DBG_NoDebug);
-            unsigned int data_count = debugDrawer.getData()->size();
-            float* debugData = new float[data_count];
-            for (unsigned int i = 0; i<data_count; i++) {
-                debugData[i] = debugDrawer.getData()->at(i);
-            }
-            debug_ab->setDataElements(data_count/6, debugData);
-            debugDrawer.clearData();
-            debugShader->use();
-            debugShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
-            debug_vao->render();
         }
     }
 }
