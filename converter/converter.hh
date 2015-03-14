@@ -8,7 +8,7 @@
 using namespace tinyxml2;
 class Converter {
     public:
-        Converter(std::string levelPath, std::string compositionsPath);
+        Converter(std::string levelPath, std::string levelName, std::string compositionsPath);
         Converter();
         ~Converter();
         void updateComposition(int idG, int idB, float posX, float posZ); //updates the position of a composition

@@ -54,7 +54,7 @@ int main( int argc, char *argv[] ){
         exit(-1);
     }
     std::string compositionsPath = charCompositionsPath;
-    Converter conv = Converter("../" + levelPath + levelString, "../" + compositionsPath);
+    Converter conv = Converter("../" + levelPath, levelString, "../" + compositionsPath);
     
     //read the setup png
     printf("Loading the png.\n");

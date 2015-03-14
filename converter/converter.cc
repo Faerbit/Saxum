@@ -5,8 +5,8 @@
 
 using namespace tinyxml2;
 
-Converter::Converter(std::string levelPath, std::string compositionsPath){
-    xmlFile = levelPath + ".xml";
+Converter::Converter(std::string levelPath, std::string levelName, std::string compositionsPath){
+    xmlFile = levelPath + levelName + ".xml";
     
     //Load Compositions
     std::string stringCompositions = compositionsPath;
@@ -18,8 +18,8 @@ Converter::Converter(std::string levelPath, std::string compositionsPath){
     }
     
     //Create a backup of the current Level png file, if no backup exists
-    std::string pngFile = levelPath + ".png";
-    std::string backupPNG = levelPath + "Backup.png";
+    std::string pngFile = levelPath + levelName + ".png";
+    std::string backupPNG = levelPath  + levelName + "Backup.png";
     struct stat buf;
     if(stat(backupPNG.c_str(), &buf) != 0){
         std::ifstream  src(pngFile, std::ios::binary);
@@ -63,10 +63,18 @@ Converter::Converter(std::string levelPath, std::string compositionsPath){
         XMLElement* rColourAmbient = doc->NewElement("rColour");
         XMLElement* gColourAmbient = doc->NewElement("gColour");
         XMLElement* bColourAmbient = doc->NewElement("bColour");
-        XMLElement* rColourFog = doc->NewElement("rColour");
-        XMLElement* gColourFog = doc->NewElement("gColour");
-        XMLElement* bColourFog = doc->NewElement("bColour");
-        XMLElement* alphaFog = doc->NewElement("alpha");
+        XMLElement* rColourFogDay = doc->NewElement("rColour");
+        XMLElement* gColourFogDay = doc->NewElement("gColour");
+        XMLElement* bColourFogDay = doc->NewElement("bColour");
+        XMLElement* alphaFogDay = doc->NewElement("alpha");
+        XMLElement* rColourFogRise = doc->NewElement("rColour");
+        XMLElement* gColourFogRise = doc->NewElement("gColour");
+        XMLElement* bColourFogRise = doc->NewElement("bColour");
+        XMLElement* alphaFogRise = doc->NewElement("alpha");
+        XMLElement* rColourFogNight = doc->NewElement("rColour");
+        XMLElement* gColourFogNight = doc->NewElement("gColour");
+        XMLElement* bColourFogNight = doc->NewElement("bColour");
+        XMLElement* alphaFogNight = doc->NewElement("alpha");
         
         lightAttributes[0]->SetText("-1.0");
         lightAttributes[1]->SetText("1.5");
@@ -78,41 +86,65 @@ Converter::Converter(std::string levelPath, std::string compositionsPath){
         rColourAmbient->SetText("1.0");
         gColourAmbient->SetText("1.0");
         bColourAmbient->SetText("1.0");
-        rColourFog->SetText("0.10");
-        gColourFog->SetText("0.14");
-        bColourFog->SetText("0.14");
-        alphaFog->SetText("1.0");
+        rColourFogDay->SetText("0.57");
+        gColourFogDay->SetText("0.80");
+        bColourFogDay->SetText("0.98");
+        alphaFogDay->SetText("1.0");
+        rColourFogRise->SetText("0.88");
+        gColourFogRise->SetText("0.38");
+        bColourFogRise->SetText("0.38");
+        alphaFogRise->SetText("1.0");
+        rColourFogNight->SetText("0.09");
+        gColourFogNight->SetText("0.1");
+        bColourFogNight->SetText("0.24");
+        alphaFogNight->SetText("1.0");
         
         XMLElement* ambientLight = doc->NewElement("ambientLight");
-        XMLElement* fogColour = doc->NewElement("fogColour");
+        XMLElement* fogColourDay = doc->NewElement("fogColourDay");
+        XMLElement* fogColourRise = doc->NewElement("fogColourRise");
+        XMLElement* fogColourNight = doc->NewElement("fogColourNight");
         XMLElement* directionalLight = doc->NewElement("directionalLight");
         
         ambientLight->InsertEndChild(rColourAmbient);
         ambientLight->InsertEndChild(gColourAmbient);
         ambientLight->InsertEndChild(bColourAmbient);
-        fogColour->InsertEndChild(rColourFog);
-        fogColour->InsertEndChild(gColourFog);
-        fogColour->InsertEndChild(bColourFog);
-        fogColour->InsertEndChild(alphaFog);
+        fogColourDay->InsertEndChild(rColourFogDay);
+        fogColourDay->InsertEndChild(gColourFogDay);
+        fogColourDay->InsertEndChild(bColourFogDay);
+        fogColourDay->InsertEndChild(alphaFogDay);
+        fogColourRise->InsertEndChild(rColourFogRise);
+        fogColourRise->InsertEndChild(gColourFogRise);
+        fogColourRise->InsertEndChild(bColourFogRise);
+        fogColourRise->InsertEndChild(alphaFogRise);
+        fogColourNight->InsertEndChild(rColourFogNight);
+        fogColourNight->InsertEndChild(gColourFogNight);
+        fogColourNight->InsertEndChild(bColourFogNight);
+        fogColourNight->InsertEndChild(alphaFogNight);
         for(int i=0;i<7;i++){
             directionalLight->InsertEndChild(lightAttributes[i]);
         }
         doc->InsertEndChild(ambientLight);
-        doc->InsertEndChild(fogColour);
+        doc->InsertEndChild(fogColourDay);
+        doc->InsertEndChild(fogColourRise);
+        doc->InsertEndChild(fogColourNight);
         doc->InsertEndChild(directionalLight);
         
         //Create global terrain Element
         XMLElement* terrain = doc->NewElement("terrain");
+        XMLElement* terrainHeightmap = doc->NewElement("heightmap");
         XMLElement* terrainTexture = doc->NewElement("texture");
         XMLElement* terrainAmbientFactor = doc->NewElement("ambientFactor");
         XMLElement* terrainDiffuseFactor = doc->NewElement("diffuseFactor");
         XMLElement* terrainSpecularFactor = doc->NewElement("specularFactor");
         XMLElement* terrainShininess = doc->NewElement("shininess");
-        terrainTexture->SetText("seamlessTerrain.png");
+        std::string heightmapPath = "heightmap" + levelName + ".png";
+        terrainHeightmap->SetText(heightmapPath.c_str());
+        terrainTexture->SetText("terrainTexture.png");
         terrainAmbientFactor->SetText("0.1");
         terrainDiffuseFactor->SetText("0.8");
         terrainSpecularFactor->SetText("0.2");
-        terrainShininess->SetText("3.0");
+        terrainShininess->SetText("1.0");
+        terrain->InsertEndChild(terrainHeightmap);
         terrain->InsertEndChild(terrainTexture);
         terrain->InsertEndChild(terrainAmbientFactor);
         terrain->InsertEndChild(terrainDiffuseFactor);
@@ -122,9 +154,15 @@ Converter::Converter(std::string levelPath, std::string compositionsPath){
         
         //Create global skydome Element
         XMLElement* skydome = doc->NewElement("skydome");
+        XMLElement* skydomeModel = doc->NewElement("model");
         XMLElement* skydomeTexture = doc->NewElement("texture");
+        XMLElement* skydomeTextureNight = doc->NewElement("nightTexture");
+        skydomeModel->SetText("skydome.obj");
         skydomeTexture->SetText("skydome.png");
+        skydomeTextureNight->SetText("skydomeNight.png");
+        skydome->InsertEndChild(skydomeModel);
         skydome->InsertEndChild(skydomeTexture);
+        skydome->InsertEndChild(skydomeTextureNight);
         doc->InsertEndChild(skydome);
         
         //Create global physics parameters
@@ -132,7 +170,7 @@ Converter::Converter(std::string levelPath, std::string compositionsPath){
         XMLElement* playerFriction = doc->NewElement("friction");
         XMLElement* playerStrength = doc->NewElement("strength");
         playerFriction->SetText("0.9");
-        playerStrength->SetText("100.0");
+        playerStrength->SetText("300.0");
         physics->InsertEndChild(playerFriction);
         physics->InsertEndChild(playerStrength);
         doc->InsertEndChild(physics);
@@ -157,7 +195,7 @@ Converter::Converter(std::string levelPath, std::string compositionsPath){
         doc->InsertEndChild(positionConstraint);
     }else{
         //Create a backup of the current Level xml file
-        std::string backupXML = levelPath + "Backup.xml";
+        std::string backupXML = levelPath + levelName + "Backup.xml";
         std::ifstream  src(xmlFile, std::ios::binary);
         std::ofstream  dst(backupXML,  std::ios::binary);
         dst << src.rdbuf();
