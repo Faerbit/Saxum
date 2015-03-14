@@ -64,7 +64,7 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
             objects.at(i)->render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
         }
     }
-    if (lightingPass) {
+    if (lightingPass && waterPlane) {
             waterPlane->render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
     }
 }
