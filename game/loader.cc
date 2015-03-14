@@ -27,7 +27,8 @@ void Loader::loadConfig(Application* application) {
     application->setTexturePath(texturePath);
     application->setScriptPath(queryString(config, "scriptPath"));
     application->setHeightmapPath(queryString(config, "heightmapPath"));
-    application->setLevelXmlPath(queryString(config, "levelXmlPath"));
+    std::string levelXmlPath = queryString(config, "levelXmlPath");
+    application->setLevelXmlPath(levelXmlPath + queryString(config, "levelXML"));
     XMLElement* loadingScreen = config->FirstChildElement("loadingScreen");
     if (loadingScreen != NULL) {
         std::string screenPath = queryString(loadingScreen, "screenPath");

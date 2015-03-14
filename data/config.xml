@@ -21,7 +21,8 @@
 
 <heightmapPath>data/levels/</heightmapPath>
 
-<levelXmlPath>data/levels/Level1.xml</levelXmlPath>
+<levelXmlPath>data/levels/</levelXmlPath>
+<levelXML>Level1.xml</levelXML>
 
 <!-- must be located in the textures directory -->
 <loadingScreen>
