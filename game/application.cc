@@ -19,13 +19,11 @@ void Application::init()
     graphics.renderLoadingScreen();
     // init random generator
     std::srand(std::time(NULL));
-    // choose Level             TODO: Choose this in a menu
 }
 
 void Application::initLevel() {
-    std::string heightmapFilePath = heightmapPath + "heightmapLvl1.png";
     std::string levelXmlFilePath = levelXmlPath + "Level1.xml";
-    this->level = Level(heightmapFilePath, levelXmlFilePath);
+    this->level = Level(levelXmlFilePath);
     level.getPhysics()->init(geometryPath);
     // Don't change this!
     ignoredMouseUpdates = 0;
@@ -38,7 +36,7 @@ void Application::initLevel() {
     level.load();
     Loader loader = Loader();
     
-    loader.load(levelXmlFilePath, &level, compositionsPath, scriptPath, geometryPath, texturePath);
+    loader.load(levelXmlFilePath, &level, compositionsPath, scriptPath, geometryPath, texturePath, heightmapPath);
     graphics.init(&level);
     
     // just in case: check for errors

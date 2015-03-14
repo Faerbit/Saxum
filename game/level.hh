@@ -22,7 +22,7 @@ extern "C" {
 
 class Level {
     public:
-        Level(std::string heightmapFilePath, std::string xmlFilePath);
+        Level(std::string xmlFilePath);
         Level();
         ~Level();
         void load();
@@ -73,6 +73,7 @@ class Level {
         void setPlayerIndex(int index);
         void forceMove(float x, float y, float z, unsigned indice);
         void activateEndgame();
+        void setTerrain(Terrain terrain);
     private:
         lua_State* luaState=nullptr;
         std::vector<Object*> objects;

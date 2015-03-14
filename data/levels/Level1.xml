@@ -13208,6 +13208,7 @@
 </directionalLight>
 
 <terrain>
+    <heightmap>heightmapLvl1.png</heightmap>
     <texture>sand.png</texture>
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.8</diffuseFactor>

@@ -52,7 +52,9 @@ void Loader::loadConfig(Application* application) {
     }
 }
 
-void Loader::load(std::string filePath, Level* level, std::string compositionsPath, std::string scriptPath, std::string globalGeometryPath, std::string globalTexturePath) {
+void Loader::load(std::string filePath, Level* level, std::string compositionsPath, std::string scriptPath, 
+    std::string globalGeometryPath, std::string globalTexturePath, std::string heightmapPath) {
+    struct stat buf;
     //Loading from xml:
     XMLDocument* doc = new XMLDocument();
     const char* xmlFile = filePath.c_str();
@@ -68,15 +70,22 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     level->setStrength(strength);
     
     // load the terrain
+    XMLElement* terrainElement = doc->FirstChildElement("terrain");
+    std::string levelHeightmapPath = heightmapPath + queryString(terrainElement, "heightmap");
+    if(stat(levelHeightmapPath.c_str(), &buf) != 0){
+        std::cout << "The heightmap file " << levelHeightmapPath << " does not exist." << std::endl;
+        exit(-1);
+    }
+    Terrain terrain = Terrain(levelHeightmapPath);
+    level->setTerrain(terrain);
+    // Because object gets copied a lot load it when it has reached it's final destination
     level->getTerrain()->load();
     Model terrainModel = Model(level->getTerrain()->getModel());
-    XMLElement* terrainElement = doc->FirstChildElement("terrain");
     std::string terrainTexture = queryString(terrainElement, "texture");
     float terrainAmbientFactor = queryFloat(terrainElement, "ambientFactor");
     float terrainDiffuseFactor = queryFloat(terrainElement, "diffuseFactor");
     float terrainSpecularFactor = queryFloat(terrainElement, "specularFactor");
     float terrainShininess = queryFloat(terrainElement, "shininess");
-    struct stat buf;
     std::string terrainTexturePath = "../" + globalTexturePath + terrainTexture;
     if(stat(terrainTexturePath.c_str(), &buf) != 0){
         std::cout << "The texture file " << terrainTexturePath << " does not exist." << std::endl;

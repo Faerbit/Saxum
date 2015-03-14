@@ -10,7 +10,9 @@ class Loader {
     public:
         Loader();
         void loadConfig(Application* application);
-        void load(std::string filePath, Level* level, std::string compositionsPath, std::string scriptPath, std::string geometryPath, std::string texturePath);
+        void load(std::string filePath, Level* level, std::string compositionsPath, 
+            std::string scriptPath, std::string geometryPath, std::string texturePath,
+            std::string heightmapPath);
         glm::vec3 reloadPlayerPosition(std::string filePath, Level* level);
     private:
         float queryFloat(XMLElement* element, const char* attribute);

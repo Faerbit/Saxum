@@ -2,8 +2,7 @@
 #include "loader.hh"
 #include <string>
 
-Level::Level(std::string heightmapFilePath, std::string xmlFilePath){
-    this->terrain = Terrain(heightmapFilePath);
+Level::Level(std::string xmlFilePath){
     // default value
     skydomeSize = 50.0f;
     physics = Physics();
@@ -340,4 +339,8 @@ void Level::activateEndgame(){
 
 void Level::setWaterPlane(Object* water) {
     this->waterPlane = water;
+}
+
+void Level::setTerrain(Terrain terrain) {
+    this->terrain = terrain;
 }
