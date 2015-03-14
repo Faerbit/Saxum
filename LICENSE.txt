@@ -263,8 +263,13 @@ SOFTWARE.
 Licenses for Models and Textures:
 -------------------------------------------------------------------------------------
 
-data/textures/seamlessTerrain.png is from
-http://hhh316.deviantart.com/art/Seamless-Beach-Sand-Texture-271683282
+data/textures/sand.png is from
+http://opengameart.org/node/18616
+Created by Christian Femmer aka Duion.
+It is licensed CC-BY 3.0,
+see https://creativecommons.org/licenses/by/3.0/ for full license text.
+
+data/textures/hintTexture2.png is based on this.
 
 -------------------------------------------------------------------------------------
 
