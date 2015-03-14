@@ -23,6 +23,8 @@
 
 <levelXmlPath>data/levels/</levelXmlPath>
 
+
+<!-- must be located in the textures directory -->
 <loadingScreen>
     <screenPath>loadingscreen.png</screenPath>
     <screenContinuePath>loadingscreenContinue.png</screenContinuePath>
