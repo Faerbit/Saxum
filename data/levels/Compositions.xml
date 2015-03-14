@@ -710,7 +710,7 @@
 
 <objectData>
     <modelPath>hint.obj</modelPath>
-    <texturePath>hintTexture.png</texturePath>
+    <texturePath>hintTexture2.png</texturePath>
     <ambientFactor>0.13</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
