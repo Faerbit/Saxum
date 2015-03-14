@@ -491,6 +491,7 @@ void Graphics::render(double time)
             }
             debug_ab->setDataElements(data_count/6, debugData);
             debugDrawer.clearData();
+            delete debugData;
             debugShader->use();
             debugShader->setUniform("viewProjectionMatrix", lightingViewProjectionMatrix);
             debug_vao->render();

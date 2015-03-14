@@ -60,5 +60,5 @@ void DebugDraw::draw3dText (const btVector3 &location, const char *textString) {
 }
 
 void DebugDraw::clearData() {
-    this->data = std::vector<float>();
+    this->data.clear();
 }
