@@ -13053,6 +13053,22 @@
         <toChangeIdBlue>105</toChangeIdBlue>
         <toChangeObjNum>0</toChangeObjNum>
     </trigger>
+    <trigger>
+        <name>firstCheckpoint</name>
+        <undo>false</undo>
+        <xPosition>-70</xPosition>
+        <yPosition>23</yPosition>
+        <zPosition>105</zPosition>
+        <targetIdGreen>-</targetIdGreen>
+        <targetIdBlue>-</targetIdBlue>
+        <distance>25</distance>
+        <isBiggerThan>false</isBiggerThan>
+        <objectNum>0</objectNum>
+        <luaScript>firstCheckpoint.lua</luaScript>
+        <toChangeIdGreen>0</toChangeIdGreen>
+        <toChangeIdBlue>105</toChangeIdBlue>
+        <toChangeObjNum>0</toChangeObjNum>
+    </trigger>
 </composition>
 
 <composition>
