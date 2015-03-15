@@ -23,7 +23,7 @@ static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         app.setCameraLock(false);
     }
-#ifdef CMAKE_CXX_FLAGS_DEBUG
+#ifdef SAXUM_DEBUG
     if (_key == GLFW_KEY_F5 && _action == GLFW_PRESS) {
         app.getGraphics()->setRenderShadows(!app.getGraphics()->getRenderShadows());
     }
@@ -104,7 +104,7 @@ bool createWindow()
     // activate multisampling (second parameter is the number of samples):
     glfwWindowHint( GLFW_SAMPLES, 4);
 
-    #ifdef CMAKE_CXX_FLAGS_DEBUG
+    #ifdef SAXUM_DEBUG
         // request an OpenGL debug context:
         glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, true );
     #endif
@@ -120,7 +120,7 @@ bool createWindow()
         return false;
     }
     glfwMakeContextCurrent(window);
-    #ifdef CMAKE_CXX_FLAGS_DEBUG
+    #ifdef SAXUM_DEBUG
         ACGL::init(true);
     #else
         ACGL::init(false); // do not request debug context
@@ -188,7 +188,7 @@ int main( int argc, char *argv[] )
                 keyboardState.aPressed  = glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS;
                 keyboardState.sPressed  = glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS;
                 keyboardState.dPressed  = glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
-                #ifdef CMAKE_CXX_FLAGS_DEBUG
+                #ifdef SAXUM_DEBUG
                     keyboardState.lPressed  = glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS;
                     keyboardState.kPressed  = glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS;
                     keyboardState.f1Pressed = glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS;
