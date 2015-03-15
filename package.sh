@@ -30,6 +30,6 @@ then
     cd binaries; strip -s *; cd ..
     mkdir  "Saxum_${platform^}"
     cp -r binaries data LICENSE.txt "Saxum_${platform^}"
-    zip -r "Saxum_${platform^}.zip" "Saxum_${platform^}"
+    zip -9r "Saxum_${platform^}.zip" "Saxum_${platform^}"
     rm -rf "Saxum_${platform^}"
 fi
