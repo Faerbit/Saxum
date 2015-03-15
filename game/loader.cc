@@ -374,10 +374,17 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                     float compYOffset = queryFloat(thisComposition, "yOffset");
                     float compZPos = queryFloat(thisComposition, "zPos");
                     float lightIntensity = queryFloat(xmlLight, "intensity");
-                    glm::vec3 compPos = glm::vec3(compXPos,
-                                        compYOffset+level->getTerrain()->getHeightmap()[int(compXPos-0.5+0.5*level->getTerrain()->getHeightmapHeight())]
+                    bool ignoreHeightmap = queryBool(composition, "ignoreHeightmap");
+                    glm::vec3 compPos = glm::vec3(0.0f);
+                    if (!ignoreHeightmap) {
+                        compPos = glm::vec3(compXPos,
+                            compYOffset+level->getTerrain()->getHeightmap()[int(compXPos-0.5+0.5*level->getTerrain()->getHeightmapHeight())]
                                                                           [int(compZPos-0.5+0.5*level->getTerrain()->getHeightmapWidth())],
-                                        compZPos);
+                            compZPos);
+                    }
+                    else {
+                        compPos = glm::vec3(compXPos, compYOffset, compZPos);
+                    }
                     lightOffset = lightOffset * compScale;
                     glm::vec4 rotatedLightOffset = glm::rotate(compRot.x, glm::vec3(1.0f, 0.0f, 0.0f))
                                                     * glm::rotate(compRot.y, glm::vec3(0.0f, 1.0f, 0.0f))
