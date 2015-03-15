@@ -21,12 +21,12 @@ test:
     override:
         - docker run -v ~/Saxum:/saxum/saxum -w=/saxum/saxum -u=$(id -u) faerbit/saxum ./package.sh linux
         - docker run -v ~/Saxum:/saxum/saxum -w=/saxum/saxum -u=$(id -u) faerbit/saxum ./package.sh windows
-        - if [ -f MarbleGame_Windows.zip ]; then cp MarbleGame_Windows.zip $CIRCLE_ARTIFACTS; fi
-        - if [ -f MarbleGame_Linux.zip ]; then cp MarbleGame_Linux.zip $CIRCLE_ARTIFACTS; fi
+        - if [ -f Saxum_Windows.zip ]; then cp Saxum_Windows.zip $CIRCLE_ARTIFACTS; fi
+        - if [ -f Saxum_Linux.zip ]; then cp Saxum_Linux.zip $CIRCLE_ARTIFACTS; fi
 
 deployment:
     master:
         branch: master
         commands:
-            - if [ -f MarbleGame_Windows.zip ]; then ./dropbox_uploader.sh -p upload MarbleGame_Windows.zip /; fi
-            - if [ -f MarbleGame_Linux.zip ]; then ./dropbox_uploader.sh -p upload MarbleGame_Linux.zip /; fi
+            - if [ -f Saxum_Windows.zip ]; then ./dropbox_uploader.sh -p upload Saxum_Windows.zip /; fi
+            - if [ -f Saxum_Linux.zip ]; then ./dropbox_uploader.sh -p upload Saxum_Linux.zip /; fi
