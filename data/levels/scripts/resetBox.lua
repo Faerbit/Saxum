@@ -3,7 +3,7 @@ if(global.triggeredResetBox == nil) then
     global.triggeredResetBox = false
 end
 
-function trigger(objectToChange)
+function trigger(objectToChange, printDebug)
     if(global.triggeredResetBox == false) then
         if(not level) then
             print("No level found in Lua!")
@@ -13,7 +13,9 @@ function trigger(objectToChange)
         local y = 22.5
         local z =8.5
         level:forceMove(x, y, z, objectToChange)
-        
-        print("reset box")
+       
+        if(printDebug) then
+            print("reset box")
+        end
     end
 end

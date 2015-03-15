@@ -3,7 +3,7 @@ if(global.triggeredSunStart == nil) then
     global.triggeredSunStart = false
 end
 
-function trigger(objectToChange)
+function trigger(objectToChange, printDebug)
     if(global.triggeredSunStart == false) then
         if(not level) then
             print("No level found in Lua!")
@@ -14,6 +14,8 @@ function trigger(objectToChange)
         global.sunStartTime = time
         global.triggeredSunStart = true
         level:activateEndgame()
-        print("sunStart")
+        if(printDebug) then
+            print("sunStart")
+        end
     end
 end

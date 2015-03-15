@@ -6,7 +6,7 @@ if(global.triggeredOpenSecondDoor2Undo == nil) then
     global.triggeredOpenSecondDoor2Undo = true
 end
 
-function trigger(objectToChange)
+function trigger(objectToChange, printDebug)
     if(global.triggeredOpenSecondDoor2 == false) then
         if(not level) then
             print("No level found in Lua!")
@@ -30,11 +30,13 @@ function trigger(objectToChange)
         local zPos = 26.5
         level:preloadLightPosition(xPos, yPos, zPos)
         level:addLightByParameters(0.2, 0.9, 0.0, 4.0, -2.0, 1.3, 2.0)
-        print("openSecondDoor2")
+        if(printDebug) then
+            print("openSecondDoor2")
+        end
     end
 end
 
-function triggerUndo(objectToChange)
+function triggerUndo(objectToChange, printDebug)
     if(global.triggeredOpenSecondDoor2Undo == false) then
         if(not level) then
             print("No level found in Lua!")
@@ -49,6 +51,8 @@ function triggerUndo(objectToChange)
         level:deleteFourLights()
         
         global.triggeredOpenSecondDoor2Undo = true
-        print("openSecondDoor2Undo")
+        if(printDebug) then
+            print("openSecondDoor2Undo")
+        end
     end
 end

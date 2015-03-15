@@ -27,6 +27,11 @@ Trigger::~Trigger(){
 }
 
 void Trigger::triggerUpdate(){
+    #ifdef SAXUM_DEBUG
+        bool printDebug = true;
+    #else
+        bool printDebug = false;
+    #endif
     if (isBigger && (glm::distance(object->getPosition(), position) > distance)) {
         int error = luaL_dofile(luaState, luaScript.c_str());
         if (error != 0) {
@@ -34,9 +39,9 @@ void Trigger::triggerUpdate(){
             exit(-1);
         }
         if (undo){
-            luabridge::getGlobal(luaState, "triggerUndo")(objectToChange);
+            luabridge::getGlobal(luaState, "triggerUndo")(objectToChange, printDebug);
         }else{
-            luabridge::getGlobal(luaState, "trigger")(objectToChange);
+            luabridge::getGlobal(luaState, "trigger")(objectToChange, printDebug);
         }
     }
     else if (!isBigger && (glm::distance(object->getPosition(), position) < distance)) {
@@ -46,9 +51,9 @@ void Trigger::triggerUpdate(){
             exit(-1);
         }
         if (undo){
-            luabridge::getGlobal(luaState, "triggerUndo")(objectToChange);
+            luabridge::getGlobal(luaState, "triggerUndo")(objectToChange, printDebug);
         }else{
-            luabridge::getGlobal(luaState, "trigger")(objectToChange);
+            luabridge::getGlobal(luaState, "trigger")(objectToChange, printDebug);
         }
     }
 }

@@ -6,7 +6,7 @@ if(global.triggeredSCRIPTNAMEUndo == nil) then
     global.triggeredSCRIPTNAMEUndo = false
 end
 
-function trigger(objectToChange)
+function trigger(objectToChange, printDebug)
     if(global.triggeredSCRIPTNAME == false) then
         if(not level) then
             print("No level found in Lua!")
@@ -16,11 +16,13 @@ function trigger(objectToChange)
         --enter the scripts code here and replace all occurences of SCRIPTNAME with the name of the script.
         
         global.triggeredSCRIPTNAME = true
-        print("SCRIPTNAME")
+        if(printDebug) then
+            print("SCRIPTNAME")
+        end
     end
 end
 
-function triggerUndo(objectToChange)
+function triggerUndo(objectToChange, printDebug)
     if(global.triggeredSCRIPTNAMEUndo == false) then
         if(not level) then
             print("No level found in Lua!")
@@ -30,6 +32,8 @@ function triggerUndo(objectToChange)
         --enter the scripts undo code here
         
         global.triggeredSCRIPTNAMEUndo = true
-        print("SCRIPTNAMEUndo")
+        if(printDebug) then
+            print("SCRIPTNAMEUndo")
+        end
     end
 end

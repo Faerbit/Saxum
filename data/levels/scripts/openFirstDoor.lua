@@ -6,7 +6,7 @@ if(global.triggeredOpenFirstDoorUndo == nil) then
     global.triggeredOpenFirstDoorUndo = true
 end
 
-function trigger(objectToChange)
+function trigger(objectToChange, printDebug)
     if(global.triggeredOpenFirstDoor == false) then
         if(not level) then
             print("No level found in Lua!")
@@ -22,11 +22,13 @@ function trigger(objectToChange)
         global.triggeredOpenFirstDoorUndo = false
         
         global.triggeredOpenFirstDoor = true
-        print("openFirstDoor")
+        if (printDebug) then
+            print("openFirstDoor")
+        end
     end
 end
 
-function triggerUndo(objectToChange)
+function triggerUndo(objectToChange, printDebug)
     if(global.triggeredOpenFirstDoorUndo == false) then
         if(not level) then
             print("No level found in Lua!")
@@ -42,6 +44,8 @@ function triggerUndo(objectToChange)
         global.triggeredOpenFirstDoor = false
         
         global.triggeredOpenFirstDoorUndo = true
-        print("openFirstDoorUndo")
+        if(printDebug) then
+            print("openFirstDoorUndo")
+        end
     end
 end

@@ -3,7 +3,7 @@ if(global.triggeredResetPlayer == nil) then
     global.triggeredResetPlayer = false
 end
 
-function trigger(objectToChange)
+function trigger(objectToChange, printDebug)
     if(global.triggeredResetPlayer == false) then
         if(not level) then
             print("No level found in Lua!")
@@ -27,7 +27,9 @@ function trigger(objectToChange)
         else
             level:resetPlayer()
         end
-        
-        print("reset player")
+       
+        if(printDebug) then
+            print("reset player")
+        end
     end
 end
