@@ -363,6 +363,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                     compRot[0] = queryFloat(thisComposition, "xRot");
                     compRot[1] = queryFloat(thisComposition, "yRot");
                     compRot[2] = queryFloat(thisComposition, "zRot");
+                    compRot *= 0.0174532925;    //transform degrees to radians
                     lightOffset[0] = queryFloat(xmlLight, "xOffset");
                     lightOffset[1] = queryFloat(xmlLight, "yOffset");
                     lightOffset[2] = queryFloat(xmlLight, "zOffset");
@@ -375,16 +376,11 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                     float compZPos = queryFloat(thisComposition, "zPos");
                     float lightIntensity = queryFloat(xmlLight, "intensity");
                     bool ignoreHeightmap = queryBool(composition, "ignoreHeightmap");
-                    glm::vec3 compPos = glm::vec3(0.0f);
                     if (!ignoreHeightmap) {
-                        compPos = glm::vec3(compXPos,
-                            compYOffset+level->getTerrain()->getHeightmap()[int(compXPos-0.5+0.5*level->getTerrain()->getHeightmapHeight())]
-                                                                          [int(compZPos-0.5+0.5*level->getTerrain()->getHeightmapWidth())],
-                            compZPos);
+                            compYOffset = compYOffset+level->getTerrain()->getHeightmap()[int(compXPos-0.5+0.5*level->getTerrain()->getHeightmapHeight())]
+                                                                          [int(compZPos-0.5+0.5*level->getTerrain()->getHeightmapWidth())];
                     }
-                    else {
-                        compPos = glm::vec3(compXPos, compYOffset, compZPos);
-                    }
+                    glm::vec3 compPos = glm::vec3(compXPos, compYOffset, compZPos);
                     lightOffset = lightOffset * compScale;
                     glm::vec4 rotatedLightOffset = glm::rotate(compRot.x, glm::vec3(1.0f, 0.0f, 0.0f))
                                                     * glm::rotate(compRot.y, glm::vec3(0.0f, 1.0f, 0.0f))
