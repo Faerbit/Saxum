@@ -13,7 +13,7 @@ static void resizeCallback(GLFWwindow* window, int newWidth, int newHeight)
 
 static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
 {
-    if (!app.isGameStarted() && _action == GLFW_PRESS) {
+    if (!app.isGameStarted() && _action == GLFW_PRESS && _key != GLFW_KEY_ESCAPE) {
         app.startGame();
     }
     if (_key == GLFW_KEY_ESCAPE && _action == GLFW_PRESS) {
@@ -145,10 +145,7 @@ int main( int argc, char *argv[] )
     glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
     // set Callbacks
     glfwSetWindowSizeCallback(window, resizeCallback);
-    glfwSetKeyCallback(window, keyCallback );
-    glfwSetScrollCallback(window, scrollCallback );
     glfwSetWindowFocusCallback(window, focusCallback);
-    glfwSetMouseButtonCallback(window, mouseCallback);
     
     // Enable vertical sync (on cards that support it) with parameter 1 - 0 means off
     glfwSwapInterval( 0 );
@@ -157,6 +154,10 @@ int main( int argc, char *argv[] )
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
     glfwSwapBuffers(window);
     app.initLevel();
+
+    glfwSetKeyCallback(window, keyCallback );
+    glfwSetScrollCallback(window, scrollCallback );
+    glfwSetMouseButtonCallback(window, mouseCallback);
     
     int frameCount = 0;
     
