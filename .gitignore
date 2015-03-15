@@ -9,3 +9,4 @@ CMakeLists.txt.user
 *.blend1
 *.swp
 *.pyc
+*.o
