@@ -1,4 +1,8 @@
 #include "physics.hh"
+#include <ACGL/OpenGL/Data/GeometryData.hh>
+#include <ACGL/OpenGL/Data/GeometryDataLoadStore.hh>
+
+using namespace ACGL::OpenGL;
 
 
 Physics::Physics() {
@@ -203,39 +207,30 @@ void Physics::addConvexBody(Entity entity, std::string path, float mass, float d
     if(bodies.size() == indice)
         throw std::invalid_argument( "Bodies out of Sync" );
     
-    std::vector< unsigned int > vertexIndices; //temp lists for data sets
-    std::vector< btVector3 > temp_vertices;
-    path = "../" + geometryPath + path;
-    FILE * file = fopen(path.c_str(), "r");
-    if( file == NULL ){
-        throw std::invalid_argument( "Impossible to open the file" ); //create correct filepath and report error if cannot open
+    SharedGeometryData geometry = loadGeometryData("../" + geometryPath + path);
+
+    for (unsigned int i = 0; i<geometry->mAttributes.size(); i++) {
+        if (geometry->mAttributes.at(i).type != GL_FLOAT) {
+            printf("File %s incompatible with physics\n", std::string(geometryPath + path).c_str());
+            exit(-1);
+        }
     }
-    while( 1 ){
-        char lineHeader[128];
-        //read the first word of the line
-        int res = fscanf(file, "%s", lineHeader);
-        if (res == EOF)
-            break; //while not at end do loop
-        if ( strcmp( lineHeader, "v" ) == 0 ){ //if a vertex
-            glm::vec3 vertex;
-            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
-            temp_vertices.push_back(btVector3(vertex.x,vertex.y,vertex.z)); //save vertex in array
-        }
-        else if ( strcmp( lineHeader, "f" ) == 0 ){ //if face (index for 3 vertexes for a triangle)
-            std::string vertex1, vertex2, vertex3;
-            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
-            vertexIndices.push_back(vertexIndex[0]);
-            vertexIndices.push_back(vertexIndex[1]);
-            vertexIndices.push_back(vertexIndex[2]); //save 3 indexes in array
-        }
+    int strideSize = geometry->getStrideSize()/sizeof(geometry->mAttributes.at(0).type);
+    int size = geometry->getSize()/geometry->getStrideSize();
+
+    GLfloat* dataStart = (GLfloat*) geometry->getData();
+
+    std::vector<btVector3> vertices;
+
+    for (int i = 0; i<size; i++) {
+        vertices.push_back(btVector3(dataStart[i*strideSize + 0], dataStart[i*strideSize + 1], dataStart[i*strideSize + 2]));
     }
     //finally start making body
     btTriangleMesh* triMesh = new btTriangleMesh();
     
-    for(unsigned i = 2; i < vertexIndices.size();i+=3)
+    for(unsigned i = 0; i < vertices.size();i+=3)
     {
-        triMesh->addTriangle(temp_vertices[vertexIndices[i]],temp_vertices[vertexIndices[i-1]],temp_vertices[vertexIndices[i-2]]); //for every face (3 elements in vertexIndices) create triangle use the indices to find correct vertexes to make the triangle
+        triMesh->addTriangle(vertices.at(i+0), vertices.at(i+1), vertices.at(i+2));
     }
     
     btConvexTriangleMeshShape* shape = new btConvexTriangleMeshShape(triMesh,true);
@@ -273,45 +268,36 @@ void Physics::addConvexBody(Entity entity, std::string path, float mass, float d
 
 void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA,unsigned indice,float scaling, bool rotate)
 {
-    
     if(bodies.size() == indice)
         throw std::invalid_argument( "Bodies out of Sync" );
     
-    std::vector< unsigned int > vertexIndices; //temp lists for data sets
-    std::vector< btVector3 > temp_vertices;
-    path = "../" + geometryPath + path;
-    FILE * file = fopen(path.c_str(), "r");
-    if( file == NULL ){
-        throw std::invalid_argument( "Impossible to open the file" ); //create correct filepath and report error if cannot open
-    }
-    while( 1 ){
-        char lineHeader[128];
-        //read the first word of the line
-        int res = fscanf(file, "%s", lineHeader);
-        if (res == EOF)
-            break; //while not at end do loop
-        if ( strcmp( lineHeader, "v" ) == 0 ){ //if a vertex
-            glm::vec3 vertex;
-            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
-            temp_vertices.push_back(btVector3(vertex.x,vertex.y,vertex.z)); //save vertex in array
-        }
-        else if ( strcmp( lineHeader, "f" ) == 0 ){ //if face (index for 3 vertexes for a triangle)
-            std::string vertex1, vertex2, vertex3;
-            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
-            vertexIndices.push_back(vertexIndex[0]);
-            vertexIndices.push_back(vertexIndex[1]);
-            vertexIndices.push_back(vertexIndex[2]); //save 3 indexes in array
+    SharedGeometryData geometry = loadGeometryData("../" + geometryPath + path);
+
+    for (unsigned int i = 0; i<geometry->mAttributes.size(); i++) {
+        if (geometry->mAttributes.at(i).type != GL_FLOAT) {
+            printf("File %s incompatible with physics\n", std::string(geometryPath + path).c_str());
+            exit(-1);
         }
     }
+    int strideSize = geometry->getStrideSize()/sizeof(geometry->mAttributes.at(0).type);
+    int size = geometry->getSize()/geometry->getStrideSize();
+
+    GLfloat* dataStart = (GLfloat*) geometry->getData();
+
+    std::vector<btVector3> vertices;
+
+    for (int i = 0; i<size; i++) {
+        vertices.push_back(btVector3(dataStart[i*strideSize + 0], dataStart[i*strideSize + 1], dataStart[i*strideSize + 2]));
+    }
+
     //finally start making body
     btTriangleMesh* triMesh = new btTriangleMesh();
-    
-    for(unsigned i = 2; i < vertexIndices.size();i+=3)
+
+    for(unsigned i = 0; i < vertices.size();i+=3)
     {
-        triMesh->addTriangle(temp_vertices[vertexIndices[i]],temp_vertices[vertexIndices[i-1]],temp_vertices[vertexIndices[i-2]]); //for every face (3 elements in vertexIndices) create triangle use the indices to find correct vertexes to make the triangle
+        triMesh->addTriangle(vertices.at(i+0), vertices.at(i+1), vertices.at(i+2));
     }
-    
+
     btBvhTriangleMeshShape* shape = new btBvhTriangleMeshShape(triMesh,true);
     shape->setLocalScaling(btVector3(scaling,scaling,scaling)); //we need to add a scaling here because the objects seem to have diffrent sizes when loaded (no clue why, see composition.xml for exact scaling factors)
     
