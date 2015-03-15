@@ -385,7 +385,7 @@
     </object>
 </composition>
 
-<!-- Bridge Block on Pillar with torch -->
+<!-- Rotated Bridge Block on Pillar with Torch -->
 <composition>
     <typeID>163</typeID>
     <ignoreHeightmap>true</ignoreHeightmap>
@@ -419,6 +419,79 @@
         <zOffset>0.0</zOffset>
         <xRot>0.0</xRot>
         <yRot>90.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+    <object>
+        <modelPath>column.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>18.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+    <object>
+        <modelPath>column.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>15.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+    <object>
+        <modelPath>column.obj</modelPath>
+        <xOffset>0.0</xOffset>
+        <yOffset>12.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.5</scale>
+        <mass>0.0</mass>
+    </object>
+</composition>
+
+<!-- Bridge Block on Pillar with torch -->
+<composition>
+    <typeID>164</typeID>
+    <ignoreHeightmap>true</ignoreHeightmap>
+    <object>
+        <modelPath>torch.obj</modelPath>
+        <xOffset>-1.5</xOffset>
+        <yOffset>21.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
+        <zRot>0.0</zRot>
+        <scale>1.0</scale>
+        <mass>0.0</mass>
+    </object>
+    <light>
+        <xOffset>-1.5</xOffset>
+        <yOffset>24</yOffset>
+        <zOffset>0</zOffset>
+        <rColour>1.0</rColour>
+        <gColour>0.9</gColour>
+        <bColour>0.3</bColour>
+        <intensity>8.0</intensity>
+        <flameOffset>-0.5</flameOffset>
+        <flameHeight>1.0</flameHeight>
+        <flameWidth>1.0</flameWidth>
+    </light>
+    <object>
+        <modelPath>block.obj</modelPath>
+        <xOffset>0.0</xOffset>  
+        <yOffset>20.0</yOffset>
+        <zOffset>0.0</zOffset>
+        <xRot>0.0</xRot>
+        <yRot>0.0</yRot>
         <zRot>0.0</zRot>
         <scale>1.5</scale>
         <mass>0.0</mass>
