@@ -284,7 +284,7 @@ data/textures/skydomeNew.png was modified and originally taken from:
 http://www.tutorialsforblender3d.com/Textures/Skys/Sky_Dome_1.html
 
 The author states that the images were created with "Terragen(tm) Classic for
-Windows" and according to ther license, the textures are free for personal
+Windows" and according to their license, the textures are free for personal
 non-commercial use.
 
 -------------------------------------------------------------------------------------
