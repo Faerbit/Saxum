@@ -158,9 +158,6 @@ int main( int argc, char *argv[] )
         exit( -1 );
     }
     
-    // Set window title to binary name (without the path):
-    std::vector<std::string> tmp = ACGL::Utils::StringHelpers::split( std::string( argv[0] ), '/' );
-    glfwSetWindowTitle(window, tmp[tmp.size()-1].c_str() );
     // Ensure we can capture the escape key being pressed below
     glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
     // set Callbacks
@@ -181,7 +178,7 @@ int main( int argc, char *argv[] )
     
     int frameCount = 0;
     
-    const double FPSdelay = 2.0;
+    const double FPSdelay = 1.0;
     double startTimeInSeconds = glfwGetTime();
     double showNextFPS = startTimeInSeconds + FPSdelay;
     
@@ -192,15 +189,17 @@ int main( int argc, char *argv[] )
     do {
         
         double now = glfwGetTime()- startTimeInSeconds;
-        
-        if (showNextFPS <= now) {
-            std::stringstream sstream (std::stringstream::in | std::stringstream::out);
-            sstream << std::setprecision(1) << std::fixed
-                    << tmp[tmp.size()-1] << " - FPS: " << frameCount / (now-showNextFPS + FPSdelay) << " " << 1000 * (now-showNextFPS + FPSdelay)/frameCount << " msec";
-            glfwSetWindowTitle(window, sstream.str().c_str() );
-            showNextFPS = now + FPSdelay;
-            frameCount = 0;
-        }
+
+        #ifdef SAXUM_DEBUG
+            if (showNextFPS <= now) {
+                std::stringstream sstream (std::stringstream::in | std::stringstream::out);
+                sstream << std::setprecision(1) << std::fixed
+                        << "Saxum" << " - FPS: " << frameCount / (now-showNextFPS + FPSdelay) << " " << 1000 * (now-showNextFPS + FPSdelay)/frameCount << " msec";
+                glfwSetWindowTitle(window, sstream.str().c_str() );
+                showNextFPS = now + FPSdelay;
+                frameCount = 0;
+            }
+        #endif
         if (app.isGameStarted()) {
             static float gameStart = now;
             if (app.isLocked() && app.getIgnoredMouseUpdates() == 0) {
