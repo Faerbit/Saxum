@@ -23,6 +23,7 @@ static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         app.setCameraLock(false);
     }
+#ifdef CMAKE_CXX_FLAGS_DEBUG
     if (_key == GLFW_KEY_F5 && _action == GLFW_PRESS) {
         app.getGraphics()->setRenderShadows(!app.getGraphics()->getRenderShadows());
     }
@@ -35,6 +36,7 @@ static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
     if (_key == GLFW_KEY_F8 && _action == GLFW_PRESS) {
         app.getGraphics()->setRenderWorld(!app.getGraphics()->getRenderWorld());
     }
+#endif
 }
 
 static void mouseCallback(GLFWwindow* window, int button, int action, int) {
@@ -101,9 +103,11 @@ bool createWindow()
     
     // activate multisampling (second parameter is the number of samples):
     glfwWindowHint( GLFW_SAMPLES, 4);
-    
-    // request an OpenGL debug context:
-    glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, true );
+
+    #ifdef CMAKE_CXX_FLAGS_DEBUG
+        // request an OpenGL debug context:
+        glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, true );
+    #endif
     
     // define whether the window can get resized:
     glfwWindowHint(GLFW_RESIZABLE, true);
@@ -116,7 +120,11 @@ bool createWindow()
         return false;
     }
     glfwMakeContextCurrent(window);
-    ACGL::init();
+    #ifdef CMAKE_CXX_FLAGS_DEBUG
+        ACGL::init(true);
+    #else
+        ACGL::init(false); // do not request debug context
+    #endif
     return true;
 }
 
@@ -179,12 +187,22 @@ int main( int argc, char *argv[] )
                 keyboardState.aPressed  = glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS;
                 keyboardState.sPressed  = glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS;
                 keyboardState.dPressed  = glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
-                keyboardState.lPressed  = glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS;
-                keyboardState.kPressed  = glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS;
-                keyboardState.f1Pressed = glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS;
-                keyboardState.f2Pressed = glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS;
-                keyboardState.f3Pressed = glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS;
-                keyboardState.f4Pressed = glfwGetKey(window, GLFW_KEY_F4) == GLFW_PRESS;
+                #ifdef CMAKE_CXX_FLAGS_DEBUG
+                    keyboardState.lPressed  = glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS;
+                    keyboardState.kPressed  = glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS;
+                    keyboardState.f1Pressed = glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS;
+                    keyboardState.f2Pressed = glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS;
+                    keyboardState.f3Pressed = glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS;
+                    keyboardState.f4Pressed = glfwGetKey(window, GLFW_KEY_F4) == GLFW_PRESS;
+                #else
+                    keyboardState.lPressed  = false;
+                    keyboardState.kPressed  = false;
+                    keyboardState.f1Pressed = false;
+                    keyboardState.f2Pressed = false;
+                    keyboardState.f3Pressed = false;
+                    keyboardState.f4Pressed = false;
+                #endif
+
                 
                 double xpos, ypos;
                 glfwGetCursorPos(window, &xpos, &ypos);
