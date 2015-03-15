@@ -3,6 +3,8 @@
     <height>786</height>
 </resolution>
 
+<!-- The resolution settings get ignored if you choose windowed fullscreen. -->
+
 <windowedFullscreen>true</windowedFullscreen>
 
 <!-- Reduce the following parameters if you game runs too slow.
