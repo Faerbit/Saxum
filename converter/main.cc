@@ -94,7 +94,7 @@ int main( int argc, char *argv[] ){
         std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
         exit(-1);
     }
-    printf("Deleting obsolete Compositions.\n");
+    printf("Deleting obsolete Compositions (Can take a minute).\n");
     //delete compositions that were not in the png anymore
     for (int i=0; i<256; i++){
         for (int j=0; j<256; j++){
