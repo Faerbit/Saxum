@@ -23,20 +23,18 @@ void Physics::init(std::string geometryPath) //prepares bullet by creating all i
 
 void Physics::takeUpdateStep(float timeDiff)
 {
+    for(unsigned i = 0; i < allPositionConstraints.size();i++) //this handles the spring constraints
+    {
+        if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition()) //if constraint != position of the body because otherwise dir = 0
+        {
+            btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
+            dir = dir*allPositionConstraints[i].strength - allPositionConstraints[i].body->getLinearVelocity()
+                                                           *allPositionConstraints[i].body->getLinearVelocity().length();
+            allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength); //apply a foce upon the object pushing it towards the constraint position
+        }
+    }
     if(simulationActive)
     {
-        
-        for(unsigned i = 0; i < allPositionConstraints.size();i++) //this handles the spring constraints
-        {
-            if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition()) //if constraint != position of the body because otherwise dir = 0
-            {
-                btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
-                dir = dir*allPositionConstraints[i].strength - allPositionConstraints[i].body->getLinearVelocity()
-                                                               *allPositionConstraints[i].body->getLinearVelocity().length();
-                allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength); //apply a foce upon the object pushing it towards the constraint position
-            }
-        }
-        
         if(endgame)
         {
             currentDirection = playerBall->getCenterOfMassPosition();
@@ -64,23 +62,10 @@ void Physics::takeUpdateStep(float timeDiff)
             cameraBody->applyCentralForce(currentForce*1.0/force);
         }
         
-       
-        
         world->stepSimulation(timeDiff);
     }
     else
     {
-        for(unsigned i = 0; i < allPositionConstraints.size();i++) //this handles the spring constraints
-        {
-            if(allPositionConstraints[i].position != allPositionConstraints[i].body->getCenterOfMassPosition()) //if constraint != position of the body because otherwise dir = 0
-            {
-                btVector3 dir = allPositionConstraints[i].position - allPositionConstraints[i].body->getCenterOfMassPosition();
-                dir = dir*allPositionConstraints[i].strength - allPositionConstraints[i].body->getLinearVelocity()
-                                                               *allPositionConstraints[i].body->getLinearVelocity().length();
-                allPositionConstraints[i].body->applyCentralForce(dir*allPositionConstraints[i].strength); //apply a foce upon the object pushing it towards the constraint position
-            }
-        }
-        
         btVector3 camPos = cameraBody->getCenterOfMassPosition();
         if(sinking)
         {
