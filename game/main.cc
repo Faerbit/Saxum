@@ -36,6 +36,9 @@ static void keyCallback(GLFWwindow* _window, int _key, int, int _action, int)
     if (_key == GLFW_KEY_F8 && _action == GLFW_PRESS) {
         app.getGraphics()->setRenderWorld(!app.getGraphics()->getRenderWorld());
     }
+    if (_key == GLFW_KEY_F9 && _action == GLFW_PRESS) {
+        app.getLevel()->printPosition();
+    }
 #endif
 }
 

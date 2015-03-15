@@ -344,3 +344,8 @@ void Level::setWaterPlane(Object* water) {
 void Level::setTerrain(Terrain terrain) {
     this->terrain = terrain;
 }
+
+void Level::printPosition() {
+    printf("Player position: %2.2f, %2.2f, %2.2f\n", cameraCenter->getPosition().x,
+            cameraCenter->getPosition().y, cameraCenter->getPosition().z);
+}

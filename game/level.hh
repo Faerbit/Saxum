@@ -74,6 +74,7 @@ class Level {
         void forceMove(float x, float y, float z, unsigned indice);
         void activateEndgame();
         void setTerrain(Terrain terrain);
+        void printPosition();
     private:
         lua_State* luaState=nullptr;
         std::vector<Object*> objects;
