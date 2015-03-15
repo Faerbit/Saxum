@@ -221,8 +221,12 @@ void Graphics::renderLoadingScreen() {
     }
     loadingScreen = Texture2DFileManager::the()->get(Texture2DCreator(loadingScreenPath));
     loadingScreen->generateMipmaps();
+    loadingScreen->setMinFilter(GL_NEAREST_MIPMAP_LINEAR);
+    loadingScreen->setMagFilter(GL_LINEAR);
     loadingContinueScreen = Texture2DFileManager::the()->get(Texture2DCreator(loadingScreenContinuePath));
     loadingContinueScreen->generateMipmaps();
+    loadingContinueScreen->setMinFilter(GL_NEAREST_MIPMAP_LINEAR);
+    loadingContinueScreen->setMagFilter(GL_LINEAR);
     loadingScreenWidth = (float)loadingScreen->getWidth();
     loadingScreenHeight = (float)loadingScreen->getHeight();
 
