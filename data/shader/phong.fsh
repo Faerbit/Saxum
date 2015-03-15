@@ -146,8 +146,9 @@ float samplePointShadow(samplerCubeShadow shadowMap, vec3 lightDirection) {
     float A = -(farPlane+nearPlane)/(farPlane-nearPlane);
     float B = -2*(farPlane*nearPlane)/(farPlane - nearPlane);
     float compValue = 0.5*(-A*length(lightDirection) + B)/length(lightDirection) + 0.5;
-    float bias = 0.001*tan(acos(clamp(dot(vNormal, lightDirection), 0.0, 1.0)));
-    bias = clamp(bias, 0.0, 0.0005);
+    float bias = 0.001*tan(acos(clamp(dot(vNormal, normalize(lightDirection)), 0.0, 1.0)));
+    bias = clamp(bias, 0.0, 0.001);
+    bias *= 1/length(lightDirection)*8;
     return texture(shadowMap, vec4(lightDirection , compValue - bias));
 }
 
@@ -248,11 +249,11 @@ void main()
                 intensity = clamp(exp(-(1/lightIntensities[i])*distance), 0.0, 1.0);
             }
             diffuseColor += clamp(dot(normalize(vNormal), lightVector)
-            *diffuseFactor*intensity*lightColors[i], 0.0, 1.0)*pointVisibility;
+            *diffuseFactor*intensity*lightColors[i]*pointVisibility, 0.0, 1.0);
             vec3 cameraVector = normalize(camera - vec3(fragPosition));
             specularColor += clamp(pow((dot((cameraVector+lightVector),normalize(vNormal))/
-            (length(cameraVector+lightVector)*length(normalize(vNormal)))),shininess), 0.0, 1.0)
-            *specularFactor*intensity*lightColors[i]*pointVisibility;
+            (length(cameraVector+lightVector)*length(normalize(vNormal)))),shininess)*pointVisibility, 0.0, 1.0)
+            *specularFactor*intensity*lightColors[i];
         }
     }
 
