@@ -13244,9 +13244,9 @@
 </fogColourRise>
 
 <fogColourNight>
-    <rColour>0.196</rColour>
-    <gColour>0.0</gColour>
-    <bColour>0.392</bColour>
+    <rColour>0.247</rColour>
+    <gColour>0.047</gColour>
+    <bColour>0.204</bColour>
     <alpha>1.0</alpha>
 </fogColourNight>
 

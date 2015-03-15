@@ -625,7 +625,7 @@
 <objectData>
     <modelPath>marbleSmooth.obj</modelPath>
     <texturePath>cgtextures/marbleTexture.png</texturePath>
-    <ambientFactor>0.13</ambientFactor>
+    <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.5</diffuseFactor>
     <specularFactor>0.5</specularFactor>
     <shininess>3.0</shininess>
@@ -640,7 +640,7 @@
 <objectData>
     <modelPath>block.obj</modelPath>
     <texturePath>cgtextures/blockTexture_small.png</texturePath>
-    <ambientFactor>0.13</ambientFactor>
+    <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
@@ -656,7 +656,7 @@
 <objectData>
     <modelPath>column.obj</modelPath>
     <texturePath>cgtextures/columnTexture2.png</texturePath>
-    <ambientFactor>0.13</ambientFactor>
+    <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
@@ -669,7 +669,7 @@
 <objectData>
     <modelPath>torch.obj</modelPath>    
     <texturePath>cgtextures/torchTexture2.png</texturePath>
-    <ambientFactor>0.13</ambientFactor>
+    <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.3</diffuseFactor>
     <specularFactor>0.7</specularFactor>
     <shininess>10.0</shininess>
@@ -683,7 +683,7 @@
 <objectData>
     <modelPath>switchInner.obj</modelPath>
     <texturePath>cgtextures/switchInnerTexture.png</texturePath>
-    <ambientFactor>0.13</ambientFactor>
+    <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>        
     <shininess>2.0</shininess>
@@ -711,7 +711,7 @@
 <objectData>
     <modelPath>switchOuter.obj</modelPath>
     <texturePath>cgtextures/switchOuterTexture.png</texturePath>
-    <ambientFactor>0.13</ambientFactor>
+    <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>1.0</shininess>
@@ -723,7 +723,7 @@
 <objectData>
     <modelPath>simpleWall.obj</modelPath>
     <texturePath>cgtextures/simpleWallTexture.png</texturePath>
-    <ambientFactor>0.13</ambientFactor>
+    <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>1.0</shininess>
@@ -739,7 +739,7 @@
 <objectData>
     <modelPath>gate.obj</modelPath>
     <texturePath>cgtextures/gateTexture.png</texturePath> 
-    <ambientFactor>0.13</ambientFactor>
+    <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
@@ -755,7 +755,7 @@
 <objectData>
     <modelPath>movableBlock.obj</modelPath>
     <texturePath>cgtextures/movableBlockTexture.png</texturePath>
-    <ambientFactor>0.13</ambientFactor>
+    <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>2.0</shininess>
@@ -771,7 +771,7 @@
 <objectData>
     <modelPath>brazier.obj</modelPath>
     <texturePath>cgtextures/brazierTexture.png</texturePath>
-    <ambientFactor>0.13</ambientFactor>
+    <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>1.0</shininess>
@@ -784,7 +784,7 @@
 <objectData>
     <modelPath>hint.obj</modelPath>
     <texturePath>hintTexture2.png</texturePath>
-    <ambientFactor>0.13</ambientFactor>
+    <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>1.0</shininess>
@@ -797,7 +797,7 @@
 <objectData>
     <modelPath>exit.obj</modelPath>
     <texturePath>cgtextures/exitTexture.png</texturePath>
-    <ambientFactor>0.13</ambientFactor>
+    <ambientFactor>0.1</ambientFactor>
     <diffuseFactor>0.6</diffuseFactor>
     <specularFactor>0.4</specularFactor>
     <shininess>1.0</shininess>
