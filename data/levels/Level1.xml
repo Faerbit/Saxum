@@ -13024,12 +13024,12 @@
     <trigger>
         <name>sunStart</name>
         <undo>false</undo>
-        <xPosition>-216</xPosition>
+        <xPosition>-215</xPosition>
         <yPosition>20</yPosition>
-        <zPosition>34</zPosition>
+        <zPosition>30</zPosition>
         <targetIdGreen>-</targetIdGreen>
         <targetIdBlue>-</targetIdBlue>
-        <distance>2</distance>
+        <distance>5</distance>
         <isBiggerThan>false</isBiggerThan>
         <objectNum>0</objectNum>
         <luaScript>sunStart.lua</luaScript>
