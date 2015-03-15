@@ -184,7 +184,6 @@ void Physics::addTerrain(int width, int length, float** heightData) //The terrai
                 highest = heightData[j][i]; //bullet needs to know the highest point of the heightmap
         }
     }
-    highest++;
     
     btHeightfieldTerrainShape* terrainShape = new btHeightfieldTerrainShape(length,width,heightfield,highest,1,true,false);
     btRigidBody::btRigidBodyConstructionInfo info(0,new btDefaultMotionState(),terrainShape,btVector3(0,0,0)); //next we process all data for the rigid body into info
