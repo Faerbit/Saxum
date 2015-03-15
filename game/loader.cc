@@ -17,6 +17,7 @@ void Loader::loadConfig(Application* application) {
 
     application->setWindowWidth(queryInt(resolution, "width"));
     application->setWindowHeight(queryInt(resolution, "height"));
+    application->setFullscreen(queryBool(config, "windowedFullscreen"));
     application->setShadowCubeSize(queryInt(config, "shadowCubeSize"));
     application->setFarPlane(queryFloat(config, "farPlane"));
     application->setMaxShadowRenderCount(queryInt(config, "maxShadowRenderCount"));

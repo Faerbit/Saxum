@@ -3,6 +3,8 @@
     <height>786</height>
 </resolution>
 
+<windowedFullscreen>true</windowedFullscreen>
+
 <shadowCubeSize>1024</shadowCubeSize>
 
 <farPlane>150.0</farPlane>

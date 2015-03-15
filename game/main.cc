@@ -112,12 +112,28 @@ bool createWindow()
     // define whether the window can get resized:
     glfwWindowHint(GLFW_RESIZABLE, true);
     
-    // try to create an OpenGL context in a window and check the supported OpenGL version:
-    //                                                  R,G,B,A, Depth,Stencil
-    window = glfwCreateWindow(app.getGraphics()->getWindowSize().x, app.getGraphics()->getWindowSize().y, "SWP MarbleGame Group C", NULL, NULL);
-    if (!window) {
-        ACGL::Utils::error() << "Failed to open a GLFW window - requested OpenGL: " <<  ACGL_OPENGL_VERSION << std::endl;
-        return false;
+    if(app.makeFullscreen()) {
+        const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+        glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+        glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+        glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+        glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+        window = glfwCreateWindow(mode->width, mode->height, "Saxum", glfwGetPrimaryMonitor(), NULL);
+
+        if (!window) {
+            ACGL::Utils::error() << "Failed to open a GLFW window - requested OpenGL: " <<  ACGL_OPENGL_VERSION << std::endl;
+            return false;
+        }
+    }
+    else {
+        // try to create an OpenGL context in a window and check the supported OpenGL version:
+        //                                                  R,G,B,A, Depth,Stencil
+        window = glfwCreateWindow(app.getGraphics()->getWindowSize().x, app.getGraphics()->getWindowSize().y, "Saxum", NULL, NULL);
+        if (!window) {
+            ACGL::Utils::error() << "Failed to open a GLFW window - requested OpenGL: " <<  ACGL_OPENGL_VERSION << std::endl;
+            return false;
+        }
     }
     glfwMakeContextCurrent(window);
     #ifdef SAXUM_DEBUG

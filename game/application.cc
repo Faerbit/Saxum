@@ -145,3 +145,11 @@ void Application::startGame() {
 bool Application::isGameStarted() {
     return gameStarted;
 }
+
+void Application::setFullscreen(bool state) {
+    this->fullscreen = state;
+}
+
+bool Application::makeFullscreen() {
+    return fullscreen;
+}

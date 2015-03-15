@@ -35,7 +35,10 @@ class Application {
         void setLoadingScreenContinuePath(std::string path);
         bool isGameStarted();
         void startGame();
+        void setFullscreen(bool state);
+        bool makeFullscreen();
     private:
+        bool fullscreen;
         bool gameStarted;
         int ignoredMouseUpdates;
         bool focused;
