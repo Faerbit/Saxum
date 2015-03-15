@@ -21,5 +21,4 @@ In theory this should also compile on OS X. Since I do not own a Mac it is impos
 If you get it compiling, please get in touch with me afterwards.
 
 ##Modding
-In theory the game is highly moddable. If you're interested in this, please get in touch with me, 
-so I can explain the workflow to you.
+In theory the game is highly moddable. For modding some knowledge in XML and Lua is required. If you're interested in this, please get in touch with me, so I can explain the workflow to you.
