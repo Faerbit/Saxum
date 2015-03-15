@@ -273,9 +273,10 @@ data/textures/hintTexture2.png is based on this.
 
 -------------------------------------------------------------------------------------
 
-data/textures/bluenightskydome.png was generated with:
+data/textures/nightskydome.png was generated with:
 http://wwwtyro.github.io/procedural.js/space/ Source code here:
 https://github.com/wwwtyro/procedural.js
+Seed: NTc3MDMzNjg3ODQ4NQ
 
 -------------------------------------------------------------------------------------
 

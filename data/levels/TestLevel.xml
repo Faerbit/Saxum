@@ -227,7 +227,7 @@
 <skydome>
     <model>skydome.obj</model>
     <texture>skydomeNew.png</texture>
-    <nightTexture>bluenightskydome.png</nightTexture>
+    <nightTexture>nightskydome.png</nightTexture>
 </skydome>
 
 <physics>
