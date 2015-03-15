@@ -28,8 +28,8 @@ rc=$?
 if [[ $rc == 0 ]]
 then
     cd binaries; strip -s *; cd ..
-    mkdir  "MarbleGame_${platform^}"
-    cp -r binaries data LICENSE.txt "MarbleGame_${platform^}"
-    zip -r "MarbleGame_${platform^}.zip" "MarbleGame_${platform^}"
-    rm -rf "MarbleGame_${platform^}" 
+    mkdir  "Saxum_${platform^}"
+    cp -r binaries data LICENSE.txt "Saxum_${platform^}"
+    zip -r "Saxum_${platform^}.zip" "Saxum_${platform^}"
+    rm -rf "Saxum_${platform^}"
 fi
