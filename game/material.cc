@@ -4,6 +4,8 @@ Material::Material(std::string filePath, float ambientFactor, float diffuseFacto
         float specularFactor, float shininess, bool movingTexture) {
     reference = ACGL::OpenGL::Texture2DFileManager::the()->get(ACGL::OpenGL::Texture2DCreator(filePath));
     reference->generateMipmaps();
+    reference->setMinFilter(GL_NEAREST_MIPMAP_LINEAR);
+    reference->setMagFilter(GL_LINEAR);
     this->ambientFactor = ambientFactor;
     this->diffuseFactor = diffuseFactor;
     this->specularFactor = specularFactor;
