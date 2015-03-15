@@ -122,6 +122,7 @@ bool createWindow()
         glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
         glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
         glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+        app.getGraphics()->resize(glm::uvec2(mode->width, mode->height));
         window = glfwCreateWindow(mode->width, mode->height, "Saxum", glfwGetPrimaryMonitor(), NULL);
 
         if (!window) {

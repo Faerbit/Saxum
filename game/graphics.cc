@@ -626,14 +626,16 @@ void Graphics::updateLights() {
 
 void Graphics::resize(glm::uvec2 windowSize) {
     this->windowSize = windowSize;
-    for (unsigned int i = 0; i<depth_directionalMaps.size(); i++) {
-        depth_directionalMaps.at(i)->resize(glm::vec2(windowSize.x, windowSize.y));
+    if (gameStart) {
+        for (unsigned int i = 0; i<depth_directionalMaps.size(); i++) {
+            depth_directionalMaps.at(i)->resize(glm::vec2(windowSize.x, windowSize.y));
+        }
+        light_fbo_color_texture->resize(windowSize);
+        light_fbo_depth_texture->resize(windowSize);
+        flamePostShader->setUniform("windowSizeX", int(windowSize.x));
+        flamePostShader->setUniform("windowSizeY", int(windowSize.y));
+        bindTextureUnits();
     }
-    light_fbo_color_texture->resize(windowSize);
-    light_fbo_depth_texture->resize(windowSize);
-    flamePostShader->setUniform("windowSizeX", int(windowSize.x));
-    flamePostShader->setUniform("windowSizeY", int(windowSize.y));
-    bindTextureUnits();
 }
 
 glm::mat4 Graphics::buildViewMatrix(Level* level) {
