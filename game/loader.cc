@@ -301,7 +301,9 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                             if (physicType.compare("Player") == 0){
                                 float radius = queryFloat(objectData, "radius");
                                 radius *= objectScale*compScale;
-                                level->addPhysicsObject(object);
+                                if (mass != 0.0f) {
+                                    level->addPhysicsObject(object);
+                                }
                                 level->getPhysics()->addPlayer(friction, radius, *object, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize());
                             }else if (physicType.compare("Box") == 0){
                                 float width = queryFloat(objectData, "width");
@@ -310,7 +312,9 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                                 width  *= objectScale*compScale;
                                 height *= objectScale*compScale;
                                 length *= objectScale*compScale;
-                                level->addPhysicsObject(object);
+                                if (mass != 0.0f) {
+                                    level->addPhysicsObject(object);
+                                }
                                 level->getPhysics()->addBox(width, height, length, *object, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize(), rotate);
                             }else if (physicType.compare("Button") == 0){
                                 float width = queryFloat(objectData, "width");
@@ -319,10 +323,14 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                                 width  *= objectScale*compScale;
                                 height *= objectScale*compScale;
                                 length *= objectScale*compScale;
-                                level->addPhysicsObject(object);
+                                if (mass != 0.0f) {
+                                    level->addPhysicsObject(object);
+                                }
                                 level->getPhysics()->addButton(width, height, length, *object, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize(), rotate);
                             }else if (physicType.compare("TriangleMesh") == 0){
-                                level->addPhysicsObject(object);
+                                if (mass != 0.0f) {
+                                    level->addPhysicsObject(object);
+                                }
                                 level->getPhysics()->addTriangleMeshBody(*object, modelPath, mass, dampningL, dampningA, level->getPhysicsObjectsVectorSize(), objectScale*compScale, rotate);
                             }else if (physicType.compare("None") == 0){
                             

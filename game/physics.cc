@@ -133,8 +133,10 @@ void Physics::addPositionConstraint(int bodyIndice, float strength, glm::vec3 po
 //players and objects
 void Physics::addPlayer(float friction, float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice)
 {
-    if(bodies.size() == indice)
-        throw std::invalid_argument( "Bodies out of Sync" ); //these error are to ensure that level can always communicate with physics without having to worry about synching errors
+    if (mass != 0.0f) {
+        if(bodies.size() == indice)
+            throw std::invalid_argument( "Bodies out of Sync: Before adding Player" ); //these error are to ensure that level can always communicate with physics without having to worry about synching errors
+    }
     
     btSphereShape* sphere = new btSphereShape(rad); //the first thing we need for a rigid body is the shape
     btVector3 inertia(0,0,0);
@@ -159,14 +161,18 @@ void Physics::addPlayer(float friction, float rad, Entity entity, float mass, fl
     playerBall->setDamping(dampningL, dampningA); //here we can set the dampning (how much of the motion is lost)
     
     world->addRigidBody(playerBall,COL_OBJECTS,COL_OBJECTS|COL_OBJECTS_NO_TERRAIN|COL_TERRAIN); //then we add the rigid body to the wiorld, allowing it to be simulated
-    
-    bodies.push_back(playerBall); //next we add the rigid body to our own list (for cleanup and for synchronitaation with level)
+
+    if (mass != 0.0f) {
+        bodies.push_back(playerBall); //next we add the rigid body to our own list (for cleanup and for synchronitaation with level)
+    }
     //note, while we can always access playerBall through its global name, we add it to this array for synchronization purposes
     
     playerBall->setSleepingThresholds(0,0); //in a final step we make sure that the body never is removed from the active rigid bodies
-    
-    if(bodies.size() != indice)
-        throw std::invalid_argument( "Bodies out of Sync" ); //one last check to make sure level and physics are in synch
+  
+    if (mass != 0.0f) {
+        if(bodies.size() != indice)
+            throw std::invalid_argument( "Bodies out of Sync: After adding Player" ); //one last check to make sure level and physics are in synch
+    }
     
     addCamera(); //now that the player exists add a camera for the player
 }
@@ -202,9 +208,10 @@ void Physics::addTerrain(int width, int length, float** heightData) //The terrai
 
 void Physics::addConvexBody(Entity entity, std::string path, float mass, float dampningL, float dampningA, unsigned indice, float scaling, bool rotate)
 {    
-    
-    if(bodies.size() == indice)
-        throw std::invalid_argument( "Bodies out of Sync" );
+    if (mass != 0.0f) {
+        if(bodies.size() == indice)
+            throw std::invalid_argument( "Bodies out of Sync: Before adding Convex Body" );
+    }
     
     SharedGeometryData geometry = loadGeometryData("../" + geometryPath + path);
 
@@ -251,8 +258,10 @@ void Physics::addConvexBody(Entity entity, std::string path, float mass, float d
     btRigidBody* body = new btRigidBody(info);
     
     body->setDamping(dampningL,dampningA);
-    
-    bodies.push_back(body);
+   
+    if (mass != 0.0f) {
+        bodies.push_back(body);
+    }
     
     world->addRigidBody(body,COL_OBJECTS, objectsPhysicsCollision);
     
@@ -260,15 +269,19 @@ void Physics::addConvexBody(Entity entity, std::string path, float mass, float d
     {
         body->setAngularFactor(btVector3(0,0,0));
     }
-    
-    if(bodies.size() != indice)
-        throw std::invalid_argument( "Bodies out of Sync" );
+
+    if (mass != 0.0f) {
+        if(bodies.size() != indice)
+            throw std::invalid_argument( "Bodies out of Sync: After adding Convex Body" );
+    }
 }
 
 void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, float dampningL, float dampningA,unsigned indice,float scaling, bool rotate)
 {
-    if(bodies.size() == indice)
-        throw std::invalid_argument( "Bodies out of Sync" );
+    if (mass != 0.0f) {
+        if(bodies.size() == indice)
+            throw std::invalid_argument( "Bodies out of Sync: Before adding Triangle Mesh Body" );
+    }
     
     SharedGeometryData geometry = loadGeometryData("../" + geometryPath + path);
 
@@ -316,8 +329,10 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
     btRigidBody* body = new btRigidBody(info);
     
     body->setDamping(dampningL,dampningA);
-    
-    bodies.push_back(body);
+   
+    if (mass != 0.0f) {
+        bodies.push_back(body);
+    }
     
     world->addRigidBody(body,COL_OBJECTS, objectsPhysicsCollision);
     
@@ -325,16 +340,19 @@ void Physics::addTriangleMeshBody(Entity entity, std::string path, float mass, f
     {
         body->setAngularFactor(btVector3(0,0,0));
     }
-    
-    if(bodies.size() != indice)
-        throw std::invalid_argument( "Bodies out of Sync" );
+   
+    if (mass != 0.0f) {
+        if(bodies.size() != indice)
+            throw std::invalid_argument( "Bodies out of Sync: After adding Triangle Mesh Body" );
+    }
 }
 
 void Physics::addButton(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate)
 {
-    
-    if(bodies.size() == indice)
-        throw std::invalid_argument( "Bodies out of Sync" );
+    if (mass != 0.0f) {
+        if(bodies.size() == indice)
+            throw std::invalid_argument( "Bodies out of Sync: Before adding Button" );
+    }
     
     btBoxShape* box = new btBoxShape(btVector3(width/2,height/2,length/2));
     
@@ -358,22 +376,28 @@ void Physics::addButton(float width, float height, float length, Entity entity, 
     
     world->addRigidBody(body,COL_OBJECTS_NO_TERRAIN, specialPhysicsCollision); //the specialPhysicsCollision allows these objects to not collide with the terrain
     
-    bodies.push_back(body);
+    if (mass != 0.0f) {
+        bodies.push_back(body);
+    }
     
      if(!rotate)
     {
         body->setAngularFactor(btVector3(0,0,0));
     }
-    
-    if(bodies.size() != indice)
-        throw std::invalid_argument( "Bodies out of Sync" );
+
+    if (mass != 0.0f) {
+        if(bodies.size() != indice)
+            throw std::invalid_argument( "Bodies out of Sync: After adding Button" );
+    }
 }
 
 void Physics::addBox(float width, float height, float length, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate)
 {
     //similar to other constructors
-    if(bodies.size() == indice)
-        throw std::invalid_argument( "Bodies out of Sync" );
+    if (mass != 0.0f) {
+        if(bodies.size() == indice)
+            throw std::invalid_argument( "Bodies out of Sync: Before adding Box" );
+    }
     
     glm::quat glmQuat = glm::quat_cast(entity.getRotation());
     btBoxShape* box = new btBoxShape(btVector3(width/2,height/2,length/2));
@@ -393,22 +417,28 @@ void Physics::addBox(float width, float height, float length, Entity entity, flo
     body->setDamping(dampningL, dampningA);
     
     world->addRigidBody(body,COL_OBJECTS, objectsPhysicsCollision);
-    
-    bodies.push_back(body);
+   
+    if (mass != 0.0f) {
+        bodies.push_back(body);
+    }
     
     if(!rotate)
     {
         body->setAngularFactor(btVector3(0,0,0));
     }
     
-    if(bodies.size() != indice)
-        throw std::invalid_argument( "Bodies out of Sync" );
+    if (mass != 0.0f) {
+        if(bodies.size() != indice)
+            throw std::invalid_argument( "Bodies out of Sync: After adding Box" );
+    }
 }
 
 void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, float dampningA, unsigned indice,bool rotate)
 {
-    if(bodies.size() == indice) //(user's initial) height, not the actual height. More...
-        throw std::invalid_argument( "Bodies out of Sync" );
+    if (mass != 0.0f) {
+        if(bodies.size() == indice) //(user's initial) height, not the actual height. More...
+            throw std::invalid_argument( "Bodies out of Sync: Before adding Sphere" );
+    }
     
     btSphereShape* sphere = new btSphereShape(rad);
     btVector3 inertia(0,0,0);
@@ -429,7 +459,9 @@ void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, f
     
     world->addRigidBody(body,COL_OBJECTS, objectsPhysicsCollision);
     
-    bodies.push_back(body);
+    if (mass != 0.0f) { 
+        bodies.push_back(body);
+    }
     
     if(!rotate)//rotate lets certain objects get inertia (0,0,0) (not rotateable)
     {
@@ -437,9 +469,11 @@ void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, f
     }
     
     body->setSleepingThresholds(0,0);
-    
-    if(bodies.size() != indice)
-        throw std::invalid_argument( "Bodies out of Sync" );
+   
+    if (mass != 0.0f) {
+        if(bodies.size() != indice)
+            throw std::invalid_argument( "Bodies out of Sync: After adding Sphere" );
+    }
 }
 
 void Physics::prepareCollisionDetection()
