@@ -14,22 +14,38 @@ Terrain::~Terrain() {
 
 void Terrain::load() {
     std::vector<unsigned char> image; //the raw pixels
-    unsigned error = lodepng::decode(image, heightmapWidth, heightmapHeight, heightmapFilePath);
+    unsigned int heightmapHeightLoading = 0;
+    unsigned int heightmapWidthLoading = 0;
+    unsigned error = lodepng::decode(image, heightmapWidthLoading, heightmapHeightLoading, heightmapFilePath);
     if (error) {
         std::cout << "Decoder error " << error << " from Terrain::load: " << lodepng_error_text(error) << std::endl;
     }
+    this->heightmapHeight = heightmapHeightLoading;
+    this->heightmapWidth = heightmapWidthLoading;
     this->heightmap = new float*[this->heightmapWidth]; //initialize the heightmap
-    for(unsigned int columnNum = 0; columnNum < this->heightmapWidth; columnNum++){ //read in the heightmap
+    for(int columnNum = 0; columnNum < this->heightmapWidth; columnNum++){ //read in the heightmap
         this->heightmap[columnNum] = new float[this->heightmapHeight];
-        for(unsigned int rowNum = 0; rowNum < this->heightmapHeight; rowNum++){
+        for(int rowNum = 0; rowNum < this->heightmapHeight; rowNum++){
             this->heightmap[columnNum][rowNum] = (float)(image[(rowNum*heightmapWidth+columnNum)*4]) / 6; //<--heightmap is scaled here
         }
     }
-    this->makeTriangleMesh();
+    this->makeTriangleMesh(0, 0, heightmapHeight, heightmapWidth);
     heightmapChanged = false; //no need to make a TriangleMesh again before rendering
 }
 
-void Terrain::makeTriangleMesh(){
+void Terrain::makeTriangleMesh(int startX, int startZ, int endX, int endZ) {
+    if (startX < 0) {
+        startX = 0;
+    }
+    if (startZ < 0) {
+        startZ = 0;
+    }
+    if (endX > heightmapHeight) {
+        endX = heightmapHeight;
+    }
+    if (endZ > heightmapWidth) {
+        endZ = heightmapWidth;
+    }
 
     ACGL::OpenGL::SharedArrayBuffer ab = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
     // Do NOT change the order of this!
@@ -37,12 +53,12 @@ void Terrain::makeTriangleMesh(){
     ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
     ab->defineAttribute("aNormal", GL_FLOAT, 3);
     
-    unsigned int rowNum=0, columnNum=0, dataCount=0, floatsPerVertex=8; //initializing:
+    int rowNum = startX, columnNum = startZ, dataCount=0, floatsPerVertex=8; //initializing:
     bool movingRight = true, isUp = true;
     int numVertices = (this->heightmapHeight - 1) * (this->heightmapWidth * 2 + 1) + 1;
     float* abData = new float[numVertices * floatsPerVertex];
     
-    while(rowNum < this->heightmapHeight){ //traversing the Triangle Strip!
+    while(rowNum < endX){ //traversing the Triangle Strip!
         set_abData(abData, dataCount, rowNum, columnNum);
         dataCount += floatsPerVertex;
         if (isUp){
@@ -50,7 +66,7 @@ void Terrain::makeTriangleMesh(){
             isUp = false;
         }
         else if (movingRight) {
-            if (columnNum == this->heightmapWidth - 1) {
+            if (columnNum == endZ - 1) {
                 set_abData(abData, dataCount, rowNum, columnNum);
                 dataCount += floatsPerVertex;
                 set_abData(abData, dataCount, rowNum, columnNum);
@@ -65,7 +81,7 @@ void Terrain::makeTriangleMesh(){
             }
         }
         else {
-            if (columnNum == 0){
+            if (columnNum == startZ){
                 set_abData(abData, dataCount, rowNum, columnNum);
                 dataCount += floatsPerVertex;
                 set_abData(abData, dataCount, rowNum, columnNum);
@@ -91,7 +107,7 @@ void Terrain::makeTriangleMesh(){
 
 
 
-void Terrain::set_abData(float* abData, unsigned int dataCount, unsigned int rowNum, unsigned int columnNum){
+void Terrain::set_abData(float* abData, int dataCount, int rowNum, int columnNum){
     //set Position
     abData[dataCount] = (float)rowNum;
     abData[dataCount+1] = heightmap[rowNum][columnNum];
@@ -143,10 +159,10 @@ float** Terrain::getHeightmap(){
     return this->heightmap;
 }
 
-unsigned int Terrain::getHeightmapHeight(){
+int Terrain::getHeightmapHeight(){
     return this->heightmapHeight;
 }
 
-unsigned int Terrain::getHeightmapWidth(){
+int Terrain::getHeightmapWidth(){
     return this->heightmapWidth;
 }
