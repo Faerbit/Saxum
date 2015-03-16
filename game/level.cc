@@ -16,9 +16,6 @@ Level::~Level() {
     if (luaState!=nullptr) {
         lua_close(luaState);
     }
-    for(unsigned int i = 0; i<objects.size(); i++) {
-        delete(objects.at(i));
-    }
     delete(waterPlane);
 }
 
@@ -55,12 +52,12 @@ void Level::load() {
 
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs) {
-    for(unsigned int i = 0; i<objects.size(); i++) {
+    for(unsigned int i = 0; i<chunks.size(); i++) {
         if (lightingPass) {
-            objects.at(i)->render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
+            chunks.at(i).render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
         }
         else {
-            objects.at(i)->render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
+            chunks.at(i).render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
         }
     }
     if (lightingPass && waterPlane) {
@@ -191,8 +188,8 @@ float Level::getSkydomeSize() {
     return this->skydomeSize;
 }
 
-std::vector<Object*>* Level::getObjects() {
-    return &objects;
+std::vector<Object*>* Level::getAllObjects() {
+    return &allObjects;
 }
 
 std::vector<Object*>* Level::getPhysicsObjects() {
@@ -229,7 +226,8 @@ void Level::setSkydomeObject(Skydome object){
 }
 
 void Level::addObject(Object* object) {
-    objects.push_back(object);
+    allObjects.push_back(object);
+    chunks.at(0).addObject(object);
 }
 
 void Level::addPhysicsObject(Object* object) {
@@ -265,10 +263,6 @@ void Level::setSunDirection(float x, float y, float z){
 
 Physics* Level::getPhysics() {
     return &physics;
-}
-
-unsigned int Level::getObjectsVectorSize() {
-    return objects.size();
 }
 
 unsigned int Level::getPhysicsObjectsVectorSize() {
@@ -336,4 +330,9 @@ void Level::setTerrain(Terrain terrain) {
 void Level::printPosition() {
     printf("Player position: %2.2f, %2.2f, %2.2f\n", cameraCenter->getPosition().x,
             cameraCenter->getPosition().y, cameraCenter->getPosition().z);
+}
+
+void Level::generateChunks(int chunkSize) {
+    chunks = std::vector<Chunk>(1);
+    chunks.at(0) = Chunk();
 }

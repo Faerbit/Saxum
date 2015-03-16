@@ -12,6 +12,7 @@
 #include "trigger.hh"
 #include "skydome.hh"
 #include "keyboardState.hh"
+#include "chunk.hh"
 
 extern "C" {
     #include "lua.h"
@@ -43,7 +44,7 @@ class Level {
         float getSkydomeSize();
         void setWaterPlane(Object* water);
         Skydome* getSkydome();
-        std::vector<Object*>* getObjects();
+        std::vector<Object*>* getAllObjects();
         std::vector<Object*>* getPhysicsObjects();
         void moveObject(int objectIndex, float strength, float xPos, float yPos, float zPos);
         void setStrength(float strength);
@@ -56,9 +57,8 @@ class Level {
         void setFogColourNight(glm::vec4 colour);
         void setDirectionalLight(Light light);
         void setSunDirection(float x, float y, float z);
-        Physics* getPhysics();
-        unsigned int getObjectsVectorSize();
         unsigned int getPhysicsObjectsVectorSize();
+        Physics* getPhysics();
         void setCameraCenter(Object* object);
         void addLight(Light light);
         void preloadLightPosition(float xPos, float yPos, float zPos);
@@ -74,10 +74,13 @@ class Level {
         void activateEndgame();
         void setTerrain(Terrain terrain);
         void printPosition();
+        void generateChunks(int chunkSize);
     private:
         lua_State* luaState=nullptr;
-        std::vector<Object*> objects;
+        std::vector<Object*> crossChunkObjects;
+        std::vector<Object*> allObjects;
         std::vector<Object*> physicsObjects;
+        std::vector<Chunk> chunks;
         std::vector<Light> lights;
         std::vector<Trigger> triggers;
         Object* waterPlane;

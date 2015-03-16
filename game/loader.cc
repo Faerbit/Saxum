@@ -82,6 +82,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     level->setTerrain(terrain);
     // Because object gets copied a lot load it when it has reached it's final destination
     level->getTerrain()->load();
+    level->generateChunks(50.0f);
     Model terrainModel = Model(level->getTerrain()->getModel());
     std::string terrainTexture = queryString(terrainElement, "texture");
     float terrainAmbientFactor = queryFloat(terrainElement, "ambientFactor");
@@ -341,7 +342,7 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                             
                             //create an identifier for this object
                             std::vector<int> objectIdentifier = std::vector<int>(5);
-                            objectIdentifier[0] = level->getObjectsVectorSize()-1;
+                            objectIdentifier[0] = level->getAllObjects()->size()-1;
                             if (physicType.compare("None") == 0){
                                 objectIdentifier[1] = 0;
                             }else{
