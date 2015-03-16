@@ -35,7 +35,6 @@ void Level::load() {
     //Expose the class Level and its functions to Lua
     luabridge::getGlobalNamespace(luaState)
         .beginClass<Level>("Level")
-        .addFunction("deleteObject", &Level::deleteObject)
         .addFunction("getObjectCount", &Level::getPhysicsObjectsVectorSize)
         .addFunction("moveObject", &Level::moveObject)
         .addFunction("resetPlayer", &Level::resetPlayer)
@@ -204,17 +203,6 @@ void Level::moveObject(int objectIndex, float strength, float xPos, float yPos, 
     glm::vec3 position = glm::vec3(xPos, yPos, zPos);
     physics.removePositionConstraint(objectIndex);
     physics.addPositionConstraint(objectIndex, strength, position);
-}
-
-//should not be used since objects does not get synchronized and deletion is not implemented in pyhsics
-void Level::deleteObject(int objectIndex){
-    physicsObjects.erase(physicsObjects.begin() + objectIndex);
-    for(unsigned int i = 0; i<triggers.size(); i++) {
-        if(triggers.at(i).deleteNotification(objectIndex)){
-            triggers.erase(triggers.begin() + i);
-            i--;
-        }
-    }
 }
 
 void Level::resetPlayer(){

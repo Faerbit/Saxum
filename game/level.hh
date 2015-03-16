@@ -45,7 +45,6 @@ class Level {
         Skydome* getSkydome();
         std::vector<Object*>* getObjects();
         std::vector<Object*>* getPhysicsObjects();
-        void deleteObject(int objectIndex);
         void moveObject(int objectIndex, float strength, float xPos, float yPos, float zPos);
         void setStrength(float strength);
         void setSkydomeObject(Skydome object);
