@@ -4,7 +4,7 @@ This is a Marble Puzzle/Exploration Game developed in the practical course
 at the institute for Computer Graphics and Multimedia at the RWTH Aachen.
 
 ##Downloads
-See [release page](https://github.com/Faerbit/Saxum/releases) for downloads(Coming soon(tm)).
+See [release page](https://github.com/Faerbit/Saxum/releases) for downloads.
 
 ##Controls
 You can control the camera by moving the mouse. You can zoom with the mouse wheel.
@@ -21,5 +21,4 @@ In theory this should also compile on OS X. Since I do not own a Mac it is impos
 If you get it compiling, please get in touch with me afterwards.
 
 ##Modding
-In theory the game is highly moddable. If you're interested in this, please get in touch with me, 
-so I can explain the workflow to you.
+In theory the game is highly moddable. For modding some knowledge in XML and Lua is required. If you're interested in this, please get in touch with me, so I can explain the workflow to you.
