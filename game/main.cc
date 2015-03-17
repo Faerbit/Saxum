@@ -190,16 +190,14 @@ int main( int argc, char *argv[] )
         
         double now = glfwGetTime()- startTimeInSeconds;
 
-        #ifdef SAXUM_DEBUG
-            if (showNextFPS <= now) {
-                std::stringstream sstream (std::stringstream::in | std::stringstream::out);
-                sstream << std::setprecision(1) << std::fixed
-                        << "Saxum" << " - FPS: " << frameCount / (now-showNextFPS + FPSdelay) << " " << 1000 * (now-showNextFPS + FPSdelay)/frameCount << " msec";
-                glfwSetWindowTitle(window, sstream.str().c_str() );
-                showNextFPS = now + FPSdelay;
-                frameCount = 0;
-            }
-        #endif
+        if (showNextFPS <= now) {
+            std::stringstream sstream (std::stringstream::in | std::stringstream::out);
+            sstream << std::setprecision(1) << std::fixed
+                    << "Saxum" << " - FPS: " << frameCount / (now-showNextFPS + FPSdelay) << " " << 1000 * (now-showNextFPS + FPSdelay)/frameCount << " msec";
+            glfwSetWindowTitle(window, sstream.str().c_str() );
+            showNextFPS = now + FPSdelay;
+            frameCount = 0;
+        }
         if (app.isGameStarted()) {
             static float gameStart = now;
             if (app.isLocked() && app.getIgnoredMouseUpdates() == 0) {
