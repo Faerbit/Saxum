@@ -30,7 +30,6 @@ void Terrain::load() {
         }
     }
     this->makeTriangleMesh(0, 0, heightmapHeight, heightmapWidth);
-    heightmapChanged = false; //no need to make a TriangleMesh again before rendering
 }
 
 void Terrain::makeTriangleMesh(int startX, int startZ, int endX, int endZ) {

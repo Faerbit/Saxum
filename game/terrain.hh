@@ -22,7 +22,6 @@ class Terrain {
         std::string heightmapFilePath;
         int heightmapHeight, heightmapWidth;
         float** heightmap; //can be accessed like 'float[][]'
-        bool heightmapChanged;
         ACGL::OpenGL::SharedVertexArrayObject triangleMesh;
         void set_abData(float* abData, int dataCount, int rowNum, int columnNum);
 };
