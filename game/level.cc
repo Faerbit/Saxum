@@ -229,6 +229,7 @@ void Level::setSkydomeObject(Skydome object){
 
 void Level::addObject(Object* object) {
     allObjects.push_back(object);
+    //int xPosition = object->getPosition().x - terrain.getHeightmapHeight
     chunks.at(0).at(0).addObject(object);
 }
 
@@ -335,12 +336,13 @@ void Level::printPosition() {
 }
 
 void Level::generateChunks(int chunkSize) {
+    this->chunkSize = chunkSize;
     int numberChunksX = 0;
-    if (terrain.getHeightmapHeight() % chunkSize == 0) {
-        numberChunksX = terrain.getHeightmapHeight()/chunkSize;
+    if (terrain.getHeightmapWidth() % chunkSize == 0) {
+        numberChunksX = terrain.getHeightmapWidth()/chunkSize;
     }
     else {
-        numberChunksX = (terrain.getHeightmapHeight()/chunkSize) + 1;
+        numberChunksX = (terrain.getHeightmapWidth()/chunkSize) + 1;
     }
     int numberChunksZ = 0;
     if (terrain.getHeightmapHeight() % chunkSize == 0) {
@@ -357,4 +359,8 @@ void Level::generateChunks(int chunkSize) {
         }
         chunks.at(i) = zChunks;
     }
+}
+
+std::vector<std::vector<Chunk>>* Level::getChunks() {
+    return &chunks;
 }

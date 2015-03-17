@@ -2,6 +2,8 @@
 #include <ACGL/OpenGL/Objects/VertexArrayObject.hh>
 using namespace tinyxml2;
 
+const int chunkSize = 50;
+
 Loader::Loader() {
 }
 
@@ -80,10 +82,10 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
     }
     Terrain terrain = Terrain(levelHeightmapPath);
     level->setTerrain(terrain);
-    // Because object gets copied a lot load it when it has reached it's final destination
+    // Because object gets copied a lot, load it when it has reached it's final destination
     level->getTerrain()->load();
-    level->generateChunks(50.0f);
-    Model terrainModel = Model(level->getTerrain()->getModel());
+    // generate appropriate amount of chunks depending on the heightmap size.
+    level->generateChunks(chunkSize);
     std::string terrainTexture = queryString(terrainElement, "texture");
     float terrainAmbientFactor = queryFloat(terrainElement, "ambientFactor");
     float terrainDiffuseFactor = queryFloat(terrainElement, "diffuseFactor");
@@ -95,10 +97,15 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
         exit(-1);
     }
     Material terrainMaterial = Material(terrainTexture, terrainAmbientFactor, terrainDiffuseFactor, terrainSpecularFactor, terrainShininess);
-    Object* terrainObject = new Object(terrainModel, terrainMaterial,
-    glm::vec3(-0.5*((float)level->getTerrain()->getHeightmapHeight()-1), 0.0f, -0.5f*((float)level->getTerrain()->getHeightmapWidth()-1)),
-        glm::vec3(0.0f, 0.0f, 0.0f), true);
-    level->addObject(terrainObject);
+    for (unsigned int i = 0; i<level->getChunks()->size(); i++) {
+        for (unsigned int j = 0; j<level->getChunks()->at(i).size(); j++) {
+            Model terrainModel = Model(level->getTerrain()->makeTriangleMesh(i*chunkSize, j*chunkSize, (i+1)*chunkSize+1, (j+1)*chunkSize+1));
+            Object* terrainObject = new Object(terrainModel, terrainMaterial,
+            glm::vec3(-0.5*((float)level->getTerrain()->getHeightmapHeight()-1), 0.0f, -0.5f*((float)level->getTerrain()->getHeightmapWidth()-1)),
+                glm::vec3(0.0f, 0.0f, 0.0f), true);
+            level->addObject(terrainObject);
+        }
+    }
     level->getPhysics()->addTerrain(level->getTerrain()->getHeightmapWidth(), level->getTerrain()->getHeightmapHeight(), level->getTerrain()->getHeightmap());
     
     //load the skydome

@@ -5,6 +5,9 @@
 #include "material.hh"
 #include <ACGL/OpenGL/Objects/VertexArrayObject.hh>
 #include "model.hh"
+
+using namespace ACGL::OpenGL;
+
 class Terrain {
     public:
         Terrain(std::string heightmapFilePath);
@@ -12,17 +15,15 @@ class Terrain {
         ~Terrain();
         void load();
         void render();
-        Model getModel();
         float** getHeightmap();
         int getHeightmapHeight();
         int getHeightmapWidth();
-        void makeTriangleMesh(int startX, int startZ, int endX, int endZ);
+        SharedVertexArrayObject makeTriangleMesh(int startX, int startZ, int endX, int endZ);
     private:
         Material material;
         std::string heightmapFilePath;
         int heightmapHeight, heightmapWidth;
         float** heightmap; //can be accessed like 'float[][]'
-        ACGL::OpenGL::SharedVertexArrayObject triangleMesh;
         void set_abData(float* abData, int dataCount, int rowNum, int columnNum);
 };
 

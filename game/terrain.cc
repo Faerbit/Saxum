@@ -29,10 +29,9 @@ void Terrain::load() {
             this->heightmap[columnNum][rowNum] = (float)(image[(rowNum*heightmapWidth+columnNum)*4]) / 6; //<--heightmap is scaled here
         }
     }
-    this->makeTriangleMesh(0, 0, heightmapHeight, heightmapWidth);
 }
 
-void Terrain::makeTriangleMesh(int startX, int startZ, int endX, int endZ) {
+SharedVertexArrayObject Terrain::makeTriangleMesh(int startX, int startZ, int endX, int endZ) {
     if (startX < 0) {
         startX = 0;
     }
@@ -46,7 +45,8 @@ void Terrain::makeTriangleMesh(int startX, int startZ, int endX, int endZ) {
         endZ = heightmapWidth;
     }
 
-    ACGL::OpenGL::SharedArrayBuffer ab = std::make_shared<ACGL::OpenGL::ArrayBuffer>();
+    SharedArrayBuffer ab = SharedArrayBuffer(new ArrayBuffer());
+    SharedVertexArrayObject vao = SharedVertexArrayObject(new VertexArrayObject());
     // Do NOT change the order of this!
     ab->defineAttribute("aPosition", GL_FLOAT, 3);
     ab->defineAttribute("aTexCoord", GL_FLOAT, 2);
@@ -54,7 +54,7 @@ void Terrain::makeTriangleMesh(int startX, int startZ, int endX, int endZ) {
     
     int rowNum = startX, columnNum = startZ, dataCount=0, floatsPerVertex=8; //initializing:
     bool movingRight = true, isUp = true;
-    int numVertices = (this->heightmapHeight - 1) * (this->heightmapWidth * 2 + 1) + 1;
+    int numVertices = ((endX - startX) - 1) * ((endZ - startZ) * 2 + 1) + 1;
     float* abData = new float[numVertices * floatsPerVertex];
     
     while(rowNum < endX){ //traversing the Triangle Strip!
@@ -98,10 +98,10 @@ void Terrain::makeTriangleMesh(int startX, int startZ, int endX, int endZ) {
     
     ab->setDataElements(numVertices, abData);
     delete abData;
-    this->triangleMesh = std::make_shared<ACGL::OpenGL::VertexArrayObject>();
-    this->triangleMesh->bind();
-    this->triangleMesh->setMode(GL_TRIANGLE_STRIP);
-    this->triangleMesh->attachAllAttributes(ab);
+    vao->bind();
+    vao->setMode(GL_TRIANGLE_STRIP);
+    vao->attachAllAttributes(ab);
+    return vao;
 }
 
 
@@ -148,10 +148,6 @@ void Terrain::set_abData(float* abData, int dataCount, int rowNum, int columnNum
         abData[dataCount+6] = sumNormals[1];
         abData[dataCount+7] = sumNormals[2];
     }
-}
-
-Model Terrain::getModel(){
-    return Model(this->triangleMesh);
 }
 
 float** Terrain::getHeightmap(){

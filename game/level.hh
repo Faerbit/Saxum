@@ -75,6 +75,7 @@ class Level {
         void setTerrain(Terrain terrain);
         void printPosition();
         void generateChunks(int chunkSize);
+        std::vector<std::vector<Chunk>>* getChunks();
     private:
         lua_State* luaState=nullptr;
         std::vector<Object*> crossChunkObjects;
@@ -99,6 +100,7 @@ class Level {
         float strength;
         std::string xmlFilePath;
         glm::vec3 nextLightPosition;
+        float chunkSize;
 };
 
 #endif
