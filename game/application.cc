@@ -22,7 +22,7 @@ void Application::init()
 }
 
 void Application::initLevel() {
-    this->level = Level(levelXmlPath, farPlane);
+    this->level = Level(levelXmlPath);
     level.getPhysics()->init(geometryPath);
     // Don't change this!
     ignoredMouseUpdates = 0;

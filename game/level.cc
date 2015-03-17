@@ -2,7 +2,7 @@
 #include "loader.hh"
 #include <string>
 
-Level::Level(std::string xmlFilePath, float farPlane){
+Level::Level(std::string xmlFilePath) {
     // default value
     skydomeSize = 50.0f;
     physics = Physics();
@@ -55,10 +55,10 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs) {
     int renderDistance = 0;
     if ((int)farPlane % chunkSize == 0) {
-        renderDistance = farPlane/chunkSize;
+        renderDistance = (int)skydomeSize/chunkSize;
     }
     else {
-        renderDistance = (farPlane/chunkSize) + 1;
+        renderDistance = ((int)skydomeSize/chunkSize) + 1;
     }
     int xPosition = ((int)cameraCenter->getPosition().x + (terrain.getHeightmapWidth()/2))/chunkSize;
     int zPosition = ((int)cameraCenter->getPosition().z + (terrain.getHeightmapHeight()/2))/chunkSize;

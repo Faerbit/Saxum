@@ -23,7 +23,7 @@ extern "C" {
 
 class Level {
     public:
-        Level(std::string xmlFilePath, float farPlane);
+        Level(std::string xmlFilePath);
         Level();
         ~Level();
         void load();
