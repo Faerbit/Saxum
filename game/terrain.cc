@@ -38,11 +38,11 @@ SharedVertexArrayObject Terrain::makeTriangleMesh(int startX, int startZ, int en
     if (startZ < 0) {
         startZ = 0;
     }
-    if (endX > heightmapHeight) {
-        endX = heightmapHeight;
+    if (endX > heightmapWidth) {
+        endX = heightmapWidth;
     }
-    if (endZ > heightmapWidth) {
-        endZ = heightmapWidth;
+    if (endZ > heightmapHeight) {
+        endZ = heightmapHeight;
     }
 
     SharedArrayBuffer ab = SharedArrayBuffer(new ArrayBuffer());

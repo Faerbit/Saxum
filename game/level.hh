@@ -23,7 +23,7 @@ extern "C" {
 
 class Level {
     public:
-        Level(std::string xmlFilePath);
+        Level(std::string xmlFilePath, float farPlane);
         Level();
         ~Level();
         void load();
@@ -76,6 +76,7 @@ class Level {
         void printPosition();
         void generateChunks(int chunkSize);
         std::vector<std::vector<Chunk>>* getChunks();
+        void addToSpecificChunk(Object* object, int xPosition, int zPosition);
     private:
         lua_State* luaState=nullptr;
         std::vector<Object*> crossChunkObjects;
@@ -100,7 +101,8 @@ class Level {
         float strength;
         std::string xmlFilePath;
         glm::vec3 nextLightPosition;
-        float chunkSize;
+        int chunkSize;
+        float farPlane;
 };
 
 #endif

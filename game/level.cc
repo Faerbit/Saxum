@@ -2,11 +2,12 @@
 #include "loader.hh"
 #include <string>
 
-Level::Level(std::string xmlFilePath){
+Level::Level(std::string xmlFilePath, float farPlane){
     // default value
     skydomeSize = 50.0f;
     physics = Physics();
     this->xmlFilePath = xmlFilePath;
+    this->farPlane = farPlane;
 }
 
 Level::Level() {
@@ -52,8 +53,33 @@ void Level::load() {
 
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs) {
-    for(unsigned int i = 0; i<chunks.size(); i++) {
-        for(unsigned int j = 0; j<chunks.at(i).size(); j++) {
+    int renderDistance = 0;
+    if ((int)farPlane % chunkSize == 0) {
+        renderDistance = farPlane/chunkSize;
+    }
+    else {
+        renderDistance = (farPlane/chunkSize) + 1;
+    }
+    int xPosition = ((int)cameraCenter->getPosition().x + (terrain.getHeightmapWidth()/2))/chunkSize;
+    int zPosition = ((int)cameraCenter->getPosition().z + (terrain.getHeightmapHeight()/2))/chunkSize;
+    int xStart = xPosition - renderDistance;
+    unsigned int xEnd = xPosition + renderDistance;
+    int zStart = zPosition - renderDistance;
+    unsigned int zEnd = zPosition + renderDistance;
+    if (xStart < 0) {
+        xStart = 0;
+    }
+    if (zStart < 0) {
+        zStart = 0;
+    }
+    if (xEnd >= chunks.size()) {
+        xEnd = chunks.size()-1;
+    }
+    if (zEnd >= chunks.at(0).size()) {
+        zEnd = chunks.at(0).size()-1;
+    }
+    for(unsigned int i = xStart; i<=xEnd; i++) {
+        for(unsigned int j = zStart; j<=zEnd; j++) {
             if (lightingPass) {
                 chunks.at(i).at(j).render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
             }
@@ -229,8 +255,13 @@ void Level::setSkydomeObject(Skydome object){
 
 void Level::addObject(Object* object) {
     allObjects.push_back(object);
-    //int xPosition = object->getPosition().x - terrain.getHeightmapHeight
-    chunks.at(0).at(0).addObject(object);
+    int xPosition = ((int)object->getPosition().x + (terrain.getHeightmapWidth()/2))/chunkSize;
+    int zPosition = ((int)object->getPosition().z + (terrain.getHeightmapHeight()/2))/chunkSize;
+    chunks.at(xPosition).at(zPosition).addObject(object);
+}
+
+void Level::addToSpecificChunk(Object* object, int xPosition, int zPosition) {
+    chunks.at(xPosition).at(zPosition).addObject(object);
 }
 
 void Level::addPhysicsObject(Object* object) {
