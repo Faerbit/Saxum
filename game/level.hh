@@ -80,7 +80,7 @@ class Level {
         std::vector<Object*> crossChunkObjects;
         std::vector<Object*> allObjects;
         std::vector<Object*> physicsObjects;
-        std::vector<Chunk> chunks;
+        std::vector<std::vector<Chunk>> chunks;
         std::vector<Light> lights;
         std::vector<Trigger> triggers;
         Object* waterPlane;

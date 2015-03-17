@@ -53,11 +53,13 @@ void Level::load() {
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs) {
     for(unsigned int i = 0; i<chunks.size(); i++) {
-        if (lightingPass) {
-            chunks.at(i).render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
-        }
-        else {
-            chunks.at(i).render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
+        for(unsigned int j = 0; j<chunks.at(i).size(); j++) {
+            if (lightingPass) {
+                chunks.at(i).at(j).render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
+            }
+            else {
+                chunks.at(i).at(j).render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
+            }
         }
     }
     if (lightingPass && waterPlane) {
@@ -227,7 +229,7 @@ void Level::setSkydomeObject(Skydome object){
 
 void Level::addObject(Object* object) {
     allObjects.push_back(object);
-    chunks.at(0).addObject(object);
+    chunks.at(0).at(0).addObject(object);
 }
 
 void Level::addPhysicsObject(Object* object) {
@@ -333,6 +335,26 @@ void Level::printPosition() {
 }
 
 void Level::generateChunks(int chunkSize) {
-    chunks = std::vector<Chunk>(1);
-    chunks.at(0) = Chunk();
+    int numberChunksX = 0;
+    if (terrain.getHeightmapHeight() % chunkSize == 0) {
+        numberChunksX = terrain.getHeightmapHeight()/chunkSize;
+    }
+    else {
+        numberChunksX = (terrain.getHeightmapHeight()/chunkSize) + 1;
+    }
+    int numberChunksZ = 0;
+    if (terrain.getHeightmapHeight() % chunkSize == 0) {
+        numberChunksZ = terrain.getHeightmapHeight()/chunkSize;
+    }
+    else {
+        numberChunksZ = (terrain.getHeightmapHeight()/chunkSize) + 1;
+    }
+    chunks = std::vector<std::vector<Chunk>> (numberChunksX);
+    for(int i = 0; i<numberChunksX; i++) {
+        std::vector<Chunk> zChunks = std::vector<Chunk>(numberChunksZ);
+        for(int j = 0; j<numberChunksZ; j++) {
+            zChunks.at(j) = Chunk();
+        }
+        chunks.at(i) = zChunks;
+    }
 }
