@@ -181,6 +181,22 @@ void Graphics::init(Level* level) {
     bindTextureUnits();
 
     updateClosestLights();
+
+    // set shader variables that stay the same across the runtime of the application
+    skydomeShader->use();
+    skydomeShader->setUniform("farPlane", farPlane);
+    skydomeShader->setUniform("skydomeSize", level->getSkydomeSize());
+    skydomeShader->setUniform("fogColorDay", level->getFogColourDay());
+    skydomeShader->setUniform("fogColorRise", level->getFogColourRise());
+    skydomeShader->setUniform("fogColorNight", level->getFogColourNight());
+    skydomeShader->setUniform("sunColor", level->getDirectionalLight()->getColour());
+
+    lightingShader->use(); 
+    lightingShader->setUniform("farPlane", farPlane);
+    lightingShader->setUniform("fogColorDay", level->getFogColourDay());
+    lightingShader->setUniform("fogColorRise", level->getFogColourRise());
+    lightingShader->setUniform("fogColorNight", level->getFogColourNight());
+    lightingShader->setUniform("ambientColor", level->getAmbientLight());
 }
 
 void Graphics::bindTextureUnits(){
@@ -435,14 +451,8 @@ void Graphics::render(double time)
         //render skydome
         skydomeShader->use();
         // set fog Parameters
-        skydomeShader->setUniform("farPlane", farPlane);
-        skydomeShader->setUniform("skydomeSize", level->getSkydomeSize());
-        skydomeShader->setUniform("fogColorDay", level->getFogColourDay());
-        skydomeShader->setUniform("fogColorRise", level->getFogColourRise());
-        skydomeShader->setUniform("fogColorNight", level->getFogColourNight());
         skydomeShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
         skydomeShader->setUniform("directionalVector", level->getDirectionalLight()->getPosition());
-        skydomeShader->setUniform("sunColor", level->getDirectionalLight()->getColour());
         level->getSkydome()->render(skydomeShader, false, true, &lightingViewProjectionMatrix);
         
         lightingShader->use();
@@ -460,16 +470,10 @@ void Graphics::render(double time)
             depthBiasVPs.at(i) = biasMatrix * depthViewProjectionMatrices.at(i);
         }
 
-        lightingShader->setUniform("farPlane", farPlane);
-        
         // set fog Parameters
-        lightingShader->setUniform("fogColorDay", level->getFogColourDay());
-        lightingShader->setUniform("fogColorRise", level->getFogColourRise());
-        lightingShader->setUniform("fogColorNight", level->getFogColourNight());
         lightingShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
         
         // set Material Parameters
-        lightingShader->setUniform("ambientColor", level->getAmbientLight());
         lightingShader->setUniform("camera", level->getPhysics()->getCameraPosition());
         textureMovementPosition += wind/5.0f;
         lightingShader->setUniform("movingTextureOffset", textureMovementPosition);
