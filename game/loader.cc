@@ -294,7 +294,8 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
                             objectRot[2] = queryFloat(xmlObject, "zRot");
                             objectRot *= 0.0174532925;    //transform degrees to radians
                             Object* object = new Object(model, material, objectPosition, compRot+objectRot, renderable);
-                            level->addObject(object);
+                            bool crossesChunks = queryBool(composition, "crossesChunks");
+                            level->addObject(object, crossesChunks);
                             
                             //add object to physics
                             std::string physicType = queryString(objectData, "physicType");

@@ -5,6 +5,7 @@
 <composition>
     <typeID>20</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
+    <crossesChunks>true</crossesChunks>
     <object>
         <modelPath>marbleSmooth.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -22,6 +23,7 @@
 <composition>
     <typeID>40</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
+    <crossesChunks>true</crossesChunks>
     <object>
         <modelPath>block.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -39,6 +41,7 @@
 <composition>
     <typeID>60</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>column.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -56,6 +59,7 @@
 <composition>
     <typeID>80</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>torch.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -85,6 +89,7 @@
 <composition>
     <typeID>81</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>torch.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -129,6 +134,7 @@
 <composition>
     <typeID>100</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>column.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -168,6 +174,7 @@
 <composition>
     <typeID>120</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>switchInner.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -251,6 +258,7 @@
 <composition>
     <typeID>140</typeID>
     <ignoreHeightmap>true</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>block.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -268,6 +276,7 @@
 <composition>
     <typeID>141</typeID>
     <ignoreHeightmap>true</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>block.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -289,6 +298,7 @@
 <composition>
     <typeID>160</typeID>
     <ignoreHeightmap>true</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>block.obj</modelPath>
         <xOffset>0.0</xOffset>  
@@ -339,6 +349,7 @@
 <composition>
     <typeID>161</typeID>
     <ignoreHeightmap>true</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>block.obj</modelPath>
         <xOffset>0.0</xOffset>  
@@ -389,6 +400,7 @@
 <composition>
     <typeID>163</typeID>
     <ignoreHeightmap>true</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>torch.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -462,6 +474,7 @@
 <composition>
     <typeID>164</typeID>
     <ignoreHeightmap>true</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>torch.obj</modelPath>
         <xOffset>-1.5</xOffset>
@@ -535,6 +548,7 @@
 <composition>
     <typeID>180</typeID>
     <ignoreHeightmap>true</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>simpleWall.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -552,6 +566,7 @@
 <composition>
     <typeID>181</typeID>
     <ignoreHeightmap>true</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>simpleWall.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -569,6 +584,7 @@
 <composition>  	
     <typeID>200</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
+    <crossesChunks>true</crossesChunks>
     <object>
         <modelPath>block.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -586,6 +602,7 @@
 <composition>
     <typeID>220</typeID>
     <ignoreHeightmap>true</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>gate.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -603,6 +620,7 @@
 <composition>
     <typeID>221</typeID>
     <ignoreHeightmap>true</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>gate.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -620,6 +638,7 @@
 <composition>
     <typeID>240</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
+    <crossesChunks>true</crossesChunks>
     <object>
         <modelPath>movableBlock.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -637,6 +656,7 @@
 <composition>
     <typeID>245</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>brazier.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -654,6 +674,7 @@
 <composition>
     <typeID>250</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>hint.obj</modelPath>
         <xOffset>0.0</xOffset>
@@ -671,6 +692,7 @@
 <composition>
     <typeID>254</typeID>
     <ignoreHeightmap>false</ignoreHeightmap>
+    <crossesChunks>false</crossesChunks>
     <object>
         <modelPath>exit.obj</modelPath>
         <xOffset>0.0</xOffset>

@@ -49,7 +49,7 @@ class Level {
         void moveObject(int objectIndex, float strength, float xPos, float yPos, float zPos);
         void setStrength(float strength);
         void setSkydomeObject(Skydome object);
-        void addObject(Object* object);
+        void addObject(Object* object, bool crossesChunks);
         void addPhysicsObject(Object* object);
         void setAmbientLight(glm::vec3 colour);
         void setFogColourDay(glm::vec4 colour);

@@ -88,6 +88,14 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
             }
         }
     }
+    for (unsigned int i = 0; i<crossChunkObjects.size(); i++) {
+        if (lightingPass) {
+            crossChunkObjects.at(i)->render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
+        }
+        else {
+            crossChunkObjects.at(i)->render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
+        }
+    }
     if (lightingPass && waterPlane) {
             waterPlane->render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
     }
@@ -253,11 +261,16 @@ void Level::setSkydomeObject(Skydome object){
     this->skydome = object;
 }
 
-void Level::addObject(Object* object) {
+void Level::addObject(Object* object, bool crossesChunks) {
     allObjects.push_back(object);
-    int xPosition = ((int)object->getPosition().x + (terrain.getHeightmapWidth()/2))/chunkSize;
-    int zPosition = ((int)object->getPosition().z + (terrain.getHeightmapHeight()/2))/chunkSize;
-    chunks.at(xPosition).at(zPosition).addObject(object);
+    if (crossesChunks) {
+        crossChunkObjects.push_back(object);
+    }
+    else {
+        int xPosition = ((int)object->getPosition().x + (terrain.getHeightmapWidth()/2))/chunkSize;
+        int zPosition = ((int)object->getPosition().z + (terrain.getHeightmapHeight()/2))/chunkSize;
+        chunks.at(xPosition).at(zPosition).addObject(object);
+    }
 }
 
 void Level::addToSpecificChunk(Object* object, int xPosition, int zPosition) {
