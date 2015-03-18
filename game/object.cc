@@ -1,4 +1,6 @@
 #include "object.hh"
+//#include <iterator>
+//#include <algorithm>
 
 Object::Object(Model model, Material material, glm::vec3 position, glm::vec3 rotation, bool renderable) :
         Entity(position, rotation) {
@@ -27,7 +29,8 @@ void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         else {
             shader->setUniform("movingTexture", false);
         }
-        shader->setTexture("uTexture", material.getReference(), 0);
+        auto textureUnit = std::distance(Material::getAllTextures()->begin(), std::find(std::begin(*Material::getAllTextures()), std::end(*Material::getAllTextures()), material.getReference()));
+        shader->setUniform("uTexture", (int)textureUnit + 2);
         shader->setUniform("modelMatrix", modelMatrix);
     }
     if (lightingPass) {

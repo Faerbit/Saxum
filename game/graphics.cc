@@ -202,37 +202,40 @@ void Graphics::init(Level* level) {
 void Graphics::bindTextureUnits(){
 
     lightingShader->use();
+    unsigned int textureCount = Material::getAllTextures()->size();
+    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
+    printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
+    // Exit if we need more texture units
+    if (number_of_texture_units < (int)textureCount + 18) {
+        printf("You need at least %d  texture units to run this application. Exiting\n", textureCount + 18);
+        exit(-1);
+    }
+    for(unsigned int i = 0; i<Material::getAllTextures()->size(); i++) {
+        lightingShader->setTexture("uTexture", Material::getAllTextures()->at(i), i+2);
+    }
 
     for (unsigned int i = 0; i<depth_directionalMaps.size(); i++) {
-        // start with texture unit 1 because the first is reserved for the texture
-        lightingShader->setTexture("shadowMap_directional" + std::to_string(i), depth_directionalMaps.at(i), i+1);
+        lightingShader->setTexture("shadowMap_directional" + std::to_string(i), depth_directionalMaps.at(i), textureCount + i + 2);
     }
 
     if (level->getLights()->size() > 0) {
         for(unsigned int i = 0; i<depth_cubeMaps.size(); i++){
-            // start with texture unit 4 because the first four are used by the texture and the directional shadow map
-            lightingShader->setTexture("shadowMap_cube" + std::to_string(i), depth_cubeMaps.at(i), i+4);
+            lightingShader->setTexture("shadowMap_cube" + std::to_string(i), depth_cubeMaps.at(i), textureCount + i + 5);
         }
     }
     flamePostShader->use();
-    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, 14);
+    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, textureCount + 15);
 
     skydomeShader->use();
-    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture()->getReference(), 15);
+    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture()->getReference(), textureCount + 16);
 
     loadingShader->use(); 
-    loadingShader->setTexture("screen", loadingScreen, 16);
-    loadingShader->setTexture("screenContinue", loadingContinueScreen, 17);
+    loadingShader->setTexture("screen", loadingScreen, textureCount + 17);
+    loadingShader->setTexture("screenContinue", loadingContinueScreen, textureCount + 18);
+    printf("This application used %d texture units.\n", textureCount + 18);
 }
 
 void Graphics::renderLoadingScreen() {
-    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
-    printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
-    // Exit if we need more texture units
-    if (number_of_texture_units < 18) {
-        printf("You need at least 18 texture units to run this application. Exiting\n");
-        exit(-1);
-    }
     loadingScreen = Texture2DFileManager::the()->get(Texture2DCreator(loadingScreenPath));
     loadingScreen->generateMipmaps();
     loadingScreen->setMinFilter(GL_NEAREST_MIPMAP_LINEAR);
@@ -286,8 +289,8 @@ void Graphics::renderLoadingScreen() {
         .attributeLocations(fullscreen_quad_loading->getAttributeLocations()).create();
     loadingShader->use();
     loadingShader->setUniform("time", 0.0f);
-    loadingShader->setTexture("screen", loadingScreen, 16);
-    loadingShader->setTexture("screenContinue", loadingContinueScreen, 17);
+    loadingShader->setTexture("screen", loadingScreen, 0);
+    loadingShader->setTexture("screenContinue", loadingContinueScreen, 1);
     fullscreen_quad_loading->render();
 }
 

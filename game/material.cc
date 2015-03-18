@@ -1,5 +1,8 @@
 #include "material.hh"
 
+std::set<SharedTexture2D> Material::allTexturesSet = std::set<SharedTexture2D>();
+std::vector<SharedTexture2D> Material::allTexturesVector = std::vector<SharedTexture2D>();
+
 Material::Material(std::string filePath, float ambientFactor, float diffuseFactor,
         float specularFactor, float shininess, bool movingTexture) {
     reference = ACGL::OpenGL::Texture2DFileManager::the()->get(ACGL::OpenGL::Texture2DCreator(filePath));
@@ -11,6 +14,11 @@ Material::Material(std::string filePath, float ambientFactor, float diffuseFacto
     this->specularFactor = specularFactor;
     this->shininess = shininess;
     this->movingTexture = movingTexture;
+    unsigned int count = allTexturesSet.size();
+    allTexturesSet.insert(reference);
+    if (allTexturesSet.size() != count) {
+        allTexturesVector.push_back(reference);
+    }
 }
 
 Material::Material() {
@@ -41,4 +49,8 @@ float Material::getShininess() {
 
 bool Material::isMoving(){
     return movingTexture;
+}
+
+std::vector<SharedTexture2D>* Material::getAllTextures() {
+    return &allTexturesVector;
 }
