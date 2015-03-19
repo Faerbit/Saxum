@@ -19,6 +19,10 @@ Material::Material(std::string filePath, float ambientFactor, float diffuseFacto
     if (allTexturesSet.size() != count) {
         allTexturesVector.push_back(reference);
     }
+    textureUnit = std::distance(Material::getAllTextures()->begin(),
+            std::find(std::begin(*Material::getAllTextures()),
+        // first two texture units are used by the loading screen
+            std::end(*Material::getAllTextures()), reference)) + 2;
 }
 
 Material::Material() {
@@ -53,4 +57,8 @@ bool Material::isMoving(){
 
 std::vector<SharedTexture2D>* Material::getAllTextures() {
     return &allTexturesVector;
+}
+
+int Material::getTextureUnit() {
+    return textureUnit;
 }

@@ -29,8 +29,7 @@ void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         else {
             shader->setUniform("movingTexture", false);
         }
-        auto textureUnit = std::distance(Material::getAllTextures()->begin(), std::find(std::begin(*Material::getAllTextures()), std::end(*Material::getAllTextures()), material.getReference()));
-        shader->setUniform("uTexture", (int)textureUnit + 2);
+        shader->setUniform("uTexture", material.getTextureUnit());
         shader->setUniform("modelMatrix", modelMatrix);
     }
     if (lightingPass) {

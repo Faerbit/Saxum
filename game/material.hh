@@ -22,8 +22,10 @@ class Material{
         float getShininess();
         bool isMoving();
         static std::vector<SharedTexture2D>* getAllTextures();
+        int getTextureUnit();
 
     private:
+        int textureUnit;
         ACGL::OpenGL::SharedTexture2D reference;
         float ambientFactor;
         float diffuseFactor;
