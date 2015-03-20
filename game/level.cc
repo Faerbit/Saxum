@@ -101,6 +101,42 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
     }
 }
 
+void Level::enqueueObjects(std::vector<std::vector<Object*>>* renderQueue) {
+    int renderDistance = 0;
+    if ((int)farPlane % chunkSize == 0) {
+        renderDistance = (((int)skydomeSize)+chunkSize/2)/chunkSize;
+    }
+    else {
+        renderDistance = ((((int)skydomeSize)+chunkSize/2)/chunkSize) + 1;
+    }
+    int xPosition = ((int)cameraCenter->getPosition().x + (terrain.getHeightmapWidth()/2))/chunkSize;
+    int zPosition = ((int)cameraCenter->getPosition().z + (terrain.getHeightmapHeight()/2))/chunkSize;
+    int xStart = xPosition - renderDistance;
+    unsigned int xEnd = xPosition + renderDistance;
+    int zStart = zPosition - renderDistance;
+    unsigned int zEnd = zPosition + renderDistance;
+    if (xStart < 0) {
+        xStart = 0;
+    }
+    if (zStart < 0) {
+        zStart = 0;
+    }
+    if (xEnd >= chunks.size()) {
+        xEnd = chunks.size()-1;
+    }
+    if (zEnd >= chunks.at(0).size()) {
+        zEnd = chunks.at(0).size()-1;
+    }
+    for(unsigned int i = xStart; i<=xEnd; i++) {
+        for(unsigned int j = zStart; j<=zEnd; j++) {
+            chunks.at(i).at(j).enqueueObjects(renderQueue);
+        }
+    }
+    for(unsigned int i = 0; i<crossChunkObjects.size(); i++) {
+        renderQueue->at(crossChunkObjects.at(i)->getMaterial()->getTextureUnit() - 2).push_back(crossChunkObjects.at(i));
+    }
+}
+
 void Level::update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseDelta, 
         KeyboardState* keyboardState) {
     

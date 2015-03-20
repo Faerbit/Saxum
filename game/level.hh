@@ -77,6 +77,7 @@ class Level {
         void generateChunks(int chunkSize);
         std::vector<std::vector<Chunk>>* getChunks();
         void addToSpecificChunk(Object* object, int xPosition, int zPosition);
+        void enqueueObjects(std::vector<std::vector<Object*>>* renderQueue);
     private:
         lua_State* luaState=nullptr;
         std::vector<Object*> crossChunkObjects;

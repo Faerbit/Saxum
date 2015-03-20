@@ -1,7 +1,7 @@
 #pragma once
 
-#include "object.hh"
 #include <ACGL/OpenGL/Objects.hh>
+#include "object.hh"
 
 using namespace ACGL::OpenGL;
 
@@ -12,6 +12,7 @@ class Chunk {
         void render(SharedShaderProgram shader, bool lightingPass, bool texturePass,
             glm::mat4* viewProjcetionMatrix, std::vector<glm::mat4>* additionalMatrices=0);
         void addObject(Object* object);
+        void enqueueObjects(std::vector<std::vector<Object*>>* renderQueue);
     private:
         std::vector<Object*> objects;
 };

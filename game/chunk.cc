@@ -16,6 +16,12 @@ void Chunk::render(SharedShaderProgram shader, bool lightingPass, bool texturePa
     }
 }
 
+void Chunk::enqueueObjects(std::vector<std::vector<Object*>>* renderQueue) {
+    for(unsigned int i = 0; i<objects.size(); i++) {
+        renderQueue->at(objects.at(i)->getMaterial()->getTextureUnit() - 2).push_back(objects.at(i));
+    }
+}
+
 void Chunk::addObject(Object* object) {
     objects.push_back(object);
 }

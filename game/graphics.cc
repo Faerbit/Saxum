@@ -197,6 +197,11 @@ void Graphics::init(Level* level) {
     lightingShader->setUniform("fogColorRise", level->getFogColourRise());
     lightingShader->setUniform("fogColorNight", level->getFogColourNight());
     lightingShader->setUniform("ambientColor", level->getAmbientLight());
+
+    renderQueue = std::vector<std::vector<Object*>>(Material::getAllTextures()->size());
+    for (unsigned int i = 0; i<renderQueue.size(); i++) {
+        renderQueue.at(i) = std::vector<Object*>();
+    }
 }
 
 void Graphics::bindTextureUnits(){
@@ -486,7 +491,26 @@ void Graphics::render(double time)
 
         if (renderWorld) {
             // render the level
-            level->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
+            level->enqueueObjects(&renderQueue);
+            for (unsigned int i = 0; i<renderQueue.size(); i++) {
+                if (renderQueue.at(i).size() != 0) {
+                    Material* material = renderQueue.at(i).at(0)->getMaterial();
+                    if (material->isMoving()) {
+                        lightingShader->setUniform("movingTexture", true);
+                    }
+                    else {
+                        lightingShader->setUniform("movingTexture", false);
+                    }
+                    lightingShader->setUniform("uTexture", material->getTextureUnit());
+                    lightingShader->setUniform("ambientFactor", material->getAmbientFactor());
+                    lightingShader->setUniform("diffuseFactor", material->getDiffuseFactor());
+                    lightingShader->setUniform("specularFactor", material->getSpecularFactor());
+                    lightingShader->setUniform("shininess", material->getShininess());
+                    for(unsigned int j = 0; j<renderQueue.at(i).size(); j++) {
+                        renderQueue.at(i).at(j)->render(lightingShader, true, false, &lightingViewProjectionMatrix, &depthBiasVPs);
+                    }
+                }
+            }
         }
 
         if (renderDebug) {

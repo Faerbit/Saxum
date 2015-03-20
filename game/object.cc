@@ -33,11 +33,6 @@ void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
         shader->setUniform("modelMatrix", modelMatrix);
     }
     if (lightingPass) {
-    // set lightning parameters for this object
-        shader->setUniform("ambientFactor", material.getAmbientFactor());
-        shader->setUniform("diffuseFactor", material.getDiffuseFactor());
-        shader->setUniform("specularFactor", material.getSpecularFactor());
-        shader->setUniform("shininess", material.getShininess());
         // set model matrix
         shader->setUniform("modelMatrix", modelMatrix);
         // set shadowMVPs
@@ -57,4 +52,8 @@ void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
     shader->setUniform("modelViewProjectionMatrix", mvp);
     // draw
     model.getReference()->render();
+}
+
+Material* Object::getMaterial() {
+    return &material;
 }

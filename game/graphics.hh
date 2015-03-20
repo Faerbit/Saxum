@@ -88,7 +88,7 @@ class Graphics {
         SharedArrayBuffer debug_ab;
         SharedVertexArrayObject debug_vao;
         SharedShaderProgram debugShader;
-
+        std::vector<std::vector<Object*>> renderQueue;
 };
 
 #endif
