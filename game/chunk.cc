@@ -20,14 +20,14 @@ void Chunk::addObject(Object* object) {
     objects.push_back(object);
 }
 
-void Chunk::sortObjects(int materialCount) {
+void Chunk::sortObjects(int textureCount) {
     // init
-    sortedObjects = std::vector<std::vector<Object*>>(materialCount);
+    sortedObjects = std::vector<std::vector<Object*>>(textureCount);
     for(unsigned int i = 0; i<sortedObjects.size(); i++) {
         sortedObjects.at(i) = std::vector<Object*>();
     }
     for(unsigned int i = 0; i<objects.size(); i++){
-        sortedObjects.at(objects.at(i)->getMaterial()->getMaterialId()).push_back(objects.at(i));
+        sortedObjects.at(objects.at(i)->getMaterial()->getTextureUnit() - 2).push_back(objects.at(i));
     }
 }
 

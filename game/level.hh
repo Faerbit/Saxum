@@ -81,7 +81,7 @@ class Level {
         std::vector<std::vector<Chunk>>* getChunks();
         void addToSpecificChunk(Object* object, int xPosition, int zPosition);
         void enqueueObjects(Graphics* graphics);
-        void sortObjects(int materialCount);
+        void sortObjects(int textureCount);
     private:
         lua_State* luaState=nullptr;
         std::vector<Object*> crossChunkObjects;

@@ -2,8 +2,6 @@
 
 std::set<SharedTexture2D> Material::allTexturesSet = std::set<SharedTexture2D>();
 std::vector<SharedTexture2D> Material::allTexturesVector = std::vector<SharedTexture2D>();
-std::set<Material> Material::allMaterialsSet = std::set<Material>();
-std::vector<Material> Material::allMaterialsVector = std::vector<Material*>();
 
 Material::Material(std::string filePath, float ambientFactor, float diffuseFactor,
         float specularFactor, float shininess, bool movingTexture) {
@@ -25,15 +23,6 @@ Material::Material(std::string filePath, float ambientFactor, float diffuseFacto
             std::find(std::begin(*Material::getAllTextures()),
         // first two texture units are used by the loading screen
             std::end(*Material::getAllTextures()), reference)) + 2;
-
-    unsigned int materialCount = allMaterialsSet.size();
-    allMaterialsSet.insert(*this);
-    if (allMaterialsSet.size() != materialCount) {
-        allMaterialsVector.push_back(*this);
-    }
-    materialId = std::distance(Material::getAllMaterials()->begin(),
-            std::find(std::begin(*Material::getAllMaterials()),
-            std::end(*Material::getAllMaterials()), *this));
 }
 
 Material::Material() {

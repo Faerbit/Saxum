@@ -136,19 +136,19 @@ void Level::enqueueObjects(Graphics* graphics) {
     graphics->enqueueObjects(&sortedCrossChunkObjects);
 }
 
-void Level::sortObjects(int materialCount) {
+void Level::sortObjects(int textureCount) {
     for(unsigned int i = 0; i<chunks.size(); i++) {
         for(unsigned int j = 0; j<chunks.at(i).size(); j++) {
-            chunks.at(i).at(j).sortObjects(materialCount);
+            chunks.at(i).at(j).sortObjects(textureCount);
         }
     }
     // init
-    sortedCrossChunkObjects = std::vector<std::vector<Object*>>(materialCount);
+    sortedCrossChunkObjects = std::vector<std::vector<Object*>>(textureCount);
     for(unsigned int i = 0; i<sortedCrossChunkObjects.size(); i++) {
        sortedCrossChunkObjects.at(i) = std::vector<Object*>(); 
     }
     for(unsigned int i = 0; i<crossChunkObjects.size(); i++) {
-        sortedCrossChunkObjects.at(crossChunkObjects.at(i)->getMaterial()->getMaterialId())
+        sortedCrossChunkObjects.at(crossChunkObjects.at(i)->getMaterial()->getTextureUnit() - 2)
             .push_back(crossChunkObjects.at(i));
     }
 }
