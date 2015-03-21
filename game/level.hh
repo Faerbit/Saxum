@@ -33,7 +33,8 @@ class Level {
         void update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseDelta,
                 KeyboardState* keyboardState);
         void render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
-            glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs=0);
+                int chunkRenderDistance, glm::mat4* viewProjectionMatrix,
+                std::vector<glm::mat4>* shadowVPs=0);
         glm::vec3 getAmbientLight();
         Light* getDirectionalLight();
         std::vector<Light>* getLights();

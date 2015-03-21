@@ -52,17 +52,20 @@ void Level::load() {
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
 }
 
-void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
-        glm::mat4* viewProjectionMatrix, std::vector<glm::mat4>* shadowVPs) {
+void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass, 
+        int chunkRenderDistance, glm::mat4* viewProjectionMatrix, 
+        std::vector<glm::mat4>* shadowVPs) {
     int renderDistance = 0;
-    if ((int)farPlane % chunkSize == 0) {
-        renderDistance = (((int)skydomeSize)+chunkSize/2)/chunkSize;
+    if (chunkRenderDistance < 0) {
+        if ((int)farPlane % chunkSize == 0) {
+            renderDistance = (((int)skydomeSize)+chunkSize/2)/chunkSize;
+        }
+        else {
+            renderDistance = ((((int)skydomeSize)+chunkSize/2)/chunkSize) + 1;
+        }
     }
     else {
-        renderDistance = ((((int)skydomeSize)+chunkSize/2)/chunkSize) + 1;
-    }
-    if(!lightingPass) {
-        renderDistance = 1;
+        renderDistance = chunkRenderDistance;
     }
     int xPosition = ((int)cameraCenter->getPosition().x + (terrain.getHeightmapWidth()/2))/chunkSize;
     int zPosition = ((int)cameraCenter->getPosition().z + (terrain.getHeightmapHeight()/2))/chunkSize;

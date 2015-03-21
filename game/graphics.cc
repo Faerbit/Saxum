@@ -197,6 +197,14 @@ void Graphics::init(Level* level) {
     lightingShader->setUniform("fogColorRise", level->getFogColourRise());
     lightingShader->setUniform("fogColorNight", level->getFogColourNight());
     lightingShader->setUniform("ambientColor", level->getAmbientLight());
+    if(level->getDirectionalLight()) {
+        lightingShader->setUniform("directionalLightVector",
+            level->getDirectionalLight()->getPosition());
+        lightingShader->setUniform("directionalColor",
+            level->getDirectionalLight()->getColour());
+        lightingShader->setUniform("targetDirectionalIntensity",
+            level->getDirectionalLight()->getIntensity());
+    }
 
     level->sortObjects(Material::getAllTextures()->size());
     #ifdef SAXUM_DEBUG
@@ -379,7 +387,7 @@ void Graphics::render(double time)
                     glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * viewMatrix;
                     std::vector<glm::mat4> viewMatrixVector = std::vector<glm::mat4>();
                     viewMatrixVector.push_back(viewMatrix);
-                    level->render(depthCubeShader, false, &depthViewProjectionMatrix_face, &viewMatrixVector);
+                    level->render(depthCubeShader, false, 1, &depthViewProjectionMatrix_face, &viewMatrixVector);
                     if (!framebuffer_cube->isFrameBufferObjectComplete()) {
                         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
                     }
@@ -397,7 +405,7 @@ void Graphics::render(double time)
             for (unsigned int i = 0; i<framebuffer_directional.size(); i++) {
                 framebuffer_directional.at(i)->bind(); 
                 glClear(GL_DEPTH_BUFFER_BIT);
-                if (sunAngle > -0.6f) {
+                if (sunAngle > 0.0f) {
                     float projection_size = 0.0f;
                     switch(i) {
                         case 0:
@@ -412,7 +420,7 @@ void Graphics::render(double time)
                     }
                     depthViewProjectionMatrices.at(i) =  glm::ortho<float>(-projection_size, projection_size, -projection_size, projection_size, -farPlane/1.5f, farPlane/1.5f) *
                         glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-                    level->render(depthShader, false, &depthViewProjectionMatrices.at(i));
+                    level->render(depthShader, false, -1, &depthViewProjectionMatrices.at(i));
                     if (!framebuffer_directional.at(i)->isFrameBufferObjectComplete()) {
                         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
                     }
@@ -481,6 +489,10 @@ void Graphics::render(double time)
 
         // set fog Parameters
         lightingShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
+        if(level->getDirectionalLight()) {
+            lightingShader->setUniform("directionalLightVector",
+                level->getDirectionalLight()->getPosition());
+        }
         
         // set Material Parameters
         lightingShader->setUniform("camera", level->getPhysics()->getCameraPosition());
@@ -655,14 +667,6 @@ void Graphics::updateLights() {
             sizeof(lightIntensities),  (GLfloat*) lightIntensities);
     }
     // set directional Light
-    if(level->getDirectionalLight()) {
-        lightingShader->setUniform("directionalLightVector",
-            level->getDirectionalLight()->getPosition());
-        lightingShader->setUniform("directionalColor",
-            level->getDirectionalLight()->getColour());
-        lightingShader->setUniform("directionalIntensity",
-            level->getDirectionalLight()->getIntensity());
-    }
     bool isFlame[closestLights.size()];
     closestFlames = std::vector<Flame*>();
     for (unsigned int i = 0; i<closestLights.size(); i++) {

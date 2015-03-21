@@ -33,7 +33,7 @@ uniform int lightCount;
 uniform int maxShadowRenderCount;
 uniform vec3 directionalLightVector;
 uniform vec3 directionalColor;
-uniform float directionalIntensity;
+uniform float targetDirectionalIntensity;
 uniform vec3 lightSources[32];
 uniform vec3 lightColors[32];
 uniform float lightIntensities[32];
@@ -121,21 +121,25 @@ vec3 sunColor(float dot){
     return mix(directionalColor, vec3(fogColorRise), riseFactor);
 }
 
-float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord, float maxBias ) {
+float sunIntensity(float dot) {
+    return targetDirectionalIntensity * sin(2*dot);
+}
+
+float sampleDirectionalShadow(sampler2DShadow shadowMap, vec4 shadowCoord, float maxBias, float intensity) {
     float visibility = 1.0;
     const float stretching = 650.0;
     float bias = 0.001*tan(acos(clamp(dot(vNormal, -directionalLightVector), 0.0, 1.0)));
     bias = clamp(bias, 0.0, maxBias);
     for (int i=0; i<4; i++) {
-        visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/stretching, shadowCoord.z - bias)));
+        visibility -= intensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/stretching, shadowCoord.z - bias)));
     }
-    if (visibility == 1.0-(directionalIntensity/16)*4)
+    if (visibility == 1.0-(intensity/16)*4)
     {
-        visibility = 1.0-directionalIntensity;
+        visibility = 1.0-intensity;
     }
     else if (visibility != 1.0) {
         for (int i=0; i<12; i++) {
-            visibility -= directionalIntensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/stretching, shadowCoord.z - bias)));
+            visibility -= intensity/16*(1.0-texture(shadowMap, vec3(shadowCoord.xy + poissonDisk[i]/stretching, shadowCoord.z - bias)));
         }
     }
     return visibility;
@@ -170,28 +174,29 @@ void main()
     if(length(directionalLightVector)>0.0f) {
         vec3 directionalVector = normalize(directionalLightVector);
         sunAngle = dot(vec3(0.0, 1.0, 0.0), directionalVector);
-        if ( sunAngle > -0.6) {
+        if ( sunAngle > 0.0) {
             float directionalVisibility = 1.0f;
+            float directionalIntensity = sunIntensity(sunAngle);
             if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.2) {
                 if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.2) {
-                    directionalVisibility = sampleDirectionalShadow(shadowMap_directional0, shadowCoord0, 0.001);
+                    directionalVisibility = sampleDirectionalShadow(shadowMap_directional0, shadowCoord0, 0.001, directionalIntensity);
                 }
                 else if (distanceToBorder(shadowCoord0.xy) <= 0.5 && distanceToBorder(shadowCoord0.xy) > 0.0) {
-                    float directionalVisibility0 = sampleDirectionalShadow(shadowMap_directional0, shadowCoord0, 0.001);
-                    float directionalVisibility1 = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.002);
+                    float directionalVisibility0 = sampleDirectionalShadow(shadowMap_directional0, shadowCoord0, 0.001, directionalIntensity);
+                    float directionalVisibility1 = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.002, directionalIntensity);
                     directionalVisibility = mix(directionalVisibility0, directionalVisibility1, distanceToBorder(shadowCoord0.xy) * 5);
                 }
                 else {
-                    directionalVisibility = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.002);
+                    directionalVisibility = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.002, directionalIntensity);
                 }
             }
             else if (distanceToBorder(shadowCoord1.xy) <= 0.5 && distanceToBorder(shadowCoord1.xy) > 0.0) {
-                float directionalVisibility1 = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.01);
-                float directionalVisibility2 = sampleDirectionalShadow(shadowMap_directional2, shadowCoord2, 0.01);
+                float directionalVisibility1 = sampleDirectionalShadow(shadowMap_directional1, shadowCoord1, 0.002, directionalIntensity);
+                float directionalVisibility2 = sampleDirectionalShadow(shadowMap_directional2, shadowCoord2, 0.01, directionalIntensity);
                 directionalVisibility = mix(directionalVisibility1, directionalVisibility2, distanceToBorder(shadowCoord1.xy) * 5);
             }
             else {
-                directionalVisibility = sampleDirectionalShadow(shadowMap_directional2, shadowCoord2, 0.01);
+                directionalVisibility = sampleDirectionalShadow(shadowMap_directional2, shadowCoord2, 0.01, directionalIntensity);
             }
             diffuseColor += clamp(dot(normalize(vNormal), directionalVector)
             *diffuseFactor*directionalIntensity*sunColor(sunAngle), 0.0, 1.0)*directionalVisibility;
