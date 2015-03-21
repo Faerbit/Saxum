@@ -518,8 +518,24 @@ void Graphics::render(double time)
                     }
                 }
             }
+            // render water plane last for correct transparency
+            if (level->getWaterPlane()) {
+                Material* material = level->getWaterPlane()->getMaterial();
+                if (material->isMoving()) {
+                    lightingShader->setUniform("movingTexture", true);
+                }
+                else {
+                    lightingShader->setUniform("movingTexture", false);
+                }
+                lightingShader->setUniform("uTexture", material->getTextureUnit());
+                lightingShader->setUniform("ambientFactor", material->getAmbientFactor());
+                lightingShader->setUniform("diffuseFactor", material->getDiffuseFactor());
+                lightingShader->setUniform("specularFactor", material->getSpecularFactor());
+                lightingShader->setUniform("shininess", material->getShininess());
+                level->getWaterPlane()->render(lightingShader, true, false, &lightingViewProjectionMatrix, &depthBiasVPs);
+            }
+            renderQueue.clear();
         }
-        renderQueue.clear();
 
         if (renderDebug) {
             debugDrawer.setDebugMode(btIDebugDraw::DBG_DrawWireframe);

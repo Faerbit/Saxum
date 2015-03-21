@@ -100,9 +100,6 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
             crossChunkObjects.at(i)->render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
         }
     }
-    if (lightingPass && waterPlane) {
-            waterPlane->render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
-    }
 }
 
 void Level::enqueueObjects(Graphics* graphics) {
@@ -462,4 +459,8 @@ void Level::generateChunks(int chunkSize) {
 
 std::vector<std::vector<Chunk>>* Level::getChunks() {
     return &chunks;
+}
+
+Object* Level::getWaterPlane() {
+    return waterPlane;
 }

@@ -46,6 +46,7 @@ class Level {
         void setSkydomeSize(float size);
         float getSkydomeSize();
         void setWaterPlane(Object* water);
+        Object* getWaterPlane();
         Skydome* getSkydome();
         std::vector<Object*>* getAllObjects();
         std::vector<Object*>* getPhysicsObjects();
