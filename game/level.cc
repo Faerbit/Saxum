@@ -61,6 +61,9 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
     else {
         renderDistance = ((((int)skydomeSize)+chunkSize/2)/chunkSize) + 1;
     }
+    if(!lightingPass) {
+        renderDistance = 1;
+    }
     int xPosition = ((int)cameraCenter->getPosition().x + (terrain.getHeightmapWidth()/2))/chunkSize;
     int zPosition = ((int)cameraCenter->getPosition().z + (terrain.getHeightmapHeight()/2))/chunkSize;
     int xStart = xPosition - renderDistance;

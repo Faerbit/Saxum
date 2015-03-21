@@ -2,7 +2,7 @@
 #include <ACGL/OpenGL/Objects/VertexArrayObject.hh>
 using namespace tinyxml2;
 
-const int chunkSize = 30;
+const int chunkSize = 25;
 
 Loader::Loader() {
 }
