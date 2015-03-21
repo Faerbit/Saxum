@@ -16,12 +16,21 @@ void Chunk::render(SharedShaderProgram shader, bool lightingPass, bool texturePa
     }
 }
 
-void Chunk::enqueueObjects(std::vector<std::vector<Object*>>* renderQueue) {
-    for(unsigned int i = 0; i<objects.size(); i++) {
-        renderQueue->at(objects.at(i)->getMaterial()->getTextureUnit() - 2).push_back(objects.at(i));
+void Chunk::addObject(Object* object) {
+    objects.push_back(object);
+}
+
+void Chunk::sortObjects(int materialCount) {
+    // init
+    sortedObjects = std::vector<std::vector<Object*>>(materialCount);
+    for(unsigned int i = 0; i<sortedObjects.size(); i++) {
+        sortedObjects.at(i) = std::vector<Object*>();
+    }
+    for(unsigned int i = 0; i<objects.size(); i++){
+        sortedObjects.at(objects.at(i)->getMaterial()->getMaterialId()).push_back(objects.at(i));
     }
 }
 
-void Chunk::addObject(Object* object) {
-    objects.push_back(object);
+std::vector<std::vector<Object*>>* Chunk::getSortedObjects() {
+    return &sortedObjects;
 }

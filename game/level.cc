@@ -1,6 +1,7 @@
 #include "level.hh"
 #include "loader.hh"
 #include <string>
+#include "graphics.hh"
 
 Level::Level(std::string xmlFilePath) {
     // default value
@@ -101,7 +102,7 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
     }
 }
 
-void Level::enqueueObjects(std::vector<std::vector<Object*>>* renderQueue) {
+void Level::enqueueObjects(Graphics* graphics) {
     int renderDistance = 0;
     if ((int)farPlane % chunkSize == 0) {
         renderDistance = (((int)skydomeSize)+chunkSize/2)/chunkSize;
@@ -129,11 +130,26 @@ void Level::enqueueObjects(std::vector<std::vector<Object*>>* renderQueue) {
     }
     for(unsigned int i = xStart; i<=xEnd; i++) {
         for(unsigned int j = zStart; j<=zEnd; j++) {
-            chunks.at(i).at(j).enqueueObjects(renderQueue);
+            graphics->enqueueObjects(chunks.at(i).at(j).getSortedObjects());
         }
     }
+    graphics->enqueueObjects(&sortedCrossChunkObjects);
+}
+
+void Level::sortObjects(int materialCount) {
+    for(unsigned int i = 0; i<chunks.size(); i++) {
+        for(unsigned int j = 0; j<chunks.at(i).size(); j++) {
+            chunks.at(i).at(j).sortObjects(materialCount);
+        }
+    }
+    // init
+    sortedCrossChunkObjects = std::vector<std::vector<Object*>>(materialCount);
+    for(unsigned int i = 0; i<sortedCrossChunkObjects.size(); i++) {
+       sortedCrossChunkObjects.at(i) = std::vector<Object*>(); 
+    }
     for(unsigned int i = 0; i<crossChunkObjects.size(); i++) {
-        renderQueue->at(crossChunkObjects.at(i)->getMaterial()->getTextureUnit() - 2).push_back(crossChunkObjects.at(i));
+        sortedCrossChunkObjects.at(crossChunkObjects.at(i)->getMaterial()->getMaterialId())
+            .push_back(crossChunkObjects.at(i));
     }
 }
 

@@ -21,6 +21,9 @@ extern "C" {
 }
 #include "LuaBridge.h"
 
+// forward declaration
+class Graphics;
+
 class Level {
     public:
         Level(std::string xmlFilePath);
@@ -77,10 +80,12 @@ class Level {
         void generateChunks(int chunkSize);
         std::vector<std::vector<Chunk>>* getChunks();
         void addToSpecificChunk(Object* object, int xPosition, int zPosition);
-        void enqueueObjects(std::vector<std::vector<Object*>>* renderQueue);
+        void enqueueObjects(Graphics* graphics);
+        void sortObjects(int materialCount);
     private:
         lua_State* luaState=nullptr;
         std::vector<Object*> crossChunkObjects;
+        std::vector<std::vector<Object*>> sortedCrossChunkObjects;
         std::vector<Object*> allObjects;
         std::vector<Object*> physicsObjects;
         std::vector<std::vector<Chunk>> chunks;

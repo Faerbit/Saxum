@@ -198,10 +198,11 @@ void Graphics::init(Level* level) {
     lightingShader->setUniform("fogColorNight", level->getFogColourNight());
     lightingShader->setUniform("ambientColor", level->getAmbientLight());
 
-    renderQueue = std::vector<std::vector<Object*>>(Material::getAllTextures()->size());
-    for (unsigned int i = 0; i<renderQueue.size(); i++) {
-        renderQueue.at(i) = std::vector<Object*>();
-    }
+    level->sortObjects(Material::getAllMaterials()->size());
+    #ifdef SAXUM_DEBUG
+        std::cout << "There were " << Material::getAllMaterials()->size()
+                <<  " materials used in this level." << std::endl;
+    #endif
 }
 
 void Graphics::bindTextureUnits(){
@@ -491,23 +492,24 @@ void Graphics::render(double time)
 
         if (renderWorld) {
             // render the level
-            level->enqueueObjects(&renderQueue);
-            for (unsigned int i = 0; i<renderQueue.size(); i++) {
-                if (renderQueue.at(i).size() != 0) {
-                    Material* material = renderQueue.at(i).at(0)->getMaterial();
-                    if (material->isMoving()) {
-                        lightingShader->setUniform("movingTexture", true);
+            level->enqueueObjects(this);
+            for (unsigned int i = 0; i<Material::getAllTextures()->size(); i++) {
+                Material* material = &Material::getAllTextures()->at(i);
+                if (material->isMoving()) {
+                    lightingShader->setUniform("movingTexture", true);
+                }
+                else {
+                    lightingShader->setUniform("movingTexture", false);
+                }
+                lightingShader->setUniform("uTexture", material->getTextureUnit());
+                lightingShader->setUniform("ambientFactor", material->getAmbientFactor());
+                lightingShader->setUniform("diffuseFactor", material->getDiffuseFactor());
+                lightingShader->setUniform("specularFactor", material->getSpecularFactor());
+                lightingShader->setUniform("shininess", material->getShininess());
+                for(unsigned int j = 0; j<renderQueue.size(); j++) {
+                    for(unsigned int k = 0; k<renderQueue.at(j)->at(i).size(); k++) {
+                        renderQueue.at(j)->at(i).at(k)->render(lightingShader, true, false, &lightingViewProjectionMatrix, &depthBiasVPs);
                     }
-                    else {
-                        lightingShader->setUniform("movingTexture", false);
-                    }
-                    lightingShader->setUniform("uTexture", material->getTextureUnit());
-                    lightingShader->setUniform("ambientFactor", material->getAmbientFactor());
-                    lightingShader->setUniform("diffuseFactor", material->getDiffuseFactor());
-                    lightingShader->setUniform("specularFactor", material->getSpecularFactor());
-                    lightingShader->setUniform("shininess", material->getShininess());
-                    for(unsigned int j = 0; j<renderQueue.at(i).size(); j++) {
-                        renderQueue.at(i).at(j)->render(lightingShader, true, false, &lightingViewProjectionMatrix, &depthBiasVPs);
                     }
                 }
             }
@@ -749,4 +751,8 @@ void Graphics::setRenderWorld(bool state) {
 
 bool Graphics::getRenderWorld() {
     return renderWorld;
+}
+
+void Graphics::enqueueObjects(std::vector<std::vector<Object*>>* queue){
+    renderQueue.push_back(queue);
 }
