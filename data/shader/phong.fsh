@@ -209,7 +209,14 @@ void main()
         float distance = length(lightDirection);
         float pointVisibility = 1.0f;
         // only take lights into account with meaningful contribution
-        if (distance < farPlane) {
+        float intensity = 0.0f;
+        if (isFlame[i] == true) {
+            intensity = clamp(exp(-(1/(lightIntensities[i] + flickerFunction(i)))*distance), 0.0, 1.0);
+        }
+        else {
+            intensity = clamp(exp(-(1/lightIntensities[i])*distance), 0.0, 1.0);
+        }
+        if (intensity > 0.005) {
             if (i == 0 && i<maxShadowRenderCount) {
                 pointVisibility = samplePointShadow(shadowMap_cube0, lightDirection);
             }
@@ -241,13 +248,6 @@ void main()
                 pointVisibility = samplePointShadow(shadowMap_cube9, lightDirection);
             }
             vec3 lightVector = normalize(lightSources[i]-vec3(fragPosition));
-            float intensity = 0.0f;
-            if (isFlame[i] == true) {
-                intensity = clamp(exp(-(1/(lightIntensities[i] + flickerFunction(i)))*distance), 0.0, 1.0);
-            }
-            else {
-                intensity = clamp(exp(-(1/lightIntensities[i])*distance), 0.0, 1.0);
-            }
             diffuseColor += clamp(dot(normalize(vNormal), lightVector)
             *diffuseFactor*intensity*lightColors[i]*pointVisibility, 0.0, 1.0);
             vec3 cameraVector = normalize(camera - vec3(fragPosition));
