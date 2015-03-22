@@ -97,7 +97,7 @@ SharedVertexArrayObject Terrain::makeTriangleMesh(int startX, int startZ, int en
     }
     
     ab->setDataElements(numVertices, abData);
-    delete abData;
+    delete[] abData;
     vao->bind();
     vao->setMode(GL_TRIANGLE_STRIP);
     vao->attachAllAttributes(ab);
