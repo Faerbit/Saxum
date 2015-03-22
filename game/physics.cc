@@ -479,7 +479,6 @@ void Physics::addSphere(float rad, Entity entity, float mass, float dampningL, f
 void Physics::prepareCollisionDetection()
 {
     playerTerrainCol = playerObjectColision = false;
-    int numManifods = world->getDispatcher()->getNumManifolds();
 }
 
 bool Physics::playerWithGround()
