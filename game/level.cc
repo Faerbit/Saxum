@@ -8,7 +8,6 @@ Level::Level(std::string xmlFilePath) {
     skydomeSize = 50.0f;
     physics = Physics();
     this->xmlFilePath = xmlFilePath;
-    this->farPlane = farPlane;
 }
 
 Level::Level() {
