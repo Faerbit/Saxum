@@ -372,6 +372,7 @@ glm::vec3 Level::getAmbientLight() {
 }
 
 std::vector<Light*>* Level::getLights() {
+    std::lock_guard<std::mutex> lock(light_mutex);
     return &lights;
 }
 
@@ -508,6 +509,7 @@ void Level::setCameraCenter(Object* object) {
 }
 
 void Level::addLight(Light light) {
+    std::lock_guard<std::mutex> lock(light_mutex);
     Light *add_light = new Light(light);
     this->lights.push_back(add_light);
 }
@@ -517,11 +519,13 @@ void Level::preloadLightPosition(float xPos, float yPos, float zPos){
 }
 
 void Level::addLightByParameters(float redColour, float greenColour, float blueColour,  float intensity, float flameYOffset, float flameHeight, float flameWidth){
+    std::lock_guard<std::mutex> lock(light_mutex);
     glm::vec3 colour = glm::vec3(redColour, greenColour, blueColour);
     this->lights.push_back(new Light(nextLightPosition, colour, intensity, flameYOffset, flameHeight, flameWidth));
 }
 
 void Level::deleteFourLights(){
+    std::lock_guard<std::mutex> lock(light_mutex);
     int indice = lights.size()-4;
     lights.erase(lights.begin() + indice);
     lights.erase(lights.begin() + indice);
@@ -612,6 +616,7 @@ bool Level::compareLightDistances(Light* a, Light* b) {
 }
 
 std::vector<Light*>* Level::getClosestLights() {
+    std::lock_guard<std::mutex> lock(light_mutex);
     closestLights = std::vector<Light*>(lights);
     std::sort(closestLights.begin(),
         closestLights.end(),
