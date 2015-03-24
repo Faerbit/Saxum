@@ -1,6 +1,4 @@
 #include "object.hh"
-//#include <iterator>
-//#include <algorithm>
 
 Object::Object(Model model, Material material, glm::vec3 position, glm::vec3 rotation, bool renderable) :
         Entity(position, rotation) {
