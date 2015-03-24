@@ -47,23 +47,28 @@ Entity::~Entity(){
 }
 
 glm::vec3 Entity::getPosition() {
+    std::lock_guard<std::mutex> lock(mutex);
     return position;
 }
 
 glm::mat4 Entity::getRotation() {
+    std::lock_guard<std::mutex> lock(mutex);
     return rotation;
 }
 
 void Entity::setPosition(glm::vec3 position) {
+    std::lock_guard<std::mutex> lock(mutex);
     this->position = position;
 }
 
 void Entity::setRotation(glm::vec3 rotation) {
+    std::lock_guard<std::mutex> lock(mutex);
     this->rotation = glm::rotate(rotation.x, glm::vec3(1.0f, 0.0f, 0.0f))
         * glm::rotate(rotation.y, glm::vec3(0.0f, 1.0f, 0.0f))
         * glm::rotate(rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 }
 
 void Entity::setRotation(glm::mat4 rotation) {
+    std::lock_guard<std::mutex> lock(mutex);
     this->rotation = rotation;
 }
