@@ -7,8 +7,7 @@ Camera::Camera(glm::vec2 rotation, float distance) {
 }
 
 Camera::Camera() {
-    rotation = glm::vec2(0.0f, 0.0f);
-    distance = 5.0f;
+    Camera(glm::vec2(0.0f, 0.0f), 5.0f);
 }
 
 Camera::~Camera() {
