@@ -37,8 +37,6 @@ class Graphics {
     private:
         void bindTextureUnits();
         void updateLights();
-        void updateClosestLights();
-        bool compareLightDistances(Light a, Light b);
         void saveDepthBufferToDisk(int face, std::string);
         double lastLightUpdate;
         double lastWindUpdate;
@@ -54,7 +52,7 @@ class Graphics {
         std::string loadingScreenContinuePath;
         SharedTexture2D loadingScreen;
         SharedTexture2D loadingContinueScreen;
-        std::vector<Light> closestLights;
+        std::vector<Light*>* closestLights;
         std::vector<Flame*> closestFlames;
         SharedShaderProgram loadingShader;
         SharedShaderProgram lightingShader;

@@ -18,6 +18,9 @@ Level::~Level() {
         lua_close(luaState);
     }
     delete(waterPlane);
+    for(unsigned int i = 0; i<lights.size(); i++) {
+        delete(lights.at(i));
+    }
 }
 
 void Level::load() {
@@ -238,7 +241,7 @@ glm::vec3 Level::getAmbientLight() {
     return ambientLight;
 }
 
-std::vector<Light>* Level::getLights() {
+std::vector<Light*>* Level::getLights() {
     return &lights;
 }
 
@@ -375,7 +378,8 @@ void Level::setCameraCenter(Object* object) {
 }
 
 void Level::addLight(Light light) {
-    this->lights.push_back(light);
+    Light *add_light = new Light(light);
+    this->lights.push_back(add_light);
 }
 
 void Level::preloadLightPosition(float xPos, float yPos, float zPos){
@@ -384,7 +388,7 @@ void Level::preloadLightPosition(float xPos, float yPos, float zPos){
 
 void Level::addLightByParameters(float redColour, float greenColour, float blueColour,  float intensity, float flameYOffset, float flameHeight, float flameWidth){
     glm::vec3 colour = glm::vec3(redColour, greenColour, blueColour);
-    this->lights.push_back(Light(nextLightPosition, colour, intensity, flameYOffset, flameHeight, flameWidth));
+    this->lights.push_back(new Light(nextLightPosition, colour, intensity, flameYOffset, flameHeight, flameWidth));
 }
 
 void Level::deleteFourLights(){
@@ -465,4 +469,26 @@ std::vector<std::vector<Chunk>>* Level::getChunks() {
 
 Object* Level::getWaterPlane() {
     return waterPlane;
+}
+
+bool Level::compareLightDistances(Light* a, Light* b) {
+    if (glm::distance(cameraCenter->getPosition(), a->getPosition()) <
+            glm::distance(cameraCenter->getPosition(), b->getPosition())) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+std::vector<Light*>* Level::getClosestLights() {
+    closestLights = std::vector<Light*>(lights);
+    std::sort(closestLights.begin(),
+        closestLights.end(),
+        [this](Light* a, Light* b) {return compareLightDistances(a, b); });
+    if (lights.size() > 15) {
+        closestLights = std::vector<Light*>(&closestLights[0],
+                &closestLights[15]);
+    }
+    return &closestLights;
 }
