@@ -93,13 +93,13 @@ class Level {
         std::vector<std::vector<Chunk>> chunks;
         std::vector<Light> lights;
         std::vector<Trigger> triggers;
-        Object* waterPlane;
+        Object* waterPlane=nullptr;
         glm::vec3 ambientLight;
         glm::vec4 fogColourDay;
         glm::vec4 fogColourRise;
         glm::vec4 fogColourNight;
         Light directionalLight;
-        Object* cameraCenter;
+        Object* cameraCenter=nullptr;
         int playerIndex;
         Skydome skydome;
         Physics physics;
