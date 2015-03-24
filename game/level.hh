@@ -27,6 +27,10 @@ class Graphics;
 class Level {
     public:
         Level(std::string xmlFilePath);
+        Level(const Level &other);
+        Level(const Level &&other);
+        Level& operator=(const Level &other);
+        Level& operator=(const Level &&other);
         Level();
         ~Level();
         void load();
@@ -114,6 +118,7 @@ class Level {
         int chunkSize;
         float farPlane;
         bool compareLightDistances(Light* a, Light* b);
+        mutable std::mutex light_mutex;
 };
 
 #endif
