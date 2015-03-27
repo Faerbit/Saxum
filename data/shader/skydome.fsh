@@ -80,8 +80,8 @@ void main() {
     fogFactor *= clamp((1.0-((fragPosition.y-40.0)/30.0)), 0.0, 1.0);
     if (distanceToSun < sunSize) {
         float sunIntensity = clamp(0.3*exp(1/(distanceToSun/sunSize))-exp(1.0)*0.3, 0.0, 1.0);
-        vec4 color = mix(textureColor, vec4(sunColorFunc(sunAngle), sunIntensity), sunIntensity);
-        oColor = mix(color, fogColor(-sunAngle), fogFactor);
+        vec4 fogcolor = mix(textureColor, fogColor(-sunAngle), fogFactor);
+        oColor = mix(fogcolor, vec4(sunColorFunc(sunAngle), sunIntensity), sunIntensity*sin(2*(-sunAngle)));
     }
     else {
         oColor = mix(textureColor, fogColor(-sunAngle), fogFactor);
