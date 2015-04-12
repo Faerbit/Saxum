@@ -61,7 +61,7 @@ vec3 sunColorFunc(float dot) {
     else {
         riseFactor = cos(2*dot);
     }
-    return mix(sunColor, vec3(fogColorRise), riseFactor);
+    return mix(sunColor, vec3(fogColorRise)*1.4, riseFactor);
 }
 
 void main() {
