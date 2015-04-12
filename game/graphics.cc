@@ -319,39 +319,6 @@ void Graphics::render(double time)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         loadingShader->use();
         loadingShader->setUniform("time", float(time));
-        float quadData[24];
-        if (loadingScreenWidth/loadingScreenHeight < ((float)windowSize.x)/((float)windowSize.y)) {
-            float quadTemp[24] ={
-            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f,
-             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  1.0f, 1.0f,
-             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
-
-             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
-            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  0.0f, 0.0f,
-            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f
-            };
-            for(int i = 0; i<24; i++) {
-                quadData[i] = quadTemp[i];
-            }
-        }
-        else {
-            float quadTemp[24] = {
-                -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f,
-                 1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 1.0f,
-                 1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
-
-                 1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
-                -1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 0.0f,
-                -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f
-            };
-            for(int i = 0; i<24; i++) {
-                quadData[i] = quadTemp[i];
-            }
-        }
-
-        fullscreen_quad_ab_loading->setDataElements(6, quadData);
-        fullscreen_quad_loading = SharedVertexArrayObject(new VertexArrayObject);
-        fullscreen_quad_loading->attachAllAttributes(fullscreen_quad_ab_loading);
         fullscreen_quad_loading->render();
     }
     else {
@@ -671,6 +638,41 @@ void Graphics::resize(glm::uvec2 windowSize) {
         flamePostShader->setUniform("windowSizeX", int(windowSize.x));
         flamePostShader->setUniform("windowSizeY", int(windowSize.y));
         bindTextureUnits();
+    }
+    else {
+        float quadData[24];
+        if (loadingScreenWidth/loadingScreenHeight < ((float)windowSize.x)/((float)windowSize.y)) {
+            float quadTemp[24] ={
+            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f,
+             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  1.0f, 1.0f,
+             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+
+             (((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  1.0f, 0.0f,
+            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)), -1.0f,  0.0f, 0.0f,
+            -(((float)windowSize.y*loadingScreenWidth)/((float)windowSize.x*loadingScreenHeight)),  1.0f,  0.0f, 1.0f
+            };
+            for(int i = 0; i<24; i++) {
+                quadData[i] = quadTemp[i];
+            }
+        }
+        else {
+            float quadTemp[24] = {
+                -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f,
+                 1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 1.0f,
+                 1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+
+                 1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  1.0f, 0.0f,
+                -1.0f, -((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 0.0f,
+                -1.0f,  ((float)windowSize.x*loadingScreenHeight)/((float)windowSize.y*loadingScreenWidth),  0.0f, 1.0f
+            };
+            for(int i = 0; i<24; i++) {
+                quadData[i] = quadTemp[i];
+            }
+        }
+
+        fullscreen_quad_ab_loading->setDataElements(6, quadData);
+        fullscreen_quad_loading = SharedVertexArrayObject(new VertexArrayObject);
+        fullscreen_quad_loading->attachAllAttributes(fullscreen_quad_ab_loading);
     }
 }
 
