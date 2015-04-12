@@ -220,19 +220,19 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
     for(unsigned int i = xStart; i<=xEnd; i++) {
         for(unsigned int j = zStart; j<=zEnd; j++) {
             if (lightingPass) {
-                chunks.at(i).at(j).render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
+                chunks.at(i).at(j).render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
             }
             else {
-                chunks.at(i).at(j).render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
+                chunks.at(i).at(j).render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
             }
         }
     }
     for (unsigned int i = 0; i<crossChunkObjects.size(); i++) {
         if (lightingPass) {
-            crossChunkObjects.at(i)->render(shader, lightingPass, true, viewProjectionMatrix, shadowVPs);
+            crossChunkObjects.at(i)->render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
         }
         else {
-            crossChunkObjects.at(i)->render(shader, lightingPass, false, viewProjectionMatrix, shadowVPs);
+            crossChunkObjects.at(i)->render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
         }
     }
 }

@@ -9,7 +9,7 @@ class Chunk {
     public:
         Chunk();
         ~Chunk();
-        void render(SharedShaderProgram shader, bool lightingPass, bool texturePass,
+        void render(SharedShaderProgram shader, bool lightingPass,
             glm::mat4* viewProjcetionMatrix, std::vector<glm::mat4>* additionalMatrices=0);
         void addObject(Object* object);
         void sortObjects(int textureCount);

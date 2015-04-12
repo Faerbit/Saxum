@@ -1,11 +1,18 @@
 #pragma once
 #include "object.hh"
+#include <ACGL/OpenGL/Objects.hh>
 
-class Skydome : public Object {
+using namespace ACGL::OpenGL;
+using namespace std;
+
+class Skydome : public Object{
     public:
-        Skydome(Model model, Material material, Material nightTexture);
+        Skydome(Model model, string dayTexturePath, string nightTexturePath);
         Skydome();
-        Material* getNightTexture();
+        SharedTexture2D getNightTexture();
+        SharedTexture2D getDayTexture();
     private:
-        Material nightTexture;
+        SharedTexture2D nightTexture;
+        SharedTexture2D dayTexture;
+
 };

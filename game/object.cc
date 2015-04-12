@@ -14,22 +14,13 @@ Object::~Object() {
 }
 
 void Object::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
-    bool texturePass, glm::mat4* viewProjectionMatrix,
+    glm::mat4* viewProjectionMatrix,
     std::vector<glm::mat4>* additionalMatrices) {
     if (!renderable) {
         return;
     }
     glm::mat4 modelMatrix = glm::translate(getPosition()) * getRotation() * glm::scale<float>(glm::vec3(model.getScale()));
-    if(texturePass) {
-        if (material.isMoving()) {
-            shader->setUniform("movingTexture", true);
-        }
-        else {
-            shader->setUniform("movingTexture", false);
-        }
-        shader->setUniform("uTexture", material.getTextureUnit());
-        shader->setUniform("modelMatrix", modelMatrix);
-    }
+    shader->setUniform("modelMatrix", modelMatrix);
     if (lightingPass) {
         // set model matrix
         shader->setUniform("modelMatrix", modelMatrix);

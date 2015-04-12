@@ -123,15 +123,13 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
         std::cout << "The texture file " << skydomeTexturePath << " does not exist." << std::endl;
         exit(-1);
     }
-    Material skydomeMaterial = Material(skydomeTexture, 1.0f, 0.0f, 0.0f, 0.0f);
     std::string nightTexture = queryString(skydomeElement, "nightTexture");
     std::string nightTexturePath = "../" + globalTexturePath + nightTexture;
     if(stat(nightTexturePath.c_str(), &buf) != 0){
         std::cout << "The texture file " << nightTexturePath << " does not exist." << std::endl;
         exit(-1);
     }
-    Material nightMaterial = Material(nightTexture, 1.0f, 0.0f, 0.0f, 0.0f);
-    Skydome skydomeObject = Skydome(skydomeModel, skydomeMaterial, nightMaterial);
+    Skydome skydomeObject = Skydome(skydomeModel, skydomeTexture, nightTexture);
     level->setSkydomeObject(skydomeObject);
     
     //load the waterPlane

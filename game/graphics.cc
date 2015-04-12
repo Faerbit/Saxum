@@ -241,12 +241,13 @@ void Graphics::bindTextureUnits(){
     flamePostShader->setTexture("light_fbo", light_fbo_color_texture, textureCount + 15);
 
     skydomeShader->use();
-    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture()->getReference(), textureCount + 16);
+    skydomeShader->setTexture("dayTexture", level->getSkydome()->getDayTexture(), textureCount + 16);
+    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture(), textureCount + 17);
 
     loadingShader->use(); 
-    loadingShader->setTexture("screen", loadingScreen, textureCount + 17);
-    loadingShader->setTexture("screenContinue", loadingContinueScreen, textureCount + 18);
-    printf("This application used %d texture units.\n", textureCount + 18);
+    loadingShader->setTexture("screen", loadingScreen, textureCount + 18);
+    loadingShader->setTexture("screenContinue", loadingContinueScreen, textureCount + 19);
+    printf("This application used %d texture units.\n", textureCount + 19);
 }
 
 void Graphics::renderLoadingScreen() {
@@ -437,7 +438,7 @@ void Graphics::render(double time)
         // set fog Parameters
         skydomeShader->setUniform("cameraCenter", level->getCameraCenter()->getPosition());
         skydomeShader->setUniform("directionalVector", level->getDirectionalLight()->getPosition());
-        level->getSkydome()->render(skydomeShader, false, true, &lightingViewProjectionMatrix);
+        level->getSkydome()->render(skydomeShader, false, &lightingViewProjectionMatrix);
         
         lightingShader->use();
         
@@ -492,7 +493,7 @@ void Graphics::render(double time)
                             lightingShader->setUniform("shininess", material->getShininess());
                         }
                         for(unsigned int k = 0; k<renderQueue.at(j)->at(i).size(); k++) {
-                        renderQueue.at(j)->at(i).at(k)->render(lightingShader, true, false, &lightingViewProjectionMatrix, &depthBiasVPs);
+                        renderQueue.at(j)->at(i).at(k)->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
                         }
                     }
                 }
@@ -511,7 +512,7 @@ void Graphics::render(double time)
                 lightingShader->setUniform("diffuseFactor", material->getDiffuseFactor());
                 lightingShader->setUniform("specularFactor", material->getSpecularFactor());
                 lightingShader->setUniform("shininess", material->getShininess());
-                level->getWaterPlane()->render(lightingShader, true, false, &lightingViewProjectionMatrix, &depthBiasVPs);
+                level->getWaterPlane()->render(lightingShader, true, &lightingViewProjectionMatrix, &depthBiasVPs);
             }
             renderQueue.clear();
         }

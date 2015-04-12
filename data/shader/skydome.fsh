@@ -6,7 +6,7 @@ in vec4 sunPosition;
 
 out vec4 oColor;
 
-uniform sampler2D uTexture;
+uniform sampler2D dayTexture;
 uniform sampler2D nightTexture;
 uniform float farPlane;
 uniform vec4 fogColorDay;
@@ -67,7 +67,7 @@ vec3 sunColorFunc(float dot) {
 void main() {
     vec4 textureColor = vec4(0.0, 0.0, 0.0, 1.0);
     float sunAngle = -dot(normalize(directionalVector), vec3(0.0, 1.0, 0.0));
-    vec4 dayColor = texture(uTexture, vTexCoord);
+    vec4 dayColor = texture(dayTexture, vTexCoord);
     if (sunAngle >= 0.0) {
         textureColor = mix(dayColor, texture(nightTexture, vTexCoord), sunAngle);
     }

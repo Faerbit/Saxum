@@ -9,10 +9,10 @@ Chunk::~Chunk() {
     }
 }
 
-void Chunk::render(SharedShaderProgram shader, bool lightingPass, bool texturePass,
+void Chunk::render(SharedShaderProgram shader, bool lightingPass,
     glm::mat4* viewProjcetionMatrix, std::vector<glm::mat4>* additionalMatrices) {
     for(unsigned int i = 0; i<objects.size(); i++) {
-        objects.at(i)->render(shader, lightingPass, texturePass, viewProjcetionMatrix, additionalMatrices);
+        objects.at(i)->render(shader, lightingPass, viewProjcetionMatrix, additionalMatrices);
     }
 }
 
