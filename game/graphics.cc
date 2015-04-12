@@ -259,6 +259,7 @@ Graphics& Graphics::operator= (Graphics &&other) {
 
 
 void Graphics::init(Level* level) {
+    std::lock_guard<std::mutex> lock(init_mutex);
     // save Level
     this->level = level;
 
@@ -473,6 +474,7 @@ void Graphics::bindTextureUnits(){
 }
 
 void Graphics::renderLoadingScreen() {
+    std::lock_guard<std::mutex> lock(init_mutex);
     loadingScreen = Texture2DFileManager::the()->get(Texture2DCreator(loadingScreenPath));
     loadingScreen->generateMipmaps();
     loadingScreen->setMinFilter(GL_NEAREST_MIPMAP_LINEAR);
@@ -538,6 +540,7 @@ glm::uvec2 Graphics::getWindowSize() {
 void Graphics::render(double time)
 {
     if (!gameStart) {
+        std::lock_guard<std::mutex> lock(init_mutex);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         loadingShader->use();
@@ -851,6 +854,7 @@ void Graphics::updateLights() {
 }
 
 void Graphics::resize(glm::uvec2 windowSize) {
+    std::lock_guard<std::mutex> lock(init_mutex);
     this->windowSize = windowSize;
     if (gameStart) {
         for (unsigned int i = 0; i<depth_directionalMaps.size(); i++) {
