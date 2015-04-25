@@ -33,3 +33,5 @@ then
     zip -9r "Saxum_${platform^}.zip" "Saxum_${platform^}"
     rm -rf "Saxum_${platform^}"
 fi
+
+exit $rc
