@@ -16,10 +16,6 @@ class Graphics {
         Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane, int cube_size, 
                 unsigned int maxShadowRenderCount, std::string screenPath,
                 std::string screenContinuePath);
-        Graphics(const Graphics &other);
-        Graphics(Graphics &&other);
-        Graphics& operator= (const Graphics &other);
-        Graphics& operator= (Graphics &&other);
         Graphics();
         void init(Level* level);
         void render(double time);

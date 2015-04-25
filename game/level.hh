@@ -27,10 +27,6 @@ class Graphics;
 class Level {
     public:
         Level(std::string xmlFilePath);
-        Level(const Level &other);
-        Level(const Level &&other);
-        Level& operator=(const Level &other);
-        Level& operator=(const Level &&other);
         Level();
         ~Level();
         void load();
