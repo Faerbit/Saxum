@@ -35,7 +35,7 @@ void Application::initLevel() {
     level.load();
     Loader loader = Loader();
     
-    loader.load(levelXmlPath, &level, compositionsPath, scriptPath, geometryPath, texturePath, heightmapPath);
+    loader.load(levelXmlPath, &level, compositionsPath, scriptPath, geometryPath, texturePath, heightmapPath, &graphics);
     graphics.init(&level);
     
     // just in case: check for errors

@@ -1,8 +1,6 @@
-#ifndef MAIN_HH_INCLUDED
-#define MAIN_HH_INCLUDED
+#pragma once
 
 #include "application.hh"
 
-Application app;
-GLFWwindow* window;
-#endif
+extern Application app;
+extern GLFWwindow* window;

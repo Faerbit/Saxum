@@ -1,4 +1,5 @@
 #include "loader.hh"
+#include "main.hh"
 #include <ACGL/OpenGL/Objects/VertexArrayObject.hh>
 using namespace tinyxml2;
 
@@ -57,7 +58,7 @@ void Loader::loadConfig(Application* application) {
 }
 
 void Loader::load(std::string filePath, Level* level, std::string compositionsPath, std::string scriptPath, 
-    std::string globalGeometryPath, std::string globalTexturePath, std::string heightmapPath) {
+    std::string globalGeometryPath, std::string globalTexturePath, std::string heightmapPath, Graphics* graphics) {
     struct stat buf;
     //Loading from xml:
     XMLDocument* doc = new XMLDocument();
@@ -226,6 +227,13 @@ void Loader::load(std::string filePath, Level* level, std::string compositionsPa
             int compositionType = queryInt(composition, "typeID");
             //corect composition found
             if(thisType == compositionType){
+
+                // update loading screen
+                glfwPollEvents();
+                graphics->render(0.0f);
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                glfwSwapBuffers(window);
+
                 typeExists = true;
                 //iterate over all objects of the composition
                 XMLElement* xmlObject = composition->FirstChildElement("object");

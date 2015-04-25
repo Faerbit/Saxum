@@ -4,6 +4,9 @@
 #include <sstream>
 #include "keyboardState.hh"
 
+Application app;
+GLFWwindow* window;
+
 static void resizeCallback(GLFWwindow* window, int newWidth, int newHeight)
 {
     // store the new window size and adjust the viewport:
