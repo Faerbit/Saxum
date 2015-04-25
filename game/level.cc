@@ -10,136 +10,6 @@ Level::Level(std::string xmlFilePath) {
     this->xmlFilePath = xmlFilePath;
 }
 
-Level::Level(const Level &&other) {
-    std::lock_guard<std::mutex> lock(other.light_mutex);
-    luaState = std::move(other.luaState);
-    crossChunkObjects = std::move(other.crossChunkObjects);
-    sortedCrossChunkObjects = std::move(other.sortedCrossChunkObjects);
-    allObjects = std::move(other.allObjects);
-    physicsObjects = std::move(other.physicsObjects);
-    chunks = std::move(other.chunks);
-    lights = std::move(other.lights);
-    closestLights = std::move(other.closestLights);
-    triggers = std::move(other.triggers);
-    waterPlane = std::move(other.waterPlane);
-    ambientLight = std::move(other.ambientLight);
-    fogColourDay = std::move(other.fogColourDay);
-    fogColourRise = std::move(other.fogColourRise);
-    fogColourNight = std::move(other.fogColourNight);
-    directionalLight = std::move(other.directionalLight);
-    cameraCenter = std::move(other.cameraCenter);
-    playerIndex = std::move(other.playerIndex);
-    skydome = std::move(other.skydome);
-    physics = std::move(other.physics);
-    camera = std::move(other.camera);
-    terrain = std::move(other.terrain);
-    skydomeSize = std::move(other.skydomeSize);
-    strength = std::move(other.strength);
-    xmlFilePath = std::move(other.xmlFilePath);
-    nextLightPosition = std::move(other.nextLightPosition);
-    chunkSize = std::move(other.chunkSize);
-    farPlane = std::move(other.farPlane);
-}
-
-Level::Level(const Level &other) {
-    std::lock_guard<std::mutex> lock(other.light_mutex);
-    luaState = other.luaState;
-    crossChunkObjects = other.crossChunkObjects;
-    sortedCrossChunkObjects = other.sortedCrossChunkObjects;
-    allObjects = other.allObjects;
-    physicsObjects = other.physicsObjects;
-    chunks = other.chunks;
-    lights = other.lights;
-    closestLights = other.closestLights;
-    triggers = other.triggers;
-    waterPlane = other.waterPlane;
-    ambientLight = other.ambientLight;
-    fogColourDay = other.fogColourDay;
-    fogColourRise = other.fogColourRise;
-    fogColourNight = other.fogColourNight;
-    directionalLight = other.directionalLight;
-    cameraCenter = other.cameraCenter;
-    playerIndex = other.playerIndex;
-    skydome = other.skydome;
-    physics = other.physics;
-    camera = other.camera;
-    terrain = other.terrain;
-    skydomeSize = other.skydomeSize;
-    strength = other.strength;
-    xmlFilePath = other.xmlFilePath;
-    nextLightPosition = other.nextLightPosition;
-    chunkSize = other.chunkSize;
-    farPlane = other.farPlane;
-}
-
-Level& Level::operator= (const Level &other) {
-    std::lock(light_mutex, other.light_mutex);
-    std::lock_guard<std::mutex> self_lock(light_mutex, std::adopt_lock);
-    std::lock_guard<std::mutex> other_lock(other.light_mutex, std::adopt_lock);
-    luaState = other.luaState;
-    crossChunkObjects = other.crossChunkObjects;
-    sortedCrossChunkObjects = other.sortedCrossChunkObjects;
-    allObjects = other.allObjects;
-    physicsObjects = other.physicsObjects;
-    chunks = other.chunks;
-    lights = other.lights;
-    closestLights = other.closestLights;
-    triggers = other.triggers;
-    waterPlane = other.waterPlane;
-    ambientLight = other.ambientLight;
-    fogColourDay = other.fogColourDay;
-    fogColourRise = other.fogColourRise;
-    fogColourNight = other.fogColourNight;
-    directionalLight = other.directionalLight;
-    cameraCenter = other.cameraCenter;
-    playerIndex = other.playerIndex;
-    skydome = other.skydome;
-    physics = other.physics;
-    camera = other.camera;
-    terrain = other.terrain;
-    skydomeSize = other.skydomeSize;
-    strength = other.strength;
-    xmlFilePath = other.xmlFilePath;
-    nextLightPosition = other.nextLightPosition;
-    chunkSize = other.chunkSize;
-    farPlane = other.farPlane;
-    return *this;
-}
-
-Level& Level::operator= (const Level &&other) {
-    std::lock(light_mutex, other.light_mutex);
-    std::lock_guard<std::mutex> self_lock(light_mutex, std::adopt_lock);
-    std::lock_guard<std::mutex> other_lock(other.light_mutex, std::adopt_lock);
-    luaState = std::move(other.luaState);
-    crossChunkObjects = std::move(other.crossChunkObjects);
-    sortedCrossChunkObjects = std::move(other.sortedCrossChunkObjects);
-    allObjects = std::move(other.allObjects);
-    physicsObjects = std::move(other.physicsObjects);
-    chunks = std::move(other.chunks);
-    lights = std::move(other.lights);
-    closestLights = std::move(other.closestLights);
-    triggers = std::move(other.triggers);
-    waterPlane = std::move(other.waterPlane);
-    ambientLight = std::move(other.ambientLight);
-    fogColourDay = std::move(other.fogColourDay);
-    fogColourRise = std::move(other.fogColourRise);
-    fogColourNight = std::move(other.fogColourNight);
-    directionalLight = std::move(other.directionalLight);
-    cameraCenter = std::move(other.cameraCenter);
-    playerIndex = std::move(other.playerIndex);
-    skydome = std::move(other.skydome);
-    physics = std::move(other.physics);
-    camera = std::move(other.camera);
-    terrain = std::move(other.terrain);
-    skydomeSize = std::move(other.skydomeSize);
-    strength = std::move(other.strength);
-    xmlFilePath = std::move(other.xmlFilePath);
-    nextLightPosition = std::move(other.nextLightPosition);
-    chunkSize = std::move(other.chunkSize);
-    farPlane = std::move(other.farPlane);
-    return *this;
-}
-
 Level::Level() {
 }
 
@@ -372,7 +242,6 @@ glm::vec3 Level::getAmbientLight() {
 }
 
 std::vector<Light*>* Level::getLights() {
-    std::lock_guard<std::mutex> lock(light_mutex);
     return &lights;
 }
 
@@ -509,7 +378,6 @@ void Level::setCameraCenter(Object* object) {
 }
 
 void Level::addLight(Light light) {
-    std::lock_guard<std::mutex> lock(light_mutex);
     Light *add_light = new Light(light);
     this->lights.push_back(add_light);
 }
@@ -519,13 +387,11 @@ void Level::preloadLightPosition(float xPos, float yPos, float zPos){
 }
 
 void Level::addLightByParameters(float redColour, float greenColour, float blueColour,  float intensity, float flameYOffset, float flameHeight, float flameWidth){
-    std::lock_guard<std::mutex> lock(light_mutex);
     glm::vec3 colour = glm::vec3(redColour, greenColour, blueColour);
     this->lights.push_back(new Light(nextLightPosition, colour, intensity, flameYOffset, flameHeight, flameWidth));
 }
 
 void Level::deleteFourLights(){
-    std::lock_guard<std::mutex> lock(light_mutex);
     int indice = lights.size()-4;
     lights.erase(lights.begin() + indice);
     lights.erase(lights.begin() + indice);
@@ -616,7 +482,6 @@ bool Level::compareLightDistances(Light* a, Light* b) {
 }
 
 std::vector<Light*>* Level::getClosestLights() {
-    std::lock_guard<std::mutex> lock(light_mutex);
     closestLights = std::vector<Light*>(lights);
     std::sort(closestLights.begin(),
         closestLights.end(),

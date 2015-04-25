@@ -118,7 +118,6 @@ class Level {
         int chunkSize;
         float farPlane;
         bool compareLightDistances(Light* a, Light* b);
-        mutable std::mutex light_mutex;
 };
 
 #endif

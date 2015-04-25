@@ -92,7 +92,6 @@ class Graphics {
         SharedVertexArrayObject debug_vao;
         SharedShaderProgram debugShader;
         std::vector<std::vector<std::vector<Object*>>*> renderQueue;
-        mutable std::mutex init_mutex;
 };
 
 #endif
