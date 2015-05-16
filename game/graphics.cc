@@ -627,6 +627,10 @@ void Graphics::updateLights() {
     glUniform1iv(lightingShader->getUniformLocation("isFlame"), sizeof(isFlame), (GLint*) isFlame);
 }
 
+void Graphics::saveWindowSize(glm::uvec2 windowSize) {
+    this->windowSize = windowSize;
+}
+
 void Graphics::resize(glm::uvec2 windowSize) {
     this->windowSize = windowSize;
     if (gameStart) {

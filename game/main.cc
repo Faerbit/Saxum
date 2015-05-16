@@ -125,6 +125,7 @@ bool createWindow()
         glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
         glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
         glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+        app.getGraphics()->saveWindowSize(glm::uvec2(mode->width, mode->height));
         window = glfwCreateWindow(mode->width, mode->height, "Saxum", glfwGetPrimaryMonitor(), NULL);
 
         if (!window) {
@@ -168,8 +169,9 @@ int main( int argc, char *argv[] )
     
     // Enable vertical sync (on cards that support it) with parameter 1 - 0 means off
     glfwSwapInterval( 0 );
-    
+
     app.init();
+    app.getGraphics()->resize(app.getGraphics()->getWindowSize());
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
     glfwSwapBuffers(window);
     app.initLevel();

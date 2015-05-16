@@ -34,6 +34,7 @@ class Graphics {
         bool getRenderDebug();
         bool getRenderWorld();
         void enqueueObjects(std::vector<std::vector<Object*>>* queue);
+        void saveWindowSize(glm::uvec2 windowSize);
     private:
         void bindTextureUnits();
         void updateLights();
