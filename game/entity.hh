@@ -2,7 +2,6 @@
 #define ENTITY_HH_INCLUDED
 
 #include <ACGL/Math/Math.hh>
-#include <mutex>
 
 class Entity {
     public:
