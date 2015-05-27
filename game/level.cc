@@ -141,6 +141,43 @@ void Level::enqueueObjects(Graphics* graphics) {
     graphics->enqueueObjects(&sortedCrossChunkObjects);
 }
 
+std::vector<Chunk*> Level::getSurroundingChunks() {
+    int renderDistance = 0;
+    if ((int)farPlane % chunkSize == 0) {
+        renderDistance = (((int)skydomeSize)+chunkSize/2)/chunkSize;
+    }
+    else {
+        renderDistance = ((((int)skydomeSize)+chunkSize/2)/chunkSize) + 1;
+    }
+    int xPosition = ((int)cameraCenter->getPosition().x + (terrain.getHeightmapWidth()/2))/chunkSize;
+    int zPosition = ((int)cameraCenter->getPosition().z + (terrain.getHeightmapHeight()/2))/chunkSize;
+    int xStart = xPosition - renderDistance;
+    unsigned int xEnd = xPosition + renderDistance;
+    int zStart = zPosition - renderDistance;
+    unsigned int zEnd = zPosition + renderDistance;
+    if (xStart < 0) {
+        xStart = 0;
+    }
+    if (zStart < 0) {
+        zStart = 0;
+    }
+    if (xEnd >= chunks.size()) {
+        xEnd = chunks.size()-1;
+    }
+    if (zEnd >= chunks.at(0).size()) {
+        zEnd = chunks.at(0).size()-1;
+    }
+    std::vector<Chunk*> vector = std::vector<Chunk*>((2*renderDistance)*(2*renderDistance));
+    int counter = 0;
+    for(unsigned int i = xStart; i<=xEnd; i++) {
+        for(unsigned int j = zStart; j<=zEnd; j++) {
+            vector.at(counter) = &chunks.at(i).at(j);
+            counter++;
+        }
+    }
+    return vector;
+}
+
 void Level::sortObjects(int textureCount) {
     for(unsigned int i = 0; i<chunks.size(); i++) {
         for(unsigned int j = 0; j<chunks.at(i).size(); j++) {
