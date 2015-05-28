@@ -86,7 +86,7 @@ class Level {
         void sortObjects(int textureCount);
         std::vector<Light*>* getClosestLights();
     private:
-        std::vector<Chunk*> getSurroundingChunks();
+        std::vector<Chunk*> getSurroundingChunks(int chunkRenderDistance);
         lua_State* luaState=nullptr;
         std::vector<Object*> crossChunkObjects;
         std::vector<std::vector<Object*>> sortedCrossChunkObjects;

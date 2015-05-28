@@ -141,13 +141,18 @@ void Level::enqueueObjects(Graphics* graphics) {
     graphics->enqueueObjects(&sortedCrossChunkObjects);
 }
 
-std::vector<Chunk*> Level::getSurroundingChunks() {
+std::vector<Chunk*> Level::getSurroundingChunks(int chunkRenderDistance) {
     int renderDistance = 0;
-    if ((int)farPlane % chunkSize == 0) {
-        renderDistance = (((int)skydomeSize)+chunkSize/2)/chunkSize;
+    if (chunkRenderDistance < 0) {
+        if ((int)farPlane % chunkSize == 0) {
+            renderDistance = (((int)skydomeSize)+chunkSize/2)/chunkSize;
+        }
+        else {
+            renderDistance = ((((int)skydomeSize)+chunkSize/2)/chunkSize) + 1;
+        }
     }
     else {
-        renderDistance = ((((int)skydomeSize)+chunkSize/2)/chunkSize) + 1;
+        renderDistance = chunkRenderDistance;
     }
     int xPosition = ((int)cameraCenter->getPosition().x + (terrain.getHeightmapWidth()/2))/chunkSize;
     int zPosition = ((int)cameraCenter->getPosition().z + (terrain.getHeightmapHeight()/2))/chunkSize;
