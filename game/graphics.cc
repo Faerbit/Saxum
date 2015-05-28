@@ -30,6 +30,7 @@ Graphics::Graphics(glm::uvec2 windowSize, float nearPlane,
     renderFlames = true;
     renderWorld = true;
     renderDebug = false;
+    directionalShadowSwitch = false;
 }
 
 Graphics::Graphics() {
@@ -196,6 +197,7 @@ void Graphics::init(Level* level) {
     lightingShader->setUniform("fogColorRise", level->getFogColourRise());
     lightingShader->setUniform("fogColorNight", level->getFogColourNight());
     lightingShader->setUniform("ambientColor", level->getAmbientLight());
+    lightingShader->setUniform("sampleDirectionalShadowSwitch", false);
     if(level->getDirectionalLight()) {
         lightingShader->setUniform("directionalLightVector",
             level->getDirectionalLight()->getPosition());
@@ -361,37 +363,46 @@ void Graphics::render(double time)
                 }
             }
 
-            // render depth textures for sun
-            depthShader->use();
             glViewport(0, 0, windowSize.x, windowSize.y);
-           
-            
+
+            // render depth textures for sun
             float sunAngle = glm::dot(glm::vec3(0.0f, 1.0f, 0.0f), glm::normalize(level->getDirectionalLight()->getPosition()));
             glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
 
-            for (unsigned int i = 0; i<framebuffer_directional.size(); i++) {
-                framebuffer_directional.at(i)->bind(); 
-                glClear(GL_DEPTH_BUFFER_BIT);
-                if (sunAngle > 0.0f) {
-                    float projection_size = 0.0f;
-                    switch(i) {
-                        case 0:
-                            projection_size = 10.0f;
-                            break;
-                        case 1:
-                            projection_size = 30.0f;
-                            break;
-                        case 2:
-                            projection_size = farPlane/1.5f;
-                            break;
-                    }
-                    depthViewProjectionMatrices.at(i) =  glm::ortho<float>(-projection_size, projection_size, -projection_size, projection_size, -farPlane/1.5f, farPlane/1.5f) *
-                        glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
-                    level->render(depthShader, false, -1, &depthViewProjectionMatrices.at(i));
-                    if (!framebuffer_directional.at(i)->isFrameBufferObjectComplete()) {
-                        printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
-                    }
+            if (sunAngle > 0.0f) {
+                if (!directionalShadowSwitch) {
+                    lightingShader->use();
+                    lightingShader->setUniform("sampleDirectionalShadowSwitch", true);
+                    directionalShadowSwitch = true;
                 }
+                depthShader->use();
+                for (unsigned int i = 0; i<framebuffer_directional.size(); i++) {
+                    framebuffer_directional.at(i)->bind();
+                    glClear(GL_DEPTH_BUFFER_BIT);
+                        float projection_size = 0.0f;
+                        switch(i) {
+                            case 0:
+                                projection_size = 10.0f;
+                                break;
+                            case 1:
+                                projection_size = 30.0f;
+                                break;
+                            case 2:
+                                projection_size = farPlane/1.5f;
+                                break;
+                        }
+                        depthViewProjectionMatrices.at(i) =  glm::ortho<float>(-projection_size, projection_size, -projection_size, projection_size, -farPlane/1.5f, farPlane/1.5f) *
+                            glm::lookAt(sunVector, level->getCameraCenter()->getPosition(), glm::vec3(0,1,0));
+                        level->render(depthShader, false, -1, &depthViewProjectionMatrices.at(i));
+                        if (!framebuffer_directional.at(i)->isFrameBufferObjectComplete()) {
+                            printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
+                        }
+                }
+            }
+            else if (directionalShadowSwitch) {
+                lightingShader->use();
+                lightingShader->setUniform("sampleDirectionalShadowSwitch", false);
+                directionalShadowSwitch = false;
             }
         }
         
