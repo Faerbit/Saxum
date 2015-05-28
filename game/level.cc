@@ -167,7 +167,7 @@ std::vector<Chunk*> Level::getSurroundingChunks() {
     if (zEnd >= chunks.at(0).size()) {
         zEnd = chunks.at(0).size()-1;
     }
-    std::vector<Chunk*> vector = std::vector<Chunk*>((2*renderDistance)*(2*renderDistance));
+    std::vector<Chunk*> vector = std::vector<Chunk*>((xEnd - xStart + 1)*(zEnd - zStart + 1));
     int counter = 0;
     for(unsigned int i = xStart; i<=xEnd; i++) {
         for(unsigned int j = zStart; j<=zEnd; j++) {
