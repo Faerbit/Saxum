@@ -53,8 +53,8 @@ ADD_DEFINITIONS(-DNO_SPACE_NAVIGATOR_SUPPORT)
 #
 # Lets the binary get written to a shared folder (which can be ignored by git).
 # Will also set the run directory for QTCreator:
-SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -DSAXUM_DEBUG")
-SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -DSAXUM_DEBUG")
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -DSAXUM_DEBUG -g")
+SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -DSAXUM_DEBUG -g")
 
 set(dir ${CMAKE_CURRENT_SOURCE_DIR}/binaries)
 set(EXECUTABLE_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
