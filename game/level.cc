@@ -57,86 +57,19 @@ void Level::load() {
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass, 
         int chunkRenderDistance, glm::mat4* viewProjectionMatrix, 
         std::vector<glm::mat4>* shadowVPs) {
-    int renderDistance = 0;
-    if (chunkRenderDistance < 0) {
-        if ((int)farPlane % chunkSize == 0) {
-            renderDistance = (((int)skydomeSize)+chunkSize/2)/chunkSize;
-        }
-        else {
-            renderDistance = ((((int)skydomeSize)+chunkSize/2)/chunkSize) + 1;
-        }
-    }
-    else {
-        renderDistance = chunkRenderDistance;
-    }
-    int xPosition = ((int)cameraCenter->getPosition().x + (terrain.getHeightmapWidth()/2))/chunkSize;
-    int zPosition = ((int)cameraCenter->getPosition().z + (terrain.getHeightmapHeight()/2))/chunkSize;
-    int xStart = xPosition - renderDistance;
-    unsigned int xEnd = xPosition + renderDistance;
-    int zStart = zPosition - renderDistance;
-    unsigned int zEnd = zPosition + renderDistance;
-    if (xStart < 0) {
-        xStart = 0;
-    }
-    if (zStart < 0) {
-        zStart = 0;
-    }
-    if (xEnd >= chunks.size()) {
-        xEnd = chunks.size()-1;
-    }
-    if (zEnd >= chunks.at(0).size()) {
-        zEnd = chunks.at(0).size()-1;
-    }
-    for(unsigned int i = xStart; i<=xEnd; i++) {
-        for(unsigned int j = zStart; j<=zEnd; j++) {
-            if (lightingPass) {
-                chunks.at(i).at(j).render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
-            }
-            else {
-                chunks.at(i).at(j).render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
-            }
-        }
+    std::vector<Chunk*> nearChunks = getSurroundingChunks(chunkRenderDistance);
+    for(unsigned int i = 0; i<nearChunks.size(); i++) {
+        nearChunks.at(i)->render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
     }
     for (unsigned int i = 0; i<crossChunkObjects.size(); i++) {
-        if (lightingPass) {
-            crossChunkObjects.at(i)->render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
-        }
-        else {
-            crossChunkObjects.at(i)->render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
-        }
+        crossChunkObjects.at(i)->render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
     }
 }
 
 void Level::enqueueObjects(Graphics* graphics) {
-    int renderDistance = 0;
-    if ((int)farPlane % chunkSize == 0) {
-        renderDistance = (((int)skydomeSize)+chunkSize/2)/chunkSize;
-    }
-    else {
-        renderDistance = ((((int)skydomeSize)+chunkSize/2)/chunkSize) + 1;
-    }
-    int xPosition = ((int)cameraCenter->getPosition().x + (terrain.getHeightmapWidth()/2))/chunkSize;
-    int zPosition = ((int)cameraCenter->getPosition().z + (terrain.getHeightmapHeight()/2))/chunkSize;
-    int xStart = xPosition - renderDistance;
-    unsigned int xEnd = xPosition + renderDistance;
-    int zStart = zPosition - renderDistance;
-    unsigned int zEnd = zPosition + renderDistance;
-    if (xStart < 0) {
-        xStart = 0;
-    }
-    if (zStart < 0) {
-        zStart = 0;
-    }
-    if (xEnd >= chunks.size()) {
-        xEnd = chunks.size()-1;
-    }
-    if (zEnd >= chunks.at(0).size()) {
-        zEnd = chunks.at(0).size()-1;
-    }
-    for(unsigned int i = xStart; i<=xEnd; i++) {
-        for(unsigned int j = zStart; j<=zEnd; j++) {
-            graphics->enqueueObjects(chunks.at(i).at(j).getSortedObjects());
-        }
+    std::vector<Chunk*> nearChunks = getSurroundingChunks(-1);
+    for(unsigned int i = 0; i<nearChunks.size(); i++) {
+        graphics->enqueueObjects(nearChunks.at(i)->getSortedObjects());
     }
     graphics->enqueueObjects(&sortedCrossChunkObjects);
 }
