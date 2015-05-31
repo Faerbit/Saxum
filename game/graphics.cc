@@ -54,8 +54,8 @@ void Graphics::init(Level* level) {
     lastWindUpdate = - windUpdateDelay;
     windTarget = 0.0f;
     wind = glm::vec2(0.0f, 0.0f);
-    windDirection = glm::vec2(-1.0f, -1.0f);
-    windDirectionTarget = glm::vec2(-1.0f, -1.0f);
+    windDirection = glm::vec2(1.0f, 1.0f);
+    windDirectionTarget = glm::vec2(1.0f, 1.0f);
     textureMovementPosition = glm::vec2(0.0, 0.0);
     
     // construct VAO to give shader correct Attribute locations
