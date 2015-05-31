@@ -42,14 +42,11 @@ void Flame::render(SharedShaderProgram shader, glm::mat4 viewProjectionMatrix, f
     shader->setUniform("withColor", withColor);
     shader->setUniform("time", time);
     shader->setUniform("skew", skewing);
-    shader->setUniform("bottom", true);
-    shader->setUniform("left", true);
-    vao->render();
-    shader->setUniform("left", false);
-    vao->render();
-    shader->setUniform("bottom", false);
-    shader->setUniform("left", true);
-    vao->render();
-    shader->setUniform("left", false);
-    vao->render();
+    for (int i = 0; i<8; i++) {
+        shader->setUniform("bottom", true);
+        shader->setUniform("circle_index", i);
+        vao->render();
+        shader->setUniform("bottom", false);
+        vao->render();
+    }
 }

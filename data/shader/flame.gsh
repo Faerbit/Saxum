@@ -3,7 +3,7 @@
 uniform mat4 modelViewProjectionMatrix;
 uniform float time;
 uniform bool bottom;
-uniform bool left;
+uniform int circle_index;
 uniform vec2 skew;
 
 layout(points) in;
@@ -75,19 +75,11 @@ void main() {
     for (i; i<render_end; i+=step) {
         float downRadius    = radiusFunction(i);
         float upRadius = radiusFunction(i+step);
-        float circle_end = 0.0;
-        int j = 0;
-        if (left) {
-            j = 0;
-            circle_end = resolution/2.0;
-        }
-        else {
-            j = int(resolution/2.0);
-            circle_end = resolution;
-        }
+        int j = int(resolution/2.0) * circle_index;
+        int circle_end = int(resolution/2.0) * (circle_index + 1);
         for (j; j<circle_end; j++) {
-            float leftAngle     = PI * 2.0 / resolution   * j;
-            float rightAngle    = PI * 2.0 / resolution * (j+1);
+            float leftAngle     = PI * 2.0 / resolution / 4.0  * j;
+            float rightAngle    = PI * 2.0 / resolution / 4.0 * (j+1);
 
             vec4 offset = vec4(cos(rightAngle) * downRadius, i, -sin(rightAngle) * downRadius, 0.0);
             gl_Position = gl_in[0].gl_Position + modelViewProjectionMatrix * offset;
