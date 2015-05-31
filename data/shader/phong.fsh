@@ -177,7 +177,7 @@ float samplePointShadow(samplerCubeShadow shadowMap, vec3 lightDirection, float 
     float compValue = 0.5*(-A*length(lightDirection) + B)/length(lightDirection) + 0.5;
     float bias = 0.001*tan(acos(clamp(dot(vNormal, normalize(lightDirection)), 0.0, 1.0)));
     bias = clamp(bias, 0.0, 0.001);
-    //bias *= 1/length(lightDirection)*8;
+    bias *= 1/length(lightDirection)*8;
     for (int i=0; i<4; i++) {
         visibility -= intensity/16*(1.0-texture(shadowMap, vec4(lightDirection + poissonDisk3D[i]/stretching, compValue - bias)));
     }
