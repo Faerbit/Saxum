@@ -27,6 +27,11 @@ uniform samplerCubeShadow shadowMap_cube6;
 uniform samplerCubeShadow shadowMap_cube7;
 uniform samplerCubeShadow shadowMap_cube8;
 uniform samplerCubeShadow shadowMap_cube9;
+uniform samplerCubeShadow shadowMap_cube10;
+uniform samplerCubeShadow shadowMap_cube11;
+uniform samplerCubeShadow shadowMap_cube12;
+uniform samplerCubeShadow shadowMap_cube13;
+uniform samplerCubeShadow shadowMap_cube14;
 uniform vec3 ambientColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
@@ -313,6 +318,21 @@ void main()
             }
             if (i == 9 && i<maxShadowRenderCount) {
                 pointVisibility = samplePointShadow(shadowMap_cube9, lightDirection, intensity);
+            }
+            if (i == 10 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube10, lightDirection, intensity);
+            }
+            if (i == 11 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube11, lightDirection, intensity);
+            }
+            if (i == 12 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube12, lightDirection, intensity);
+            }
+            if (i == 13 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube13, lightDirection, intensity);
+            }
+            if (i == 14 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube14, lightDirection, intensity);
             }
             vec3 lightVector = normalize(lightPos-vec3(fragPosition));
             diffuseColor += clamp(dot(normalize(vNormal), lightVector)

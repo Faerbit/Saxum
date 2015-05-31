@@ -144,7 +144,7 @@ void Graphics::init(Level* level) {
 
 
     // always generate and bind 10 cube maps, because otherwise the shader won't work
-    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(10);
+    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(15);
     for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {
         depth_cubeMaps.at(i) = SharedTextureCubeMap(new TextureCubeMap(glm::vec2(cube_size, cube_size), GL_DEPTH_COMPONENT24));
         depth_cubeMaps.at(i)->setMinFilter(GL_NEAREST);
@@ -219,8 +219,8 @@ void Graphics::bindTextureUnits(){
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
     // Exit if we need more texture units
-    if (number_of_texture_units < (int)textureCount + 18) {
-        printf("You need at least %d  texture units to run this application. Exiting\n", textureCount + 18);
+    if (number_of_texture_units < (int)textureCount + 27) {
+        printf("You need at least %d  texture units to run this application. Exiting\n", textureCount + 27);
         exit(-1);
     }
     for(unsigned int i = 0; i<Material::getAllTextures()->size(); i++) {
@@ -237,16 +237,16 @@ void Graphics::bindTextureUnits(){
         }
     }
     flamePostShader->use();
-    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, textureCount + 17);
+    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, textureCount + 22);
 
     skydomeShader->use();
-    skydomeShader->setTexture("dayTexture", level->getSkydome()->getDayTexture(), textureCount + 18);
-    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture(), textureCount + 19);
+    skydomeShader->setTexture("dayTexture", level->getSkydome()->getDayTexture(), textureCount + 23);
+    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture(), textureCount + 24);
 
     loadingShader->use(); 
-    loadingShader->setTexture("screen", loadingScreen, textureCount + 20);
-    loadingShader->setTexture("screenContinue", loadingContinueScreen, textureCount + 21);
-    printf("This application used %d texture units.\n", textureCount + 21);
+    loadingShader->setTexture("screen", loadingScreen, textureCount + 25);
+    loadingShader->setTexture("screenContinue", loadingContinueScreen, textureCount + 26);
+    printf("This application used %d texture units.\n", textureCount + 27);
 }
 
 void Graphics::renderLoadingScreen() {
