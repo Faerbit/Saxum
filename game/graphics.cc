@@ -30,7 +30,6 @@ Graphics::Graphics(glm::uvec2 windowSize, float nearPlane,
     renderFlames = true;
     renderWorld = true;
     renderDebug = false;
-    directionalShadowSwitch = false;
 }
 
 Graphics::Graphics() {
@@ -197,7 +196,6 @@ void Graphics::init(Level* level) {
     lightingShader->setUniform("fogColorRise", level->getFogColourRise());
     lightingShader->setUniform("fogColorNight", level->getFogColourNight());
     lightingShader->setUniform("ambientColor", level->getAmbientLight());
-    lightingShader->setUniform("sampleDirectionalShadowSwitch", false);
     if(level->getDirectionalLight()) {
         lightingShader->setUniform("directionalLightVector",
             level->getDirectionalLight()->getPosition());
@@ -370,11 +368,6 @@ void Graphics::render(double time)
             glm::vec3 sunVector = (level->getCameraCenter()->getPosition() + level->getDirectionalLight()->getPosition());
 
             if (sunAngle > 0.0f) {
-                if (!directionalShadowSwitch) {
-                    lightingShader->use();
-                    lightingShader->setUniform("sampleDirectionalShadowSwitch", true);
-                    directionalShadowSwitch = true;
-                }
                 depthShader->use();
                 for (unsigned int i = 0; i<framebuffer_directional.size(); i++) {
                     framebuffer_directional.at(i)->bind();
@@ -404,11 +397,6 @@ void Graphics::render(double time)
                             printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
                         }
                 }
-            }
-            else if (directionalShadowSwitch) {
-                lightingShader->use();
-                lightingShader->setUniform("sampleDirectionalShadowSwitch", false);
-                directionalShadowSwitch = false;
             }
         }
         

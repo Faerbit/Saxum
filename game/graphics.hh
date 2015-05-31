@@ -84,7 +84,6 @@ class Graphics {
         bool renderFlames;
         bool renderDebug;
         bool renderWorld;
-        bool directionalShadowSwitch;
         DebugDraw debugDrawer;
         SharedArrayBuffer debug_ab;
         SharedVertexArrayObject debug_vao;

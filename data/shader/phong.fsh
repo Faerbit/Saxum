@@ -51,7 +51,6 @@ uniform bool movingTexture;
 uniform vec2 movement;
 uniform vec2 movingTextureOffset;
 uniform float time;
-uniform bool sampleDirectionalShadowSwitch;
 
 vec2 poissonDisk[16] = vec2[](
    vec2( -0.94201624, -0.39906216 ),
@@ -209,9 +208,9 @@ void main()
 
     // direction lighting
     float sunAngle = -1.0;
-    if(sampleDirectionalShadowSwitch) {
-        vec3 directionalVector = normalize(directionalLightVector);
-        sunAngle = dot(vec3(0.0, 1.0, 0.0), directionalVector);
+    vec3 directionalVector = normalize(directionalLightVector);
+    sunAngle = dot(vec3(0.0, 1.0, 0.0), directionalVector);
+    if(sunAngle > 0.0) {
         float directionalVisibility = 1.0f;
         float directionalIntensity = sunIntensity(sunAngle);
         if (distanceToBorder(shadowCoord3.xy) <= 0.5 && distanceToBorder(shadowCoord3.xy) > 0.2) {
