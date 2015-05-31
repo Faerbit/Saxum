@@ -125,8 +125,8 @@ void Graphics::init(Level* level) {
     level->getPhysics()->getWorld()->setDebugDrawer(&debugDrawer);
 
 
-    depth_directionalMaps = std::vector<SharedTexture2D>(3);
-    framebuffer_directional = std::vector<SharedFrameBufferObject>(3);
+    depth_directionalMaps = std::vector<SharedTexture2D>(5);
+    framebuffer_directional = std::vector<SharedFrameBufferObject>(5);
     for (unsigned int i = 0; i<depth_directionalMaps.size(); i++) {
         depth_directionalMaps.at(i) = SharedTexture2D( new Texture2D(windowSize, GL_DEPTH_COMPONENT24));
         depth_directionalMaps.at(i)->setMinFilter(GL_NEAREST);
@@ -235,20 +235,20 @@ void Graphics::bindTextureUnits(){
 
     if (level->getLights()->size() > 0) {
         for(unsigned int i = 0; i<depth_cubeMaps.size(); i++){
-            lightingShader->setTexture("shadowMap_cube" + std::to_string(i), depth_cubeMaps.at(i), textureCount + i + 5);
+            lightingShader->setTexture("shadowMap_cube" + std::to_string(i), depth_cubeMaps.at(i), textureCount + i + 7);
         }
     }
     flamePostShader->use();
-    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, textureCount + 15);
+    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, textureCount + 17);
 
     skydomeShader->use();
-    skydomeShader->setTexture("dayTexture", level->getSkydome()->getDayTexture(), textureCount + 16);
-    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture(), textureCount + 17);
+    skydomeShader->setTexture("dayTexture", level->getSkydome()->getDayTexture(), textureCount + 18);
+    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture(), textureCount + 19);
 
     loadingShader->use(); 
-    loadingShader->setTexture("screen", loadingScreen, textureCount + 18);
-    loadingShader->setTexture("screenContinue", loadingContinueScreen, textureCount + 19);
-    printf("This application used %d texture units.\n", textureCount + 19);
+    loadingShader->setTexture("screen", loadingScreen, textureCount + 20);
+    loadingShader->setTexture("screenContinue", loadingContinueScreen, textureCount + 21);
+    printf("This application used %d texture units.\n", textureCount + 21);
 }
 
 void Graphics::renderLoadingScreen() {
@@ -385,9 +385,15 @@ void Graphics::render(double time)
                                 projection_size = 10.0f;
                                 break;
                             case 1:
-                                projection_size = 30.0f;
+                                projection_size = 20.0f;
                                 break;
                             case 2:
+                                projection_size = 40.0f;
+                                break;
+                            case 3:
+                                projection_size = 60.0f;
+                                break;
+                            case 4:
                                 projection_size = farPlane/1.5f;
                                 break;
                         }
