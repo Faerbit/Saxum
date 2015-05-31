@@ -33,7 +33,7 @@ class Level {
         void update(float runTimeSinceLastUpdate, float runTime, glm::vec2 mouseDelta,
                 KeyboardState* keyboardState);
         void render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
-                int chunkRenderDistance, glm::mat4* viewProjectionMatrix,
+                glm::vec3 center, int chunkRenderDistance, glm::mat4* viewProjectionMatrix,
                 std::vector<glm::mat4>* shadowVPs=0);
         glm::vec3 getAmbientLight();
         Light* getDirectionalLight();
@@ -67,7 +67,9 @@ class Level {
         void setCameraCenter(Object* object);
         void addLight(Light light);
         void preloadLightPosition(float xPos, float yPos, float zPos);
-        void addLightByParameters(float redColour, float greenColour, float blueColour, float intensity, float flameYOffset, float flameHeight, float flameWidth);
+        void addLightByParameters(float redColour, float greenColour,
+                float blueColour, float intensity, float flameYOffset,
+                float flameHeight, float flameWidth);
         void deleteFourLights();
         void addTrigger(Trigger trigger);
         lua_State* getLuaState();
@@ -86,7 +88,7 @@ class Level {
         void sortObjects(int textureCount);
         std::vector<shared_ptr<Light>>* getClosestLights();
     private:
-        std::vector<Chunk*> getSurroundingChunks(int chunkRenderDistance);
+        std::vector<Chunk*> getSurroundingChunks(glm::vec3 center, int chunkRenderDistance);
         lua_State* luaState=nullptr;
         std::vector<Object*> crossChunkObjects;
         std::vector<std::vector<Object*>> sortedCrossChunkObjects;

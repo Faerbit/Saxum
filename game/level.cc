@@ -52,9 +52,9 @@ void Level::load() {
 }
 
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass, 
-        int chunkRenderDistance, glm::mat4* viewProjectionMatrix, 
+        glm::vec3 center, int chunkRenderDistance, glm::mat4* viewProjectionMatrix,
         std::vector<glm::mat4>* shadowVPs) {
-    std::vector<Chunk*> nearChunks = getSurroundingChunks(chunkRenderDistance);
+    std::vector<Chunk*> nearChunks = getSurroundingChunks(center, chunkRenderDistance);
     for(unsigned int i = 0; i<nearChunks.size(); i++) {
         nearChunks.at(i)->render(shader, lightingPass, viewProjectionMatrix, shadowVPs);
     }
@@ -64,14 +64,14 @@ void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass,
 }
 
 void Level::enqueueObjects(Graphics* graphics) {
-    std::vector<Chunk*> nearChunks = getSurroundingChunks(-1);
+    std::vector<Chunk*> nearChunks = getSurroundingChunks(cameraCenter->getPosition(), -1);
     for(unsigned int i = 0; i<nearChunks.size(); i++) {
         graphics->enqueueObjects(nearChunks.at(i)->getSortedObjects());
     }
     graphics->enqueueObjects(&sortedCrossChunkObjects);
 }
 
-std::vector<Chunk*> Level::getSurroundingChunks(int chunkRenderDistance) {
+std::vector<Chunk*> Level::getSurroundingChunks(glm::vec3 center, int chunkRenderDistance) {
     int renderDistance = 0;
     if (chunkRenderDistance < 0) {
         if ((int)farPlane % chunkSize == 0) {
@@ -84,8 +84,8 @@ std::vector<Chunk*> Level::getSurroundingChunks(int chunkRenderDistance) {
     else {
         renderDistance = chunkRenderDistance;
     }
-    int xPosition = ((int)cameraCenter->getPosition().x + (terrain.getHeightmapWidth()/2))/chunkSize;
-    int zPosition = ((int)cameraCenter->getPosition().z + (terrain.getHeightmapHeight()/2))/chunkSize;
+    int xPosition = ((int)center.x + (terrain.getHeightmapWidth()/2))/chunkSize;
+    int zPosition = ((int)center.z + (terrain.getHeightmapHeight()/2))/chunkSize;
     int xStart = xPosition - renderDistance;
     unsigned int xEnd = xPosition + renderDistance;
     int zStart = zPosition - renderDistance;
