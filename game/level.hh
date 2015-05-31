@@ -37,7 +37,7 @@ class Level {
                 std::vector<glm::mat4>* shadowVPs=0);
         glm::vec3 getAmbientLight();
         Light* getDirectionalLight();
-        std::vector<Light*>* getLights();
+        std::vector<shared_ptr<Light>>* getLights();
         Object* getCameraCenter();
         Camera* getCamera();
         glm::vec3 getCameraPosition();
@@ -84,7 +84,7 @@ class Level {
         void addToSpecificChunk(Object* object, int xPosition, int zPosition);
         void enqueueObjects(Graphics* graphics);
         void sortObjects(int textureCount);
-        std::vector<Light*>* getClosestLights();
+        std::vector<shared_ptr<Light>>* getClosestLights();
     private:
         std::vector<Chunk*> getSurroundingChunks(int chunkRenderDistance);
         lua_State* luaState=nullptr;
@@ -93,8 +93,8 @@ class Level {
         std::vector<Object*> allObjects;
         std::vector<Object*> physicsObjects;
         std::vector<std::vector<Chunk>> chunks;
-        std::vector<Light*> lights;
-        std::vector<Light*> closestLights;
+        std::vector<shared_ptr<Light>> lights;
+        std::vector<shared_ptr<Light>> closestLights;
         std::vector<Trigger> triggers;
         Object* waterPlane=nullptr;
         glm::vec3 ambientLight;
@@ -114,7 +114,7 @@ class Level {
         glm::vec3 nextLightPosition;
         int chunkSize;
         float farPlane;
-        bool compareLightDistances(Light* a, Light* b);
+        bool compareLightDistances(shared_ptr<Light> a, shared_ptr<Light> b);
 };
 
 #endif

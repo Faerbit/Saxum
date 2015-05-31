@@ -53,7 +53,7 @@ class Graphics {
         std::string loadingScreenContinuePath;
         SharedTexture2D loadingScreen;
         SharedTexture2D loadingContinueScreen;
-        std::vector<Light*>* closestLights;
+        std::vector<shared_ptr<Light>>* closestLights;
         std::vector<Flame*> closestFlames;
         SharedShaderProgram loadingShader;
         SharedShaderProgram lightingShader;
