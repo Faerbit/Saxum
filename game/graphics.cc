@@ -12,6 +12,7 @@ using namespace ACGL::OpenGL;
 
 const double lightUpdateDelay = 0.5f;
 const double windUpdateDelay = 0.5f;
+const int maxShadowSampleCount = 15;
 
 Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, 
     float farPlane, int cube_size,
@@ -143,8 +144,8 @@ void Graphics::init(Level* level) {
 
 
 
-    // always generate and bind 10 cube maps, because otherwise the shader won't work
-    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(15);
+    // always generate and bind all cube maps, because otherwise the shader won't work
+    depth_cubeMaps = std::vector<ACGL::OpenGL::SharedTextureCubeMap>(maxShadowSampleCount);
     for (unsigned int i = 0; i<depth_cubeMaps.size(); i++) {
         depth_cubeMaps.at(i) = SharedTextureCubeMap(new TextureCubeMap(glm::vec2(cube_size, cube_size), GL_DEPTH_COMPONENT24));
         depth_cubeMaps.at(i)->setMinFilter(GL_NEAREST);
@@ -179,7 +180,7 @@ void Graphics::init(Level* level) {
 
     bindTextureUnits();
 
-    closestLights = level->getClosestLights();
+    updateLights();
 
     // set shader variables that stay the same across the runtime of the application
     skydomeShader->use();
@@ -205,24 +206,33 @@ void Graphics::init(Level* level) {
             level->getDirectionalLight()->getIntensity());
     }
 
+    depthCubeShader->use();
+    depthCubeShader->setUniform("farPlane", farPlane);
+
     level->sortObjects(Material::getAllTextures()->size());
     #ifdef SAXUM_DEBUG
         std::cout << "There were " << Material::getAllTextures()->size()
                 <<  " materials used in this level." << std::endl;
     #endif
+
+    initShadowRenderQueue();
 }
 
 void Graphics::bindTextureUnits(){
-
-    lightingShader->use();
     unsigned int textureCount = Material::getAllTextures()->size();
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &number_of_texture_units);
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
     // Exit if we need more texture units
-    if (number_of_texture_units < (int)textureCount + 27) {
-        printf("You need at least %d  texture units to run this application. Exiting\n", textureCount + 27);
+    if (number_of_texture_units < (int)textureCount + maxShadowSampleCount + 9) {
+        printf("You need at least %d  texture units to run this application. Exiting\n", textureCount + maxShadowSampleCount + 9);
         exit(-1);
     }
+
+    loadingShader->use();
+    loadingShader->setTexture("screen", loadingScreen, 0);
+    loadingShader->setTexture("screenContinue", loadingContinueScreen, 1);
+
+    lightingShader->use();
     for(unsigned int i = 0; i<Material::getAllTextures()->size(); i++) {
         lightingShader->setTexture("uTexture", Material::getAllTextures()->at(i), i+2);
     }
@@ -237,16 +247,13 @@ void Graphics::bindTextureUnits(){
         }
     }
     flamePostShader->use();
-    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, textureCount + 22);
+    flamePostShader->setTexture("light_fbo", light_fbo_color_texture, textureCount + maxShadowSampleCount + 7);
 
     skydomeShader->use();
-    skydomeShader->setTexture("dayTexture", level->getSkydome()->getDayTexture(), textureCount + 23);
-    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture(), textureCount + 24);
+    skydomeShader->setTexture("dayTexture", level->getSkydome()->getDayTexture(), textureCount + maxShadowSampleCount + 8);
+    skydomeShader->setTexture("nightTexture", level->getSkydome()->getNightTexture(), textureCount + maxShadowSampleCount + 9);
 
-    loadingShader->use(); 
-    loadingShader->setTexture("screen", loadingScreen, textureCount + 25);
-    loadingShader->setTexture("screenContinue", loadingContinueScreen, textureCount + 26);
-    printf("This application used %d texture units.\n", textureCount + 27);
+    printf("This application used %d texture units.\n", textureCount + maxShadowSampleCount + 9);
 }
 
 void Graphics::renderLoadingScreen() {
@@ -317,6 +324,7 @@ void Graphics::render(double time)
     if (!gameStart) {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glViewport(0, 0, windowSize.x, windowSize.y);
         loadingShader->use();
         loadingShader->setUniform("time", float(time));
         fullscreen_quad_loading->render();
@@ -332,8 +340,6 @@ void Graphics::render(double time)
         // At first render shadows
         std::vector<glm::mat4> depthViewProjectionMatrices = std::vector<glm::mat4>(framebuffer_directional.size());
         if (renderShadows) {
-            depthCubeShader->use();
-            depthCubeShader->setUniform("farPlane", farPlane);
             // render depth textures for point lights
             glViewport(0, 0, cube_size, cube_size);
             glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  50.0f);
