@@ -197,6 +197,7 @@ void Graphics::init(Level* level) {
     lightingShader->setUniform("fogColorRise", level->getFogColourRise());
     lightingShader->setUniform("fogColorNight", level->getFogColourNight());
     lightingShader->setUniform("ambientColor", level->getAmbientLight());
+
     if(level->getDirectionalLight()) {
         lightingShader->setUniform("directionalLightVector",
             level->getDirectionalLight()->getPosition());
@@ -333,13 +334,14 @@ void Graphics::render(double time)
         double nextLightUpdate = lastLightUpdate + lightUpdateDelay;
         if (time >= nextLightUpdate)
         {
-            updateLights();
+            //updateLights();
             lastLightUpdate = time;
         }
 
         // At first render shadows
         std::vector<glm::mat4> depthViewProjectionMatrices = std::vector<glm::mat4>(framebuffer_directional.size());
         if (renderShadows) {
+            /*depthCubeShader->use();
             // render depth textures for point lights
             glViewport(0, 0, cube_size, cube_size);
             glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  50.0f);
@@ -365,7 +367,7 @@ void Graphics::render(double time)
                         printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
                     }
                 }
-            }
+            }*/
 
             glViewport(0, 0, windowSize.x, windowSize.y);
 
@@ -599,7 +601,7 @@ void Graphics::updateLights() {
     if (closestLights->size() > 0) {
         lightingShader->use();
         lightingShader->setUniform("lightCount", (int) closestLights->size());
-        lightingShader->setUniform("maxShadowRenderCount", std::min((int) closestLights->size(), (int)maxShadowRenderCount));
+        lightingShader->setUniform("maxShadowRenderCount", min((int)closestLights->size(), maxShadowSampleCount));
 
         // Build light position array
         glm::vec3 lightSources[closestLights->size()];
@@ -777,4 +779,39 @@ bool Graphics::getRenderWorld() {
 
 void Graphics::enqueueObjects(std::vector<std::vector<Object*>>* queue){
     renderQueue.push_back(queue);
+}
+
+void Graphics::initShadowRenderQueue() {
+    int maxLights = min((int)closestLights->size(), maxShadowSampleCount);
+    shadowRenderQueue = std::vector<ShadowRenderQueueSlot>(maxLights);
+    glViewport(0, 0, cube_size, cube_size);
+    glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  50.0f);
+    glm::vec3 looking_directions[6] = {glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
+        glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
+    glm::vec3 upvectors[6] = {glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, 0.0f, -1.0f),
+        glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.0f, -1.0f, 0.0f),glm::vec3(0.0f, -1.0f, 0.0f)};
+
+    framebuffer_cube->bind();
+
+    for(unsigned int i = 0; i<shadowRenderQueue.size(); i++){
+        shadowRenderQueue.at(i).light = closestLights->at(i);
+        shadowRenderQueue.at(i).priority = farPlane - glm::distance(level->getCameraCenter()->getPosition(), closestLights->at(i)->getPosition());
+        shadowRenderQueue.at(i).currentPriority = 0;
+        // render depth textures for point lights
+        depthCubeShader->use();
+        // render each side of the cube
+        for (int i_face = 0; i_face<6; i_face++) {
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face, depth_cubeMaps.at(i)->getObjectName(), 0);
+            glClear(GL_DEPTH_BUFFER_BIT);
+            glm::mat4 viewMatrix = glm::lookAt(shadowRenderQueue.at(i).light->getPosition(),
+                shadowRenderQueue.at(i).light->getPosition() + looking_directions[i_face], upvectors[i_face]);
+            glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * viewMatrix;
+            std::vector<glm::mat4> viewMatrixVector = std::vector<glm::mat4>();
+            viewMatrixVector.push_back(viewMatrix);
+            level->render(depthCubeShader, false, shadowRenderQueue.at(i).light->getPosition(), 1, &depthViewProjectionMatrix_face, &viewMatrixVector);
+            if (!framebuffer_cube->isFrameBufferObjectComplete()) {
+                printf("Framebuffer incomplete, unknown error occured during shadow generation!\n");
+            }
+        }
+    }
 }

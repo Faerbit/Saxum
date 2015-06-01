@@ -11,6 +11,12 @@
 
 using namespace ACGL::OpenGL;
 
+struct ShadowRenderQueueSlot{
+    shared_ptr<Light> light;
+    int priority;
+    int currentPriority;
+};
+
 class Graphics {
     public:
         Graphics(glm::uvec2 windowSize, float nearPlane, float farPlane, int cube_size, 
@@ -89,6 +95,8 @@ class Graphics {
         SharedVertexArrayObject debug_vao;
         SharedShaderProgram debugShader;
         std::vector<std::vector<std::vector<Object*>>*> renderQueue;
+        std::vector<ShadowRenderQueueSlot> shadowRenderQueue;
+        void initShadowRenderQueue();
 };
 
 #endif
