@@ -214,8 +214,6 @@ void Graphics::init(Level* level) {
         std::cout << "There were " << Material::getAllTextures()->size()
                 <<  " materials used in this level." << std::endl;
     #endif
-
-    initShadowRenderQueue();
 }
 
 void Graphics::bindTextureUnits(){
@@ -224,7 +222,7 @@ void Graphics::bindTextureUnits(){
     printf("Your graphics card supports %d texture units.\n", number_of_texture_units);
     // Exit if we need more texture units
     if (number_of_texture_units < (int)textureCount + maxShadowSampleCount + 9) {
-        printf("You need at least %d  texture units to run this application. Exiting\n", textureCount + maxShadowSampleCount + 9);
+        printf("You need at least %d texture units to run this application. Exiting\n", textureCount + maxShadowSampleCount + 9);
         exit(-1);
     }
 
