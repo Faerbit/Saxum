@@ -462,5 +462,7 @@ std::vector<shared_ptr<Light>>* Level::getClosestLights() {
         closestLights = std::vector<shared_ptr<Light>>(&closestLights[0],
                 &closestLights[15]);
     }
+    // sort pointers for faster comparisons
+    std::sort(closestLights.begin(), closestLights.end());
     return &closestLights;
 }
