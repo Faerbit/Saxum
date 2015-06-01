@@ -340,6 +340,7 @@ void Graphics::render(double time)
         if (renderShadows) {
             // render depth textures for point lights
             glViewport(0, 0, cube_size, cube_size);
+            depthCubeShader->use();
             glm::mat4 depthProjectionMatrix_pointlights = glm::perspective(1.571f, (float)cube_size/(float)cube_size, 0.1f,  50.0f);
             glm::vec3 looking_directions[6] = {glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
                 glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
