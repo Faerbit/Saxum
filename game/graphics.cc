@@ -376,12 +376,19 @@ void Graphics::render(double time)
             framebuffer_cube->bind();
             for (unsigned int i_pointlight = 0; i_pointlight < renderQueue.size(); i_pointlight++) {
                 // render each side of the cube
+                glm::vec3 position = glm::vec3(0.0f);
+                if (std::get<0>(renderQueue.at(i_pointlight))->isFlame()) {
+                    position = std::get<0>(renderQueue.at(i_pointlight))->getPosition();
+                    position = glm::vec3(position.x + 0.75f*wind.x, position.y, position.z + 0.75f*wind.y);
+                }
+                else {
+                    position = std::get<0>(renderQueue.at(i_pointlight))->getPosition();
+                }
                 for (int i_face = 0; i_face<6; i_face++) {
                     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i_face,
                             depth_cubeMaps.at(std::get<2>(renderQueue.at(i_pointlight)))->getObjectName(), 0);
                     glClear(GL_DEPTH_BUFFER_BIT);
-                    glm::mat4 viewMatrix = glm::lookAt(std::get<0>(renderQueue.at(i_pointlight))->getPosition(),
-                        std::get<0>(renderQueue.at(i_pointlight))->getPosition() + looking_directions[i_face], upvectors[i_face]);
+                    glm::mat4 viewMatrix = glm::lookAt(position, position + looking_directions[i_face], upvectors[i_face]);
                     glm::mat4 depthViewProjectionMatrix_face = depthProjectionMatrix_pointlights * viewMatrix;
                     std::vector<glm::mat4> viewMatrixVector = std::vector<glm::mat4>(1);
                     viewMatrixVector.at(0) = viewMatrix;
