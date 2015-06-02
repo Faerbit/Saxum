@@ -398,7 +398,7 @@ void Graphics::render(double time)
                     glm::vec3 position = glm::vec3(0.0f);
                     if (std::get<0>(renderQueue.at(i_pointlight))->isFlame()) {
                         position = std::get<0>(renderQueue.at(i_pointlight))->getPosition();
-                        position = glm::vec3(position.x + 0.75f*wind.x, position.y, position.z + 0.75f*wind.y);
+                        position = glm::vec3(position.x - 0.75f*wind.y, position.y, position.z + 0.75f*wind.x);
                     }
                     else {
                         position = std::get<0>(renderQueue.at(i_pointlight))->getPosition();
