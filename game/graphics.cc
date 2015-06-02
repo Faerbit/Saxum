@@ -680,32 +680,32 @@ void Graphics::updateLights() {
         }
 
         // Build light position array
-        glm::vec3 lightSources[closestLights->size()];
-        for(unsigned int i = 0; i<closestLights->size(); i++) {
-            lightSources[i] = closestLights->at(i)->getPosition();
+        glm::vec3 lightSources[shadowRenderQueue.size()];
+        for(unsigned int i = 0; i<shadowRenderQueue.size(); i++) {
+            lightSources[i] = shadowRenderQueue.at(i).light->getPosition();
         }
         glUniform3fv(lightingShader->getUniformLocation("lightSources"),
             sizeof(lightSources),  (GLfloat*) lightSources);
         // Build light colour array
-        glm::vec3 lightColours[closestLights->size()];
-        for(unsigned int i = 0; i<closestLights->size(); i++) {
-            lightColours[i] = closestLights->at(i)->getColour();
+        glm::vec3 lightColours[shadowRenderQueue.size()];
+        for(unsigned int i = 0; i<shadowRenderQueue.size(); i++) {
+            lightColours[i] = shadowRenderQueue.at(i).light->getColour();
         }
         glUniform3fv(lightingShader->getUniformLocation("lightColors"),
             sizeof(lightColours),  (GLfloat*) lightColours);
         // Build light attenuation array
-        float lightIntensities[closestLights->size()];
-        for(unsigned int i = 0; i<closestLights->size(); i++) {
-            lightIntensities[i] = closestLights->at(i)->getIntensity();
+        float lightIntensities[shadowRenderQueue.size()];
+        for(unsigned int i = 0; i<shadowRenderQueue.size(); i++) {
+            lightIntensities[i] = shadowRenderQueue.at(i).light->getIntensity();
         }
         glUniform1fv(lightingShader->getUniformLocation("lightIntensities"),
             sizeof(lightIntensities),  (GLfloat*) lightIntensities);
 
-        bool isFlame[closestLights->size()];
+        bool isFlame[shadowRenderQueue.size()];
         closestFlames = std::vector<Flame*>();
-        for (unsigned int i = 0; i<closestLights->size(); i++) {
-            if (closestLights->at(i)->isFlame()) {
-                closestFlames.push_back(closestLights->at(i)->getFlame());
+        for(unsigned int i = 0; i<shadowRenderQueue.size(); i++) {
+            if (shadowRenderQueue.at(i).light->isFlame()) {
+                closestFlames.push_back(shadowRenderQueue.at(i).light->getFlame());
                 isFlame[i] = true;
             }
             else {
