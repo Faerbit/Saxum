@@ -21,9 +21,24 @@ Graphics::Graphics(glm::uvec2 windowSize, float nearPlane,
     std::string screenContinuePath) {
     this->windowSize = windowSize;
     this->nearPlane = nearPlane;
-    this->farPlane = farPlane;
-    this->cube_size = cube_size;
-    this->maxShadowRenderCount = maxShadowRenderCount;
+    if (farPlane > 0) {
+        this->farPlane = farPlane;
+    }
+    else {
+        this->farPlane = 0;
+    }
+    if (cube_size > 0) {
+        this->cube_size = cube_size;
+    }
+    else {
+        this->cube_size = 0;
+    }
+    if (maxShadowRenderCount < 15) {
+        this->maxShadowRenderCount = maxShadowRenderCount;
+    }
+    else {
+        this->maxShadowRenderCount = 0;
+    }
     this->loadingScreenPath = screenPath;
     this->loadingScreenContinuePath = screenContinuePath;
     gameStart = false;
