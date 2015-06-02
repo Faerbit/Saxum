@@ -649,7 +649,7 @@ void Graphics::render(double time)
 
 void Graphics::updateLights() {
     std::vector<std::shared_ptr<Light>> oldClosestLights = std::vector<std::shared_ptr<Light>>(*closestLights);
-    closestLights = level->getClosestLights();
+    closestLights = level->getClosestLights(maxShadowSampleCount);
     if (closestLights->size() > 0) {
         lightingShader->use();
         lightingShader->setUniform("lightCount", (int) closestLights->size());
@@ -873,7 +873,7 @@ void Graphics::enqueueObjects(std::vector<std::vector<Object*>>* queue){
 }
 
 void Graphics::initShadowRenderQueue() {
-    closestLights = level->getClosestLights();
+    closestLights = level->getClosestLights(maxShadowSampleCount);
     int maxLights = min((int)closestLights->size(), maxShadowSampleCount);
     shadowRenderQueue = std::vector<ShadowRenderQueueSlot>(maxLights);
     glViewport(0, 0, cube_size, cube_size);

@@ -86,7 +86,7 @@ class Level {
         void addToSpecificChunk(Object* object, int xPosition, int zPosition);
         void enqueueObjects(Graphics* graphics);
         void sortObjects(int textureCount);
-        std::vector<shared_ptr<Light>>* getClosestLights();
+        std::vector<shared_ptr<Light>>* getClosestLights(unsigned int maximumAmount);
         int checkMaxSurroundingLights();
     private:
         std::vector<Chunk*> getSurroundingChunks(glm::vec3 center, int chunkRenderDistance);

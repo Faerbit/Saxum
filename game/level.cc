@@ -468,14 +468,14 @@ bool Level::compareLightDistances(shared_ptr<Light> a, shared_ptr<Light> b) {
     }
 }
 
-std::vector<shared_ptr<Light>>* Level::getClosestLights() {
+std::vector<shared_ptr<Light>>* Level::getClosestLights(unsigned int maximumAmount) {
     closestLights = std::vector<shared_ptr<Light>>(lights);
     std::sort(closestLights.begin(),
         closestLights.end(),
         [this](shared_ptr<Light> a, shared_ptr<Light> b) {return compareLightDistances(a, b); });
-    if (lights.size() > 15) {
+    if (lights.size() > maximumAmount) {
         closestLights = std::vector<shared_ptr<Light>>(&closestLights[0],
-                &closestLights[15]);
+                &closestLights[maximumAmount]);
     }
     // sort pointers for faster comparisons
     std::sort(closestLights.begin(), closestLights.end());
