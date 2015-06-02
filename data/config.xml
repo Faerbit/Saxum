@@ -11,11 +11,11 @@
     If you feel your game runs smooth enough you can increase them to
     increase the visual quality.  -->
 
-<shadowCubeSize>1024</shadowCubeSize>
+<shadowCubeSize>512</shadowCubeSize>
 
 <farPlane>150.0</farPlane>
 
-<maxShadowRenderCount>5</maxShadowRenderCount>
+<maxShadowRenderCount>3</maxShadowRenderCount>
 
 <!-- The following stuff is used to configure the application.
      Do not change unless you know what you are doing. -->
