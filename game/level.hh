@@ -87,6 +87,7 @@ class Level {
         void enqueueObjects(Graphics* graphics);
         void sortObjects(int textureCount);
         std::vector<shared_ptr<Light>>* getClosestLights();
+        int checkMaxSurroundingLights();
     private:
         std::vector<Chunk*> getSurroundingChunks(glm::vec3 center, int chunkRenderDistance);
         lua_State* luaState=nullptr;

@@ -226,6 +226,7 @@ void Graphics::init(Level* level) {
     #ifdef SAXUM_DEBUG
         std::cout << "There were " << Material::getAllTextures()->size()
                 <<  " materials used in this level." << std::endl;
+        cout << "There are " << level->checkMaxSurroundingLights() << " max surrounding lights." << endl;
     #endif
 
     initShadowRenderQueue();

@@ -1,7 +1,6 @@
 #include "level.hh"
 #include "loader.hh"
 #include <string>
-#include "graphics.hh"
 
 Level::Level(std::string xmlFilePath) {
     // default value
@@ -49,6 +48,22 @@ void Level::load() {
     lua_setglobal(luaState, "level");
     
     this->camera = Camera(glm::vec2(-0.8f, 0.0f), 3.0f);
+}
+
+int Level::checkMaxSurroundingLights() {
+    int maxSurroundingLights = 0;
+    for(unsigned int i = 0; i<lights.size(); i++) {
+        int thisSurroundingLights = 0;
+        for(unsigned int j = 0; j<lights.size(); j++) {
+            if (glm::distance(lights.at(i)->getPosition(), lights.at(j)->getPosition()) < skydomeSize) {
+                thisSurroundingLights++;
+            }
+        }
+        if (thisSurroundingLights > maxSurroundingLights) {
+            maxSurroundingLights = thisSurroundingLights;
+        }
+    }
+    return maxSurroundingLights;
 }
 
 void Level::render(ACGL::OpenGL::SharedShaderProgram shader, bool lightingPass, 
