@@ -272,7 +272,7 @@ void main()
     for(int i = 0; i<lightCount; i++) {
         vec3 lightPos = vec3(0.0, 0.0, 0.0);
         if (isFlame[i] == true) {
-            lightPos = vec3(lightSources[i].x + movement.y , lightSources[i].y, lightSources[i].z + movement.x);
+            lightPos = vec3(lightSources[i].x + 0.75*movement.y , lightSources[i].y, lightSources[i].z + 0.75*movement.x);
         }
         else {
             lightPos = lightSources[i];
