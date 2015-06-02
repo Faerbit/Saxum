@@ -32,6 +32,17 @@ uniform samplerCubeShadow shadowMap_cube11;
 uniform samplerCubeShadow shadowMap_cube12;
 uniform samplerCubeShadow shadowMap_cube13;
 uniform samplerCubeShadow shadowMap_cube14;
+uniform samplerCubeShadow shadowMap_cube15;
+uniform samplerCubeShadow shadowMap_cube16;
+uniform samplerCubeShadow shadowMap_cube17;
+uniform samplerCubeShadow shadowMap_cube18;
+uniform samplerCubeShadow shadowMap_cube19;
+uniform samplerCubeShadow shadowMap_cube20;
+uniform samplerCubeShadow shadowMap_cube21;
+uniform samplerCubeShadow shadowMap_cube22;
+uniform samplerCubeShadow shadowMap_cube23;
+uniform samplerCubeShadow shadowMap_cube24;
+uniform samplerCubeShadow shadowMap_cube25;
 uniform vec3 ambientColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
@@ -333,6 +344,39 @@ void main()
             }
             if (i == 14 && i<maxShadowRenderCount) {
                 pointVisibility = samplePointShadow(shadowMap_cube14, lightDirection, intensity);
+            }
+            if (i == 15 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube15, lightDirection, intensity);
+            }
+            if (i == 16 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube16, lightDirection, intensity);
+            }
+            if (i == 17 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube17, lightDirection, intensity);
+            }
+            if (i == 18 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube18, lightDirection, intensity);
+            }
+            if (i == 19 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube19, lightDirection, intensity);
+            }
+            if (i == 20 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube20, lightDirection, intensity);
+            }
+            if (i == 21 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube21, lightDirection, intensity);
+            }
+            if (i == 22 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube22, lightDirection, intensity);
+            }
+            if (i == 23 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube23, lightDirection, intensity);
+            }
+            if (i == 24 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube24, lightDirection, intensity);
+            }
+            if (i == 25 && i<maxShadowRenderCount) {
+                pointVisibility = samplePointShadow(shadowMap_cube25, lightDirection, intensity);
             }
             vec3 lightVector = normalize(lightPos-vec3(fragPosition));
             diffuseColor += clamp(dot(normalize(vNormal), lightVector)

@@ -12,7 +12,7 @@ using namespace ACGL::OpenGL;
 
 const double lightUpdateDelay = 0.5f;
 const double windUpdateDelay = 0.5f;
-const int maxShadowSampleCount = 15;
+const int maxShadowSampleCount = 26;
 
 Graphics::Graphics(glm::uvec2 windowSize, float nearPlane, 
     float farPlane, int cube_size,
@@ -33,7 +33,7 @@ Graphics::Graphics(glm::uvec2 windowSize, float nearPlane,
     else {
         this->cube_size = 0;
     }
-    if (maxShadowRenderCount < 15) {
+    if (maxShadowRenderCount < maxShadowSampleCount) {
         this->maxShadowRenderCount = maxShadowRenderCount;
     }
     else {
