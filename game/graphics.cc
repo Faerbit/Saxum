@@ -366,7 +366,7 @@ void Graphics::render(double time)
             for(unsigned int i = 0; i<shadowRenderQueue.size(); i++) {
                 for(unsigned int j = 0; j<renderQueue.size(); j++){
                     if (shadowRenderQueue.at(i).currentPriority > std::get<1>(renderQueue.at(j))){
-                        if (j<renderQueue.size() - 2) {
+                        if (j<renderQueue.size() - 2 && renderQueue.size() > 1) {
                             renderQueue.at(j+1) = renderQueue.at(j);
                         }
                         renderQueue.at(j) = std::make_tuple(shadowRenderQueue.at(i).light, shadowRenderQueue.at(i).currentPriority, i);
