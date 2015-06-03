@@ -4,7 +4,7 @@
 #   GLFW3_LIBRARY_DIR, folder in which the GLFW library is located
 #   GLFW3_LIBRARY, library to link against to use GLFW
 
-set(GLFW3_VERSION "3.1.0")
+set(GLFW3_VERSION "3.1.1")
 
 
 ####### Expanded from @PACKAGE_INIT@ by configure_package_config_file() #######
