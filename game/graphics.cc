@@ -364,20 +364,19 @@ void Graphics::render(double time)
             std::vector<std::tuple<std::shared_ptr<Light>, int, int>> renderQueue =
                 std::vector<std::tuple<std::shared_ptr<Light>, int, int>>(maxShadowRenderCount);
             for(unsigned int i = 0; i<shadowRenderQueue.size(); i++) {
-                bool enqueued = false;
                 for(unsigned int j = 0; j<renderQueue.size(); j++){
                     if (shadowRenderQueue.at(i).currentPriority > std::get<1>(renderQueue.at(j))){
                         if (j<renderQueue.size() - 2) {
                             renderQueue.at(j+1) = renderQueue.at(j);
                         }
                         renderQueue.at(j) = std::make_tuple(shadowRenderQueue.at(i).light, shadowRenderQueue.at(i).currentPriority, i);
-                        enqueued = true;
                         break;
                     }
                 }
-                if (enqueued) {
-                    shadowRenderQueue.at(i).currentPriority = 0;
-                }
+            }
+            // reset currentPriority
+            for(unsigned int i = 0; i<renderQueue.size(); i++) {
+                shadowRenderQueue.at(std::get<2>(renderQueue.at(i))).currentPriority = 0;
             }
 
             depthCubeShader->use();
