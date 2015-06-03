@@ -26,7 +26,7 @@ class Graphics;
 
 class Level {
     public:
-        Level(std::string xmlFilePath);
+        Level(std::string xmlFilePath, float farPlane);
         Level();
         ~Level();
         void load();

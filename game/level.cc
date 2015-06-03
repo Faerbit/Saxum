@@ -2,11 +2,12 @@
 #include "loader.hh"
 #include <string>
 
-Level::Level(std::string xmlFilePath) {
+Level::Level(std::string xmlFilePath, float farPlane) {
     // default value
     skydomeSize = 50.0f;
     physics = Physics();
     this->xmlFilePath = xmlFilePath;
+    this->farPlane = farPlane;
 }
 
 Level::Level() {
