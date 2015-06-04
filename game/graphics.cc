@@ -690,7 +690,7 @@ void Graphics::updateLights() {
         // update priority of the shadow render queue
         for(unsigned int i = 0; i<shadowRenderQueue.size(); i++) {
             float distance = glm::distance(level->getCameraCenter()->getPosition(), shadowRenderQueue.at(i).light->getPosition());
-            shadowRenderQueue.at(i).priority = (int) 100*std::exp(5.0f - 0.05f * distance);
+            shadowRenderQueue.at(i).priority = (int) 100*std::exp(5.0f - 0.1f * distance);
         }
 
         // Build light position array
