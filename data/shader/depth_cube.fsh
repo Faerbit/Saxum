@@ -4,8 +4,6 @@ in vec4 fragPosition;
 
 uniform float farPlane;
 
-out float gl_FragDepth;
-
 void main() {
     float nearPlane = 0.1;
     float A = -(farPlane+nearPlane)/(farPlane-nearPlane);
